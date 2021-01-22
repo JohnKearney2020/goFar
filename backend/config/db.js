@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import colors from 'colors';
 
 const connectDB = async () => {
   try {
@@ -12,7 +11,7 @@ const connectDB = async () => {
   } catch (error) {
     console.error(`Error: ${error.message}` .red.underline.bold);
     // passing one means exit with failure
-    process.exit(1);
+    process.exit(1); //the 1 means exit with failure
   }
 }
 
