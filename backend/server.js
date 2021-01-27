@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import colors from 'colors';
 
 import connectDB from './config/db.js'; //remember, we need the .js extension in the backend since we are using the ESmodules way of importing
 import products from './data/products.js';
@@ -34,4 +35,4 @@ app.use(express.json()); //this will allow us to accept JSON data in the body
 //               Start the Server
 //===============================================
 const PORT = process.env.PORT || 5000; //get the port from our .env file
-app.listen(PORT, console.log(`Server running on ${process.env.NODE_ENV} mode on port ${PORT}` .yellow.bold));
+app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}` .yellow.bold));
