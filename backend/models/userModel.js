@@ -8,8 +8,16 @@ const wishListSchema = mongoose.Schema({
       required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
       ref: 'Product'
     },
+    name: {
+      type: String,
+      required: true
+    },
     quantity: {
       type: Number,
+      required: true
+    },
+    image: {
+      type: String,
       required: true
     }
   // wishListProduct: {

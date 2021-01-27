@@ -12,6 +12,12 @@ const reviewSchema = mongoose.Schema({
   timestamps: true
 });
 
+// const colorsSchema = mongoose.Schema({
+//   colorName: { type: String, required: true },
+//   colorHexCode: { type: String },
+
+// })
+
 const productSchema = mongoose.Schema({
   //we want to know which user created the product. We do this by setting the 'type' and then the 'ref'
   //the 'ref' references the model where we can find that ObjectId
@@ -24,29 +30,88 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  images: [{
-    source: {
-      type: String,
-      required: true,
-    },
-    isPrimaryImage: {
-      type: Boolean,
-      required: true,
-      default: false
+  images: [
+    {
+      color: {
+        type: String,
+        required: true
+      },
+      source: {
+          type: String,
+          required: true,
+      },
+      isPrimaryImage: {
+        type: Boolean,
+        required: true,
+        default: false
+      }
     }
-  }],
+  ],
   brand: {
     type: String,
     required: true
   },
-  category: {
+  subBrand: {
+    type: String
+  },
+  categories: [{
+    type: String,
+    required: true,
+  }],
+  gender: {
+    type: String
+  },
+  hasSizes: {
+    type: Boolean,
+    required: true
+  },
+  colors: [{
+    colorName: {
+      type: String,
+      required: true
+    },
+    colorHexcode: {
+      type: String,
+      required: false
+    },
+    colorPrice: {
+      type: Number
+    },
+    clearance: {
+      type: Boolean,
+      default: false
+    }
+  }],
+  sizes: [{
+    color: { type: String, required: true },
+    sizeCategory: { type: String, required: true, default: 'Regular' }, // 'Regular', 'Tall', 'Short
+    size: { type: String },
+    qty: { type: Number, required: true, default: 0 }
+  }],
+  description1: {
     type: String,
     required: true,
   },
-  description: {
+  description2: {
     type: String,
-    required: true,
   },
+  description3: {
+    type: String,
+  },
+  description4: {
+    type: String,
+  },
+  features: [{ type: String }],
+    // {
+    //   featuresBullet: {
+    //     type: String
+    //   }
+    // }
+  // ],
+  care: {
+    type: String,
+  },
+  materials: [{ type: String }],
   reviews: [reviewSchema], //an array of review objects. See the schema above
   rating: { //the average of all user ratings
     type: Number,
@@ -58,16 +123,26 @@ const productSchema = mongoose.Schema({
     required: true,
     default: 0
   },
-  price: {
+  defaultPrice: {
     type: Number,
     required: true,
     default: 0
-  },
-  countInStock: {
-    type: Number,
-    required: true,
-    default: 0
-  },
+  }
+  // salePrice: {
+  //   type: Number,
+  //   required: true,
+  //   default: 0
+  // },
+  // clearance: {
+  //   type: Boolean,
+  //   required: true,
+  //   default: false
+  // }
+  // countInStock: {
+  //   type: Number,
+  //   required: true,
+  //   default: 0
+  // },
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true

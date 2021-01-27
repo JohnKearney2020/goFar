@@ -1,6 +1,4 @@
-  
-
-const products = [
+ const products = [
   {
     name: 'Airpods Wireless Bluetooth Headphones',
     images: ['/images/airpods.jpg'],

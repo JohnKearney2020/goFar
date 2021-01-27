@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import colors from 'colors';
 import users from './data/users.js';
+import products from './data/products.js';
 
 //Models
 import Product from './models/productModel.js';
@@ -24,14 +25,14 @@ const importData = async () => {
     //We store our created users in a variable as an array of created users. We do this b/c our products are tied to the user that created them,
     //and we want to add the admin as the user that created each product in the products code below
     const createdUsers = await User.insertMany(users);
-    // const adminUser = createdUsers[0]._id; //in users.js we set the first user to be the admin
+    const adminUser = createdUsers[0]._id; //in users.js we set the first user to be the admin
 
     //--- Products ---
     //add the admin user to each product
-    // const sampleProducts = products.map(product => {
-    //   return { ...product, user: adminUser}
-    // })
-    // await Product.insertMany(sampleProducts);
+    const sampleProducts = products.map(product => {
+      return { ...product, user: adminUser}
+    })
+    await Product.insertMany(sampleProducts);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
