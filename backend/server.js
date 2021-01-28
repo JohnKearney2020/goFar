@@ -2,9 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import colors from 'colors';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js'; //remember, we need the .js extension in the backend since we are using the ESmodules way of importing
-import products from './data/products.js';
+import productRoutes from './routes/productRoutes.js';
 
 dotenv.config(); //load our environmental variables
 connectDB(); // connect to our database!
@@ -15,20 +16,26 @@ if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.get('/', (req, res) => {
-  res.send('API is running...');
-})
-
-app.get('/api/products', (req, res) => {
-  res.json(products);
-})
-
-
 //===============================================
 //         Parse JSON from Body
 //===============================================
 app.use(express.json()); //this will allow us to accept JSON data in the body
 
+app.get('/', (req, res) => {
+  res.send('API is running...');
+})
+
+//========================================
+//Product related routes
+//========================================
+app.use('/api/products', productRoutes);
+
+//========================================
+//Error Handling Middleware
+//========================================
+// 404 fallback - for anything that is not found
+app.use(notFound);
+app.use(errorHandler);
 
 
 //===============================================
