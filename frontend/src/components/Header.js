@@ -26,9 +26,7 @@ const Header = () => {
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>Go Far</Navbar.Brand>
-          </LinkContainer>
+          <Navbar.Brand href='/'>Go Far</Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             {/* <SearchBox /> */}

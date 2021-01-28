@@ -10,9 +10,11 @@ const App = () => {
   return (
     <Router>
       <Header />
+      <main className='pt-3 pb-5'>
         <Container>
-          <Route path='/' component={HomeScreen} exact/>
+            <Route path='/' component={HomeScreen} exact/>
         </Container>
+      </main>
       <Footer />
     </Router>
   )
