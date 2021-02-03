@@ -24,13 +24,15 @@ const products2 = [
         colorName: 'Seapine',
         colorHexCode: '',
         colorPrice: 99.99,
-        clearance: false
+        clearance: false,
+        tinyImage: '/images/microtherm_MedIndigo_tiny.jpg'
       },
       {
         colorName: 'Med Indigo',
         colorHexCode: '',
         colorPrice: 79.99,
-        clearance: false
+        clearance: false,
+        tinyImage: '/images/microtherm_Seapine_tiny.jpg'
       }
     ],
     sizes: [

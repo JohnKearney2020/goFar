@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import ProductRating from './ProductRating';
+import ProductColors from './ProductColors';
 import './ProductCard.css';
 
 const findLowestPrice = (arr) => {
@@ -34,6 +35,7 @@ const ProductCard = ({ product }) => {
         {/* <Card.Text as='h3' className='productCardPrice'>${product.defaultPrice}</Card.Text> */}
         {/* <Card.Text as='h3' className='productCardPrice'>${product.colors[0].colorPrice}</Card.Text> */}
         <Card.Text as='h3' className='productCardPrice'>${lowestSalePrice}</Card.Text>
+        <ProductColors images={product.colors}/>
       </Card.Body>
     </Card>
   )
