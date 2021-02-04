@@ -24,7 +24,10 @@ const Header = () => {
   }
   return (
     <header>
-      <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
+      
+      {/* <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect> */}
+      <Navbar bg='light' variant='light' expand='lg' collapseOnSelect>
+      {/* <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect> for Cosmo Theme */}
         <Container>
           <Navbar.Brand href='/'>Go Far</Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />

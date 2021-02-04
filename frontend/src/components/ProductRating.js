@@ -14,7 +14,8 @@ const ProductRating = ({ value, text, color }) => {
   )
 };
 
-ProductRating.defaultProps = { color:  '#F8E825'};
+// ProductRating.defaultProps = { color:  '#F8E825'};
+ProductRating.defaultProps = { color:  'black'};
 
 //If we felt like checking our protypes:
 // ProductRating.propTypes = {
