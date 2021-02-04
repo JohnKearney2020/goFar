@@ -23,142 +23,232 @@ const products2 = [
       {
         colorName: 'Seapine',
         colorHexCode: '',
-        colorPrice: 89.99,
+        // colorPrice: 89.99,
         clearance: false,
         tinyImage: '/images/microtherm_MedIndigo_tiny.jpg'
       },
       {
         colorName: 'Med Indigo',
         colorHexCode: '',
-        colorPrice: 79.99,
+        // colorPrice: 79.99,
         clearance: false,
         tinyImage: '/images/microtherm_Seapine_tiny.jpg'
       }
     ],
+    // sizes: [
+    //   {
     sizes: [
-      {
-        color: 'Seapine',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'S',
-        qty: 3
+      { 
+        sizeCategoryName: 'Regular',
+        sizeCategoryDefaultPrice: 99.99,
+        sizeCategoryColorsAndSizes: [
+          {
+            color: 'Seapine',
+            colorSalePrice: 89.99,
+            sizeCategorySizes: [
+              {
+                size: 'S',
+                qty: 3,
+              }, {
+                size: 'M',
+                qty: 8
+              }, {
+                size: 'L',
+                qty: 10
+              }, {
+                size: 'XL',
+                qty: 0
+              }, {
+                size: 'XXL',
+                qty: 3
+              }
+            ]
+          },
+          {
+            color: 'Med Indigo',
+            colorSalePrice: 79.99,
+            sizeCategorySizes: [
+              {
+                size: 'S',
+                qty: 0
+              }, {
+                size: 'M',
+                qty: 0
+              }, {
+                size: 'L',
+                qty: 3
+              }, {
+                size: 'XL',
+                qty: 1
+              }, {
+                size: 'XXL',
+                qty: 6
+              }
+            ]
+          },              
+        ] //End of sizeCategoryColorsAndSizes
       },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'M',
-        qty: 8
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'L',
-        qty: 10
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'XL',
-        qty: 0
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'XXL',
-        qty: 3
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'M',
-        qty: 1
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'L',
-        qty: 20
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'XL',
-        qty: 0
-      },
-      {
-        color: 'Seapine',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'XXL',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'S',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'M',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'L',
-        qty: 3
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'XL',
-        qty: 1
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
-        size: 'XXL',
-        qty: 6
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'M',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'L',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'XL',
-        qty: 0
-      },
-      {
-        color: 'Med Indigo',
-        sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
-        size: 'XXL',
-        qty: 2
+      { 
+        sizeCategoryName: 'Tall',
+        sizeCategoryDefaultPrice: 109.99,
+        sizeCategoryColorsAndSizes: [
+          {
+            color: 'Seapine',
+            colorSalePrice: 99.99,
+            sizeCategorySizes: [
+              {
+                size: 'M',
+                qty: 1
+              }, {
+                size: 'L',
+                qty: 20
+              }, {
+                size: 'XL',
+                qty: 0
+              }, {
+                size: 'XXL',
+                qty: 0
+              }
+            ]
+          },
+          {
+            color: 'Med Indigo',
+            colorSalePrice: 0,
+            sizeCategorySizes: [
+              {
+                size: 'M',
+                qty: 2
+              }, {
+                size: 'L',
+                qty: 3
+              }, {
+                size: 'XL',
+                qty: 8
+              }, {
+                size: 'XXL',
+                qty: 7
+              }
+            ]
+          },              
+        ]
       },
     ],
+      // }
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'S',
+      //   qty: 3,
+      //   // COME BACK TO DATES - let d = new Date();
+      //   // dateAvailable: 'Thu Feb 04 2021 12:30:36 GMT-0600 (Central Standard Time)' 
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'M',
+      //   qty: 8
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'L',
+      //   qty: 10
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'XL',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'XXL',
+      //   qty: 3
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'M',
+      //   qty: 1
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'L',
+      //   qty: 20
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'XL',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Seapine',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'XXL',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'S',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'M',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'L',
+      //   qty: 3
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'XL',
+      //   qty: 1
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Regular', // 'Regular', 'Tall', 'Short
+      //   size: 'XXL',
+      //   qty: 6
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'M',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'L',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'XL',
+      //   qty: 0
+      // },
+      // {
+      //   color: 'Med Indigo',
+      //   sizeCategory: 'Tall', // 'Regular', 'Tall', 'Short
+      //   size: 'XXL',
+      //   qty: 2
+      // },
+
+    // ], //End of Sizes
     description1: 'Our premium ultralight has a streamlined fit that\'s built for mobility. Comfort is further enhanced with the soft, recycled ripstop polyester shell and its adjustable drawcord hem. But the real crux of this hoodie is the high-loft Premium Goose Down insulation. Maximum warmth. Minimum weight and bulk',
     description2: 'As an ultralight insulating layer, the MicroTherm is thinner than traditional down jackets. But that combination of minimal bulk and effective warmth is what makes it special, and is the result of its unique micro-channel construction and the exceptionally high-loft down that it holds close to the body for maximum thermal efficiency.',
     description3: 'NOTE: Temperature ratings are based on a controlled laboratory test by an independent university lab. Also consider: your sensitivity to cold and wind-chill; time of exposure; activity level; and use of layering.',
-    // features: [
-    //   { featuresBullet: '1.2 oz 20D recycled ripstop polyester shell—perfect balance of light weight and strength' },
-    //   { featuresBullet: 'StormRepel® Super DWR—our longest lasting moisture-shedding finish' },
-    //   { featuresBullet: '800 fill Responsible Down Standard (RDS) down, certified by Control Union More About RDS' },
-    //   { featuresBullet: 'Trackmydown supply information on garment—learn where your down comes from and what makes premium down premium' },
-    //   { featuresBullet: 'Insulated hood—elastic binding provides secure fit' },
-    //   { featuresBullet: 'Secure zip pockets—media port in chest pocket' },
-    //   { featuresBullet: 'Packs into chest pocket—space-saving compressibility' },
-    //   { featuresBullet: 'Length, Reg Medium: 28\" | Weight: 13.4 oz | Down Fill Weight: 3.2 oz' },
-    //   { featuresBullet: 'Active. An athletic fit. Close to the body without restricting mobility. Designed to fit over baselayers and lightweight midlayers.' }
-    // ],
     features: [
       '1.2 oz 20D recycled ripstop polyester shell—perfect balance of light weight and strength',
       'StormRepel® Super DWR—our longest lasting moisture-shedding finish',
@@ -172,13 +262,10 @@ const products2 = [
     ],
     care: 'Secure all garment closures before laundering. Machine wash cold delicate, separately, using mild detergent only. Do not bleach or use fabric softeners. Rinse thoroughly and remove promptly. Tumble dry low. Do not hang to dry. Do not iron or steam. Do not dry clean. For best results, dry with clean tennis ball.',
     materials: [ '100% polyester', 'Imported' ],
-    // reviews: [], //come back to this
+    reviews: [], //come back to this
     rating: 4,
     numReviews: 1,
-    defaultPrice: 99.99,
-    // salePrice: 0,
-    // clearance: false,
-    // countInStock: 10
+    // defaultPrice: 99.99
   }
 ]
 
