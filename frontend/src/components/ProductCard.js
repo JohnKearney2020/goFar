@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import ProductRating from './ProductRating';
 import ProductColors from './ProductColors';
 import './ProductCard.css';
+import { Link } from 'react-router-dom';
 
 const sortLowToHigh = (num1, num2) => {
   return num1 - num2;
@@ -10,7 +11,6 @@ const sortLowToHigh = (num1, num2) => {
 
 // product.sizes.sizeCategories
 const findDefaultPriceRange = (arrayOfPrices) => {
-  console.log(arrayOfPrices)
   let prices = [];
   for(let eachSizeCategory of arrayOfPrices){
     prices.push(eachSizeCategory.sizeCategoryDefaultPrice);
@@ -23,13 +23,10 @@ const findSalePriceRange = (arrayOfPrices) => {
   let prices = [];
   for(let eachSizeCategoryName of arrayOfPrices){
     for(let eachColor of eachSizeCategoryName.sizeCategoryColorsAndSizes){
-      // console.log(eachColor)
       if(eachColor.colorSalePrice !== 0) prices.push(eachColor.colorSalePrice);
     }
-    // console.log(eachSizeCategoryName);
   }
   prices.sort(sortLowToHigh);
-  // console.log(prices)
   return prices;
 }
 
@@ -47,39 +44,50 @@ const ProductCard = ({ product }) => {
   salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
   salePriceString = `$${salePriceRange[0]}`;
 
+  //Set up Local State
+  const [selectedColor, setSelectedColor] = useState('');
+  const [primaryImage, setPrimaryImage] = useState('');
+  console.log(`selected color to start is: ${selectedColor}`);
+
+  //On component load...
+  useEffect(() => {
+    setSelectedColor(product.colors[0].colorName);
+    setPrimaryImage(product.images[0].source);
+  }, [product.colors, product.images]);
+
+  const colorSelectHandler = (colorClicked) => {
+    //Find the image that corresponds to the color clicked
+    for(let eachImage of product.images) {
+      if(eachImage.color === colorClicked  && eachImage.isPrimaryImage === true){
+        setPrimaryImage(eachImage.source);
+        break;
+      }
+    }
+  }
+
+
   return (
-    <Card className='my-3 rounded'>
-      <a href={`/product/${product._id}`}>
-        <Card.Img src={product.images[0].source} variant='top' />
-      </a>
+    <Card className='my-3 rounded' style={{ width: '365px' }}>
+      <Link to={`/product/${product._id}`}>
+        <Card.Img src={primaryImage} variant='top' />
+      </Link>
       <Card.Body>
-        <a href={`/product/${product._id}`}>
-          <Card.Title as='div'>
-            <strong>{product.name}</strong>
+        <Link to={`/product/${product._id}`}>
+          <Card.Title className={`my-0 font-weight-bold`}>
+            {product.name}
           </Card.Title>
-        </a>
-        {/* {salePrices.length === 0 ? 
-          <Card.Text as='h3' className='productCardPrice'>${product.defaultPrice}</Card.Text> :
-          } */}
-
-        <Card.Text as='h3' className='productCardPrice'>{defaultPriceString}</Card.Text>
-
-        {/* {<Card.Text as='h6' className='productCardPrice'>
-          {salePriceRange.length === 0 ? <span>${product.defaultPrice}</span> : 
-          salePrices.length === 1 ? <span><s>${product.defaultPrice}</s> <span className='text-danger'>${salePrices[0]}</span></span> : 
-          <span><s>${product.defaultPrice}</s> <span className='text-danger'>${salePrices[0]} - ${salePrices[salePrices.length - 1]}</span></span>}
-        </Card.Text>} */}
+        </Link>
+        {<Card.Text as='h6' className={`my-0`} id="productCardPrices">
+          {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
+          salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceString}</span></span> : 
+          <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
+        </Card.Text>}
         <Card.Text as='div'>{product.colors.length} colors</Card.Text>
         <Card.Text as='div'>
           <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
         </Card.Text>
         <hr></hr>
-        {/* <Card.Text as='h3' className='productCardPrice'>${product.colors[0].colorPrice}</Card.Text> */}
-        {/* {lowestSalePrice < product.defaultPrice ?
-          <Card.Text as='h5' className='productCardPrice'><s>${product.defaultPrice}</s><span className="text-danger"> ${lowestSalePrice}</span></Card.Text> :
-          <Card.Text as='h5' className='productCardPrice'>${product.defaultPrice}</Card.Text>
-        } */}
-        <ProductColors images={product.colors}/>
+        <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
       </Card.Body>
     </Card>
   )
