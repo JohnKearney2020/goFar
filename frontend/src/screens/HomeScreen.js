@@ -4,6 +4,8 @@ import { Col, Row } from 'react-bootstrap';
 import products from '../products2.js';
 import ProductCard from '../components/ProductCard';
 
+import './HomeScreen.css';
+
 const HomeScreen = () => {
   return (
     <>
@@ -15,6 +17,7 @@ const HomeScreen = () => {
           </Col>
         ))}
       </Row>
+      {/* <h6 id="testPrice" className='text-danger font-weight-bold'>$79.99 - $99.99</h6> */}
     </>
   )
 }

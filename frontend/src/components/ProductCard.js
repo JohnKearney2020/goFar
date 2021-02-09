@@ -3,6 +3,7 @@ import { Card } from 'react-bootstrap';
 import ProductRating from './ProductRating';
 import ProductColors from './ProductColors';
 import './ProductCard.css';
+import { Link } from 'react-router-dom';
 
 const sortLowToHigh = (num1, num2) => {
   return num1 - num2;
@@ -46,29 +47,39 @@ const ProductCard = ({ product }) => {
   // Find the string to represent the range of sale prices, ex: '$59.99 - $69.99'
   salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
   salePriceString = `$${salePriceRange[0]}`;
+  console.log(salePriceString)
+  console.log(defaultPriceString)
+
 
   return (
-    <Card className='my-3 rounded'>
-      <a href={`/product/${product._id}`}>
+    <Card className='my-3 rounded' style={{ width: '365px' }}>
+    {/* <Card className='my-3 rounded'> */}
+      <Link to={`/product/${product._id}`}>
         <Card.Img src={product.images[0].source} variant='top' />
-      </a>
+      </Link>
       <Card.Body>
-        <a href={`/product/${product._id}`}>
-          <Card.Title as='div'>
-            <strong>{product.name}</strong>
+        <Link to={`/product/${product._id}`}>
+          <Card.Title className={`my-0 font-weight-bold`}>
+            {product.name}
           </Card.Title>
-        </a>
+        </Link>
+
+
         {/* {salePrices.length === 0 ? 
           <Card.Text as='h3' className='productCardPrice'>${product.defaultPrice}</Card.Text> :
           } */}
 
-        <Card.Text as='h3' className='productCardPrice'>{defaultPriceString}</Card.Text>
+        {/* <Card.Text as='h6' className='productCardPrice'>{defaultPriceString}</Card.Text> */}
 
-        {/* {<Card.Text as='h6' className='productCardPrice'>
-          {salePriceRange.length === 0 ? <span>${product.defaultPrice}</span> : 
-          salePrices.length === 1 ? <span><s>${product.defaultPrice}</s> <span className='text-danger'>${salePrices[0]}</span></span> : 
-          <span><s>${product.defaultPrice}</s> <span className='text-danger'>${salePrices[0]} - ${salePrices[salePrices.length - 1]}</span></span>}
-        </Card.Text>} */}
+        {/* {<Card.Text as='h6' className='py-0 productCardPrice'> */}
+
+        
+        {<Card.Text as='h6' className={`my-0`} id="productCardPrices">
+          {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
+          salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceRange[0]}</span></span> : 
+          <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>${salePriceRange[0]} - ${salePriceRange[salePriceRange.length - 1]}</span></span>}
+        </Card.Text>}
+
         <Card.Text as='div'>{product.colors.length} colors</Card.Text>
         <Card.Text as='div'>
           <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
