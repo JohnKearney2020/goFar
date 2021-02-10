@@ -74,19 +74,44 @@ const productSchema = mongoose.Schema({
       type: String,
       required: false
     },
-    colorPrice: {
-      type: Number
-    },
     clearance: {
       type: Boolean,
       default: false
+    },
+    tinyImage: {
+      type: String,
+      required: true
     }
   }],
   sizes: [{
-    color: { type: String, required: true },
-    sizeCategory: { type: String, required: true, default: 'Regular' }, // 'Regular', 'Tall', 'Short
-    size: { type: String },
-    qty: { type: Number, required: true, default: 0 }
+    sizeCategoryName: {
+      type: String,
+      required: true
+    },
+    sizeCategoryDefaultPrice: {
+      type: Number,
+      required: true
+    },
+    sizeCategoryColorsAndSizes: [{
+      color: {
+        type: String,
+        required: true
+      },
+      colorSalePrice: {
+        type: Number,
+        required: true
+      },
+      sizeCategorySizes: [{
+        size: {
+          type: String,
+          required: true
+        },
+        qty: {
+          type: Number,
+          required: true
+        }
+      }]
+    }]
   }],
   description1: {
     type: String,
@@ -124,6 +149,11 @@ const productSchema = mongoose.Schema({
     default: 0
   },
   defaultPrice: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  defaultSalePrice: {
     type: Number,
     required: true,
     default: 0
