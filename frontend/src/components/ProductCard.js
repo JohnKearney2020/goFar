@@ -77,7 +77,7 @@ const ProductCard = ({ product }) => {
             {product.name}
           </Card.Title>
         </Link>
-        {<Card.Text as='h6' className={`my-0`} id="productCardPrices">
+        {<Card.Text as='h6' className={`my-0`} id='productCardPrices'>
           {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
           salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceString}</span></span> : 
           <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
