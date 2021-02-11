@@ -29,7 +29,9 @@ const Header = () => {
       <Navbar bg='light' variant='light' expand='lg' collapseOnSelect>
       {/* <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect> for Cosmo Theme */}
         <Container>
-          <Navbar.Brand href='/'>Go Far</Navbar.Brand>
+          <LinkContainer to='/'>
+            <Navbar.Brand>Go Far</Navbar.Brand>
+          </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             {/* <SearchBox /> */}
