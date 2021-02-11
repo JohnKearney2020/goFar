@@ -1,6 +1,7 @@
 const products2 = [
   {
     // user: xxxx, //will be inserted with seeder script
+    _id: '60234651a573e04668f21326',
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
       {
