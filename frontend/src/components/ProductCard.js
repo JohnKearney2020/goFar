@@ -4,31 +4,33 @@ import ProductRating from './ProductRating';
 import ProductColors from './ProductColors';
 import './ProductCard.css';
 import { Link } from 'react-router-dom';
+// import { sortLowToHigh } from '../utilityFunctions/sortingFunctions';
+import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 
-const sortLowToHigh = (num1, num2) => {
-  return num1 - num2;
-}
+// const sortLowToHigh = (num1, num2) => {
+//   return num1 - num2;
+// }
 
 // product.sizes.sizeCategories
-const findDefaultPriceRange = (arrayOfPrices) => {
-  let prices = [];
-  for(let eachSizeCategory of arrayOfPrices){
-    prices.push(eachSizeCategory.sizeCategoryDefaultPrice);
-  }
-  prices.sort(sortLowToHigh);
-  return prices;
-}
+// const findDefaultPriceRange = (arrayOfPrices) => {
+//   let prices = [];
+//   for(let eachSizeCategory of arrayOfPrices){
+//     prices.push(eachSizeCategory.sizeCategoryDefaultPrice);
+//   }
+//   prices.sort(sortLowToHigh);
+//   return prices;
+// }
 // product.sizes.sizeCategories.sizeCategoryColorsAndSizes
-const findSalePriceRange = (arrayOfPrices) => {
-  let prices = [];
-  for(let eachSizeCategoryName of arrayOfPrices){
-    for(let eachColor of eachSizeCategoryName.sizeCategoryColorsAndSizes){
-      if(eachColor.colorSalePrice !== 0) prices.push(eachColor.colorSalePrice);
-    }
-  }
-  prices.sort(sortLowToHigh);
-  return prices;
-}
+// const findSalePriceRange = (arrayOfPrices) => {
+//   let prices = [];
+//   for(let eachSizeCategoryName of arrayOfPrices){
+//     for(let eachColor of eachSizeCategoryName.sizeCategoryColorsAndSizes){
+//       if(eachColor.colorSalePrice !== 0) prices.push(eachColor.colorSalePrice);
+//     }
+//   }
+//   prices.sort(sortLowToHigh);
+//   return prices;
+// }
 
 //remember, we are using destructuring here in place of passing 'props' and then 'props.product' etc. in our component
 const ProductCard = ({ product }) => {

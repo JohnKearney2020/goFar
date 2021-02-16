@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from '../components/ProductRating';
 import ProductColors from '../components/ProductColors';
+import ProductRating from '../components/ProductRating';
+import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 import products from '../products2';
 
 const ProductScreen = ({ match }) => {
@@ -32,9 +34,11 @@ const ProductScreen = ({ match }) => {
   return (
     <>
       <Row>
+        {/* Primary Product Image - Left side of page */}
         <Col md={6}>
           <Image src={primaryImage} alt={product.name} fluid/>
         </Col>
+        {/* Product Name / Sizes / Colors - Right side of page */}
         <Col md={6}>
           <Card border="light"> {/* light removes the border */}
             <ListGroup variant='flush'>
@@ -44,6 +48,10 @@ const ProductScreen = ({ match }) => {
               <ListGroup.Item className='border-0'>
                 <h4>{product.name}</h4>
               </ListGroup.Item>
+            </ListGroup>
+            {/* Prices and Reviews */}
+            <ListGroup>
+              <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
             </ListGroup>
             {/* Size Categories */}
             {/* <ListGroup horizontal defaultActiveKey='0' className='px-2 d-flex justify-content-start'> */}
@@ -62,9 +70,9 @@ const ProductScreen = ({ match }) => {
                 <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
               </ListGroup.Item>
             </ListGroup>
-
           </Card>
-        </Col>
+        </Col>{/* End of Product Name / Sizes / Colors */}
+
       </Row>
     </>
   )
