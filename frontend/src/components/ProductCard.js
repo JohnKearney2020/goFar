@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import ProductRating from './ProductRating';
 import ProductColors from './ProductColors';
+import PriceRanges from './PriceRanges';
 import './ProductCard.css';
 import { Link } from 'react-router-dom';
 // import { sortLowToHigh } from '../utilityFunctions/sortingFunctions';
@@ -80,9 +81,10 @@ const ProductCard = ({ product }) => {
           </Card.Title>
         </Link>
         {<Card.Text as='h6' className={`my-0`} id='productCardPrices'>
-          {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
+          <PriceRanges product={product}/>
+          {/* {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
           salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceString}</span></span> : 
-          <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
+          <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>} */}
         </Card.Text>}
         <Card.Text as='div'>{product.colors.length} colors</Card.Text>
         <Card.Text as='div'>

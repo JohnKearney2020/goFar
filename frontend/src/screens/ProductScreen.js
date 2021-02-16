@@ -4,6 +4,7 @@ import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from '../components/ProductRating';
 import ProductColors from '../components/ProductColors';
 import ProductRating from '../components/ProductRating';
+import PriceRanges from '../components/PriceRanges';
 import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 import products from '../products2';
 
@@ -50,19 +51,23 @@ const ProductScreen = ({ match }) => {
               </ListGroup.Item>
             </ListGroup>
             {/* Prices and Reviews */}
-            <ListGroup>
-              <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
+            <ListGroup horizontal className='justify-content-between'>
+              <ListGroup.Item className='border-0'>
+                <PriceRanges product={product}/>
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0'>
+                <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
+              </ListGroup.Item>
             </ListGroup>
             {/* Size Categories */}
-            {/* <ListGroup horizontal defaultActiveKey='0' className='px-2 d-flex justify-content-start'> */}
             <ListGroup horizontal defaultActiveKey='0' className='px-2'>
               {product.sizes.map((eachSize,idx) =>
-                // <ListGroup.Item action variant='light' className='text-center'>
                 <ListGroup.Item action eventKey={idx} className='text-center'>
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
               )}
             </ListGroup>
+            {/* Product Colors */}
             <ListGroup>
               <ListGroup.Item className='border-0'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}

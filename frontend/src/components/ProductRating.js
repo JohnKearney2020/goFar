@@ -2,6 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import './ProductRating.css';
 
+// color is an optional prop we can pass if we want to change the color of the stars in the rating component
 const ProductRating = ({ value, text, color }) => {
   return (
     <div className='productRating'>
