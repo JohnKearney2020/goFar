@@ -67,13 +67,24 @@ const ProductScreen = ({ match }) => {
                 </ListGroup.Item>
               )}
             </ListGroup>
-            {/* Product Colors */}
+            {/* Selected Color & Product Colors */}
             <ListGroup>
               <ListGroup.Item className='border-0'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
               <ListGroup.Item className='border-0'>
                 <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
               </ListGroup.Item>
+            </ListGroup>
+            {/* Size Selected & Sizes */}
+            <ListGroup.Item className='border-0'>
+              Size: 
+            </ListGroup.Item>
+            <ListGroup horizontal defaultActiveKey='0'>
+              {/* {product.sizes.sizeCategoryColorsAndSizes[{selectedColor}].map((eachSize,idx) =>
+                <ListGroup.Item action eventKey={idx} className='text-center'>
+                  {eachSize.sizeCategoryName}
+                </ListGroup.Item>
+              )} */}
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
