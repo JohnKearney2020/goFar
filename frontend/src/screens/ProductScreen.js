@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
-import Rating from '../components/ProductRating';
+// import Rating from '../components/ProductRating';
 import ProductColors from '../components/ProductColors';
 import ProductRating from '../components/ProductRating';
 import PriceRanges from '../components/PriceRanges';
-import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
+import SizeSelector from '../components/SizeSelector';
+// import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 import products from '../products2';
 
 const ProductScreen = ({ match }) => {
@@ -14,6 +15,8 @@ const ProductScreen = ({ match }) => {
 
   const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
   const [primaryImage, setPrimaryImage] = useState(product.images[0].source);
+  const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
+
 
   //On component load...
   // useEffect(() => {
@@ -31,6 +34,15 @@ const ProductScreen = ({ match }) => {
       }
     }
   }
+
+  // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
+  // console.log(product.sizes[0].sizeCategoryColorsAndSizes[0].color);
+
+  const sizeCategoryHandler = (e) => {
+    console.log(`Clicked size category: ${e.target.value}`);
+    setSelectedSizeCategory(e.target.value);
+  }
+
 
   return (
     <>
@@ -62,18 +74,30 @@ const ProductScreen = ({ match }) => {
             {/* Size Categories */}
             <ListGroup horizontal defaultActiveKey='0' className='px-2'>
               {product.sizes.map((eachSize,idx) =>
-                <ListGroup.Item action eventKey={idx} className='text-center'>
+                <ListGroup.Item action eventKey={idx} className='text-center' onClick={sizeCategoryHandler} value={eachSize.sizeCategoryName}>
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
               )}
             </ListGroup>
-            {/* Product Colors */}
+            {/* Selected Color & Product Colors */}
             <ListGroup>
               <ListGroup.Item className='border-0'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
               <ListGroup.Item className='border-0'>
                 <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
               </ListGroup.Item>
+            </ListGroup>
+            {/* Size Selected & Sizes */}
+            <ListGroup.Item className='border-0'>
+              Size: 
+            </ListGroup.Item>
+            <ListGroup horizontal defaultActiveKey='0'>
+              {/* {product.sizes.sizeCategoryColorsAndSizes[{selectedColor}].map((eachSize,idx) =>
+                <ListGroup.Item action eventKey={idx} className='text-center'>
+                  {eachSize.sizeCategoryName}
+                </ListGroup.Item>
+              )} */}
+              <SizeSelector product={product} selectedSizeCategory={selectedSizeCategory} selectedColor={selectedColor}/>
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
