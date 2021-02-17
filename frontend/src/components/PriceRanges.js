@@ -18,8 +18,8 @@ const PriceRanges = ({ product }) => {
   return (
     <>
       {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
-      salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceString}</span></span> : 
-      <span><s>{defaultPriceString}</s> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
+      salePriceRange.length === 1 ? <span><del>{defaultPriceString}</del> <span className='text-danger'>{salePriceString}</span></span> : 
+      <span><del>{defaultPriceString}</del> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
     </>
   )
 }

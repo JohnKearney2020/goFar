@@ -36,9 +36,16 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory }) => {
     <ListGroup horizontal defaultActiveKey='0' className='px-2'>
       {arrayOfSizes.map((eachSizeObject,idx) => (
         // <ListGroup.Item key={idx} action eventKey={idx} className='mx-3'>
-        <ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
-          {eachSizeObject.size}
-        </ListGroup.Item>
+        eachSizeObject.qty === 0 ?
+          (<ListGroup.Item key={idx} disabled className='mx-2 leftBorderFix'>
+            <del className='text-danger'>{eachSizeObject.size}</del>
+          </ListGroup.Item>) :
+          (<ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
+            {eachSizeObject.size}
+          </ListGroup.Item>)
+        // <ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
+        //   {eachSizeObject.size}
+        // </ListGroup.Item>
       ))}
     </ListGroup>
   )
