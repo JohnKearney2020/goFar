@@ -16,6 +16,7 @@ const ProductScreen = ({ match }) => {
   const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
   const [primaryImage, setPrimaryImage] = useState(product.images[0].source);
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
+  const [selectedSize, setSelectedSize] = useState('');
 
 
   //On component load...
@@ -35,13 +36,17 @@ const ProductScreen = ({ match }) => {
     }
   }
 
-  // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
-  // console.log(product.sizes[0].sizeCategoryColorsAndSizes[0].color);
-
   const sizeCategoryHandler = (e) => {
     console.log(`Clicked size category: ${e.target.value}`);
     setSelectedSizeCategory(e.target.value);
   }
+
+  const sizeSelectHandler = (e) => {
+    setSelectedSize(e.target.value);
+  }
+
+  // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
+  // console.log(product.sizes[0].sizeCategoryColorsAndSizes[0].color);
 
 
   return (
@@ -97,7 +102,7 @@ const ProductScreen = ({ match }) => {
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
               )} */}
-              <SizeSelector product={product} selectedSizeCategory={selectedSizeCategory} selectedColor={selectedColor}/>
+              <SizeSelector product={product} selectedSizeCategory={selectedSizeCategory} selectedColor={selectedColor} sizeSelectHandler={sizeSelectHandler}/>
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}

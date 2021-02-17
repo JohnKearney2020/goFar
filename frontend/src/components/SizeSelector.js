@@ -2,7 +2,7 @@ import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import './SizeSelector.css';
 
-const SizeSelector = ({ product, selectedColor, selectedSizeCategory }) => {
+const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler }) => {
   // let arrayOfSizes = [{
   //   size: 'XL'
   // }];
@@ -43,7 +43,7 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory }) => {
             <div className='ribbon'></div>
             <span>{eachSizeObject.size}</span>
           </ListGroup.Item>) :
-          (<ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
+          (<ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix' value={eachSizeObject.size} onClick={sizeSelectHandler}>
             {eachSizeObject.size}
           </ListGroup.Item>)
         // <ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
