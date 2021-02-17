@@ -1,3 +1,29 @@
 .leftBorderFix {
   border-width: 1px!important
 }
+
+.angledStrike {
+  /* background: linear-gradient(to left bottom, transparent 47.75%, currentColor 49.5%, currentColor 50.5%, transparent 52.25%); */
+  /* background: linear-gradient(to left bottom, transparent 47.75%, #55595C 49.5%, #55595C 50.5%, transparent 52.25%); */
+  /* background: linear-gradient(45deg, transparent 47.75%, #55595C 49.5%, #55595C 50.5%, transparent 52.25%); */
+  background: linear-gradient(45deg, transparent 47.75%, #919aa1 49.5%, #919aa1 50.5%, transparent 52.25%);
+}
+.withpadding {
+  padding: 0 0.15em;
+}
+
+.ribbon {
+  background-color: #919aa1;
+  /* color: white; */
+  /* font-size: .8rem; */
+  /* font-weight: 700; */
+  height: 1.8rem;
+  width: 1px; /* this keeps it from shrinking in width once we add absolute positioning to it */
+  /* padding-top: .4rem; This centers the text vertically - looks like we just winged it to get this number */
+  position: absolute;
+  transform: rotate(-45deg);
+  /* right: 1.5rem; */
+  /* top: 0.5rem; */
+  /* box-shadow: 0 0 .2rem rgba(0, 0, 0, .25); */
+  z-index: 1;
+}
