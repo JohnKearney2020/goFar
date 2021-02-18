@@ -1,31 +1,22 @@
-import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
-import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
-// import Rating from '../components/ProductRating';
+import React, { useState } from 'react';
+import { Row, Col, Image, ListGroup, Card } from 'react-bootstrap';
 import ProductColors from '../components/ProductColors';
 import ProductRating from '../components/ProductRating';
 import PriceRanges from '../components/PriceRanges';
 import SizeSelector from '../components/SizeSelector';
-// import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 import products from '../products2';
 
-const ProductScreen = ({ match }) => {
+const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
   
   const product = products.find((p)=> p._id === match.params.id);
-  // let changedSizeCategory = false;
 
   const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
-  // const [primaryImage, setPrimaryImage] = useState(product.images[0].source);
   const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
-  // const [selectedSize, setSelectedSize] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
-  const [changedSizeCategoryToggler, setChangedSizeCategoryToggler] = useState(false);
   const [activeKey, setActiveKey] = useState('');
 
-
   const colorSelectHandler = (colorClicked) => {
-    let previousColor = selectedColor;
     //Find the image that corresponds to the color clicked
     setSelectedColor(colorClicked);
     for(let eachImage of product.images) {
@@ -54,30 +45,18 @@ const ProductScreen = ({ match }) => {
     if(sizeFound === false) { setSelectedSize('') }
   }
 
-  // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
   const sizeCategoryHandler = (e) => {
-    console.log(`Clicked size category: ${e.target.value}`);
-    //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. 'Regular' to 'Tall', or vice versa
+    //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. from 'Regular' to 'Tall', or vice versa
+    //We also want to reset activeKey to clear any size buttons that the user selected
     if(e.target.value !== selectedSizeCategory) { setSelectedSize('') }
     setSelectedSizeCategory(e.target.value);
-    setChangedSizeCategoryToggler(!changedSizeCategoryToggler);
     setActiveKey('');
-    // const sizeButtons = document.getElementsByClassName('sizeButton');
-    // for(let eachSizeButton of sizeButtons){
-    //   // console.log(typeof eachSizeButton);
-    //   // console.log(eachSizeButton.classList);
-    //   eachSizeButton.classList.remove('active');
-    // }
   }
 
   const sizeSelectHandler = (e) => {
-    setSelectedSize(e.target.value);
-    setActiveKey(e.target.key);
+    setSelectedSize(e.target.value); //Change the local state for selectedSize to reflect the size the user chose
+    setActiveKey(e.target.key); //Make the corresponding size button the user clicked active
   }
-
-  // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
-  // console.log(product.sizes[0].sizeCategoryColorsAndSizes[0].color);
-
 
   return (
     <>
@@ -124,26 +103,19 @@ const ProductScreen = ({ match }) => {
             </ListGroup>
             {/* Size Selected & Sizes */}
             <ListGroup.Item className='border-0'>
-              Size: 
+              Size: {<span className='font-weight-bold'>{selectedSize}</span>}
             </ListGroup.Item>
             <ListGroup horizontal defaultActiveKey=''>
-              {/* {product.sizes.sizeCategoryColorsAndSizes[{selectedColor}].map((eachSize,idx) =>
-                <ListGroup.Item action eventKey={idx} className='text-center'>
-                  {eachSize.sizeCategoryName}
-                </ListGroup.Item>
-              )} */}
               <SizeSelector 
                 product={product} 
                 selectedSizeCategory={selectedSizeCategory} 
                 selectedColor={selectedColor} 
                 sizeSelectHandler={sizeSelectHandler}
-                changedSizeCategoryToggler={changedSizeCategoryToggler}
                 activeKey={activeKey}
               />
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
-
       </Row>
     </>
   )
