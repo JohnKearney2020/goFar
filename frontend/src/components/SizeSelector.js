@@ -2,7 +2,7 @@ import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import './SizeSelector.css';
 
-const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler, changedSizeCategoryToggler }) => {
+const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler, changedSizeCategoryToggler, activeKey }) => {
 // const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler }) => {
   // let arrayOfSizes = [{
   //   size: 'XL'
@@ -35,7 +35,7 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
   // };
 
   return (
-    <ListGroup horizontal className='px-2'>
+    <ListGroup horizontal className='px-2' activeKey={activeKey}>
       {arrayOfSizes.map((eachSizeObject,idx) => (
         // <ListGroup.Item key={idx} action eventKey={idx} className='mx-3'>
         eachSizeObject.qty === 0 ?

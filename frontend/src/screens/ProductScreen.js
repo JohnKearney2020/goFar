@@ -21,6 +21,7 @@ const ProductScreen = ({ match }) => {
   // const [selectedSize, setSelectedSize] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [changedSizeCategoryToggler, setChangedSizeCategoryToggler] = useState(false);
+  const [activeKey, setActiveKey] = useState('');
 
 
   const colorSelectHandler = (colorClicked) => {
@@ -60,6 +61,7 @@ const ProductScreen = ({ match }) => {
     if(e.target.value !== selectedSizeCategory) { setSelectedSize('') }
     setSelectedSizeCategory(e.target.value);
     setChangedSizeCategoryToggler(!changedSizeCategoryToggler);
+    setActiveKey('');
     // const sizeButtons = document.getElementsByClassName('sizeButton');
     // for(let eachSizeButton of sizeButtons){
     //   // console.log(typeof eachSizeButton);
@@ -70,6 +72,7 @@ const ProductScreen = ({ match }) => {
 
   const sizeSelectHandler = (e) => {
     setSelectedSize(e.target.value);
+    setActiveKey(e.target.key);
   }
 
   // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
@@ -135,6 +138,7 @@ const ProductScreen = ({ match }) => {
                 selectedColor={selectedColor} 
                 sizeSelectHandler={sizeSelectHandler}
                 changedSizeCategoryToggler={changedSizeCategoryToggler}
+                activeKey={activeKey}
               />
             </ListGroup>
           </Card>
