@@ -48,15 +48,16 @@ const ProductCard = ({ product }) => {
   salePriceString = `$${salePriceRange[0]}`;
 
   //Set up Local State
-  const [selectedColor, setSelectedColor] = useState('');
-  const [primaryImage, setPrimaryImage] = useState('');
+  const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
+  const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
   console.log(`selected color to start is: ${selectedColor}`);
 
   //On component load...
-  useEffect(() => {
-    setSelectedColor(product.colors[0].colorName);
-    setPrimaryImage(product.images[0].source);
-  }, [product.colors, product.images]);
+  // useEffect(() => {
+    // setSelectedColor(product.colors[0].colorName);
+    // setPrimaryImage(product.images[0].source);
+    // setPrimaryImage(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
+  // }, [product.colors, product.images]);
 
   const colorSelectHandler = (colorClicked) => {
     //Find the image that corresponds to the color clicked

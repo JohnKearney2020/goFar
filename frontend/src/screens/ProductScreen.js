@@ -12,19 +12,19 @@ import products from '../products2';
 const ProductScreen = ({ match }) => {
   
   const product = products.find((p)=> p._id === match.params.id);
+  // let changedSizeCategory = false;
 
   const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
-  const [primaryImage, setPrimaryImage] = useState(product.images[0].source);
+  // const [primaryImage, setPrimaryImage] = useState(product.images[0].source);
+  const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
+  // const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [changedSizeCategoryToggler, setChangedSizeCategoryToggler] = useState(false);
 
-
-  //On component load...
-  // useEffect(() => {
-  //   setSelectedColor(product.colors[0].colorName);
-  //   setPrimaryImage(product.images[0].source);
-  // }, [product.colors, product.images]);
 
   const colorSelectHandler = (colorClicked) => {
+    let previousColor = selectedColor;
     //Find the image that corresponds to the color clicked
     setSelectedColor(colorClicked);
     for(let eachImage of product.images) {
@@ -33,15 +33,47 @@ const ProductScreen = ({ match }) => {
         break;
       }
     }
+
+    //Check to see if the current size selected is not available in the new color. If it isn't, reset the local state of selectedSize to ''
+    let sizeFound = false;
+    for(let eachSizeCategory of product.sizes){ // Loop thru the array of general size objects
+      if(eachSizeCategory.sizeCategoryName === selectedSizeCategory){ // Find the matching sizeCategory, 'Tall' or 'Regular'
+        for(let eachColor of eachSizeCategory.sizeCategoryColorsAndSizes){ // Loop thru the array of more specific size objects
+          if(eachColor.color === colorClicked){ // Find a color that matches
+            for(let eachSize of eachColor.sizeCategorySizes){ // Loop thru the final array - an array of sizes and quantities
+              if(eachSize.size === selectedSize && eachSize.qty !== 0){
+                sizeFound = true;
+              }
+            }
+          }
+        }
+        break; //We've found the sizes for the color and can exit this loop
+      }
+    };
+    if(sizeFound === false) { setSelectedSize('') }
+  }
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+  const sizeCategoryHandler = (e) => {
+    console.log(`Clicked size category: ${e.target.value}`);
+    //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. 'Regular' to 'Tall', or vice versa
+    if(e.target.value !== selectedSizeCategory) { setSelectedSize('') }
+    setSelectedSizeCategory(e.target.value);
+    setChangedSizeCategoryToggler(!changedSizeCategoryToggler);
+    // const sizeButtons = document.getElementsByClassName('sizeButton');
+    // for(let eachSizeButton of sizeButtons){
+    //   // console.log(typeof eachSizeButton);
+    //   // console.log(eachSizeButton.classList);
+    //   eachSizeButton.classList.remove('active');
+    // }
+  }
+
+  const sizeSelectHandler = (e) => {
+    setSelectedSize(e.target.value);
   }
 
   // console.log(product.sizes.sizeCategoryColorsAndSizes[0].color);
   // console.log(product.sizes[0].sizeCategoryColorsAndSizes[0].color);
-
-  const sizeCategoryHandler = (e) => {
-    console.log(`Clicked size category: ${e.target.value}`);
-    setSelectedSizeCategory(e.target.value);
-  }
 
 
   return (
@@ -91,13 +123,19 @@ const ProductScreen = ({ match }) => {
             <ListGroup.Item className='border-0'>
               Size: 
             </ListGroup.Item>
-            <ListGroup horizontal defaultActiveKey='0'>
+            <ListGroup horizontal defaultActiveKey=''>
               {/* {product.sizes.sizeCategoryColorsAndSizes[{selectedColor}].map((eachSize,idx) =>
                 <ListGroup.Item action eventKey={idx} className='text-center'>
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
               )} */}
-              <SizeSelector product={product} selectedSizeCategory={selectedSizeCategory} selectedColor={selectedColor}/>
+              <SizeSelector 
+                product={product} 
+                selectedSizeCategory={selectedSizeCategory} 
+                selectedColor={selectedColor} 
+                sizeSelectHandler={sizeSelectHandler}
+                changedSizeCategoryToggler={changedSizeCategoryToggler}
+              />
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
