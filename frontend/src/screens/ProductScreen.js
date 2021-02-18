@@ -53,12 +53,19 @@ const ProductScreen = ({ match }) => {
     if(sizeFound === false) { setSelectedSize('') }
   }
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
   const sizeCategoryHandler = (e) => {
     console.log(`Clicked size category: ${e.target.value}`);
     //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. 'Regular' to 'Tall', or vice versa
     if(e.target.value !== selectedSizeCategory) { setSelectedSize('') }
     setSelectedSizeCategory(e.target.value);
     setChangedSizeCategoryToggler(!changedSizeCategoryToggler);
+    // const sizeButtons = document.getElementsByClassName('sizeButton');
+    // for(let eachSizeButton of sizeButtons){
+    //   // console.log(typeof eachSizeButton);
+    //   // console.log(eachSizeButton.classList);
+    //   eachSizeButton.classList.remove('active');
+    // }
   }
 
   const sizeSelectHandler = (e) => {

@@ -10,7 +10,7 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
   let arrayOfSizes = [];
   // console.log(`selectedSizeCategory: ${selectedSizeCategory}`)
   // console.log(product.sizes);
-  console.log(changedSizeCategoryToggler)
+  // console.log(changedSizeCategoryToggler)
 
 
   for(let eachSizeCategory of product.sizes){
@@ -39,13 +39,13 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
       {arrayOfSizes.map((eachSizeObject,idx) => (
         // <ListGroup.Item key={idx} action eventKey={idx} className='mx-3'>
         eachSizeObject.qty === 0 ?
-          (<ListGroup.Item key={idx} disabled className='mx-2 leftBorderFix d-flex align-items-center justify-content-center'>
+          (<ListGroup.Item key={idx} disabled className='mx-2 leftBorderFix d-flex align-items-center justify-content-center sizeButton'>
             {/* <del className='text-danger'>{eachSizeObject.size}</del> */}
             {/* <span className='angledStrike withpadding'>{eachSizeObject.size}</span> */}
             <div className='ribbon'></div>
             <span>{eachSizeObject.size}</span>
           </ListGroup.Item>) :
-          (<ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix' value={eachSizeObject.size} onClick={sizeSelectHandler}>
+          (<ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix sizeButton' value={eachSizeObject.size} onClick={sizeSelectHandler}>
             {eachSizeObject.size}
           </ListGroup.Item>)
         // <ListGroup.Item key={idx} action eventKey={idx} className='mx-2 leftBorderFix'>
