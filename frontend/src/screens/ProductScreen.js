@@ -15,6 +15,8 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [activeKey, setActiveKey] = useState('');
+  const [qtyInStock, setQtyInStock] = useState('');
+  const [qtyForCart, setQtyForCart] = useState(0);
 
   const colorSelectHandler = (colorClicked) => {
     //Find the image that corresponds to the color clicked
@@ -35,6 +37,9 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             for(let eachSize of eachColor.sizeCategorySizes){ // Loop thru the final array - an array of sizes and quantities
               if(eachSize.size === selectedSize && eachSize.qty !== 0){
                 sizeFound = true;
+                //We've found that the size is in fact in stock for the new color. Update the local qtyInStock state, too
+                console.log(`Found this qty: ${eachSize.qty}`)
+                setQtyInStock(eachSize.qty);
               }
             }
           }
@@ -42,7 +47,10 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
         break; //We've found the sizes for the color and can exit this loop
       }
     };
-    if(sizeFound === false) { setSelectedSize('') }
+    if(sizeFound === false) { //If the size is not found in the new color, reset the selectedSize and qtyInStock local state
+      setSelectedSize('');
+      setQtyInStock('');
+    }
   }
 
   const sizeCategoryHandler = (e) => {
@@ -51,11 +59,35 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
     if(e.target.value !== selectedSizeCategory) { setSelectedSize('') }
     setSelectedSizeCategory(e.target.value);
     setActiveKey('');
+    setQtyInStock(''); //since we are clearing out any size selections, we need to clear the qtyInStock local state, too.
   }
 
   const sizeSelectHandler = (e) => {
-    setSelectedSize(e.target.value); //Change the local state for selectedSize to reflect the size the user chose
-    setActiveKey(e.target.key); //Make the corresponding size button the user clicked active
+    let userSelectedSize = e.target.value;
+    setSelectedSize(userSelectedSize); //Change the local state for selectedSize to reflect the size the user chose
+    setActiveKey(e.target.dataset.keyforactivekey); //Make the corresponding size button the user clicked active
+
+    for(let eachSizeCategory of product.sizes){ // Loop thru the array of general size objects
+      if(eachSizeCategory.sizeCategoryName === selectedSizeCategory){ // Find the matching sizeCategory, 'Tall' or 'Regular'
+        for(let eachColor of eachSizeCategory.sizeCategoryColorsAndSizes){ // Loop thru the array of more specific size objects
+          if(eachColor.color === selectedColor){ // Find a color that matches
+            for(let eachSize of eachColor.sizeCategorySizes){ // Loop thru the final array - an array of sizes and quantities
+              if(eachSize.size === userSelectedSize && eachSize.qty !== 0){
+                // sizeFound = true;
+                //We've found that the size is in fact in stock for the new color. Update the local qtyInStock state, too
+                console.log(`Found this qty: ${eachSize.qty}`)
+                setQtyInStock(eachSize.qty);
+              }
+            }
+          }
+        }
+        break; //We've found the sizes for the color and can exit this loop
+      }
+    };
+  }
+
+  const addToCartHandler = () => {
+    console.log(`Clicked add to cart!`)
   }
 
   return (
@@ -112,27 +144,35 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               </ListGroup.Item>
             </ListGroup>
             {/* Size Selected & Sizes */}
-            <ListGroup.Item className='border-0'>
-              Size: {<span className='font-weight-bold'>{selectedSize}</span>}
-            </ListGroup.Item>
-            <ListGroup horizontal defaultActiveKey=''>
-              <SizeSelector 
-                product={product} 
-                selectedSizeCategory={selectedSizeCategory} 
-                selectedColor={selectedColor} 
-                sizeSelectHandler={sizeSelectHandler}
-                activeKey={activeKey}
-              />
+            <ListGroup>
+              <ListGroup.Item className='border-0'>
+                Size: {<span className='font-weight-bold'>{selectedSize}</span>}
+              </ListGroup.Item>
             </ListGroup>
+            {/* Size Selector */}
+            <SizeSelector 
+              product={product} 
+              selectedSizeCategory={selectedSizeCategory} 
+              selectedColor={selectedColor} 
+              sizeSelectHandler={sizeSelectHandler}
+              activeKey={activeKey}
+            />
             {/* Qty Select and Add to Cart Button */}
             <ListGroup horizontal className='mt-3'>
                 <ListGroup.Item className='border-0'>
-                  <Form.Control as='select' value={10}>
-                    
+                  <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)}>
+                    {[...Array(qtyInStock).keys()].map(x => (
+                      // Limit the user to a max of 10 items added to the cart at once
+                      (x + 1 <= 10 &&
+                        <option key={x+1} value={x + 1}>
+                        {x + 1}
+                        </option>
+                      )
+                    ))}
                   </Form.Control>
                 </ListGroup.Item>
                 <ListGroup.Item className='border-0'>
-                  <Button className='btn-block' type='button' variant="dark">
+                  <Button className='btn-block' type='button' variant="dark" onClick={addToCartHandler}>
                     Add to Cart
                   </Button>
                 </ListGroup.Item>
