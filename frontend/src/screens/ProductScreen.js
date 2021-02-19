@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Image, ListGroup, Card } from 'react-bootstrap';
+import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import ProductColors from '../components/ProductColors';
 import ProductRating from '../components/ProductRating';
 import PriceRanges from '../components/PriceRanges';
@@ -88,7 +88,17 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             {/* Size Categories */}
             <ListGroup horizontal defaultActiveKey='0' className='px-2'>
               {product.sizes.map((eachSize,idx) =>
-                <ListGroup.Item action eventKey={idx} className='text-center' onClick={sizeCategoryHandler} value={eachSize.sizeCategoryName}>
+                <ListGroup.Item
+                // as='button'
+                action 
+                eventKey={idx} 
+                key={idx} 
+                className='text-center' 
+                onClick={sizeCategoryHandler} 
+                value={eachSize.sizeCategoryName}
+                // variant="light"
+                // variant="dark"
+                >
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
               )}
@@ -114,9 +124,24 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                 activeKey={activeKey}
               />
             </ListGroup>
+            {/* Qty Select and Add to Cart Button */}
+            <ListGroup horizontal className='mt-3'>
+                <ListGroup.Item className='border-0'>
+                  <Form.Control as='select' value={10}>
+                    
+                  </Form.Control>
+                </ListGroup.Item>
+                <ListGroup.Item className='border-0'>
+                  <Button className='btn-block' type='button' variant="dark">
+                    Add to Cart
+                  </Button>
+                </ListGroup.Item>
+            </ListGroup>
+            <hr></hr>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
       </Row>
+      <hr></hr>
     </>
   )
 }
