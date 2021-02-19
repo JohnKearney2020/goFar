@@ -5,6 +5,7 @@ import ProductRating from '../components/ProductRating';
 import PriceRanges from '../components/PriceRanges';
 import SizeSelector from '../components/SizeSelector';
 import products from '../products2';
+import QuantityAlert from '../components/QuantityAlert';
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
   
@@ -118,7 +119,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               </ListGroup.Item>
             </ListGroup>
             {/* Size Categories */}
-            <ListGroup horizontal defaultActiveKey='0' className='px-2'>
+            <ListGroup horizontal defaultActiveKey='0' className='px-2 py-3'>
               {product.sizes.map((eachSize,idx) =>
                 <ListGroup.Item
                 // as='button'
@@ -137,15 +138,15 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             </ListGroup>
             {/* Selected Color & Product Colors */}
             <ListGroup>
-              <ListGroup.Item className='border-0'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
+              <ListGroup.Item className='border-0 pb-1'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
-              <ListGroup.Item className='border-0'>
+              <ListGroup.Item className='border-0 pt-1'>
                 <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
               </ListGroup.Item>
             </ListGroup>
             {/* Size Selected & Sizes */}
             <ListGroup>
-              <ListGroup.Item className='border-0'>
+              <ListGroup.Item className='border-0 pb-1'>
                 Size: {<span className='font-weight-bold'>{selectedSize}</span>}
               </ListGroup.Item>
             </ListGroup>
@@ -157,8 +158,13 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               sizeSelectHandler={sizeSelectHandler}
               activeKey={activeKey}
             />
+            {/* Quantity Alert */}
+            {qtyInStock <= 5 && qtyInStock &&
+              <QuantityAlert qtyInStock={qtyInStock}/>
+            }
+            <hr></hr>
             {/* Qty Select and Add to Cart Button */}
-            <ListGroup horizontal className='mt-3'>
+            <ListGroup horizontal className=''>
                 <ListGroup.Item className='border-0'>
                   <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)}>
                     {[...Array(qtyInStock).keys()].map(x => (
@@ -177,7 +183,6 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                   </Button>
                 </ListGroup.Item>
             </ListGroup>
-            <hr></hr>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
       </Row>
