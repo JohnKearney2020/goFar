@@ -6,8 +6,36 @@ import PriceRanges from '../components/PriceRanges';
 import SizeSelector from '../components/SizeSelector';
 import products from '../products2';
 import QuantityAlert from '../components/QuantityAlert';
+import FeatureIcons from '../components/FeatureIcons';
+import ProductDescription from '../components/ProductDescription';
+import ProductFeatures from '../components/ProductFeatures';
+import ProductMaterials from '../components/ProductMaterials';
+import ProductCare from '../components/ProductCare';
+
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
+
+  const arrayOfImages = [
+    {
+      source: '/images/firstAscentLogo.svg',
+      heading: 'First Ascent'
+    }, {
+      source: '/images/warmthMinus10.svg',
+      heading: 'Temp Rating (Moderate Activity)'
+    }, {
+      source: '/images/fillPower800.svg',
+      heading: 'Fill Power'
+    }, {
+      source: '/images/stormRepelDWR.svg',
+      heading: 'StormRepel Super DWR'
+    }, {
+      source: '/images/windProof.svg',
+      heading: 'Windproof'
+    }, {
+      source: '/images/recycledMaterials.svg',
+      heading: 'Recycled Materials'
+    }
+  ]
   
   const product = products.find((p)=> p._id === match.params.id);
 
@@ -162,7 +190,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             {qtyInStock <= 5 && qtyInStock &&
               <QuantityAlert qtyInStock={qtyInStock}/>
             }
-            <hr></hr>
+            <hr />
             {/* Qty Select and Add to Cart Button */}
             <ListGroup horizontal className=''>
                 <ListGroup.Item className='border-0'>
@@ -186,7 +214,31 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
       </Row>
-      <hr></hr>
+      <hr />
+      {/* Features Icons */}
+      <Row className='my-5'>
+        <FeatureIcons arrayOfImages={arrayOfImages}/>
+      </Row>
+      <hr />
+      {/* Product Description & Features */}
+      <Row>
+        <Col md={6}>
+          <ProductDescription descriptionsArray={product.descriptions}/>
+        </Col>
+        <Col md={6}>
+          <ProductFeatures featuresArray={product.features}/>
+        </Col>
+      </Row>
+      <hr/>
+      {/* Care and Materials */}
+      <Row>
+        <Col md={6}>
+            <ProductCare careArray={product.care}/>
+          </Col>
+          <Col md={6}>
+            <ProductMaterials materialsArray={product.materials}/>
+        </Col>
+      </Row>
     </>
   )
 }
