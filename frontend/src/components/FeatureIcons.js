@@ -1,16 +1,15 @@
 import React from 'react';
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 const FeatureIcons = ({ arrayOfImages }) => {
   return (
     <>
       {arrayOfImages.map((eachImage,idx) => 
       (
-        <Col className='text-center' key={idx}>
-          <Image src={eachImage.source} alt={eachImage.heading} className='m-4'/>
-          <h5 className='font-weight-bold'>{eachImage.heading}</h5>
-        </Col>
-
+        <Card key={idx} border='light' className='text-center' style={{ width: '10rem' }}>
+          <Card.Img variant='top' src={eachImage.source} />
+          <Card.Title className='mt-2 font-weight-bold'>{eachImage.heading}</Card.Title>
+        </Card>
       ))}
     </>
   )

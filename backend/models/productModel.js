@@ -113,29 +113,12 @@ const productSchema = mongoose.Schema({
       }]
     }]
   }],
-  description1: {
+  descriptions: [{
     type: String,
     required: true,
-  },
-  description2: {
-    type: String,
-  },
-  description3: {
-    type: String,
-  },
-  description4: {
-    type: String,
-  },
+  }],
   features: [{ type: String }],
-    // {
-    //   featuresBullet: {
-    //     type: String
-    //   }
-    // }
-  // ],
-  care: {
-    type: String,
-  },
+  care: [{ type: String }],
   materials: [{ type: String }],
   reviews: [reviewSchema], //an array of review objects. See the schema above
   rating: { //the average of all user ratings
@@ -157,7 +140,17 @@ const productSchema = mongoose.Schema({
     type: Number,
     required: true,
     default: 0
-  }
+  },
+  featureIcons: [{
+    heading: {
+      type: String,
+      required: true
+    },
+    source: {
+      type: String,
+      required: true
+    }
+  }],
   // salePrice: {
   //   type: Number,
   //   required: true,

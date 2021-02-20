@@ -1,7 +1,7 @@
 const products2 = [
   {
     // user: xxxx, //will be inserted with seeder script
-    _id: '60234651a573e04668f21326',
+    _id: '603060d295655823e81434d5',
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
       {
@@ -157,7 +157,33 @@ const products2 = [
     rating: 4,
     numReviews: 1,
     defaultPrice: 0,
-    defaultSalePrice: 0
+    defaultSalePrice: 0,
+    featureIcons: [
+      {
+        heading: 'First Ascent',
+        source: '/images/FeatureIcons/firstAscent.svg'
+      },
+      {
+        heading: 'Temp Rating (Moderate Activity)',
+        source: '/images/FeatureIcons/tempRatingMinus10.svg'
+      },
+      {
+        heading: 'Fill Power',
+        source: '/images/FeatureIcons/fillPower800.svg'
+      },
+      {
+        heading: 'StormRepel Super DWR',
+        source: '/images/FeatureIcons/stormRepelDWR.svg'
+      },
+      {
+        heading: 'Windproof',
+        source: '/images/FeatureIcons/windproof.svg'
+      },
+      {
+        heading: 'Recycled Materials',
+        source: '/images/FeatureIcons/recycledMaterials.svg'
+      }
+    ]
   }
 ]
 

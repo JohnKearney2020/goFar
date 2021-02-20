@@ -15,27 +15,28 @@ import ProductCare from '../components/ProductCare';
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
 
-  const arrayOfImages = [
-    {
-      source: '/images/firstAscentLogo.svg',
-      heading: 'First Ascent'
-    }, {
-      source: '/images/warmthMinus10.svg',
-      heading: 'Temp Rating (Moderate Activity)'
-    }, {
-      source: '/images/fillPower800.svg',
-      heading: 'Fill Power'
-    }, {
-      source: '/images/stormRepelDWR.svg',
-      heading: 'StormRepel Super DWR'
-    }, {
-      source: '/images/windProof.svg',
-      heading: 'Windproof'
-    }, {
-      source: '/images/recycledMaterials.svg',
-      heading: 'Recycled Materials'
-    }
-  ]
+  // const arrayOfImages = [
+  //   {
+  //     source: '/images/firstAscentLogo.svg',
+  //     heading: 'First Ascent'
+  //   }, {
+  //     source: '/images/warmthMinus10.svg',
+  //     heading: 'Temp Rating (Moderate Activity)'
+  //   }
+  //   // }, {
+  //   //   source: '/images/fillPower800.svg',
+  //   //   heading: 'Fill Power'
+  //   // }, {
+  //   //   source: '/images/stormRepelDWR.svg',
+  //   //   heading: 'StormRepel Super DWR'
+  //   // }, {
+  //   //   source: '/images/windProof.svg',
+  //   //   heading: 'Windproof'
+  //   // }, {
+  //   //   source: '/images/recycledMaterials.svg',
+  //   //   heading: 'Recycled Materials'
+  //   // }
+  // ]
   
   const product = products.find((p)=> p._id === match.params.id);
 
@@ -216,8 +217,8 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
       </Row>
       <hr />
       {/* Features Icons */}
-      <Row className='my-5'>
-        <FeatureIcons arrayOfImages={arrayOfImages}/>
+      <Row className='my-5 justify-content-around'>
+        <FeatureIcons arrayOfImages={product.featureIcons}/>
       </Row>
       <hr />
       {/* Product Description & Features */}
