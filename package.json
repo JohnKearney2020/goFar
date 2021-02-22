@@ -34,6 +34,7 @@
     "mongoose": "^5.11.13",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
+    "pure-react-carousel": "^1.27.6",
     "react-html-parser": "^2.0.2"
   },
   "devDependencies": {
