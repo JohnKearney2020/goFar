@@ -11,6 +11,7 @@ import ProductDescription from '../components/ProductDescription';
 import ProductFeatures from '../components/ProductFeatures';
 import ProductMaterials from '../components/ProductMaterials';
 import ProductCare from '../components/ProductCare';
+import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
 
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
@@ -125,7 +126,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
       <Row>
         {/* Primary Product Image - Left side of page */}
         <Col md={6}>
-          <Image src={primaryImage} alt={product.name} fluid/>
+            <Image src={primaryImage} alt={product.name} fluid/>
         </Col>
         {/* Product Name / Sizes / Colors - Right side of page */}
         <Col md={6}>
@@ -214,6 +215,10 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             </ListGroup>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
+      </Row> {/* End of Top Row */}
+      <hr />
+      <Row className='justify-content-center'>
+        <ProductDetailsCarousel />
       </Row>
       <hr />
       {/* Features Icons */}
