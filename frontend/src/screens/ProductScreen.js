@@ -144,7 +144,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                 <PriceRanges product={product}/>
               </ListGroup.Item>
               <ListGroup.Item className='border-0'>
-                <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
+                <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
               </ListGroup.Item>
             </ListGroup>
             {/* Size Categories */}
