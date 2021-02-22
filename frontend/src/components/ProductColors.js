@@ -10,8 +10,9 @@ const ProductColors = ({ images, colorSelectHandler }) => {
   }
 
   return (
-    <Container>
-      <Row>
+    // <Container>
+      // <Row>
+      <>
         {images.map(eachColorImage => (
           <Image src={eachColorImage.tinyImage} roundedCircle thumbnail className="mr-1 productColorsBorder" 
           key={eachColorImage.tinyImage}
@@ -19,8 +20,10 @@ const ProductColors = ({ images, colorSelectHandler }) => {
           onClick={newColorClickedHandler}
           />
         ))}
-      </Row>
-    </Container>
+      </>
+
+      // </Row>
+    // </Container>
   )
 }
 

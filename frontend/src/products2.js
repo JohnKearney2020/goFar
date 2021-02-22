@@ -1,7 +1,7 @@
 const products2 = [
   {
     // user: xxxx, //will be inserted with seeder script
-    _id: '60234651a573e04668f21326',
+    _id: '603060d295655823e81434d5',
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
       {
@@ -134,9 +134,12 @@ const products2 = [
         ]
       },
     ],
-    description1: 'Our premium ultralight has a streamlined fit that\'s built for mobility. Comfort is further enhanced with the soft, recycled ripstop polyester shell and its adjustable drawcord hem. But the real crux of this hoodie is the high-loft Premium Goose Down insulation. Maximum warmth. Minimum weight and bulk',
-    description2: 'As an ultralight insulating layer, the MicroTherm is thinner than traditional down jackets. But that combination of minimal bulk and effective warmth is what makes it special, and is the result of its unique micro-channel construction and the exceptionally high-loft down that it holds close to the body for maximum thermal efficiency.',
-    description3: 'NOTE: Temperature ratings are based on a controlled laboratory test by an independent university lab. Also consider: your sensitivity to cold and wind-chill; time of exposure; activity level; and use of layering.',
+    descriptions: [
+      'Our premium ultralight has a streamlined fit that\'s built for mobility. Comfort is further enhanced with the soft, recycled ripstop polyester shell and its adjustable drawcord hem. But the real crux of this hoodie is the high-loft Premium Goose Down insulation. Maximum warmth. Minimum weight and bulk',
+      'As an ultralight insulating layer, the MicroTherm is thinner than traditional down jackets. But that combination of minimal bulk and effective warmth is what makes it special, and is the result of its unique micro-channel construction and the exceptionally high-loft down that it holds close to the body for maximum thermal efficiency.',
+      // We can inject HTML directly into these strings thanks to the react-html-parser npm package
+      '<span class="font-weight-bold">NOTE:</span> Temperature ratings are based on a controlled laboratory test by an independent university lab. Also consider: your sensitivity to cold and wind-chill; time of exposure; activity level; and use of layering.'
+    ],
     features: [
       '1.2 oz 20D recycled ripstop polyester shell—perfect balance of light weight and strength',
       'StormRepel® Super DWR—our longest lasting moisture-shedding finish',
@@ -148,13 +151,39 @@ const products2 = [
       'Length, Reg Medium: 28" | Weight: 13.4 oz | Down Fill Weight: 3.2 oz',
       'Active. An athletic fit. Close to the body without restricting mobility. Designed to fit over baselayers and lightweight midlayers.'
     ],
-    care: 'Secure all garment closures before laundering. Machine wash cold delicate, separately, using mild detergent only. Do not bleach or use fabric softeners. Rinse thoroughly and remove promptly. Tumble dry low. Do not hang to dry. Do not iron or steam. Do not dry clean. For best results, dry with clean tennis ball.',
+    care: ['Secure all garment closures before laundering. Machine wash cold delicate, separately, using mild detergent only. Do not bleach or use fabric softeners. Rinse thoroughly and remove promptly. Tumble dry low. Do not hang to dry. Do not iron or steam. Do not dry clean. For best results, dry with clean tennis ball.'],
     materials: [ '100% polyester', 'Imported' ],
     reviews: [], //come back to this
     rating: 4,
     numReviews: 1,
     defaultPrice: 0,
-    defaultSalePrice: 0
+    defaultSalePrice: 0,
+    featureIcons: [
+      {
+        heading: 'First Ascent',
+        source: '/images/FeatureIcons/firstAscent.svg'
+      },
+      {
+        heading: 'Temp Rating (Moderate Activity)',
+        source: '/images/FeatureIcons/tempRatingMinus10.svg'
+      },
+      {
+        heading: 'Fill Power',
+        source: '/images/FeatureIcons/fillPower800.svg'
+      },
+      {
+        heading: 'StormRepel Super DWR',
+        source: '/images/FeatureIcons/stormRepelDWR.svg'
+      },
+      {
+        heading: 'Windproof',
+        source: '/images/FeatureIcons/windproof.svg'
+      },
+      {
+        heading: 'Recycled Materials',
+        source: '/images/FeatureIcons/recycledMaterials.svg'
+      }
+    ]
   }
 ]
 

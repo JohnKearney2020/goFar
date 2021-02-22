@@ -19,7 +19,7 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
   };
 
   return (
-    <ListGroup horizontal className='px-2' activeKey={activeKey}>
+    <ListGroup horizontal className='px-2 pb-3' activeKey={activeKey}>
       {arrayOfSizes.map((eachSizeObject,idx) => (
         eachSizeObject.qty === 0 ? //if the qty for that size is zero, in other words Out of Stock
           //'action' prop is passed even though these items are disabled b/c it has some effect on the size of the item

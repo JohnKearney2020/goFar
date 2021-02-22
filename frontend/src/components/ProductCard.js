@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import ProductRating from './ProductRating';
 import ProductColors from './ProductColors';
@@ -37,6 +37,7 @@ import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/p
 const ProductCard = ({ product }) => {
   let defaultPriceRange = findDefaultPriceRange(product.sizes);
   let salePriceRange = findSalePriceRange(product.sizes);
+  // eslint-disable-next-line no-unused-vars
   let defaultPriceString = '';
   let salePriceString = '';
   // Find the string to represent the range of default prices, ex: '$59.99 - $69.99'
@@ -47,8 +48,9 @@ const ProductCard = ({ product }) => {
   salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
   salePriceString = `$${salePriceRange[0]}`;
 
+  let selectedColor = product.colors[0].colorName;
   //Set up Local State
-  const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
+  // const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
   const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
   console.log(`selected color to start is: ${selectedColor}`);
 
@@ -92,7 +94,8 @@ const ProductCard = ({ product }) => {
           <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
         </Card.Text>
         <hr></hr>
-        <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
+        {/* <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/> */}
+        <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} />
       </Card.Body>
     </Card>
   )

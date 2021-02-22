@@ -5,8 +5,39 @@ import ProductRating from '../components/ProductRating';
 import PriceRanges from '../components/PriceRanges';
 import SizeSelector from '../components/SizeSelector';
 import products from '../products2';
+import QuantityAlert from '../components/QuantityAlert';
+import FeatureIcons from '../components/FeatureIcons';
+import ProductDescription from '../components/ProductDescription';
+import ProductFeatures from '../components/ProductFeatures';
+import ProductMaterials from '../components/ProductMaterials';
+import ProductCare from '../components/ProductCare';
+import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
+
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
+
+  // const arrayOfImages = [
+  //   {
+  //     source: '/images/firstAscentLogo.svg',
+  //     heading: 'First Ascent'
+  //   }, {
+  //     source: '/images/warmthMinus10.svg',
+  //     heading: 'Temp Rating (Moderate Activity)'
+  //   }
+  //   // }, {
+  //   //   source: '/images/fillPower800.svg',
+  //   //   heading: 'Fill Power'
+  //   // }, {
+  //   //   source: '/images/stormRepelDWR.svg',
+  //   //   heading: 'StormRepel Super DWR'
+  //   // }, {
+  //   //   source: '/images/windProof.svg',
+  //   //   heading: 'Windproof'
+  //   // }, {
+  //   //   source: '/images/recycledMaterials.svg',
+  //   //   heading: 'Recycled Materials'
+  //   // }
+  // ]
   
   const product = products.find((p)=> p._id === match.params.id);
 
@@ -95,7 +126,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
       <Row>
         {/* Primary Product Image - Left side of page */}
         <Col md={6}>
-          <Image src={primaryImage} alt={product.name} fluid/>
+            <Image src={primaryImage} alt={product.name} fluid/>
         </Col>
         {/* Product Name / Sizes / Colors - Right side of page */}
         <Col md={6}>
@@ -114,11 +145,11 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                 <PriceRanges product={product}/>
               </ListGroup.Item>
               <ListGroup.Item className='border-0'>
-                <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
+                <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
               </ListGroup.Item>
             </ListGroup>
             {/* Size Categories */}
-            <ListGroup horizontal defaultActiveKey='0' className='px-2'>
+            <ListGroup horizontal defaultActiveKey='0' className='px-2 py-3'>
               {product.sizes.map((eachSize,idx) =>
                 <ListGroup.Item
                 // as='button'
@@ -137,15 +168,15 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             </ListGroup>
             {/* Selected Color & Product Colors */}
             <ListGroup>
-              <ListGroup.Item className='border-0'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
+              <ListGroup.Item className='border-0 pb-1'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
-              <ListGroup.Item className='border-0'>
+              <ListGroup.Item className='border-0 pt-1'>
                 <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
               </ListGroup.Item>
             </ListGroup>
             {/* Size Selected & Sizes */}
             <ListGroup>
-              <ListGroup.Item className='border-0'>
+              <ListGroup.Item className='border-0 pb-1'>
                 Size: {<span className='font-weight-bold'>{selectedSize}</span>}
               </ListGroup.Item>
             </ListGroup>
@@ -157,8 +188,13 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               sizeSelectHandler={sizeSelectHandler}
               activeKey={activeKey}
             />
+            {/* Quantity Alert */}
+            {qtyInStock <= 5 && qtyInStock &&
+              <QuantityAlert qtyInStock={qtyInStock}/>
+            }
+            <hr />
             {/* Qty Select and Add to Cart Button */}
-            <ListGroup horizontal className='mt-3'>
+            <ListGroup horizontal className=''>
                 <ListGroup.Item className='border-0'>
                   <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)}>
                     {[...Array(qtyInStock).keys()].map(x => (
@@ -177,11 +213,38 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                   </Button>
                 </ListGroup.Item>
             </ListGroup>
-            <hr></hr>
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
+      </Row> {/* End of Top Row */}
+      <hr />
+      <Row className='justify-content-center'>
+        <ProductDetailsCarousel />
       </Row>
-      <hr></hr>
+      <hr />
+      {/* Features Icons */}
+      <Row className='my-5 justify-content-around'>
+        <FeatureIcons arrayOfImages={product.featureIcons}/>
+      </Row>
+      <hr />
+      {/* Product Description & Features */}
+      <Row>
+        <Col md={6}>
+          <ProductDescription descriptionsArray={product.descriptions}/>
+        </Col>
+        <Col md={6}>
+          <ProductFeatures featuresArray={product.features}/>
+        </Col>
+      </Row>
+      <hr/>
+      {/* Care and Materials */}
+      <Row>
+        <Col md={6}>
+            <ProductCare careArray={product.care}/>
+          </Col>
+          <Col md={6}>
+            <ProductMaterials materialsArray={product.materials}/>
+        </Col>
+      </Row>
     </>
   )
 }
