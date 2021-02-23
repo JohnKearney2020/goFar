@@ -4,15 +4,25 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 // import { Carousel } from 'react-bootstrap';
 
 
-// import './ProductDetailsCarousel.css';
+import './ProductDetailsCarousel.css';
 
 const ProductDetailsCarousel = ({ primaryImage }) => {
 
   const[selectedImage, setSelectedImage] = useState(primaryImage);
 
   const carouselClickHandler = (e) => {
-    setSelectedImage(e.target.src)
+    // Change the main image to the one that was clicked
+    setSelectedImage(e.target.src);
+    //remove existing borders
+    const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
+    for(let eachImage of imagesWithBorders){
+      eachImage.classList.remove('selectedBorderCarousel');
+    }
+    //Add the border to the clicked image
+    const imageForBorder = document.getElementById(e.target.id);
+    imageForBorder.classList.add('selectedBorderCarousel');
   }
+
   return (
     <>
       <CarouselProvider
@@ -33,58 +43,48 @@ const ProductDetailsCarousel = ({ primaryImage }) => {
         naturalSlideHeight={100}
         totalSlides={4}
         visibleSlides={3}
+        className='mt-3'
       >
-        {/* <Slider>
-          <Slide index={0}>
-            <ImageWithZoom src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`}/>
-          </Slide>
-          <Slide index={1}>
-            <ImageWithZoom src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`}/>
-          </Slide>
-          <Slide index={2}>
-            <ImageWithZoom src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`}/>
-          </Slide>
-          <Slide index={3}>
-            <ImageWithZoom src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`}/>
-          </Slide>
-        </Slider> */}
-        {/* <DotGroup /> */}
-        {/* <Slider>
-          <Slide index={0}>
-            <Image src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`}/>
-          </Slide>
-          <Slide index={1}>
-            <Image src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`}/>
-          </Slide>
-          <Slide index={2}>
-            <Image src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`}/>
-          </Slide>
-          <Slide index={3}>
-            <Image src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`}/>
-          </Slide>
-        </Slider> */}
         <Slider>
           <Slide index={0}>
-            <Dot slide={0}>
-              <img src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`} style={{width: '100%', height: 'auto'}} onClick={carouselClickHandler}/>
+            <Dot slide={0} className='productDetailsCarouselDot'>
+              <img src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`} style={{width: '100%', height: 'auto'}} 
+              className='productDetailsCarouselImage'
+              id={`idForBorder${'0'}`}
+              onClick={carouselClickHandler}
+              />
             </Dot>
           </Slide>
           <Slide index={1}>
-            <Dot slide={1}>
-              <img src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`} style={{width: '100%', height: 'auto'}} onClick={carouselClickHandler}/>
+            <Dot slide={1} className='productDetailsCarouselDot'>
+              <img src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`} style={{width: '100%', height: 'auto'}} 
+                onClick={carouselClickHandler} 
+                className='productDetailsCarouselImage'
+                id={`idForBorder${'1'}`} 
+                onClick={carouselClickHandler}
+              />
             </Dot>
           </Slide>
           <Slide index={2}>
-            <Dot slide={2}>
-              <img src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`} style={{width: '100%', height: 'auto'}} onClick={carouselClickHandler}/>
+            <Dot slide={2} className='productDetailsCarouselDot'>
+              <img src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`} style={{width: '100%', height: 'auto'}} 
+                className='productDetailsCarouselImage'
+                onClick={carouselClickHandler}
+                id={`idForBorder${'2'}`} 
+              />
             </Dot>
           </Slide>
           <Slide index={3}>
-            <Dot slide={3}>
-              <img src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`} style={{width: '100%', height: 'auto'}} onClick={carouselClickHandler}/>
+            <Dot slide={3} className='productDetailsCarouselDot'>
+              <img src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`} style={{width: '100%', height: 'auto'}} 
+              className='productDetailsCarouselImage'
+              id={`idForBorder${'3'}`}
+              onClick={carouselClickHandler}
+              />
             </Dot>
           </Slide>
         </Slider>
+        
 
 
 

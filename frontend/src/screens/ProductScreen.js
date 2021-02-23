@@ -134,7 +134,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               {/* <Card.Img variant="top" src={primaryImage} style={{ height: '80%' }} /> */}
               {/* <Card.Img variant="top" src={primaryImage} /> */}
               {/* <Card.Body> */}
-            <ProductDetailsCarousel primaryImage={primaryImage}/>
+            <ProductDetailsCarousel primaryImage={primaryImage} />
               {/* </Card.Body> */}
             {/* </Card> */}
             {/* <Image src={primaryImage} alt={product.name} fluid/> */}
