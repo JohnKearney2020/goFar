@@ -126,7 +126,18 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
       <Row>
         {/* Primary Product Image - Left side of page */}
         <Col md={6}>
-            <Image src={primaryImage} alt={product.name} fluid/>
+          {/* <Image src={primaryImage} alt={product.name} fluid/> */}
+            {/* <Card className='h-100'> */}
+            {/* <Card className='h-100'> */}
+            {/* <Card style={{ height: '400px' }}> */}
+            {/* <Card> */}
+              {/* <Card.Img variant="top" src={primaryImage} style={{ height: '80%' }} /> */}
+              {/* <Card.Img variant="top" src={primaryImage} /> */}
+              {/* <Card.Body> */}
+            <ProductDetailsCarousel primaryImage={primaryImage} productName={product.name}/>
+              {/* </Card.Body> */}
+            {/* </Card> */}
+            {/* <Image src={primaryImage} alt={product.name} fluid/> */}
         </Col>
         {/* Product Name / Sizes / Colors - Right side of page */}
         <Col md={6}>
@@ -216,11 +227,11 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
       </Row> {/* End of Top Row */}
-      <hr />
+      {/* <hr />
       <Row className='justify-content-center'>
         <ProductDetailsCarousel />
       </Row>
-      <hr />
+      <hr /> */}
       {/* Features Icons */}
       <Row className='my-5 justify-content-around'>
         <FeatureIcons arrayOfImages={product.featureIcons}/>
