@@ -24,7 +24,7 @@ const VideoModal = ({ show, source, closeModalHandler, productName }) => {
         <iframe 
         width="100%" 
         height="100%" 
-        src={source} 
+        src={`${source}?autoplay=1`} 
         frameBorder="0" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowFullScreen

@@ -23,34 +23,22 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
     // Change the main image to the one that was clicked
     setSelectedImage(e.target.src);
     //remove existing borders
-    const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-    for(let eachImage of imagesWithBorders){
-      eachImage.classList.remove('selectedBorderCarousel');
-    }
+    // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
+    // for(let eachImage of imagesWithBorders){
+    //   eachImage.classList.remove('selectedBorderCarousel');
+    // }
     //Add the border to the clicked image
-    const imageForBorder = document.getElementById(e.target.id);
-    imageForBorder.classList.add('selectedBorderCarousel');
+    // const imageForBorder = document.getElementById(e.target.id);
+    // imageForBorder.classList.add('selectedBorderCarousel');
   }
 
   const videoHandler = (e) => {
-    // console.log('video handler clicked!');
-    // console.log(e.target.dataset.videosource)
-    // console.log(`before we change it, videoClicked is: ${videoClicked}`)
-    // videoClicked === true ? setVideoClicked(false) : setVideoClicked(true);
-    // if(videoClicked === true){
-    //   console.log('true, setting to false');
-    //   setVideoClicked(false);
-    // } else {
-    //   console.log('false, setting to true');
-    //   setVideoClicked(true);
-    // }
-    // setVideoClicked(!videoClicked);
     setVideoSource(e.target.dataset.videosource);
-    const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-    for(let eachImage of imagesWithBorders){
-      eachImage.classList.remove('selectedBorderCarousel');
-    }
     setVideoClicked(true);
+    // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
+    // for(let eachImage of imagesWithBorders){
+    //   eachImage.classList.remove('selectedBorderCarousel');
+    // }
     // setTimeout(() => {
     //   console.log(`videoClicked is now: ${videoClicked}`)
     // }, 2500);
@@ -59,8 +47,6 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
   const closeModalHandler = () => {
     setVideoClicked(false);
   }
-
-  
 
   return (
     <>
@@ -83,7 +69,7 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
         totalSlides={5}
         visibleSlides={3}
         // touchEnabled={false}
-        // dragEnabled={false}
+        dragEnabled={false}
         className='mt-3'
       >
         <div id='divForBackNextButtons'>
@@ -99,15 +85,6 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
             </Slide>
             <Slide index={1}>
               <Dot slide={1} className='productDetailsCarouselDot' disabled={false}>
-                <img src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`} style={{width: '100%', height: 'auto'}} 
-                  onClick={carouselClickHandler} 
-                  className='productDetailsCarouselImage'
-                  id={`idForBorder${'1'}`} 
-                />
-              </Dot>
-            </Slide>
-            <Slide index={2}>
-              <Dot slide={2} className='productDetailsCarouselDot' disabled={false}>
                 <img src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`} style={{width: '100%', height: 'auto'}} 
                   className='productDetailsCarouselImage'
                   onClick={carouselClickHandler}
@@ -115,23 +92,29 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
                 />
               </Dot>
             </Slide>
+            <Slide index={2}>
+              <Dot slide={2} className='productDetailsCarouselDot' disabled={false} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
+                <div className='carouselVideo' onClick={videoHandler} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
+                </div>
+                <iframe width='100%' height='100%' src="https://www.youtube.com/embed/t2MGytLDf4I" frameBorder="0"></iframe>
+              </Dot>
+            </Slide>
             <Slide index={3}>
               <Dot slide={3} className='productDetailsCarouselDot' disabled={false}>
+                <img src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`} style={{width: '100%', height: 'auto'}} 
+                  onClick={carouselClickHandler} 
+                  className='productDetailsCarouselImage'
+                  id={`idForBorder${'1'}`} 
+                />
+              </Dot>
+            </Slide>
+            <Slide index={4}>
+              <Dot slide={4} className='productDetailsCarouselDot' disabled={false}>
                 <img src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`} style={{width: '100%', height: 'auto'}} 
                 className='productDetailsCarouselImage'
                 id={`idForBorder${'3'}`}
                 onClick={carouselClickHandler}
                 />
-              </Dot>
-            </Slide>
-            <Slide index={4}>
-              <Dot slide={4} className='productDetailsCarouselDot' disabled={false} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
-                <div className='carouselVideo' onClick={videoHandler} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
-                </div>
-                {/* <iframe width='100%' height='100%' src="https://www.youtube.com/embed/t2MGytLDf4I" frameBorder="0"></iframe> */}
-                {/* <video width='100%' height='100%' controls>
-                  <source src='/videos/video-microtherm2-0.mp4' type='video/mp4'/>
-                </video> */}
               </Dot>
             </Slide>
           </Slider>
