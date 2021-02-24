@@ -11,4 +11,43 @@
 .productDetailsCarouselDot {
   border: 0;
   margin: 0rem 0.3rem;
+  width: 100%;
+  height: 100%;
+}
+
+/* From the documentation at:  https://express-labs.github.io/pure-react-carousel/ */
+/* Wrap the <Slider />, <ButtonBack />, <ButonNext /> components in a div with relative positioning. Add absolute positioning to the buttons */
+#divForBackNextButtons {
+  position: relative;
+}
+
+#backButton {
+  position: absolute;
+  top: 35%;
+  /* left: 0; */
+}
+#nextButton {
+  position: absolute;
+  top: 35%;
+  right: 0;
+}
+
+.carouselVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.productCarouselVideoModal {
+  width: 90vw;
+  max-width: none!important;
+}
+
+.productCarouselVideoModalContent {
+  width: 100%;
+  height: 80vh;
+
 }
