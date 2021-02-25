@@ -184,8 +184,8 @@ const products2 = [
         source: '/images/FeatureIcons/recycledMaterials.svg'
       }
     ],
-    defaultPictures: [],
-    defaultVideo: ''
+    defaultPictures: ['https://i.imgur.com/VQBuiSz.jpg'],
+    defaultVideo: 'https://www.youtube.com/embed/t2MGytLDf4I'
   }
 ]
 
