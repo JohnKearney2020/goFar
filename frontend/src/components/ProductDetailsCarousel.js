@@ -11,26 +11,28 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 
 
 import './ProductDetailsCarousel.css';
-import { set } from 'mongoose';
+// import { set } from 'mongoose';
 
-const ProductDetailsCarousel = ({ primaryImage, productName }) => {
+const ProductDetailsCarousel = ({ carouselClickHandler, primaryImage, productName }) => {
 
-  const[selectedImage, setSelectedImage] = useState(primaryImage);
+  // const[selectedImage, setSelectedImage] = useState(primaryImage);
+  const[selectedImage, setSelectedImage] = useState('');
   const[videoSource, setVideoSource] = useState('');
   const[videoClicked, setVideoClicked] = useState(false);
 
-  const carouselClickHandler = (e) => {
-    // Change the main image to the one that was clicked
-    setSelectedImage(e.target.src);
-    //remove existing borders
-    // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-    // for(let eachImage of imagesWithBorders){
-    //   eachImage.classList.remove('selectedBorderCarousel');
-    // }
-    //Add the border to the clicked image
-    // const imageForBorder = document.getElementById(e.target.id);
-    // imageForBorder.classList.add('selectedBorderCarousel');
-  }
+  // const carouselClickHandler = (e) => {
+  //   // Change the main image to the one that was clicked
+  //   setSelectedImage(e.target.src);
+
+  //   //remove existing borders
+  //   // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
+  //   // for(let eachImage of imagesWithBorders){
+  //   //   eachImage.classList.remove('selectedBorderCarousel');
+  //   // }
+  //   //Add the border to the clicked image
+  //   // const imageForBorder = document.getElementById(e.target.id);
+  //   // imageForBorder.classList.add('selectedBorderCarousel');
+  // }
 
   const videoHandler = (e) => {
     setVideoSource(e.target.dataset.videosource);
@@ -58,7 +60,8 @@ const ProductDetailsCarousel = ({ primaryImage, productName }) => {
       >
         <Slider>
           <Slide>
-            <ImageWithZoom src={selectedImage} alt={`Slide 1`}/>
+            {/* <ImageWithZoom src={selectedImage || primaryImage} alt={`Slide 1`}/> */}
+            <ImageWithZoom src={primaryImage} alt={`Slide 1`}/>
           </Slide>
         </Slider>
       </CarouselProvider>
