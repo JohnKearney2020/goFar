@@ -183,7 +183,9 @@ const products2 = [
         heading: 'Recycled Materials',
         source: '/images/FeatureIcons/recycledMaterials.svg'
       }
-    ]
+    ],
+    defaultPictures: [],
+    defaultVideo: ''
   }
 ]
 
