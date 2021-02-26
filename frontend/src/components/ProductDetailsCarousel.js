@@ -92,6 +92,7 @@ const ProductDetailsCarousel = ({
         visibleSlides={3}
         // touchEnabled={false}
         dragEnabled={false}
+        infinite={true}
         className='mt-3'
       >
         <div id='divForBackNextButtons'>
