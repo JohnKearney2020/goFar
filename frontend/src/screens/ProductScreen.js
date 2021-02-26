@@ -90,14 +90,10 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
   // return a value. Other array methods like .filter() would return an array of length 1
   //      .find(image => image.isPrimaryImage === true).source;
   const colorSpecificImgObjArray = imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked];
-  // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source;
-  // setPrimaryImage(imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source);
-  setPrimaryImage(colorSpecificImgObjArray.find(image => image.isPrimaryImage === true).source);
-  setColorImagesForCarousel(colorSpecificImgObjArray.map(eachImgObj => eachImgObj.source));
-
-
-
-
+    // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source;
+    // setPrimaryImage(imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source);
+    setPrimaryImage(colorSpecificImgObjArray.find(image => image.isPrimaryImage === true).source);
+    setColorImagesForCarousel(colorSpecificImgObjArray.map(eachImgObj => eachImgObj.source));
 
     //Check to see if the current size selected is not available in the new color. If it isn't, reset the local state of selectedSize to ''
     let sizeFound = false;
@@ -190,7 +186,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             carouselClickHandler={carouselClickHandler}
             colorImagesForCarousel={colorImagesForCarousel}
             productDefaultImages={product.defaultImages}
-            prodcutDefaultVideo={product.defaultVideo}
+            productDefaultVideo={product.defaultVideo}
             />
 
         </Col>

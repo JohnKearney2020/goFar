@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, ImageWithZoom, Dot, DotGroup, Image } from 'pure-react-carousel';
-import Modal from 'react-bootstrap/Modal';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, ImageWithZoom, Dot } from 'pure-react-carousel';
 
-import Backdrop from '../components/Modals/Backdrop';
 import VideoModal from '../components/Modals/VideoModal';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-// import { Carousel } from 'react-bootstrap';
-
 // https://github.com/express-labs/pure-react-carousel
-
-
 import './ProductDetailsCarousel.css';
-// import { set } from 'mongoose';
 
 const ProductDetailsCarousel = ({ 
-  primaryImage,
-  productName,
-  carouselClickHandler, 
-  colorImagesForCarousel,
-  productDefaultImages,  
-  productDefaultVideo
-}) => {
+    primaryImage,
+    productName,
+    carouselClickHandler, 
+    colorImagesForCarousel,
+    productDefaultImages,  
+    productDefaultVideo
+  }) => {
 
 
   const[videoSource, setVideoSource] = useState('');
@@ -65,8 +58,20 @@ const ProductDetailsCarousel = ({
     setVideoClicked(false);
   }
 
+  //==============================================================================================
+  //                                  Video Slide Indexing
+  //==============================================================================================
+  // if the product has a default video, we make it the first slide in our carousel below
+  // if we do this, we need to offset the index of the other slides by +1 to account for that
+  // if we don't have a video, there is no offset, and life continues as normal.
+  let videoSlideOffset = 0;
+  if(productDefaultVideo){
+    videoSlideOffset = 1;
+  }
+
   return (
     <>
+      {/* The selected, zoomable image */}
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={100}
@@ -75,16 +80,15 @@ const ProductDetailsCarousel = ({
       >
         <Slider>
           <Slide>
-            {/* <ImageWithZoom src={selectedImage || primaryImage} alt={`Slide 1`}/> */}
             <ImageWithZoom src={primaryImage} alt={`Slide 1`}/>
           </Slide>
         </Slider>
       </CarouselProvider>
-
+      {/* Carousel containing the rest of the product images and a video if there is one */}
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={100}
-        totalSlides={combinedImagesForCarousel.length}
+        totalSlides={combinedImagesForCarousel.length + 1}
         visibleSlides={3}
         // touchEnabled={false}
         dragEnabled={false}
@@ -92,12 +96,23 @@ const ProductDetailsCarousel = ({
       >
         <div id='divForBackNextButtons'>
           <Slider>
+            {/* If the product has a video, make it the first slide */}
+            {productDefaultVideo &&
+              <Slide index={0} key={0}>
+                <Dot slide={0} className='productDetailsCarouselDot' disabled={false}>
+                  <div className='carouselVideo' onClick={videoHandler} data-videosource={productDefaultVideo}>
+                  </div>
+                  <iframe width='100%' height='100%' src={productDefaultVideo} title={`${productName} video`} frameBorder="0"></iframe>
+                </Dot>                
+              </Slide>
+            }
+            {/* The rest of the product image slides */}
             {combinedImagesForCarousel.map((eachImage, idx) => (
-              <Slide index={idx} key={idx}>
-                <Dot slide={idx} className='productDetailsCarouselDot' disabled={false}>
-                  <img src={eachImage} alt={`Slide ${idx}`} style={{width: '100%', height: 'auto'}} 
+              <Slide index={idx + videoSlideOffset} key={idx + videoSlideOffset}>
+                <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={false}>
+                  <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} style={{width: '100%', height: 'auto'}} 
                   className='productDetailsCarouselImage'
-                  id={`idForBorder${idx}`}
+                  id={`idForBorder${idx + videoSlideOffset}`}
                   onClick={carouselClickHandler}
                   />
                 </Dot>                
@@ -108,8 +123,7 @@ const ProductDetailsCarousel = ({
           <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>
         </div>
       </CarouselProvider>
-
-      {/* {videoClicked && <Backdrop videoHandler={videoHandler}/>} */}
+      {/* If the user clicks the video */}
       {videoClicked && 
         <VideoModal 
           show={videoClicked}
@@ -122,48 +136,3 @@ const ProductDetailsCarousel = ({
 }
 
 export default ProductDetailsCarousel;
-
-
-            {/* <Slide index={0}>
-              <Dot slide={0} className='productDetailsCarouselDot' disabled={false}>
-                <img src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`} style={{width: '100%', height: 'auto'}} 
-                className='productDetailsCarouselImage'
-                id={`idForBorder${'0'}`}
-                onClick={carouselClickHandler}
-                />
-              </Dot>
-            </Slide>
-            <Slide index={1}>
-              <Dot slide={1} className='productDetailsCarouselDot' disabled={false}>
-                <img src='https://i.imgur.com/udaTRbn.jpg' alt={`Slide 3`} style={{width: '100%', height: 'auto'}} 
-                  className='productDetailsCarouselImage'
-                  onClick={carouselClickHandler}
-                  id={`idForBorder${'2'}`} 
-                />
-              </Dot>
-            </Slide>
-            <Slide index={2}>
-              <Dot slide={2} className='productDetailsCarouselDot' disabled={false} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
-                <div className='carouselVideo' onClick={videoHandler} data-videosource='https://www.youtube.com/embed/t2MGytLDf4I'>
-                </div>
-                <iframe width='100%' height='100%' src="https://www.youtube.com/embed/t2MGytLDf4I" frameBorder="0"></iframe>
-              </Dot>
-            </Slide>
-            <Slide index={3}>
-              <Dot slide={3} className='productDetailsCarouselDot' disabled={false}>
-                <img src='https://i.imgur.com/ILPYxGF.jpg' alt={`Slide 2`} style={{width: '100%', height: 'auto'}} 
-                  onClick={carouselClickHandler} 
-                  className='productDetailsCarouselImage'
-                  id={`idForBorder${'1'}`} 
-                />
-              </Dot>
-            </Slide>
-            <Slide index={4}>
-              <Dot slide={4} className='productDetailsCarouselDot' disabled={false}>
-                <img src='https://i.imgur.com/VQBuiSz.jpg' alt={`Slide 4`} style={{width: '100%', height: 'auto'}} 
-                className='productDetailsCarouselImage'
-                id={`idForBorder${'3'}`}
-                onClick={carouselClickHandler}
-                />
-              </Dot>
-            </Slide> */}
