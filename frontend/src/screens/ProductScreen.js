@@ -58,34 +58,29 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
   // const imagesArray = product.images;
   // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine'].find(image => image.isPrimaryImage === true).source;
 
-  const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
-  // const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj[selectedColor]))[0].source);
-  const [primaryImage, setPrimaryImage] = useState(product.images[0]['Seapine'][0].source);
-  // const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj[selectedColor])));
+  const imageObjArray = product.images;
+
+  // const colorTest = 'Seapine';
+  const colorTest = 'Med Indigo';
+  const [selectedColor, setSelectedColor] = useState(colorTest);
+  const [primaryImage, setPrimaryImage] = useState(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
+  const [colorImagesForCarousel, setColorImagesForCarousel] = useState(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(selectedColor))][selectedColor].map(eachImgObj => eachImgObj.source));
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [activeKey, setActiveKey] = useState('');
   const [qtyInStock, setQtyInStock] = useState('');
   const [qtyForCart, setQtyForCart] = useState(0);
 
+// Test for primary image state
+// console.log(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
   
-
   const colorSelectHandler = (colorClicked) => {
-    //Find the image that corresponds to the color clicked
-    console.log(`color clicked: ${colorClicked}`)
     setSelectedColor(colorClicked);
-    // for(let eachImage of product.images) {
-    //   if(eachImage.color === colorClicked  && eachImage.isPrimaryImage === true){
-    //     setPrimaryImage(eachImage.source);
-    //     break;
-    //   }
-    // }
-
   //=========================================================================================
   //          Finding the primary image based on which color the user has selected
   //=========================================================================================
   // Here we simply put our array of images into a variable for easier code reading later
-  //      const imagesArray = product.images;
+  //      const imageObjArray = product.images;
   // Here we use .findIndex() to find the index of the array which contains the key 'Seapine'. Note the use of .hasOwnProperty() to find the index
   // that has a property/key called 'Seapine'
   //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]
@@ -94,13 +89,12 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
   // Now that we have the correct array of images, we need to find the 'source' value of the primary image. We use the .find() method b/c it will
   // return a value. Other array methods like .filter() would return an array of length 1
   //      .find(image => image.isPrimaryImage === true).source;
+  const colorSpecificImgObjArray = imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked];
+  // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source;
+  // setPrimaryImage(imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source);
+  setPrimaryImage(colorSpecificImgObjArray.find(image => image.isPrimaryImage === true).source);
+  setColorImagesForCarousel(colorSpecificImgObjArray.map(eachImgObj => eachImgObj.source));
 
-  const imagesArray = product.images;
-  // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine'].find(image => image.isPrimaryImage === true).source;
-  const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source;
-  console.log(imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked])
-  console.log(`placeHolder: ${placeHolder}`);
-  setPrimaryImage(placeHolder);
 
 
 
@@ -188,24 +182,17 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
       <Row>
         {/* Primary Product Image - Left side of page */}
         <Col md={6}>
-          {/* <Image src={primaryImage} alt={product.name} fluid/> */}
-            {/* <Card className='h-100'> */}
-            {/* <Card className='h-100'> */}
-            {/* <Card style={{ height: '400px' }}> */}
-            {/* <Card> */}
-              {/* <Card.Img variant="top" src={primaryImage} style={{ height: '80%' }} /> */}
-              {/* <Card.Img variant="top" src={primaryImage} /> */}
-              {/* <Card.Body> */}
             <ProductDetailsCarousel 
             primaryImage={primaryImage} 
             productName={product.name}
-            defaultImages={product.defaultPictures}
-            defaultVideo={product.defaultVideo}
+            // defaultImages={product.defaultPictures}
+            // defaultVideo={product.defaultVideo}
             carouselClickHandler={carouselClickHandler}
+            colorImagesForCarousel={colorImagesForCarousel}
+            productDefaultImages={product.defaultImages}
+            prodcutDefaultVideo={product.defaultVideo}
             />
-              {/* </Card.Body> */}
-            {/* </Card> */}
-            {/* <Image src={primaryImage} alt={product.name} fluid/> */}
+
         </Col>
         {/* Product Name / Sizes / Colors - Right side of page */}
         <Col md={6}>
@@ -231,15 +218,12 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
             <ListGroup horizontal defaultActiveKey='0' className='px-2 py-3'>
               {product.sizes.map((eachSize,idx) =>
                 <ListGroup.Item
-                // as='button'
                 action 
                 eventKey={idx} 
                 key={idx} 
                 className='text-center' 
                 onClick={sizeCategoryHandler} 
                 value={eachSize.sizeCategoryName}
-                // variant="light"
-                // variant="dark"
                 >
                   {eachSize.sizeCategoryName}
                 </ListGroup.Item>
@@ -295,11 +279,6 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
           </Card>
         </Col>{/* End of Product Name / Sizes / Colors */}
       </Row> {/* End of Top Row */}
-      {/* <hr />
-      <Row className='justify-content-center'>
-        <ProductDetailsCarousel />
-      </Row>
-      <hr /> */}
       {/* Features Icons */}
       <Row className='my-5 justify-content-around'>
         <FeatureIcons arrayOfImages={product.featureIcons}/>

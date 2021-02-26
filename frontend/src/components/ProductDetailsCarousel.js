@@ -13,12 +13,27 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import './ProductDetailsCarousel.css';
 // import { set } from 'mongoose';
 
-const ProductDetailsCarousel = ({ carouselClickHandler, primaryImage, productName }) => {
+const ProductDetailsCarousel = ({ 
+  primaryImage,
+  productName,
+  carouselClickHandler, 
+  colorImagesForCarousel,
+  productDefaultImages,  
+  productDefaultVideo
+}) => {
 
-  // const[selectedImage, setSelectedImage] = useState(primaryImage);
-  const[selectedImage, setSelectedImage] = useState('');
+
   const[videoSource, setVideoSource] = useState('');
   const[videoClicked, setVideoClicked] = useState(false);
+
+  // console.log(typeof colorImagesForCarousel)
+  // console.log(colorImagesForCarousel)
+  const combinedImagesForCarousel = colorImagesForCarousel.concat(productDefaultImages);
+  // console.log(typeof combinedImagesForCarousel);
+  // console.log(combinedImagesForCarousel)
+  // const copy = combinedImagesForCarousel.map((eachImage, idx) => (
+  //   console.log(eachImage)
+  // ))
 
   // const carouselClickHandler = (e) => {
   //   // Change the main image to the one that was clicked
@@ -69,7 +84,7 @@ const ProductDetailsCarousel = ({ carouselClickHandler, primaryImage, productNam
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={100}
-        totalSlides={5}
+        totalSlides={combinedImagesForCarousel.length}
         visibleSlides={3}
         // touchEnabled={false}
         dragEnabled={false}
@@ -77,7 +92,39 @@ const ProductDetailsCarousel = ({ carouselClickHandler, primaryImage, productNam
       >
         <div id='divForBackNextButtons'>
           <Slider>
-            <Slide index={0}>
+            {combinedImagesForCarousel.map((eachImage, idx) => (
+              <Slide index={idx} key={idx}>
+                <Dot slide={idx} className='productDetailsCarouselDot' disabled={false}>
+                  <img src={eachImage} alt={`Slide ${idx}`} style={{width: '100%', height: 'auto'}} 
+                  className='productDetailsCarouselImage'
+                  id={`idForBorder${idx}`}
+                  onClick={carouselClickHandler}
+                  />
+                </Dot>                
+              </Slide>
+            ))}
+          </Slider>
+          <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>
+          <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>
+        </div>
+      </CarouselProvider>
+
+      {/* {videoClicked && <Backdrop videoHandler={videoHandler}/>} */}
+      {videoClicked && 
+        <VideoModal 
+          show={videoClicked}
+          closeModalHandler={closeModalHandler} 
+          source={videoSource}
+          productName={productName} 
+        />}
+    </>
+  )
+}
+
+export default ProductDetailsCarousel;
+
+
+            {/* <Slide index={0}>
               <Dot slide={0} className='productDetailsCarouselDot' disabled={false}>
                 <img src='https://i.imgur.com/T7pSpXB.jpg' alt={`Slide 1`} style={{width: '100%', height: 'auto'}} 
                 className='productDetailsCarouselImage'
@@ -119,33 +166,4 @@ const ProductDetailsCarousel = ({ carouselClickHandler, primaryImage, productNam
                 onClick={carouselClickHandler}
                 />
               </Dot>
-            </Slide>
-          </Slider>
-          <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>
-          <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>
-        </div>
-      </CarouselProvider>
-
-      {/* {videoClicked && <Backdrop videoHandler={videoHandler}/>} */}
-      {videoClicked && 
-        <VideoModal 
-          show={videoClicked}
-          closeModalHandler={closeModalHandler} 
-          source={videoSource}
-          productName={productName} 
-        />}
-      {/* {videoClicked && 
-        <Modal show={videoClicked} onHide={closeModalResetHandler} dialogClassName='productCarouselVideoModal' contentClassName='productCarouselVideoModalContent' centered restoreFocus={false} style={{opacity:1}} animation={false}>
-          <Modal.Header closeButton />
-          <Modal.Body> */}
-            {/* <iframe width="100%" height="100%" src={source} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
-          {/* </Modal.Body>
-        </Modal> */}
-      {/* } */}
-    </>
-  )
-}
-
-export default ProductDetailsCarousel;
-
-
+            </Slide> */}

@@ -20,7 +20,7 @@
 /* From the documentation at:  https://express-labs.github.io/pure-react-carousel/ */
 /* Wrap the <Slider />, <ButtonBack />, <ButonNext /> components in a div with relative positioning. Add absolute positioning to the buttons */
 #divForBackNextButtons {
-  position: relative;
+  /* position: relative; */
 }
 
 #backButton {
