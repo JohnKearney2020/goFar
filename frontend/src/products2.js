@@ -4,16 +4,48 @@ const products2 = [
     _id: '603060d295655823e81434d5',
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
+      // {
+      //   color: 'Seapine',
+      //   source: 'https://i.imgur.com/T7pSpXB.jpg',
+      //   isPrimaryImage: true
+      // },
       {
-        color: 'Seapine',
-        source: 'https://i.imgur.com/T7pSpXB.jpg',
-        isPrimaryImage: true
+        'Seapine': [
+          {
+            source: 'https://i.imgur.com/T7pSpXB.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://i.imgur.com/udaTRbn.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://i.imgur.com/ILPYxGF.jpg',
+            isPrimaryImage: false,
+          },
+        ]
       },
       {
-        color: 'Med Indigo',
-        source: 'https://i.imgur.com/9xoTDVf.jpg',
-        isPrimaryImage: true
-      },
+        'Med Indigo': [
+          {
+            source: 'https://i.imgur.com/9xoTDVf.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://i.imgur.com/M9yFrev.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://i.imgur.com/DKeuDFh.jpg',
+            isPrimaryImage: false,
+          },
+        ]
+      }
+      // {
+      //   color: 'Med Indigo',
+      //   source: 'https://i.imgur.com/9xoTDVf.jpg',
+      //   isPrimaryImage: true
+      // },
     ],
     brand: 'Eddie Bauer',
     subBrand: 'First Ascent',
@@ -24,14 +56,12 @@ const products2 = [
       {
         colorName: 'Med Indigo',
         colorHexCode: '',
-        // colorPrice: 89.99,
         clearance: false,
         tinyImage: '/images/microtherm_MedIndigo_tiny.jpg'
       },
       {
         colorName: 'Seapine',
         colorHexCode: '',
-        // colorPrice: 79.99,
         clearance: false,
         tinyImage: '/images/microtherm_Seapine_tiny.jpg'
       }
@@ -183,7 +213,17 @@ const products2 = [
         heading: 'Recycled Materials',
         source: '/images/FeatureIcons/recycledMaterials.svg'
       }
-    ]
+    ],
+    defaultImages: [
+      'https://i.imgur.com/VQBuiSz.jpg',
+      'https://i.imgur.com/ojDjEst.jpg',
+      'https://i.imgur.com/vriRA6i.jpg',
+      'https://i.imgur.com/NCqQUk1.jpg',
+      'https://i.imgur.com/Jvmk2f4.jpg',
+      'https://i.imgur.com/TWCmNx9.jpg',
+      'https://i.imgur.com/qxYfSCG.jpg'
+    ],
+    defaultVideo: 'https://www.youtube.com/embed/t2MGytLDf4I'
   }
 ]
 

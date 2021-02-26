@@ -2,6 +2,8 @@
   /* height: 200px; */
   /* width: auto; */
   /* margin: 0rem 1rem; */
+  /* width: 100%; */
+  /* height: 100%; */
 }
 
 .selectedBorderCarousel {
@@ -18,18 +20,22 @@
 /* From the documentation at:  https://express-labs.github.io/pure-react-carousel/ */
 /* Wrap the <Slider />, <ButtonBack />, <ButonNext /> components in a div with relative positioning. Add absolute positioning to the buttons */
 #divForBackNextButtons {
-  position: relative;
+  /* position: relative; */
 }
 
 #backButton {
   position: absolute;
-  top: 35%;
-  /* left: 0; */
+  top: 40%;
+  left: -15px;
+  width: 8%;
+  height: 20%;
 }
 #nextButton {
   position: absolute;
-  top: 35%;
-  right: 0;
+  top: 40%;
+  right: -15px;
+  width: 8%;
+  height: 20%;
 }
 
 .carouselVideo {
