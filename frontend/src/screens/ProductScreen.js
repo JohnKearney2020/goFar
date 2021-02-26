@@ -173,6 +173,16 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
     // imageForBorder.classList.add('selectedBorderCarousel');
   }
 
+  //=====================================================================================================
+  //                                       Product Color Arrrays
+  //=====================================================================================================
+  // here we split the product colors into the regular product colors, and the clearance product colors
+  let productColors = [];
+  let clearanceColors = [];
+  for(let eachColor of product.colors){
+    eachColor.clearance === false ? productColors.push(eachColor) : clearanceColors.push(eachColor);
+  }
+
   return (
     <>
       <Row>
@@ -230,9 +240,19 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               <ListGroup.Item className='border-0 pb-1'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
               <ListGroup.Item className='border-0 pt-1'>
-                <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} selectedColor={selectedColor}/>
+                <ProductColors images={productColors} colorSelectHandler={colorSelectHandler} />
               </ListGroup.Item>
             </ListGroup>
+            {/* Clearance Items */}
+            {clearanceColors.length > 0 && 
+              <ListGroup>
+                <ListGroup.Item className='border-0 pb-1 text-danger'>Clearance: </ListGroup.Item>
+                {/* Product Colors */}
+                <ListGroup.Item className='border-0 pt-1'>
+                  <ProductColors images={clearanceColors} colorSelectHandler={colorSelectHandler} />
+                </ListGroup.Item>
+              </ListGroup>            
+            }
             {/* Size Selected & Sizes */}
             <ListGroup>
               <ListGroup.Item className='border-0 pb-1'>
