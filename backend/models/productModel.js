@@ -36,15 +36,17 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
       },
-      source: {
+      colorImages: [{
+        source: {
           type: String,
           required: true,
-      },
-      isPrimaryImage: {
-        type: Boolean,
-        required: true,
-        default: false
-      }
+        },
+        isPrimaryImage: {
+          type: Boolean,
+          required: true,
+          default: false
+        }
+      }],
     }
   ],
   brand: {
@@ -151,21 +153,14 @@ const productSchema = mongoose.Schema({
       required: true
     }
   }],
-  // salePrice: {
-  //   type: Number,
-  //   required: true,
-  //   default: 0
-  // },
-  // clearance: {
-  //   type: Boolean,
-  //   required: true,
-  //   default: false
-  // }
-  // countInStock: {
-  //   type: Number,
-  //   required: true,
-  //   default: 0
-  // },
+  defaultImages: [{
+    type: String,
+    required: true
+  }],
+  defaultVideo: {
+    type: String,
+    required: false
+  }
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true

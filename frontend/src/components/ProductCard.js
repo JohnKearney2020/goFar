@@ -8,31 +8,6 @@ import { Link } from 'react-router-dom';
 // import { sortLowToHigh } from '../utilityFunctions/sortingFunctions';
 import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
 
-// const sortLowToHigh = (num1, num2) => {
-//   return num1 - num2;
-// }
-
-// product.sizes.sizeCategories
-// const findDefaultPriceRange = (arrayOfPrices) => {
-//   let prices = [];
-//   for(let eachSizeCategory of arrayOfPrices){
-//     prices.push(eachSizeCategory.sizeCategoryDefaultPrice);
-//   }
-//   prices.sort(sortLowToHigh);
-//   return prices;
-// }
-// product.sizes.sizeCategories.sizeCategoryColorsAndSizes
-// const findSalePriceRange = (arrayOfPrices) => {
-//   let prices = [];
-//   for(let eachSizeCategoryName of arrayOfPrices){
-//     for(let eachColor of eachSizeCategoryName.sizeCategoryColorsAndSizes){
-//       if(eachColor.colorSalePrice !== 0) prices.push(eachColor.colorSalePrice);
-//     }
-//   }
-//   prices.sort(sortLowToHigh);
-//   return prices;
-// }
-
 //remember, we are using destructuring here in place of passing 'props' and then 'props.product' etc. in our component
 const ProductCard = ({ product }) => {
   let defaultPriceRange = findDefaultPriceRange(product.sizes);
@@ -48,42 +23,37 @@ const ProductCard = ({ product }) => {
   salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
   salePriceString = `$${salePriceRange[0]}`;
 
-  let selectedColor = product.colors[0].colorName;
   //Set up Local State
-  // const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
-  const [primaryImage, setPrimaryImage] = useState(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
-  console.log(`selected color to start is: ${selectedColor}`);
-
-  //On component load...
-  // useEffect(() => {
-    // setSelectedColor(product.colors[0].colorName);
-    // setPrimaryImage(product.images[0].source);
-    // setPrimaryImage(product.images.filter(eachObj => (eachObj.color === selectedColor))[0].source);
-  // }, [product.colors, product.images]);
+  const [selectedColor, setSelectedColor] = useState(product.colors[0].colorName);
+  let imageObjArray = product.images;
+  const [primaryImage, setPrimaryImage] = useState(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
+  // test for primary image
+  // console.log(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source)
 
   const colorSelectHandler = (colorClicked) => {
     //Find the image that corresponds to the color clicked
-    for(let eachImage of product.images) {
-      if(eachImage.color === colorClicked  && eachImage.isPrimaryImage === true){
-        setPrimaryImage(eachImage.source);
-        break;
-      }
+    if(product.colors.length > 1 && colorClicked !== selectedColor) {
+      console.log(`in colorSelectHandler. colorClicked: ${colorClicked}`)
+    setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
     }
+    //Update the selectedColor state
+    setSelectedColor(colorClicked);
   }
 
 
   return (
-    <Card className='my-3 rounded' style={{ width: '365px' }}>
+    // <Card className='my-3 p-3 rounded' style={{ width: '365px' }}>
+    <Card className='my-3 rounded'>
       <Link to={`/product/${product._id}`}>
         <Card.Img src={primaryImage} variant='top' />
       </Link>
-      <Card.Body>
+      <Card.Body className=''>
         <Link to={`/product/${product._id}`}>
-          <Card.Title className={`my-0 font-weight-bold`}>
+          <Card.Title className='my-0 font-weight-bold'>
             {product.name}
           </Card.Title>
         </Link>
-        {<Card.Text as='h6' className={`my-0`} id='productCardPrices'>
+        {<Card.Text as='h6' className='my-0' id='productCardPrices'>
           <PriceRanges product={product}/>
           {/* {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
           salePriceRange.length === 1 ? <span><s>{defaultPriceString}</s> <span className='text-danger'>{salePriceString}</span></span> : 

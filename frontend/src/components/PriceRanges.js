@@ -3,10 +3,14 @@ import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/p
 import './PriceRanges.css';
 
 const PriceRanges = ({ product }) => {
-  let defaultPriceRange = findDefaultPriceRange(product.sizes);
-  let salePriceRange = findSalePriceRange(product.sizes);
+  let defaultPriceRange;
+  let salePriceRange;
+  product.defaultPrice === 0 ? defaultPriceRange = findDefaultPriceRange(product.sizes) : defaultPriceRange = [product.defaultPrice];
+  product.defaultPrice === 0 ? salePriceRange = findSalePriceRange(product.sizes) : salePriceRange = [product.defaultSalePrice];
   let defaultPriceString = '';
   let salePriceString = '';
+  console.log(`defaultPriceRange for ${product.name}: ${defaultPriceRange}`)
+  console.log(`salePriceRange for ${product.name}: ${salePriceRange}`)
   // Find the string to represent the range of default prices, ex: '$59.99 - $69.99'
   defaultPriceRange.length > 1 ? defaultPriceString = `$${defaultPriceRange[0]} - $${defaultPriceRange[defaultPriceRange.length - 1]}` :
   defaultPriceString = `$${defaultPriceRange[0]}`;
@@ -18,8 +22,8 @@ const PriceRanges = ({ product }) => {
   return (
     <>
       {salePriceRange.length === 0 ? <span>{defaultPriceString}</span> : 
-      salePriceRange.length === 1 ? <span><del>{defaultPriceString}</del> <span className='text-danger'>{salePriceString}</span></span> : 
-      <span><del>{defaultPriceString}</del> <span className='text-danger' id='productCardSalePrices'>{salePriceString}</span></span>}
+      salePriceRange.length === 1 ? <span><del>{defaultPriceString}</del> <span className='text-danger productCardSalePrices'>{salePriceString}</span></span> : 
+      <span><del>{defaultPriceString}</del> <span className='text-danger productCardSalePrices'>{salePriceString}</span></span>}
     </>
   )
 }

@@ -1,16 +1,12 @@
 const products2 = [
   {
     // user: xxxx, //will be inserted with seeder script
-    _id: '603060d295655823e81434d5',
+    _id: '60399c265f2c8b453ca8e513',
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
-      // {
-      //   color: 'Seapine',
-      //   source: 'https://i.imgur.com/T7pSpXB.jpg',
-      //   isPrimaryImage: true
-      // },
       {
-        'Seapine': [
+        color: 'Seapine',
+        colorImages: [
           {
             source: 'https://i.imgur.com/T7pSpXB.jpg',
             isPrimaryImage: true,
@@ -22,11 +18,12 @@ const products2 = [
           {
             source: 'https://i.imgur.com/ILPYxGF.jpg',
             isPrimaryImage: false,
-          },
+          }
         ]
       },
       {
-        'Med Indigo': [
+        color: 'Med Indigo',
+        colorImages: [
           {
             source: 'https://i.imgur.com/9xoTDVf.jpg',
             isPrimaryImage: true,
@@ -38,11 +35,12 @@ const products2 = [
           {
             source: 'https://i.imgur.com/DKeuDFh.jpg',
             isPrimaryImage: false,
-          },
+          }
         ]
       },
       {
-        'Storm': [
+        color: 'Storm',
+        colorImages: [
           {
             source: 'https://i.imgur.com/RZoZpvz.jpg',
             isPrimaryImage: true,
@@ -54,7 +52,7 @@ const products2 = [
           {
             source: 'https://i.imgur.com/CHFh1pw.jpg',
             isPrimaryImage: false,
-          },
+          }
         ]
       }
     ],
@@ -283,11 +281,12 @@ const products2 = [
   },
   {
     // user: xxxx, //will be inserted with seeder script
-    _id: '603060d295655823e81434d5',
+    _id: '60399c265f2c8b453ca8e54c',
     name: 'Stargazer 2.0 2-Person Tent',
     images: [
       {
-        'Ascent Blue': [
+        color: 'Ascent Blue',
+        colorImages: [
           {
             source: 'https://i.imgur.com/raySpzc.jpg',
             isPrimaryImage: true,
