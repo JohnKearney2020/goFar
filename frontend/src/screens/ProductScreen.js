@@ -16,82 +16,38 @@ import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
 
-  // const arrayOfImages = [
-  //   {
-  //     source: '/images/firstAscentLogo.svg',
-  //     heading: 'First Ascent'
-  //   }, {
-  //     source: '/images/warmthMinus10.svg',
-  //     heading: 'Temp Rating (Moderate Activity)'
-  //   }
-  //   // }, {
-  //   //   source: '/images/fillPower800.svg',
-  //   //   heading: 'Fill Power'
-  //   // }, {
-  //   //   source: '/images/stormRepelDWR.svg',
-  //   //   heading: 'StormRepel Super DWR'
-  //   // }, {
-  //   //   source: '/images/windProof.svg',
-  //   //   heading: 'Windproof'
-  //   // }, {
-  //   //   source: '/images/recycledMaterials.svg',
-  //   //   heading: 'Recycled Materials'
-  //   // }
-  // ]
-  
   const product = products.find((p)=> p._id === match.params.id);
-
-  //=========================================================================================
-  //          Finding the primary image based on which color the user has selected
-  //=========================================================================================
-  // Here we simply put our array of images into a variable for easier code reading later
-  //      const imagesArray = product.images;
-  // Here we use .findIndex() to find the index of the array which contains the key 'Seapine'. Note the use of .hasOwnProperty() to find the index
-  // that has a property/key called 'Seapine'
-  //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]
-  // That will return the 'Seapine' object and its array of images. We need to get the array of images from the object, so we use bracket notation:
-  //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine']
-  // Now that we have the correct array of images, we need to find the 'source' value of the primary image. We use the .find() method b/c it will
-  // return a value. Other array methods like .filter() would return an array of length 1
-  //      .find(image => image.isPrimaryImage === true).source;
-
-  // const imagesArray = product.images;
-  // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine'].find(image => image.isPrimaryImage === true).source;
-
   const imageObjArray = product.images;
 
   // const colorTest = 'Seapine';
   const colorTest = 'Med Indigo';
   const [selectedColor, setSelectedColor] = useState(colorTest);
-  const [primaryImage, setPrimaryImage] = useState(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
-  const [colorImagesForCarousel, setColorImagesForCarousel] = useState(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(selectedColor))][selectedColor].map(eachImgObj => eachImgObj.source));
+  const [primaryImage, setPrimaryImage] = useState(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
+  const [colorImagesForCarousel, setColorImagesForCarousel] = useState(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.map(eachImgObj => eachImgObj.source));
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(product.sizes[0].sizeCategoryName || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [activeKey, setActiveKey] = useState('');
   const [qtyInStock, setQtyInStock] = useState('');
   const [qtyForCart, setQtyForCart] = useState(0);
-
-// Test for primary image state
-// console.log(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
+  // Test for primary image state
+  // console.log(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
   
   const colorSelectHandler = (colorClicked) => {
     setSelectedColor(colorClicked);
-  //=========================================================================================
-  //          Finding the primary image based on which color the user has selected
-  //=========================================================================================
-  // Here we simply put our array of images into a variable for easier code reading later
-  //      const imageObjArray = product.images;
-  // Here we use .findIndex() to find the index of the array which contains the key 'Seapine'. Note the use of .hasOwnProperty() to find the index
-  // that has a property/key called 'Seapine'
-  //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]
-  // That will return the 'Seapine' object and its array of images. We need to get the array of images from the object, so we use bracket notation:
-  //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine']
-  // Now that we have the correct array of images, we need to find the 'source' value of the primary image. We use the .find() method b/c it will
-  // return a value. Other array methods like .filter() would return an array of length 1
-  //      .find(image => image.isPrimaryImage === true).source;
-  const colorSpecificImgObjArray = imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked];
-    // const placeHolder = imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source;
-    // setPrimaryImage(imagesArray[imagesArray.findIndex(index => index.hasOwnProperty(colorClicked))][colorClicked].find(image => image.isPrimaryImage === true).source);
+    //=========================================================================================
+    //          Finding the primary image based on which color the user has selected
+    //=========================================================================================
+    // Here we simply put our array of images into a variable for easier code reading later
+    //      const imageObjArray = product.images;
+    // Here we use .findIndex() to find the index of the array which contains the key 'Seapine'. Note the use of .hasOwnProperty() to find the index
+    // that has a property/key called 'Seapine'
+    //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]
+    // That will return the 'Seapine' object and its array of images. We need to get the array of images from the object, so we use bracket notation:
+    //      imagesArray[imagesArray.findIndex(index => index.hasOwnProperty('Seapine'))]['Seapine']
+    // Now that we have the correct array of images, we need to find the 'source' value of the primary image. We use the .find() method b/c it will
+    // return a value. Other array methods like .filter() would return an array of length 1
+    //      .find(image => image.isPrimaryImage === true).source;
+    const colorSpecificImgObjArray = imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)].colorImages;
     setPrimaryImage(colorSpecificImgObjArray.find(image => image.isPrimaryImage === true).source);
     setColorImagesForCarousel(colorSpecificImgObjArray.map(eachImgObj => eachImgObj.source));
 
@@ -159,18 +115,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
 
   const carouselClickHandler = (e) => {
     // Change the main image to the one that was clicked
-    // setSelectedImage(e.target.src);
-    // setSelectedImage(e.target.src);
     setPrimaryImage(e.target.src)
-
-    //remove existing borders
-    // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-    // for(let eachImage of imagesWithBorders){
-    //   eachImage.classList.remove('selectedBorderCarousel');
-    // }
-    //Add the border to the clicked image
-    // const imageForBorder = document.getElementById(e.target.id);
-    // imageForBorder.classList.add('selectedBorderCarousel');
   }
 
   //=====================================================================================================
