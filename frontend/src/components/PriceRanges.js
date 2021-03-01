@@ -5,12 +5,13 @@ import './PriceRanges.css';
 const PriceRanges = ({ product }) => {
   let defaultPriceRange;
   let salePriceRange;
-  product.defaultPrice === 0 ? defaultPriceRange = findDefaultPriceRange(product.sizes) : defaultPriceRange = [product.defaultPrice];
-  product.defaultPrice === 0 ? salePriceRange = findSalePriceRange(product.sizes) : salePriceRange = [product.defaultSalePrice];
+  // product.defaultPrice === 0 ? defaultPriceRange = findDefaultPriceRange(product.sizes) : defaultPriceRange = [product.defaultPrice];
+  // product.defaultPrice === 0 ? salePriceRange = findSalePriceRange(product.sizes) : salePriceRange = [product.defaultSalePrice];
+  product.hasSizes === true ? defaultPriceRange = findDefaultPriceRange(product.sizes) : defaultPriceRange = [product.defaultPrice];
+  product.hasSizes === true ? salePriceRange = findSalePriceRange(product.sizes) : salePriceRange = [product.defaultSalePrice];
   let defaultPriceString = '';
   let salePriceString = '';
-  // console.log(`defaultPriceRange for ${product.name}: ${defaultPriceRange}`)
-  // console.log(`salePriceRange for ${product.name}: ${salePriceRange}`)
+
   // Find the string to represent the range of default prices, ex: '$59.99 - $69.99'
   defaultPriceRange.length > 1 ? defaultPriceString = `$${defaultPriceRange[0]} - $${defaultPriceRange[defaultPriceRange.length - 1]}` :
   defaultPriceString = `$${defaultPriceRange[0]}`;

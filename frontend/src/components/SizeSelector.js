@@ -5,18 +5,13 @@ import './SizeSelector.css';
 const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler, activeKey }) => {
 
   //Find what size buttons need to be displayed based on the color and sizeCategory the user selected
-  let arrayOfSizes = [];
-  for(let eachSizeCategory of product.sizes){
-    if(eachSizeCategory.sizeCategoryName === selectedSizeCategory){
-      for(let eachColor of eachSizeCategory.sizeCategoryColorsAndSizes){
-        if(eachColor.color === selectedColor){
-          for(let eachSize of eachColor.sizeCategorySizes){
-            arrayOfSizes.push(eachSize);
-          }
-        }
-      }
-    }
-  };
+  const sizeObjArray = product.sizes;
+
+  let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
+  let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
+  let arrayOfSizes = levelTwo.map((eachSize,idx) => (
+    eachSize
+  ))
 
   return (
     <ListGroup horizontal className='px-2 pb-3' activeKey={activeKey}>
