@@ -5,3 +5,7 @@ img.colorButton {
 .colorButtonActiveBorder {
   border: 1px black solid;
 }
+
+.colorButtonActiveBorderPermanent {
+  border: 1px black solid;
+}
