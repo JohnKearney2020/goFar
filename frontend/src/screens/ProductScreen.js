@@ -14,25 +14,26 @@ import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
 
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
-
+  console.log(`match.params.id: ${match.params}`)
   const product = products.find((p)=> p._id === match.params.id);
   const imageObjArray = product.images;
   const sizeObjArray = product.sizes;
+  const colorFromURL = match.params.color;
 
-  // const colorTest = 'Seapine';
-  const colorTest = 'Med Indigo';
-  // const colorTest = 'Ascent Blue';
-
-  const [selectedColor, setSelectedColor] = useState(colorTest);
+  const [selectedColor, setSelectedColor] = useState(colorFromURL);
   const [primaryImage, setPrimaryImage] = useState(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
   const [colorImagesForCarousel, setColorImagesForCarousel] = useState(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.map(eachImgObj => eachImgObj.source));
   // If the product has size categories like 'Tall', default to the first size category. Otherwise, use 'ONE SIZE'
   let initialSizeCategory;
   product.hasSizes ? initialSizeCategory = product.sizes[0].sizeCategoryName : initialSizeCategory = 'ONE SIZE';
   const [selectedSizeCategory, setSelectedSizeCategory] = useState(initialSizeCategory);
-  const [selectedSize, setSelectedSize] = useState('');
+  let initialSize;
+  product.hasSizes ? initialSize = '' : initialSize = 'ONE SIZE';
+  const [selectedSize, setSelectedSize] = useState(initialSize);
   const [activeKey, setActiveKey] = useState('');
-  const [qtyInStock, setQtyInStock] = useState('');
+  let initialQuantity;
+  product.defaultQty ? initialQuantity = product.defaultQty : initialQuantity = '';
+  const [qtyInStock, setQtyInStock] = useState(initialQuantity);
   const [qtyForCart, setQtyForCart] = useState(1);
 
   // ================================================================================================================================================
@@ -43,7 +44,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
   let initialDefaultPrice = product.defaultPrice;
   if(product.hasSizes){ // If this product has sizes
     sizesAndPricesObjArray = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
-    initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorTest)].colorSalePrice;
+    initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorFromURL)].colorSalePrice;
     initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === selectedSizeCategory)].sizeCategoryDefaultPrice;
   }
   const [colorSalePrice, setColorSalePrice] = useState(initialSalePrice);
@@ -51,7 +52,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
 
 
   // Test for primary image state
-  // console.log(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorTest))][colorTest].find(eachImage => eachImage.isPrimaryImage === true).source);
+  // console.log(imageObjArray[imageObjArray.findIndex(index => index.hasOwnProperty(colorFromURL))][colorFromURL].find(eachImage => eachImage.isPrimaryImage === true).source);
   const colorSelectHandler = (colorClicked) => {
     // ==========================================================================================
     //                            Find the price for that color:

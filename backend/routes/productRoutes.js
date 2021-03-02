@@ -14,7 +14,11 @@ router.get('/', asyncHandler(async(req, res) => {
 // @desc     Fetch single product
 // @route    GET /api/products/:id
 // @access   Public
-router.get('/:id', asyncHandler(async(req, res) => {
+router.get('/?id=:id&color=:color', asyncHandler(async(req, res) => {
+// router.get('/:id&:color', asyncHandler(async(req, res) => {
+// router.get('/:id', asyncHandler(async(req, res) => {
+  // console.log(req.params.id)
+  // console.log(req.params.color)
   const product = await Product.findById(req.params.id);
   if(product){
     res.json(product);
