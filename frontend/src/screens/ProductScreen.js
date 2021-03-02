@@ -95,7 +95,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
     setQtyInStock(''); //since we are clearing out any size selections, we need to clear the qtyInStock local state, too.
 
     // Find new default price
-    console.log(sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)]);
+    // console.log(sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)]);
     let newSizeCatDefaultPrice = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryDefaultPrice;
     setProductPrice(newSizeCatDefaultPrice);
 

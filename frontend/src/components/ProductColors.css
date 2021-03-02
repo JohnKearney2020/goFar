@@ -1,3 +1,7 @@
-img.productColorsBorder {
-  padding: 0.1rem;
+img.colorButton {
+  /* as of 3/1/2021 this is used simply as a way of selecting all color button elements */
+}
+
+.colorButtonActiveBorder {
+  border: 1px black solid;
 }
