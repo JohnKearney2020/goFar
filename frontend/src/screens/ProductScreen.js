@@ -14,7 +14,8 @@ import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
 
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
-  console.log(`match.params.id: ${match.params}`)
+  // console.log(`match.params.id: ${match.params.id}`)
+  // console.log(`match.params.id: ${match.params.color}`)
   const product = products.find((p)=> p._id === match.params.id);
   const imageObjArray = product.images;
   const sizeObjArray = product.sizes;
@@ -205,7 +206,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
               <ListGroup.Item className='border-0 pb-1'>Color: {<span className='font-weight-bold'>{selectedColor}</span>}</ListGroup.Item>
               {/* Product Colors */}
               <ListGroup.Item className='border-0 pt-1'>
-                <ProductColors images={productColors} colorSelectHandler={colorSelectHandler} />
+                <ProductColors images={productColors} colorSelectHandler={colorSelectHandler} productColorsArray={product.colors} colorFromUrl={colorFromURL}/>
               </ListGroup.Item>
             </ListGroup>
             {/* Clearance Items */}
@@ -214,7 +215,7 @@ const ProductScreen = ({ match }) => { //the match prop is needed to pull the id
                 <ListGroup.Item className='border-0 pb-1 text-danger'>Clearance: </ListGroup.Item>
                 {/* Clearance Colors */}
                 <ListGroup.Item className='border-0 pt-1'>
-                  <ProductColors images={clearanceColors} colorSelectHandler={colorSelectHandler} />
+                  <ProductColors images={clearanceColors} colorSelectHandler={colorSelectHandler} productColorsArray={product.colors} colorFromUrl={colorFromURL}/>
                 </ListGroup.Item>
               </ListGroup>            
             }

@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
   const colorSelectHandler = (colorClicked) => {
     //Find the image that corresponds to the color clicked
     if(product.colors.length > 1 && colorClicked !== selectedColor) {
-      console.log(`in colorSelectHandler. colorClicked: ${colorClicked}`)
+      // console.log(`in colorSelectHandler. colorClicked: ${colorClicked}`)
     setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
     }
     //Update the selectedColor state
@@ -59,10 +59,10 @@ const ProductCard = ({ product }) => {
         </Card.Text>}
         <Card.Text as='div'>{product.colors.length} colors</Card.Text>
         <Card.Text as='div'>
-          <ProductRating value={product.rating} text={`${product.numReviews} reviews`}/>
+          <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
         </Card.Text>
         <hr></hr>
-        <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} />
+        <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} productColorsArray={product.colors}/>
       </Card.Body>
     </Card>
   )
