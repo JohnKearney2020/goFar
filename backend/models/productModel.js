@@ -143,6 +143,11 @@ const productSchema = mongoose.Schema({
     required: true,
     default: 0
   },
+  defaultQty: {
+    type: Number,
+    required: false,
+    default: ''
+  },
   featureIcons: [{
     heading: {
       type: String,
