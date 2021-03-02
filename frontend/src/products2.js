@@ -360,6 +360,7 @@ const products2 = [
     numReviews: 3,
     defaultPrice: 399.00,
     defaultSalePrice: 349.00,
+    defaultQty: 30,
     featureIcons: [
       {
         heading: 'First Ascent',
