@@ -242,6 +242,7 @@ const products2 = [
     numReviews: 1,
     defaultPrice: 0,
     defaultSalePrice: 0,
+    defaultQty: '',
     featureIcons: [
       {
         heading: 'First Ascent',
