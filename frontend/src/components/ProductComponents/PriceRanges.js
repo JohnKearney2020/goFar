@@ -1,5 +1,5 @@
 import React from 'react';
-import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
+import { findDefaultPriceRange, findSalePriceRange } from '../../utilityFunctions/priceRanges';
 import './PriceRanges.css';
 
 const PriceRanges = ({ product }) => {

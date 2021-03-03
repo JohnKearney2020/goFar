@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, ImageWithZoom, Dot } from 'pure-react-carousel';
 
-import VideoModal from '../components/Modals/VideoModal';
+import VideoModal from '../Modals/VideoModal';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 // https://github.com/express-labs/pure-react-carousel
 import './ProductDetailsCarousel.css';

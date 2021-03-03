@@ -5,8 +5,7 @@ import ProductColors from './ProductColors';
 import PriceRanges from './PriceRanges';
 import './ProductCard.css';
 import { Link } from 'react-router-dom';
-// import { sortLowToHigh } from '../utilityFunctions/sortingFunctions';
-import { findDefaultPriceRange, findSalePriceRange } from '../utilityFunctions/priceRanges';
+import { findDefaultPriceRange, findSalePriceRange } from '../../utilityFunctions/priceRanges';
 
 //remember, we are using destructuring here in place of passing 'props' and then 'props.product' etc. in our component
 const ProductCard = ({ product }) => {
@@ -33,11 +32,7 @@ const ProductCard = ({ product }) => {
 
   const colorSelectHandler = (colorClicked) => {
     //Find the image that corresponds to the color clicked
-    console.log(colorClicked)
     if(product.colors.length > 1 && colorClicked !== selectedColor) {
-      // console.log(`in colorSelectHandler. colorClicked: ${colorClicked}`)
-      console.log(imageObjArray)
-      console.log(imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)])
     setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
     }
     //Update the selectedColor state

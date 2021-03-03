@@ -3,7 +3,7 @@ import { CardDeck, CardGroup, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 // import products from '../products.js';
 // import products from '../products2.js';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../components/ProductComponents/ProductCard';
 
 import './HomeScreen.css';
 

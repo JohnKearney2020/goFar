@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Row, Col, ListGroup, Card, Button, Form } from 'react-bootstrap';
-import ProductColors from '../components/ProductColors';
-import ProductRating from '../components/ProductRating';
-import SizeSelector from '../components/SizeSelector';
+import ProductColors from '../components/ProductComponents/ProductColors';
+import ProductRating from '../components/ProductComponents/ProductRating';
+import SizeSelector from '../components/ProductComponents/SizeSelector';
 import products from '../products2';
-import QuantityAlert from '../components/QuantityAlert';
-import FeatureIcons from '../components/FeatureIcons';
-import ProductDescription from '../components/ProductDescription';
-import ProductFeatures from '../components/ProductFeatures';
-import ProductMaterials from '../components/ProductMaterials';
-import ProductCare from '../components/ProductCare';
-import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
+import QuantityAlert from '../components/ProductComponents/QuantityAlert';
+import FeatureIcons from '../components/ProductComponents/FeatureIcons';
+import ProductDescription from '../components/ProductComponents/ProductDescription';
+import ProductFeatures from '../components/ProductComponents/ProductFeatures';
+import ProductMaterials from '../components/ProductComponents/ProductMaterials';
+import ProductCare from '../components/ProductComponents/ProductCare';
+import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
 
 
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
