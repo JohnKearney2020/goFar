@@ -5,10 +5,10 @@ import { Container } from 'react-bootstrap';
 import Header from './components/HeaderAndFooter/Header';
 import Footer from './components/HeaderAndFooter/Footer';
 import HomeScreen from './screens/HomeScreen';
-import ProductScreen from './screens/ProductScreen';
-import ProductScreenTest from './screens/ProductScreenTest';
+// import ProductScreen from './screens/ProductScreen';
+// import ProductScreenTest from './screens/ProductScreenTest';
 import ProductScreenTest2 from './screens/ProductScreenTest2';
-import ProductScreenTest3 from './screens/ProductScreenTest3';
+// import ProductScreenTest3 from './screens/ProductScreenTest3';
 
 const App = () => {
   return (

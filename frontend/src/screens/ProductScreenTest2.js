@@ -5,7 +5,8 @@ import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import { Row, Col } from 'react-bootstrap';
 
-import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
+// import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
+import ProductDetailsCarousel2 from '../components/ProductComponents/ProductDetailsCarousel2';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
@@ -37,13 +38,14 @@ const ProductScreenTest2 = ({ match }) => {
           <h1>{product.name}</h1>
           <Row>
             <Col md={6}>
-              <ProductDetailsCarousel 
+              <ProductDetailsCarousel2 
               // primaryImage={primaryImage} 
               // productName={product.name}
               // defaultImages={product.defaultPictures}
               // defaultVideo={product.defaultVideo}
               // carouselClickHandler={carouselClickHandler}
               // colorImagesForCarousel={colorImagesForCarousel}
+              product={product}
               colorFromURL={colorFromUrl}
               // productDefaultImages={product.defaultImages}
               // productDefaultVideo={product.defaultVideo}
@@ -53,7 +55,6 @@ const ProductScreenTest2 = ({ match }) => {
               
             </Col>
           </Row>
-          <h3>in ProductScreenTest2</h3>
         </>
 
       }
