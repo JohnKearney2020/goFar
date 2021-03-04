@@ -1,6 +1,7 @@
 const products = [
   {
     // user: xxxx, //will be inserted with seeder script
+    isRetired: false,
     name: 'MicroTherm® 2.0 Down Hooded Jacket',
     images: [
       {
@@ -281,6 +282,7 @@ const products = [
   },
   {
     // user: xxxx, //will be inserted with seeder script
+    isRetired: false,
     name: 'Stargazer 2.0 2-Person Tent',
     images: [
       {
@@ -379,6 +381,7 @@ const products = [
   },
   {
     // user: xxxx, //will be inserted with seeder script
+    isRetired: false,
     name: 'Guide Pro Pants',
     images: [
       {

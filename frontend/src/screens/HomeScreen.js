@@ -1,37 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { CardDeck, CardGroup, Col, Row } from 'react-bootstrap';
-import axios from 'axios';
-// import products from '../products.js';
-// import products from '../products2.js';
-import ProductCard from '../components/ProductComponents/ProductCard';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Col, Row } from 'react-bootstrap';
 
+import { listProducts } from '../actions/productActions';
+import ProductCard from '../components/ProductComponents/ProductCard';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
 import './HomeScreen.css';
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
-
+  // const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const productList = useSelector(state => state.productList);
+  const { loading, loaded, error, products } = productList;
+  
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get('/api/products');
-      setProducts(data);
-    }
-    fetchProducts();
-  }, []);
+    dispatch(listProducts());
+  }, [dispatch]);
 
   return (
     <>
-      <h1>Latest Products</h1>
-      <Row>
-          {/* <CardDeck> */}
-            {products.map(product => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <ProductCard product={product} key={product._id}/>
-              </Col>
-            ))}
-          {/* </CardDeck> */}
-
-      </Row>
-      {/* <h6 id="testPrice" className='text-danger font-weight-bold'>$79.99 - $99.99</h6> */}
+    <h1>Latest Products</h1>
+      {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) :
+        (<Row>
+          {products.map(product => (
+            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+              <ProductCard product={product} key={product._id}/>
+            </Col>
+          ))}
+        </Row>)
+      }
     </>
   )
 }

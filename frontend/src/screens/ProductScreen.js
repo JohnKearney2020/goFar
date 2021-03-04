@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Row, Col, ListGroup, Card, Button, Form } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ProductColors from '../components/ProductComponents/ProductColors';
 import ProductRating from '../components/ProductComponents/ProductRating';
 import SizeSelector from '../components/ProductComponents/SizeSelector';
-import products from '../products2';
+// import products from '../products2';
 import QuantityAlert from '../components/ProductComponents/QuantityAlert';
 import FeatureIcons from '../components/ProductComponents/FeatureIcons';
 import ProductDescription from '../components/ProductComponents/ProductDescription';
@@ -16,7 +18,10 @@ import ProductDetailsCarousel from '../components/ProductComponents/ProductDetai
 const ProductScreen = ({ match }) => { //the match prop is needed to pull the id from the URL
   // console.log(`match.params.id: ${match.params.id}`)
   // console.log(`match.params.id: ${match.params.color}`)
-  const product = products.find((p)=> p._id === match.params.id);
+  const productDetails = useSelector(state => state.productDetails);
+  const { loading, error, product, loaded } = productDetails;
+
+  // const product = products.find((p)=> p._id === match.params.id);
   const imageObjArray = product.images;
   const sizeObjArray = product.sizes;
   const colorFromURL = match.params.color;

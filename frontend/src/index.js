@@ -1,19 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './bootstrap.min.css';
-// import './bootstrap.min2.css';
-// import './bootstrap.min3.css';
-// import './bootstrap.min4.css';
-// import './bootstrap.min5.css';
-import './bootstrap.min6.css';
+import { Provider } from 'react-redux';
+import store from './store';
+
+import './bootstrap.min.css';
 import './index.css';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
