@@ -11,6 +11,8 @@ const ProductColors = ({ images, colorSelectHandler, productColorsArray, colorFr
   //     eachColor.classList.remove('colorButtonActiveBorder');
   //   }
   // }
+  // console.log('in ProductColors component');
+  // console.log(images)
 
   const newColorClickedHandler = (e) => {
     colorSelectHandler(e.target.dataset.color); //its expecting a color name as a string, ex: 'seapine'

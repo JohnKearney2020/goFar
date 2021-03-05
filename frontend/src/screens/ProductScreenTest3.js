@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import TestComponent from '../components/TestComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProductDetails } from '../actions/productActions';
 
@@ -17,7 +18,7 @@ const ProductScreenTest3 = ({ match }) => {
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id));
-    setImageObjArray(product.images)
+    // setImageObjArray(product.images)
   }, [dispatch, match.params.id]);
 
   // useEffect(() => {
@@ -25,16 +26,23 @@ const ProductScreenTest3 = ({ match }) => {
   // }, [product.images])
 
   // setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
+  console.log('product.colors:')
+  console.log(product.colors)
 
   return (
     <>
-      { loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) :
+      {/* { loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : product.colors && */}
+      { loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : 
         <>
-          <h3>In productScreenTest2</h3>
+          <h3>In productScreenTest3</h3>
           <h1>{product.name}</h1>
-          <h1>{
-          {primaryImage}
-          }</h1>
+          <h1>{product.brand}</h1>
+          <h1>{product.subBrand}</h1>
+          <h1>{product.gender}</h1>
+          {product.colors.map(eachColor => (
+            <h2>{eachColor.colorName}</h2>
+          ))}
+          <TestComponent product={product} />
         </>
 
       }

@@ -20,6 +20,7 @@ const App = () => {
             {/* <Route path='/product/:id' component={ProductScreen} /> */}
             {/* <Route path='/product/:id/:color' component={ProductScreen} /> */}
             <Route path='/product/:id/:color' component={ProductScreenTest2} />
+            {/* <Route path='/product/:id/:color' component={ProductScreenTest3} /> */}
             {/* <Route path='/product/:id/:color' component={ProductScreenTest} /> */}
             {/* <Route path='/product/?id=:id' component={ProductScreen} /> */}
             {/* <Route path='/api/product/?id=:id&color=:color' component={ProductScreen} /> */}
