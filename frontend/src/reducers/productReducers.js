@@ -15,27 +15,32 @@ export const productListReducer = (state = { products: [] }, action) => {
   } 
 }
 
-// const product = {
-//   product: {
-//     reviews: [],
-//     colors: [],
-//     sizes: []
-//   }
-// }
+const productPlaceHolderObj = {
+    reviews: [],
+    colors: [],
+    sizes: [],
+    featureIcons: [],
+    descriptions: [],
+    features: [],
+    care: [],
+    materials: []
+}
 
-export const productDetailsReducer = (state = { product: { reviews: [], colors: [], sizes: [] } }, action) => {
+
+// export const productDetailsReducer = (state = { product: { reviews: [], colors: [], sizes: [], featureIcons: [] } }, action) => {
+export const productDetailsReducer = (state = { product: productPlaceHolderObj }, action) => {
 // export const productDetailsReducer = (state = defaultProductDetailsState, action) => {
   switch(action.type) {
     case PRODUCT_DETAILS_REQUEST:
       // return { loading: true, loaded: false, ...state };
       // return { loading: true, loaded: false, product: [] };
-      return { loading: true, loaded: false, product: { reviews: [], colors: [], sizes: [] } };
+      return { loading: true, loaded: false, product: productPlaceHolderObj };
     case PRODUCT_DETAILS_SUCCESS:
       return { loading: false, loaded: true, product: action.payload };
     case PRODUCT_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case PRODUCT_DETAILS_RESET:
-      return { product: { reviews: [], colors: [], sizes: [] } };
+      return { product: productPlaceHolderObj };
     default: 
       return state;
   } 

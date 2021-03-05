@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import './SizeSelector.css';
 
-const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler, activeKey }) => {
+const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelectHandler, activeKey, loaded }) => {
 
   //Find what size buttons need to be displayed based on the color and sizeCategory the user selected
-  const sizeObjArray = product.sizes;
+  const [arrayOfSizes, setArrayOfSizes] = useState([]);
 
-  let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
-  let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
-  let arrayOfSizes = levelTwo.map((eachSize,idx) => (
-    eachSize
-  ))
+  useEffect(() => {
+    if(loaded && selectedSizeCategory !== ''){
+      const sizeObjArray = [...product.sizes];
+      let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
+      let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
+      let tempArrayOfSizes = levelTwo.map((eachSize,idx) => (
+        eachSize
+      ))
+      setArrayOfSizes(tempArrayOfSizes);
+    }
+  }, [loaded, product.sizes, selectedColor, selectedSizeCategory])
 
   return (
     <ListGroup horizontal className='px-2 pb-3' activeKey={activeKey}>

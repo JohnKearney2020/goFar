@@ -7,14 +7,9 @@ import './ProductCard.css';
 import { Link } from 'react-router-dom';
 import { findDefaultPriceRange, findSalePriceRange } from '../../utilityFunctions/priceRanges';
 
-import { useDispatch, useSelector } from 'react-redux';
-// import { listProductDetails } from '../actions/productActions';
-import { listProductDetails } from '../../actions/productActions';
-
 //remember, we are using destructuring here in place of passing 'props' and then 'props.product' etc. in our component
 const ProductCard = ({ product }) => {
-  // console.log(product._id)
-  const dispatch = useDispatch();
+
   let defaultPriceRange = findDefaultPriceRange(product.sizes);
   let salePriceRange = findSalePriceRange(product.sizes);
   let defaultPriceString = '';
