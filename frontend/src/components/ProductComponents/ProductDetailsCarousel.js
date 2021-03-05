@@ -7,37 +7,16 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import './ProductDetailsCarousel.css';
 
 const ProductDetailsCarousel = ({ colorFromUrl, product }) => {
-  // console.log('in top')
+
   const[primaryImage, setPrimaryImage] = useState('');
   const[videoClicked, setVideoClicked] = useState(false);
-  // console.log('product');
-  // console.log(product);
-  // console.log(`color from url: ${colorFromUrl}`)
-  // let primaryImageP = '';
-  let ProductColorImages = [];
-  let combinedImagesForCarousel = [];
-  let videoSlideOffset = 0;
+  const[combinedImagesForCarousel, setCombinedImagesForCarousel] = useState([]);
+  const[videoSlideOffset, setVideoSlideOffset] = useState(0);
 
-
-  // if(product.images) {
-  //   let imageObjArray = product.images;
-  //   console.log('imageObjArray:')
-  //   console.log(imageObjArray)
-  //   console.log('colorImages:')
-  //   console.log(imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)])
-
-  //   // primaryImageP = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source
-  //   // setPrimaryImage(primaryImageP);
-  //   ProductColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);
-  //   combinedImagesForCarousel = ProductColorImages.concat(product.defaultImages);
-
-  //   if(product.defaultVideo){
-  //     videoSlideOffset = 1;
-  //   }
-  // }
+  // let ProductColorImages = [];
+  // let videoSlideOffset = 0;
 
   useEffect(() => {
-    // console.log('in useEffect')
     if(product.images !== undefined && primaryImage === ''){ //should only run once on the initial load
       console.log('changing primary image')
       setPrimaryImage(product.images[product.images.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
@@ -45,18 +24,14 @@ const ProductDetailsCarousel = ({ colorFromUrl, product }) => {
 
     if(product.images) {
       let imageObjArray = product.images;
-      // console.log('imageObjArray:')
-      // console.log(imageObjArray)
-      // console.log('colorImages:')
-      // console.log(imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)])
-  
-      // primaryImageP = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source
-      // setPrimaryImage(primaryImageP);
-      ProductColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);
-      combinedImagesForCarousel = ProductColorImages.concat(product.defaultImages);
-  
+      let ProductColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);
+      setCombinedImagesForCarousel(ProductColorImages.concat(product.defaultImages))
+      // if the product has a default video, we make it the first slide in our carousel below
+      // if we do this, we need to offset the index of the other slides by +1 to account for that
+      // if we don't have a video, there is no offset, and life continues as normal.
       if(product.defaultVideo){
-        videoSlideOffset = 1;
+        // videoSlideOffset = 1;
+        setVideoSlideOffset(1);
       }
     }
 
@@ -64,7 +39,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product }) => {
   }, [])
 
   const carouselClickHandler = (e) => {
-      setPrimaryImage(e.target.src)
+      setPrimaryImage(e.target.src) // Change the main image to the one that was clicked
   }
 
   const videoHandler = (e) => {
@@ -74,61 +49,6 @@ const ProductDetailsCarousel = ({ colorFromUrl, product }) => {
   const closeModalHandler = () => {
     setVideoClicked(false);
   }
-  // let imageObjArray = product.images;
-  // console.log(imageObjArray)
-  // let primaryImage =imageObjArray[imageObjArray.findIndex(i => i.color === colorFromUrl)].
-  // let primaryImage = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source
-
-  // const[videoSource, setVideoSource] = useState('');
-  // const[videoClicked, setVideoClicked] = useState(false);
-
-  // console.log(typeof colorImagesForCarousel)
-  // console.log(colorImagesForCarousel)
-  // const combinedImagesForCarousel = colorImagesForCarousel.concat(productDefaultImages);
-  // console.log(typeof combinedImagesForCarousel);
-  // console.log(combinedImagesForCarousel)
-  // const copy = combinedImagesForCarousel.map((eachImage, idx) => (
-  //   console.log(eachImage)
-  // ))
-
-  // const carouselClickHandler = (e) => {
-  //   // Change the main image to the one that was clicked
-  //   setSelectedImage(e.target.src);
-
-  //   //remove existing borders
-  //   // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-  //   // for(let eachImage of imagesWithBorders){
-  //   //   eachImage.classList.remove('selectedBorderCarousel');
-  //   // }
-  //   //Add the border to the clicked image
-  //   // const imageForBorder = document.getElementById(e.target.id);
-  //   // imageForBorder.classList.add('selectedBorderCarousel');
-  // }
-
-  // const videoHandler = (e) => {
-    // setVideoSource(e.target.dataset.videosource);
-    // setVideoClicked(true);
-    // const imagesWithBorders = document.getElementsByClassName('productDetailsCarouselImage');
-    // for(let eachImage of imagesWithBorders){
-    //   eachImage.classList.remove('selectedBorderCarousel');
-    // }
-    // setTimeout(() => {
-    //   console.log(`videoClicked is now: ${videoClicked}`)
-    // }, 2500);
-  // }
-
-
-
-  //==============================================================================================
-  //                                  Video Slide Indexing
-  //==============================================================================================
-  // if the product has a default video, we make it the first slide in our carousel below
-  // if we do this, we need to offset the index of the other slides by +1 to account for that
-  // if we don't have a video, there is no offset, and life continues as normal.
-  // let videoSlideOffset = 0;
-  // if(productDefaultVideo){
-  //   videoSlideOffset = 1;
-  // }
 
   return (
     <>
@@ -186,7 +106,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product }) => {
               <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>
             </div>
           </CarouselProvider>
-          {/* If the user clicks the video */}
+          {/* If the user clicks the video slide*/}
           {videoClicked && 
             <VideoModal 
               show={videoClicked}
