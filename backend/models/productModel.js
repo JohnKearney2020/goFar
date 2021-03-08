@@ -26,6 +26,11 @@ const productSchema = mongoose.Schema({
     required: true,
     ref: 'User'
   },
+  isRetired: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   name: {
     type: String,
     required: true

@@ -9,6 +9,7 @@ import { findDefaultPriceRange, findSalePriceRange } from '../../utilityFunction
 
 //remember, we are using destructuring here in place of passing 'props' and then 'props.product' etc. in our component
 const ProductCard = ({ product }) => {
+
   let defaultPriceRange = findDefaultPriceRange(product.sizes);
   let salePriceRange = findSalePriceRange(product.sizes);
   let defaultPriceString = '';
@@ -39,15 +40,21 @@ const ProductCard = ({ product }) => {
     setSelectedColor(colorClicked);
   }
 
+  // const linkClickHandler = () => {
+  //   // dispatch(listProductDetails(product._id))
+  //   console.log('link handler clicked!')
+  // }
+  // console.log('product from ProductCard')
+  // console.log(product)
 
   return (
     // <Card className='my-3 p-3 rounded' style={{ width: '365px' }}>
     <Card className='my-3 rounded'>
-      <Link to={`/product/${product._id}/${selectedColor}`}>
+      <Link to={`/product/${product._id}/${selectedColor}`} >
         <Card.Img src={primaryImage} variant='top' />
       </Link>
       <Card.Body className=''>
-        <Link to={`/product/${product._id}/${selectedColor}`}>
+        <Link to={`/product/${product._id}/${selectedColor}`} >
           <Card.Title className='my-0 font-weight-bold'>
             {product.name}
           </Card.Title>
