@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { listProductDetails } from '../actions/productActions';
-import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import { Row, Col, Card, ListGroup, Button, Form } from 'react-bootstrap';
 
-// import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
 import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -18,16 +14,16 @@ import ProductDescription from '../components/ProductComponents/ProductDescripti
 import ProductFeatures from '../components/ProductComponents/ProductFeatures';
 import ProductCare from '../components/ProductComponents/ProductCare';
 import ProductMaterials from '../components/ProductComponents/ProductMaterials';
-
-
+import { listProductDetails } from '../actions/productActions';
+import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 
 const ProductScreenTest2 = ({ match }) => {
 
+  const colorFromUrl = match.params.color;
   const dispatch = useDispatch();
+  //State
   const productDetails = useSelector(state => state.productDetails);
   const { loading, error, product, loaded } = productDetails;
-  const colorFromUrl = match.params.color;
-
   const [selectedColor, setSelectedColor] = useState(colorFromUrl);
   const [colorSalePrice, setColorSalePrice] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -39,16 +35,6 @@ const ProductScreenTest2 = ({ match }) => {
   const [clearanceColors, setClearanceColors] = useState([]);
   const [qtyForCart, setQtyForCart] = useState(1);
   const [addToCartSizeMessage, setAddToCartSizeMessage] = useState(false);
-  // const [primaryImageForCarousel, setPrimaryImageForCarousel] = useState('');
-  // const [sizeObjArray, setSizeObjArray] = useState([]);
-
-
-  //=====================================================================================================
-  //                                       Product Color Arrrays
-  //=====================================================================================================
-  // here we split the product colors into the regular product colors, and the clearance product colors
-  // let productColors = [];
-  // let clearanceColors = [];
 
   // ==============================================================
   //               Pull Product data from global state
@@ -57,7 +43,7 @@ const ProductScreenTest2 = ({ match }) => {
     console.log('in productScreenTest2 1st useEffect()')
     dispatch(listProductDetails(match.params.id));
     return () => {
-      console.log('in cleanup function of ProductScreenTest2.js');
+      // console.log('in cleanup function of ProductScreenTest2.js');
       dispatch({ type: PRODUCT_DETAILS_RESET });
     }
   }, [dispatch, match.params.id]);
@@ -66,12 +52,15 @@ const ProductScreenTest2 = ({ match }) => {
   //                                Find default Prices and size category
   //==================================================================================================================
   useEffect(() => {
-    // console.log('in productScreenTest2 2nd useEffect()')
     if(loaded){ // If we've successfully loaded the product from the global state
-      // console.log('in 2nd useEffect')
-      let initialSizeCategory;
-      product.hasSizes ? initialSizeCategory = product.sizes[0].sizeCategoryName : initialSizeCategory = 'ONE SIZE';
+      //Find the initialSizeCategory, ex: 'Regular', 'Tall', etc.
+      let initialSizeCategory = product.hasSizes ? product.sizes[0].sizeCategoryName : 'ONE SIZE';
       setSelectedSizeCategory(initialSizeCategory);
+      // If the product only has one size, set the selectedSize and qtyInStock state
+      if(initialSizeCategory === 'ONE SIZE') { 
+        setSelectedSize('ONE SIZE');
+        setQtyInStock(product.defaultQty)
+      };
 
       // Populate Product Colors
       let tempProductColors = [];
@@ -82,50 +71,44 @@ const ProductScreenTest2 = ({ match }) => {
       setProductColors(tempProductColors);
       setClearanceColors(tempClearanceColors);
 
+      // Prices
       if(product.hasSizes){ //if the product has sizes
-        let sizeObjArray = product.sizes;
-
+        let sizeObjArray = [...product.sizes];
         let sizesAndPricesObjArray = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryColorsAndSizes;
-        
-        //Prices
         let initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorFromUrl)].colorSalePrice;
         let initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryDefaultPrice;
         setColorSalePrice(initialSalePrice);
         setProductPrice(initialDefaultPrice);
-
-        //Sizes
-        // console.log('sizesAndPricesObjArray')
-        // console.log(sizesAndPricesObjArray)
-        // let initialSize = 
       } else { //if the product does not have sizes
-        // Prices
-        setColorSalePrice(product.defaultPrice);
-        setProductPrice(product.defaultSalePrice);
+        setColorSalePrice(product.defaultSalePrice);
+        setProductPrice(product.defaultPrice);
       }
-
     }
-  }, [product, colorFromUrl])
+  }, [product, colorFromUrl, loaded]);
 
   const sizeCategoryHandler = (e) => {
     //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. from 'Regular' to 'Tall', or vice versa
     //We also want to reset activeKey to clear any size buttons that the user selected
     //We also need to find the price of the product in the same color, but the new size category, both the default and a sale price if it exists.
-    let sizeObjArray = [...product.sizes];
     let sizeCat = e.target.value;
-    //if we've chosen a new size category, clear any previously selected sizes
-    if(sizeCat !== selectedSizeCategory) { setSelectedSize('') }
-    setSelectedSizeCategory(sizeCat);
-    setActiveKey('');
-    setQtyInStock(''); //since we are clearing out any size selections, we need to clear the qtyInStock local state, too.
-
-    // Find new default price
-    let newSizeCatDefaultPrice = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryDefaultPrice;
-    setProductPrice(newSizeCatDefaultPrice);
-
-    // Find new sale price
-    let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryColorsAndSizes;
-    let newSizeCatSalePrice = levelOne[levelOne.findIndex(index => index.color === selectedColor)].colorSalePrice;
-    setColorSalePrice(newSizeCatSalePrice);
+    if(sizeCat !== selectedSizeCategory) { //only run if the user has selected a new size category
+      let sizeObjArray = [...product.sizes];
+      //if we've chosen a new size category, clear any previously selected sizes
+      setSelectedSize('');
+      setSelectedSizeCategory(sizeCat);
+      setActiveKey('');
+      setQtyInStock(''); //since we are clearing out any size selections, we need to clear the qtyInStock local state, too.
+      setQtyForCart(1);
+  
+      // Find new default price
+      let newSizeCatDefaultPrice = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryDefaultPrice;
+      setProductPrice(newSizeCatDefaultPrice);
+  
+      // Find new sale price
+      let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryColorsAndSizes;
+      let newSizeCatSalePrice = levelOne[levelOne.findIndex(index => index.color === selectedColor)].colorSalePrice;
+      setColorSalePrice(newSizeCatSalePrice);
+    }
   }
 
   const colorSelectHandler = (colorClicked) => {
@@ -168,24 +151,29 @@ const ProductScreenTest2 = ({ match }) => {
   }
 
   const sizeSelectHandler = (e) => {
-    if(addToCartSizeMessage) {
-      setAddToCartSizeMessage(false);
-    }
     let userSelectedSize = e.target.value;
-    setSelectedSize(userSelectedSize); //Change the local state for selectedSize to reflect the size the user chose
-    setActiveKey(e.target.dataset.keyforactivekey); //Make the corresponding size button the user clicked active
-    //Find the quantity available in the new size
-    const sizeObjArray = [...product.sizes];
-    let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
-    let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
-    let levelThree = levelTwo[levelTwo.findIndex(i => i.size === userSelectedSize)];
-    if(levelThree.qty !== 0) {
-      setQtyInStock(levelThree.qty);
+    if(userSelectedSize !== selectedSize) { //only run if the user has selected a new size
+      if(addToCartSizeMessage) {
+        setAddToCartSizeMessage(false);
+      }
+      let userSelectedSize = e.target.value;
+      setSelectedSize(userSelectedSize); //Change the local state for selectedSize to reflect the size the user chose
+      setActiveKey(e.target.dataset.keyforactivekey); //Make the corresponding size button the user clicked active
+      //Find the quantity available in the new size
+      const sizeObjArray = [...product.sizes];
+      let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
+      let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
+      let levelThree = levelTwo[levelTwo.findIndex(i => i.size === userSelectedSize)];
+      if(levelThree.qty !== 0) {
+        setQtyInStock(levelThree.qty);
+      }
     }
   }
   
   const addToCartHandler = (e) => {
     console.log('clicked add to cart!');
+    console.log(`selected size: ${selectedSize}`)
+    console.log(`selected qty: ${qtyForCart}`)
     if(selectedSize === '') {
       setAddToCartSizeMessage(true);
       return;
@@ -193,7 +181,6 @@ const ProductScreenTest2 = ({ match }) => {
     if(addToCartSizeMessage) {
       setAddToCartSizeMessage(false);
     }
-
   }
 
   return (
