@@ -6,11 +6,15 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js'; //remember, we need the .js extension in the backend since we are using the ESmodules way of importing
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config(); //load our environmental variables
 connectDB(); // connect to our database!
 
 const app = express();
+
+app.use(express.json()); //this allows us to accept JSON data in the body
+
 // Run morgan middleware in development mode only
 if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -29,6 +33,11 @@ app.get('/', (req, res) => {
 //Product related routes
 //========================================
 app.use('/api/products', productRoutes);
+
+//========================================
+//User related routes
+//========================================
+app.use('/api/users', userRoutes);
 
 //========================================
 //Error Handling Middleware

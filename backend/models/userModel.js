@@ -1,8 +1,36 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 //User Wishlist - this contains the product id's of all the products the user has put on their wishlist
 //See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
 const wishListSchema = mongoose.Schema({
+    productID: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
+      ref: 'Product'
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    }
+  // wishListProduct: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: false, //a user's wishlist can be empty
+  //   ref: 'Product',
+  // }
+}, {
+  timestamps: true
+});
+
+const cartSchema = mongoose.Schema({
     productID: {
       type: mongoose.Schema.Types.ObjectId,
       required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
@@ -67,11 +95,16 @@ const userSchema = mongoose.Schema({
     required: true,
     default: false //by default, new users will Not be admins
   },
-  wishList: [wishListSchema] //an array of wishList objects. See schema above.
+  wishList: [wishListSchema], //an array of wishList objects. See schema above.
+  cart: [cartSchema]
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true
 })
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+}
 
 const User = mongoose.model('User', userSchema);
 
