@@ -14,6 +14,7 @@ import ProductDescription from '../components/ProductComponents/ProductDescripti
 import ProductFeatures from '../components/ProductComponents/ProductFeatures';
 import ProductCare from '../components/ProductComponents/ProductCare';
 import ProductMaterials from '../components/ProductComponents/ProductMaterials';
+import ProductReviews from '../components/ProductComponents/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 
@@ -355,6 +356,10 @@ const ProductScreen = ({ match }) => {
               <Col md={6}>
                 <ProductMaterials materialsArray={product.materials}/>
             </Col>
+          </Row>
+          <hr/>
+          <Row>
+            <ProductReviews />
           </Row>
         </>
       }
