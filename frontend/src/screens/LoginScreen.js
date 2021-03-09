@@ -31,7 +31,10 @@ const LoginScreen = ({ location, history }) => {
   }
 
   const guestLoginHandler = (e) => {
-    console.log('guest login clicked')
+    console.log('guest login clicked');
+    let guestEmail = 'guest@example.com';
+    let guestPassword = '12345';
+    dispatch(login(guestEmail, guestPassword));
   }
 
   return (
