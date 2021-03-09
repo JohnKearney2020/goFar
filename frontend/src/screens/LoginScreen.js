@@ -30,6 +30,10 @@ const LoginScreen = ({ location, history }) => {
     dispatch(login(email, password));
   }
 
+  const guestLoginHandler = (e) => {
+    console.log('guest login clicked')
+  }
+
   return (
     <FormContainer>
       <h1>Sign In</h1>
@@ -56,8 +60,11 @@ const LoginScreen = ({ location, history }) => {
           >
           </Form.Control>
         </Form.Group>
-        <Button type='submit' variant='primary'>
-          Sign In
+        <Button type='submit' variant='outline-primary' disabled={loading}>
+          {loading ? 'Signing in...' : 'Sign In'}
+        </Button>
+        <Button type='button' variant='outline-secondary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
+          {loading ? 'Signing in...' : 'Sign In As Guest'}
         </Button>
       </Form>
       <Row className='py-3'>

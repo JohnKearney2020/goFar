@@ -26,10 +26,7 @@ const productPlaceHolderObj = {
     materials: []
 }
 
-
-// export const productDetailsReducer = (state = { product: { reviews: [], colors: [], sizes: [], featureIcons: [] } }, action) => {
 export const productDetailsReducer = (state = { product: productPlaceHolderObj }, action) => {
-// export const productDetailsReducer = (state = defaultProductDetailsState, action) => {
   switch(action.type) {
     case PRODUCT_DETAILS_REQUEST:
       // return { loading: true, loaded: false, ...state };

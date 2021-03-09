@@ -95,6 +95,36 @@ const userSchema = mongoose.Schema({
     required: true,
     default: false //by default, new users will Not be admins
   },
+  addresses: [{
+    addressName: {
+      type: String,
+      required: false
+    },
+    line1: {
+      type: String,
+      required: true
+    },
+    line2: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    },
+    zipCode: {
+      type: String,
+      required: true
+    }
+  }],
+  phoneNumber: {
+    type: String,
+    required: false
+  },
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
   cart: [cartSchema]
 }, {
