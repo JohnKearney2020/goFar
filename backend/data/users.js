@@ -24,6 +24,7 @@ const users = [
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
+    isAdmin: false,
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
       isPrimary: true,
@@ -41,6 +42,7 @@ const users = [
   {
     name: 'Jane Doe',
     email: 'janedoe@gmail.com',
+    isAdmin: false,
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
       isPrimary: true,
@@ -58,6 +60,7 @@ const users = [
   {
     name: 'Guest',
     email: 'guest@example.com',
+    isAdmin: false,
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
       isPrimary: true,
