@@ -96,6 +96,10 @@ const userSchema = mongoose.Schema({
     default: false //by default, new users will Not be admins
   },
   addresses: [{
+    isPrimary: {
+      type: Boolean,
+      required: true
+    },
     addressName: {
       type: String,
       required: false

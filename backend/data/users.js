@@ -9,6 +9,7 @@ const users = [
     password: bcrypt.hashSync('12345', 10), //normally this would best be done asynchronously, but it's fine here synchronously w/ just 3 users
     isAdmin: true,
     addresses: [{
+      isPrimary: true,
       addressName: 'Home',
       line1: '3 Hermann Museum Circle Dr',
       line2: 'Apt 1112',
@@ -25,6 +26,7 @@ const users = [
     email: 'johndoe@gmail.com',
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
+      isPrimary: true,
       addressName: 'The Cannon West',
       line1: '1334 Brittmore Rd',
       line2:'#1327',
@@ -41,6 +43,7 @@ const users = [
     email: 'janedoe@gmail.com',
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
+      isPrimary: true,
       addressName: 'Houston Zoo',
       line1: '6200 Hermann Park Dr',
       line2: '',
@@ -57,6 +60,7 @@ const users = [
     email: 'guest@example.com',
     password: bcrypt.hashSync('12345', 10),
     addresses: [{
+      isPrimary: true,
       addressName: 'Johnson Space Center',
       line1: '2101 E NASA Pkwy',
       line2: '',
