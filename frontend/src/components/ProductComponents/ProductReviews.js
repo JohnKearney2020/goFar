@@ -33,10 +33,10 @@ const ProductReviews = () => {
   const numReviewsPerAccordion = 5;
 
 
-  let numSetsOfReviews = Math.floor(remainingReviewsArray.length / numReviewsPerAccordion);
+  // let numSetsOfReviews = Math.floor(remainingReviewsArray.length / numReviewsPerAccordion);
   //Account for leftover reviews that aren't divisible by numReviewsPerAccordion
-  const remainder = remainingReviewsArray.length % numReviewsPerAccordion;
-  if(remainder > 0) { numSetsOfReviews = numSetsOfReviews + 1 }
+  // const remainder = remainingReviewsArray.length % numReviewsPerAccordion;
+  // if(remainder > 0) { numSetsOfReviews = numSetsOfReviews + 1 }
 
   const firstReviews = (
     <>
@@ -96,20 +96,3 @@ const ProductReviews = () => {
 }
 
 export default ProductReviews;
-
-
-{/* <Accordion className='w-100'>
-<Card>
-    <Accordion.Toggle as={Button} variant="light" eventKey='1'>
-      <h6>Read More Reviews</h6>
-      <i class="fas fa-chevron-down"></i>
-    </Accordion.Toggle>
-  <Accordion.Collapse eventKey='1'>
-    <Card.Body>
-      <h4>Review 4</h4>
-      <h4>Review 5</h4>
-      <h4>Review 6</h4>
-    </Card.Body>
-  </Accordion.Collapse>
-</Card>
-</Accordion> */}

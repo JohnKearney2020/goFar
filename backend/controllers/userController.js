@@ -16,6 +16,8 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      addresses: user.addresses,
+      phoneNumber: user.phoneNumber,
       cart: user.cart,
       wishList: user.wishList,
       token: generateToken(user._id)
@@ -30,7 +32,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route    POST /api/users
 // @access   Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email })  // here, we are effectively doing {email: email}
 
@@ -51,6 +53,10 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      addresses: user.addresses,
+      phoneNumber: user.phoneNumber,
+      cart: user.cart,
+      wishList: user.wishList,
       token: generateToken(user._id) //don't need cart or wishlist on user creation
     })
   } else {
@@ -70,6 +76,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      addresses: user.addresses,
+      phoneNumber: user.phoneNumber,
       cart: user.cart,
       wishList: user.wishList,
     })

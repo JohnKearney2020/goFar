@@ -95,6 +95,44 @@ const userSchema = mongoose.Schema({
     required: true,
     default: false //by default, new users will Not be admins
   },
+  // IMPORTANT - even though we've set many required: true parts of the addresses, cart, and wishlist we can still create a user based
+  // on less information, like name, email and password. MongoDB seems to only enforce the required part if we were to actually try
+  // to populate addresses, cart, or wishlist. If we create a user with just name, email, and address, the addresses, cart, and wishlist
+  // arrays are created, but left blank
+  addresses: [{
+    isPrimary: {
+      type: Boolean,
+      required: true
+    },
+    addressName: {
+      type: String,
+      required: false
+    },
+    line1: {
+      type: String,
+      required: true
+    },
+    line2: {
+      type: String,
+      required: false
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    },
+    zipCode: {
+      type: String,
+      required: true
+    }
+  }],
+  phoneNumber: {
+    type: String,
+    required: false
+  },
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
   cart: [cartSchema]
 }, {
