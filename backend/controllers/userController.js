@@ -26,6 +26,38 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc     Register a new user
+// @route    POST /api/users
+// @access   Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password} = req.body;
+
+  const userExists = await User.findOne({ email })  // here, we are effectively doing {email: email}
+
+  if(userExists) {
+    res.status(400);
+    throw  new Error('User already exists');
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password //this will automatically be encrypted thanks to the .preSave() middleware we created in the user model
+  })
+
+  if(user){
+    res.status(201).json({ //201 status means something was created
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id) //don't need cart or wishlist on user creation
+    })
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
+  }
+})
 
 // @desc     Get user profile
 // @route    GET /api/users/profile
@@ -47,4 +79,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile };
+export { authUser, getUserProfile, registerUser };
