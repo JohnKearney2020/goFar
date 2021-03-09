@@ -6,6 +6,7 @@ import Header from './components/HeaderAndFooter/Header';
 import Footer from './components/HeaderAndFooter/Footer';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
+import LoginScreen from './screens/LoginScreen';
 
 
 const App = () => {
@@ -14,8 +15,9 @@ const App = () => {
       <Header />
       <main className='pt-3 pb-5'>
         <Container>
-            <Route path='/' component={HomeScreen} exact/>
-            <Route path='/product/:id/:color' component={ProductScreen} />
+          <Route path='/login' component={LoginScreen} />
+          <Route path='/product/:id/:color' component={ProductScreen} />
+          <Route path='/' component={HomeScreen} exact/>
         </Container>
       </main>
       <Footer />

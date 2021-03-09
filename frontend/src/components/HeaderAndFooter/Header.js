@@ -1,22 +1,22 @@
 import React from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 // import SearchBox from './SearchBox';
 // import { logout } from '../actions/userActions';
 
 const Header = () => {
-  // const dispatch = useDispatch();
-  // const userLogin = useSelector(state => state.userLogin);
-  // const { userInfo } = userLogin;
+  const dispatch = useDispatch();
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
 
   //======================
   //Placeholder Variables
   //======================
-  const userInfo = { 
-    name: 'John',
-    isAdmin: true
-  };
+  // const userInfo = { 
+  //   name: 'John',
+  //   isAdmin: true
+  // };
 
 
   const logoutHandler = () => {
