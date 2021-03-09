@@ -53,9 +53,6 @@ const ProductReviews = () => {
               {firstReviewsArray.map(eachReview => (
                 <h4>{eachReview}</h4>
               ))}
-              {secondGroup && 
-              
-              }
             </Card.Body>
           </Accordion.Collapse>
         </Card>

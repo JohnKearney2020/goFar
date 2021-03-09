@@ -1,8 +1,36 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 //User Wishlist - this contains the product id's of all the products the user has put on their wishlist
 //See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
 const wishListSchema = mongoose.Schema({
+    productID: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
+      ref: 'Product'
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    }
+  // wishListProduct: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: false, //a user's wishlist can be empty
+  //   ref: 'Product',
+  // }
+}, {
+  timestamps: true
+});
+
+const cartSchema = mongoose.Schema({
     productID: {
       type: mongoose.Schema.Types.ObjectId,
       required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
@@ -67,10 +95,25 @@ const userSchema = mongoose.Schema({
     required: true,
     default: false //by default, new users will Not be admins
   },
-  wishList: [wishListSchema] //an array of wishList objects. See schema above.
+  wishList: [wishListSchema], //an array of wishList objects. See schema above.
+  cart: [cartSchema]
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true
+})
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+}
+
+userSchema.pre('save', async function (next) {
+  // only encrypt the user password if it has not been modified
+  if(!this.isModified('password')){
+    next()
+  }
+  //Before saving, encrypt the user password
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 })
 
 const User = mongoose.model('User', userSchema);

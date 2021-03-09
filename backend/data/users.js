@@ -8,19 +8,22 @@ const users = [
     email: 'admin@gofar.com',
     password: bcrypt.hashSync('12345', 10), //normally this would best be done asynchronously, but it's fine here synchronously w/ just 3 users
     isAdmin: true,
-    wishList: []
+    wishList: [],
+    cart: []
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
     password: bcrypt.hashSync('12345', 10),
-    wishList: []
+    wishList: [],
+    cart: []
   },
   {
     name: 'Jane Doe',
     email: 'janedoe@gmail.com',
     password: bcrypt.hashSync('12345', 10),
-    wishList: []
+    wishList: [],
+    cart: []
   }
 ];
 
