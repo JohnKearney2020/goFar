@@ -32,9 +32,9 @@ const RegisterScreen = ({ location, history }) => {
   useEffect(() => {
     // if a user is already logged in, redirect them
     if(userInfo){
-      history.push(redirect);
+        history.push(redirect);
     }
-  }, [history, userInfo, redirect]);
+  }, [ history, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -69,7 +69,6 @@ const RegisterScreen = ({ location, history }) => {
 
     if(anyErrors) { return }
     dispatch(register(name, email, password));
-    // dispatch register
   }
 
   return (
@@ -80,47 +79,56 @@ const RegisterScreen = ({ location, history }) => {
       <Form onSubmit={submitHandler}>
       <Form.Group controlId='name'>
           <Form.Label>Name</Form.Label>
-          {nameMessage && <Message variant='danger'>{nameMessage}</Message> }
           <Form.Control 
             type='name' 
             placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
+            // className='is-invalid'
+            className={nameMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {nameMessage && <div class="invalid-feedback">{nameMessage}</div>
+          }
         </Form.Group>
         <Form.Group controlId='email'>
           <Form.Label>Email Address</Form.Label>
-          {emailMessage && <Message variant='danger'>{emailMessage}</Message> }
           <Form.Control 
             type='email' 
             placeholder='Enter email address' 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className={emailMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {emailMessage && <div class="invalid-feedback">{emailMessage}</div>
+          }
         </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
-          {passwordMessage && <Message variant='danger'>{passwordMessage}</Message> }          
           <Form.Control 
             type='password' 
             placeholder='Enter password' 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className={passwordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {passwordMessage && <div class="invalid-feedback">{passwordMessage}</div>
+          }
         </Form.Group>
         <Form.Group controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
-          {confirmPasswordMessage && <Message variant='danger'>{confirmPasswordMessage}</Message> } 
           <Form.Control 
             type='password' 
             placeholder='Confirm password' 
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            className={confirmPasswordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {confirmPasswordMessage && <div class="invalid-feedback">{confirmPasswordMessage}</div>
+          }
         </Form.Group>
         <Button type='submit' variant='outline-primary' disabled={loading}>
           {loading ? 'Signing in...' : 'Register'}

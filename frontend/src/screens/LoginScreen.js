@@ -11,6 +11,9 @@ const LoginScreen = ({ location, history }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailMessage, setEmailMessage] = useState(null);
+  const [passwordMessage, setPasswordMessage] = useState(null);
+
   // redirect first talked about in section 8-44 ~9:42
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -27,6 +30,20 @@ const LoginScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    let anyErrors = false;
+    //Clear any existing errors messages first
+    if(emailMessage) { setEmailMessage(null) }
+    if(passwordMessage) { setPasswordMessage(null) }
+
+    if(email === ''){
+      setEmailMessage('Email field cannot be empty');
+      anyErrors = true;
+    }
+    if(password === ''){
+      setPasswordMessage('Password field cannot be empty');
+      anyErrors = true;
+    }
+    if(anyErrors) { return }
     dispatch(login(email, password));
   }
 
@@ -50,8 +67,11 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter email address' 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className={emailMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {emailMessage && <div class="invalid-feedback">{emailMessage}</div>
+          }
         </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
@@ -60,8 +80,11 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter password' 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className={passwordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
+          {passwordMessage && <div class="invalid-feedback">{passwordMessage}</div>
+          }
         </Form.Group>
         <Button type='submit' variant='outline-primary' disabled={loading}>
           {loading ? 'Signing in...' : 'Sign In'}
