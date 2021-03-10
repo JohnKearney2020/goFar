@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <main className='pt-3 pb-5'>
+      <main className='pt-3'>
         <Container>
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />

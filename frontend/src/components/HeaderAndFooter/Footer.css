@@ -1,7 +1,38 @@
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+main {
+  /* This padding needs to be equal to the height of the footer */
+  /* the <main></main> element is used in the App.js file */
+  padding-bottom: 150px;
+}
+
 footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  left: 0;
   width: 100%;
-  background-color: #303030;
+  /* background-color: #303030; */
+  background-color: #343a40;
+  color: rgba(255,255,255,.5);
+  height: 150px;
+}
+
+footer h5 {
+  /* color: rgba(255,255,255,.5); */
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.contactIcons {
+  font-size: 2rem;
+  margin: 0 0.4rem;
+  transition: color 0.4s ease;
+  /* color: #D0D0D0; */
+  /* color: rgba(255,255,255,.5) ; */
+  color: #FFFFFF;
+}
+.contactIcons:hover{
+  color: #7c7c7c;
 }
