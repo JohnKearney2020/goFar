@@ -131,7 +131,8 @@ const userSchema = mongoose.Schema({
   }],
   phoneNumber: {
     type: String,
-    required: false
+    required: false,
+    default: ''
   },
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
   cart: [cartSchema]
