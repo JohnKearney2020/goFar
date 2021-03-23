@@ -4,6 +4,8 @@ import { Form, Button, Row, Col, Card, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import OffsetPageHeader from '../components/OffsetPageHeader';
+
 // import FormContainer from '../components/FormContainer';
 import { getUserDetails } from '../actions/userActions';
 import './ProfileScreen.css';
@@ -14,6 +16,7 @@ const ProfileScreen = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [primaryAddress, setPrimaryAddress] = useState('');
 
   const [nameMessage, setNameMessage] = useState(null);
   const [emailMessage, setEmailMessage] = useState(null);
@@ -42,6 +45,9 @@ const ProfileScreen = ({ history }) => {
       } else { //if we have completed fetching the user details from the backend
         setName(user.name);
         setEmail(user.email);
+        //Find the user's primary address
+        let primaryAddress = user.addresses[user.addresses.findIndex(i => i.isPrimary === true)];
+        console.log(primaryAddress);
       }
     }
   }, [ dispatch, history, userInfo, user ]);
@@ -84,22 +90,14 @@ const ProfileScreen = ({ history }) => {
 
   return (
     <>
-      <Row className='w-100 mt-4 mb-5' >
-        {/* <div className='d-inline-flex'> */}
-          {/* <h1 className='display-2'>User Profile</h1><h1 className='display-2 mx-4'>|</h1> <h3 className=''>User Profile</h3> */}
-          <Col className='d-inline-flex justify-content-center mb-3' id='userProfileScreenHeading'>
-            <h1 className='display-4'>User Profile</h1><div class="vl mx-4"></div><h3 className=''>User Profile</h3>
-          </Col>
-
-        {/* </div> */}
-      </Row>
-      <Row>
+      <OffsetPageHeader leftHeaderText='User Profile' rightHeaderText='User Profile'/>
+      <Row className='my-4'>
         <Col md={3}>
-          <h2>User Info</h2>
-          <div>
+          <h2>Current User Info</h2>
+          <div className='my-5'>
             <h5>{user.name}</h5>
             <h6>{user.email}</h6>
-            <h6>{`Phone Number: ${user.phoneNumber ? user.phoneNumber : `N/A`}`}</h6>
+            <h6>{`${user.phoneNumber ? user.phoneNumber : `___-___-____`}`}</h6>
           </div>
           {/* <h4>{user.add}</h4> */}
           <Form onSubmit={submitHandler}>
