@@ -34,5 +34,6 @@ footer h5 {
   color: #FFFFFF;
 }
 .contactIcons:hover{
-  color: #7c7c7c;
+  /* color: #7c7c7c; */
+  color: #9a9da0;
 }
