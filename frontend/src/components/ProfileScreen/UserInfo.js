@@ -2,9 +2,10 @@ import React, {useState, useEffect, useRef } from 'react';
 import { Form, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getUserDetails } from '../../actions/userActions';
+import { getUserDetails, updateUserProfile } from '../../actions/userActions';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
+import { USER_UPDATE_PROFILE_RESET } from '../../constants/userConstants';
 
 const UserInfo = () => {
   const haveFetchedUserData = useRef(false);
@@ -15,6 +16,7 @@ const UserInfo = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [primaryAddress, setPrimaryAddress] = useState('');
   const { addressName, line1, line2, city, state, zipCode } = primaryAddress;
+  const [isGuest, setIsGuest] = useState(false);
 
   const [nameMessage, setNameMessage] = useState(null);
   const [emailMessage, setEmailMessage] = useState(null);
@@ -30,22 +32,36 @@ const UserInfo = () => {
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
-  const noAddressMessage = 'No addresses on file. Click the "addresses" tab to add an address';
+  const userUpdateProfile = useSelector(state => state.userUpdateProfile);
+  const { loading: updateProfileLoading, success, userInfo: updatedUserInfo } = userUpdateProfile;
+
+  const noAddressMessage = 'No addresses on file. Click the "addresses" tab to add an address.';
+  const isGuestMessage1 = 'As a guest you cannot change the Name, Email, or Password fields. You can update the Phone Number field.';
+  const isGuestMessage2 = 'Try out various CRUD operations on the Addresses, Wishlist, and Orders Tabs. You have the same abilities there as any other user. ';
+  // const isGuestMessage3 = 'Try adding, deleting, and editing addresses on the Addresses tab.';
+  // const isGuestMessage4 = 'Look at orders you and other guests have made on the Orders Tab.';
 
   useEffect(() => {
       if(haveFetchedUserData.current === false){ //if we haven't gotten the user details yet, go ahead and get them
         dispatch(getUserDetails('profile'));
         haveFetchedUserData.current = true;
-      } else { //if we have completed fetching the user details from the backend
+      } else if(success){ //if we have completed fetching the user details from the backend
+        setTimeout(() => {
+          console.log('in set timeout');
+          dispatch({ type: USER_UPDATE_PROFILE_RESET});
+          dispatch(getUserDetails('profile'));          
+        }, 1500);
+      } else {
         setName(user.name);
         setEmail(user.email);
         setPhoneNumber(user.phoneNumber);
         //Find the user's primary address
         let primeAddress = user.addresses[user.addresses.findIndex(i => i.isPrimary === true)];
-        console.log(primeAddress);
         if(primeAddress !== undefined) { setPrimaryAddress(primeAddress) };
+        //Determine if the user is a guest
+        if(user._id === '605a1c32864ac85278b75db1') { setIsGuest(true) };
       }
-    }, [ dispatch, userInfo, user ]);
+    }, [ dispatch, userInfo, user, success ]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -81,8 +97,8 @@ const UserInfo = () => {
     }
 
     if(anyErrors) { return }
-    console.log('dispatch placeholder')
     //DISPATCH UPDATE PROFILE
+    dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }));
   }
 
   return (
@@ -116,6 +132,11 @@ const UserInfo = () => {
           <hr />
 
           <h4 className='font-weight-bold'>Update Profile Information</h4>
+          {success && <Message variant='success'>Profile Successfully Updated!</Message>}
+          { isGuest && <Message variant='info'>{isGuestMessage1}</Message>}
+          { isGuest && <Message variant='info'>{isGuestMessage2}</Message>}
+          {/* { isGuest && <Message variant='info'>{isGuestMessage3}</Message>} */}
+          {/* { isGuest && <Message variant='info'>{isGuestMessage4}</Message>} */}
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
@@ -127,6 +148,7 @@ const UserInfo = () => {
                 onChange={(e) => setName(e.target.value)}
                 // className='is-invalid'
                 className={nameMessage === null ? '' : 'is-invalid'}
+                disabled={isGuest}
               >
               </Form.Control>
               { nameMessage && <div className="invalid-feedback">{nameMessage}</div> }
@@ -139,6 +161,7 @@ const UserInfo = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={emailMessage === null ? '' : 'is-invalid'}
+                disabled={isGuest}
               >
               </Form.Control>
               { emailMessage && <div className="invalid-feedback">{emailMessage}</div> }
@@ -166,6 +189,7 @@ const UserInfo = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={passwordMessage === null ? '' : 'is-invalid'}
+                disabled={isGuest}
                 aria-describedby='passwordHelpBlock'
               />
               <Form.Text className='ml-2' id="passwordHelpBlock" muted>
@@ -181,6 +205,7 @@ const UserInfo = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={confirmPasswordMessage === null ? '' : 'is-invalid'}
+                disabled={isGuest}
                 aria-describedby='confirmPasswordHelpBlock'
               />
               <Form.Text className='ml-2' id="confirmPasswordHelpBlock" muted>
@@ -188,8 +213,8 @@ const UserInfo = () => {
               </Form.Text>
               { confirmPasswordMessage && <div className="invalid-feedback">{confirmPasswordMessage}</div> }
             </Form.Group>
-            <Button type='submit' variant='outline-primary' disabled={loading}>
-              {loading ? 'Updating Profile...' : 'Update Profile'}
+            <Button type='submit' variant='outline-primary' disabled={updateProfileLoading}>
+              {updateProfileLoading ? 'Updating Profile...' : 'Update Profile'}
             </Button>
           </Form>
         </>
