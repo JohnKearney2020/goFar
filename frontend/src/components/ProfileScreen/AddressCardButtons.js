@@ -35,6 +35,7 @@ const AddressCardButtons = ({ addressID, isPrimary }) => {
 
   const makePrimaryHandler = (e) => {
     e.preventDefault();
+    if(updateProfileLoading){ return } //prevent users from clicking multiple times
     console.log('addresses from props:')
     console.log(addresses)
     const oldAddresses = [...addresses];
@@ -70,7 +71,7 @@ const AddressCardButtons = ({ addressID, isPrimary }) => {
     <>
       <Row className='justify-content-around'>
         <Button className='addressButton mr-1' size="sm" disabled={isPrimary} onClick={makePrimaryHandler}>
-          Make Primary
+          {updateProfileLoading ? 'Updating...' : 'Make Primary'}
         </Button>
         <Button className='btn-info addressButton mr-1' size="sm" onClick={updateAddressHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth />
