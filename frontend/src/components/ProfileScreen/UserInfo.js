@@ -46,11 +46,11 @@ const UserInfo = () => {
         dispatch(getUserDetails('profile'));
         haveFetchedUserData.current = true;
       } else if(success){ //if we have completed fetching the user details from the backend
-        setTimeout(() => {
+        // setTimeout(() => {
           console.log('in set timeout');
           dispatch({ type: USER_UPDATE_PROFILE_RESET});
           dispatch(getUserDetails('profile'));          
-        }, 1500);
+        // }, 1500);
       } else {
         setName(user.name);
         setEmail(user.email);

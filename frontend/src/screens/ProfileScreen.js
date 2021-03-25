@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 // import Loader from '../components/Loader';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import UserInfo from '../components/ProfileScreen/UserInfo';
+import Addresses from '../components/ProfileScreen/Addresses';
 
 // import FormContainer from '../components/FormContainer';
 // import { getUserDetails } from '../actions/userActions';
@@ -29,7 +30,7 @@ const ProfileScreen = ({ history }) => {
           <UserInfo />
         </Tab>
         <Tab eventKey='addresses' title='Addresses'>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. At obcaecati sint hic ullam odio ipsum, amet quod distinctio, unde sapiente ea veritatis eos ducimus incidunt quas. Sed optio architecto nemo explicabo necessitatibus numquam deserunt libero.
+          <Addresses />
         </Tab>
         <Tab eventKey='orders' title='Orders'>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. At obcaecati sint hic ullam odio ipsum, amet quod distinctio, unde sapiente ea veritatis eos ducimus incidunt quas. Sed optio architecto nemo explicabo necessitatibus numquam deserunt libero.

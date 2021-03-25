@@ -44,15 +44,35 @@ const users = [
     email: 'janedoe@gmail.com',
     isAdmin: false,
     password: bcrypt.hashSync('12345', 10),
-    addresses: [{
-      isPrimary: true,
-      addressName: 'Houston Zoo',
-      line1: '6200 Hermann Park Dr',
-      line2: '',
-      city: 'Houston',
-      state: 'TX',
-      zipCode: '77030'
-    }],
+    addresses: [
+      {
+        isPrimary: true,
+        addressName: 'Houston Zoo',
+        line1: '6200 Hermann Park Dr',
+        line2: '',
+        city: 'Houston',
+        state: 'TX',
+        zipCode: '77030'
+      },
+      {
+        isPrimary: false,
+        addressName: 'Home',
+        line1: '3 Hermann Museum Circle Dr',
+        line2: 'Apt 1112',
+        city: 'Houston',
+        state: 'TX',
+        zipCode: '77004'
+      },
+      {
+        isPrimary: false,
+        addressName: '',
+        line1: '1745 West Lawson Rd',
+        line2: '',
+        city: 'Bloomington',
+        state: 'IN',
+        zipCode: '47404'
+      }
+  ],
     phoneNumber: '123-456-7890',
     wishList: [],
     cart: []

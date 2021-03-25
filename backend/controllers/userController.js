@@ -100,7 +100,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     //New Addresses
-
+    user.addresses = req.body.addresses || user.addresses;
     //How to delete existing addresses
     //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
     // if(req.body.newAddress){
@@ -139,4 +139,35 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+
+// @desc     Update user addresses
+// @route    PUT /api/users/profile/addresses
+// @access   Private
+const updateUserAddresses = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if(user) {
+    //New Addresses
+    user.addresses = req.body.addresses || user.addresses;
+
+    //Update the user's info
+    const updatedUser = await user.save();
+
+    res.json({ //201 status means something was created
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      addresses: updatedUser.addresses,
+      phoneNumber: updatedUser.phoneNumber,
+      cart: updatedUser.cart,
+      wishList: updatedUser.wishList,
+      token: generateToken(updatedUser._id) 
+    })
+
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found');
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile, updateUserAddresses };
