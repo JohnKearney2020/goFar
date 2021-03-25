@@ -18,7 +18,8 @@ const Addresses = () => {
 
   useEffect(() => {
     console.log('in addresses use effect')
-    if(addresses.length >= 1 && haveArrangedAddresses.current === false){
+    // if(addresses.length >= 1 && haveArrangedAddresses.current === false){
+    if(addresses.length >= 1 ){
       const primaryAddress = [addresses[addresses.findIndex(i => i.isPrimary === true)]];
       const otherAddresses = addresses.filter(eachAddress => eachAddress.isPrimary === false);
       setAddressesToDisplay(primaryAddress.concat(otherAddresses));
