@@ -25,12 +25,7 @@ export const login = (email, password) => async (dispatch) => {
     })
     // store user info in local storage
     localStorage.setItem('userInfo', JSON.stringify(data));
-    toast.success('Logged in Successfully!', 
-    { 
-      // position: "bottom-center",
-      position: "top-right",
-      autoClose: 3500,
-    }
+    toast.info('Log in Successful!', { position: "top-right", autoClose: 3500 }
   );
   } catch (error) {
     dispatch({
@@ -45,12 +40,7 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_LOGOUT });
-  toast.success('Log Out Successful...', 
-    { 
-      position: 'top-right',
-      autoClose: 3500,
-    }
-  );
+  toast.info('Log Out Successful!', { position: 'top-right', autoClose: 3500 });
 }
 
 export const register = (name, email, password ) => async (dispatch) => {
