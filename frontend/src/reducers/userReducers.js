@@ -1,6 +1,7 @@
 import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } from '../constants/userConstants';
 import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants';
-import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/userConstants';
+import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
+import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
 export const userLoginReducer = (state = { }, action) => {
   switch(action.type) {
@@ -30,7 +31,11 @@ export const userRegisterReducer = (state = { }, action) => {
   } 
 }
 
-export const userDetailsReducer = (state = { user: {} }, action) => {
+const userDetailsPlaceHolderObj = {
+  addresses: []
+}
+
+export const userDetailsReducer = (state = { user: userDetailsPlaceHolderObj }, action) => {
   switch(action.type) {
     case USER_DETAILS_REQUEST:
       return { ...state, loading: true };
@@ -38,7 +43,31 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return { loading: false, user: action.payload };
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case USER_DETAILS_LOGOUT:
+      return { user: userDetailsPlaceHolderObj };
     default: 
       return state;
   } 
 }
+
+export const userUpdateProfileReducer = ( state = { }, action ) => {
+  switch(action.type) {
+    case USER_UPDATE_PROFILE_REQUEST:
+      return { loading: true };
+    case USER_UPDATE_PROFILE_SUCCESS:
+      return { loading: false, success: true, userInfo: action.payload };
+    case USER_UPDATE_PROFILE_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_UPDATE_PROFILE_RESET:
+      return { };
+    default: 
+      return state;
+  } 
+}
+
+// export const USER_UPDATE_PROFILE_REQUEST = 'USER_DETAILS_PROFILE_REQUEST';
+// export const USER_UPDATE_PROFILE_SUCCESS = 'USER_DETAILS_PROFILE_SUCCESS';
+// export const USER_UPDATE_PROFILE_FAIL = 'USER_DETAILS_PROFILE_FAIL';
+// export const USER_UPDATE_PROFILE_RESET = 'USER_UPDATE_PROFILE_RESET';
+
+

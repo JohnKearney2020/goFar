@@ -100,19 +100,19 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     //New Addresses
-
+    user.addresses = req.body.addresses || user.addresses;
     //How to delete existing addresses
     //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
-    if(req.body.newAddress){
-      let addressTemp = [...user.addresses];//copy the old addresses
-      if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
-        addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
-          eachIndex.isPrimary = false
-        ))
-      }
-      // user.addresses = addressTemp.concat([req.body.newAddress]);
-      user.addresses = addressTemp.concat(req.body.newAddress);
-    }
+    // if(req.body.newAddress){
+    //   let addressTemp = [...user.addresses];//copy the old addresses
+    //   if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
+    //     addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
+    //       eachIndex.isPrimary = false
+    //     ))
+    //   }
+    //   // user.addresses = addressTemp.concat([req.body.newAddress]);
+    //   user.addresses = addressTemp.concat(req.body.newAddress);
+    // }
     // user.wishList = user.wishList.push(req.body.wishList) || user.wishList;
     // user.cart = user.cart.push(req.body.cart) || user.cart;
     if(req.body.password) {

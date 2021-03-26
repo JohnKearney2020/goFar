@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } from '../constants/userConstants';
 import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants';
-import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/userConstants';
+import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
+import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL } from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -34,6 +35,7 @@ export const logout = () => (dispatch) => {
   console.log('in logout action');
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGOUT });
+  dispatch({ type: USER_DETAILS_LOGOUT });
 }
 
 export const register = (name, email, password ) => async (dispatch) => {
@@ -98,6 +100,42 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+// The get state parameter is needed b/c we will need a JWT from the state for this
+export const updateUserProfile = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_PROFILE_REQUEST
+    });
+
+    const { userLogin: { userInfo } } = getState();
+    // set headers to json
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}` //this goes to the 'api/users/profile' route which is a protected route. Our middleware is expecting a token
+      }
+    }
+    // attempt to get user details
+    const { data } = await axios.put(`/api/users/profile`, user, config);
+    dispatch({
+      type: USER_UPDATE_PROFILE_SUCCESS,
+      payload: data
+    })
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data
+    })
+
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_PROFILE_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }
