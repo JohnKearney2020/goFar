@@ -99,7 +99,7 @@ const UserInfo = () => {
 
     if(anyErrors) { return }
     //DISPATCH UPDATE PROFILE
-    dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }));
+    dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
   }
 
   return (

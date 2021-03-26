@@ -65,7 +65,7 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
       }
       return address;
     })
-    dispatch(updateUserProfile({ addresses: newAddresses }));
+    dispatch(updateUserProfile({ addresses: newAddresses }, 'makePrimary'));
   }
 
 
@@ -88,7 +88,7 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
     }
     console.log('new addresses minus the deleted one:')
     console.log(newAddresses)
-    dispatch(updateUserProfile({ addresses: newAddresses }));
+    dispatch(updateUserProfile({ addresses: newAddresses }, 'deleteAddress'));
 
   }
 

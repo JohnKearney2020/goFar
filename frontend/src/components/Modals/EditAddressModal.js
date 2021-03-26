@@ -80,7 +80,7 @@ const EditAddressModal = ({ show, closeModalHandler, address }) => {
       zipCode: zipCode
     };
     filteredAddresses.push(newAddress);
-    dispatch(updateUserProfile({ addresses: filteredAddresses }));
+    dispatch(updateUserProfile({ addresses: filteredAddresses }, 'updateAddress'));
     closeModalHandler();
   }
 

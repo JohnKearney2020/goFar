@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } from '../constants/userConstants';
 import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants';
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
@@ -23,6 +25,13 @@ export const login = (email, password) => async (dispatch) => {
     })
     // store user info in local storage
     localStorage.setItem('userInfo', JSON.stringify(data));
+    toast.success('Logged in Successfully!', 
+    { 
+      // position: "bottom-center",
+      position: "top-right",
+      autoClose: 3500,
+    }
+  );
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -36,6 +45,12 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_LOGOUT });
+  toast.success('Log Out Successful...', 
+    { 
+      position: 'top-right',
+      autoClose: 3500,
+    }
+  );
 }
 
 export const register = (name, email, password ) => async (dispatch) => {
@@ -54,6 +69,13 @@ export const register = (name, email, password ) => async (dispatch) => {
     dispatch({
       type: USER_REGISTER_SUCCESS,
     })
+    toast.success('User Registered Successfully!', 
+      { 
+        // position: "bottom-center",
+        position: "top-right",
+        autoClose: 3500,
+      }
+    );
     //automatically log the user in after a successful registration
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -106,7 +128,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 }
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const updateUserProfile = (user, userUpdateType) => async (dispatch, getState) => {
+  console.log(`userUpdateType: ${userUpdateType}`);
   try {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST
@@ -126,11 +149,56 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data
     })
-
+    //Handle Success Cases
+    let successMessage = '';
+    let notificationType = '';
+    let position = '';
+    switch (userUpdateType) {
+      case 'newAddress':
+        successMessage = 'New Address Added!';
+        notificationType = 'success';
+        position = 'bottom-center';
+        // position = '';
+        break;
+      case 'deleteAddress':
+        successMessage = 'Address Deleted!';
+        notificationType = 'success';
+        // position = 'bottom-center';
+        position = 'top-center';
+        break;
+      case 'updateAddress':
+        successMessage = 'Address Updated!';
+        notificationType = 'success';
+        // position = 'bottom-center';
+        position = 'top-center';
+        break;
+      case 'makePrimary':
+        successMessage = 'New Primary Address Set!';
+        notificationType = 'success';
+        // position = 'bottom-center';
+        position = 'top-center';
+        break;
+      case 'userUpdate':
+        successMessage = 'User Profile Information Updated!';
+        notificationType = 'success';
+        // position = 'bottom-center';
+        position = 'top-center';
+        break;
+    
+      default:
+        break;
+    }
+    console.log(`position: ${position}`)
+    toast.success(successMessage, 
+      { 
+        position: position,
+        autoClose: 3500,
+      }
+    );
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data
-    })
+    });
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
