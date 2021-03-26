@@ -140,34 +140,3 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     })
   }
 }
-
-
-// The get state parameter is needed b/c we will need a JWT from the state for this
-export const updateUserAddresses = (user) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST
-    });
-
-    const { userLogin: { userInfo } } = getState();
-    // set headers to json
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}` //this goes to the 'api/users/profile' route which is a protected route. Our middleware is expecting a token
-      }
-    }
-    // attempt to get user details
-    const { data } = await axios.put(`/api/users/profile`, user, config);
-    dispatch({
-      type: USER_UPDATE_PROFILE_SUCCESS,
-      payload: data
-    })
-
-  } catch (error) {
-    dispatch({
-      type: USER_UPDATE_PROFILE_FAIL,
-      payload: error.response && error.response.data.message ? error.response.data.message : error.message
-    })
-  }
-}

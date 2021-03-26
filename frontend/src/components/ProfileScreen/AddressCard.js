@@ -8,9 +8,10 @@ const AddressCard = ({ address }) => {
   const { addressName, isPrimary, line1, line2, city, state, zipCode, _id: id } = address;
 
   return (
-    <Card className='rounded d-flex'>
+    <Card className='rounded d-flex mb-2'>
+      { address.isPrimary && <Card.Header as='h6' className='font-weight-bold'>Primary Address</Card.Header> }
       <Card.Body className='d-flex justify-content-start flex-column'>
-        { address.addressName && <Card.Title>{address.addressName}</Card.Title> }
+        { addressName && <Card.Title>{addressName}</Card.Title> }
         <Card.Text as='h6'>
           {line1}
         </Card.Text>
@@ -19,7 +20,7 @@ const AddressCard = ({ address }) => {
           {city}, {state} {zipCode}
         </Card.Text>
         <div className='d-flex h-100 align-items-end justify-content-center'>
-          <AddressCardButtons addressID={id} isPrimary={isPrimary} />
+          <AddressCardButtons addressID={id} address={address} isPrimary={isPrimary} />
         </div>
       </Card.Body>
     </Card>

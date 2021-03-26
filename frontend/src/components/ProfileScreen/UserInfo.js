@@ -35,7 +35,8 @@ const UserInfo = () => {
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
   const { loading: updateProfileLoading, success, userInfo: updatedUserInfo } = userUpdateProfile;
 
-  const noAddressMessage = 'No addresses on file. Click the "addresses" tab to add an address.';
+  const noAddressMessage = 'No addresses on file. Click the "Addresses" tab to add an address.';
+  const updateAddressMessage = 'You can update your primary address by clicking the "Addresses" tab.'
   const isGuestMessage1 = 'As a guest you cannot change the Name, Email, or Password fields. You can update the Phone Number field.';
   const isGuestMessage2 = 'Try out various CRUD operations on the Addresses, Wishlist, and Orders Tabs. You have the same abilities there as any other user. ';
   // const isGuestMessage3 = 'Try adding, deleting, and editing addresses on the Addresses tab.';
@@ -125,6 +126,7 @@ const UserInfo = () => {
                   { <h6>{line1}</h6> }
                   { line2 && <h6>{line2}</h6> } {/* the address line 2 is an optional field */}
                   {<h6>{city}, {state} {zipCode}</h6>}
+                  {/* <Message className='my-0' variant='info'>{updateAddressMessage}</Message> */}
                 </>
               )}          
             </ListGroup.Item>
