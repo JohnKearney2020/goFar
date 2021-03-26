@@ -75,7 +75,7 @@ const NewAddressModal = ({ show, closeModalHandler}) => {
     };
 
     existingAddresses.push(newAddress);
-    dispatch(updateUserProfile({ addresses: existingAddresses }));
+    dispatch(updateUserProfile({ addresses: existingAddresses }, 'newAddress'));
     closeModalHandler();
   }
 
