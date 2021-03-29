@@ -6,7 +6,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 // https://github.com/express-labs/pure-react-carousel
 import './ProductDetailsCarousel.css';
 
-const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor }) => {
+const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, setPrimaryImageForColor }) => {
 
   const[primaryImage, setPrimaryImage] = useState('');
   // const[primaryImage, setPrimaryImage] = useState('');
@@ -26,10 +26,14 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor }
       let imageObjArray = [...product.images];
       let productColorImages;
       if(selectedColor === ''){ //set PrimaryImage based on color in URL. see defaultProps at end of this component
-        setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
+        let primaryImage = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source;
+        setPrimaryImage(primaryImage); //Primary image for the carousel
+        setPrimaryImageForColor(primaryImage); //Primary image for that color used by the cart and wishlist
         productColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);
-      } else { //set primary image based on color in the primaryImageFromProductScreen prop
-        setPrimaryImage(imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source);
+      } else { //set primary image
+        let primaryImage = imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.find(eachImage => eachImage.isPrimaryImage === true).source;
+        setPrimaryImage(primaryImage);
+        setPrimaryImageForColor(primaryImage); //Primary image for that color used by the cart and wishlist
         productColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.map(i => i.source);
       }
       // let productColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
@@ -8,12 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import './WishListButton.css';
 
-
-
-const WishListButton = ({ productID }) => {
+const WishListButton = ({ productID, productName, color, size, quantity, primaryImageForColor }) => {
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  // const { wishList } = userInfo;
+  const { _id:userID, wishList } = userInfo;
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
@@ -38,13 +38,41 @@ const WishListButton = ({ productID }) => {
     }
   }, [addresses,productID])
 
-  const addToWishListHandler = () => {
-    console.log('clicked add to wishlist')
+  const addToWishListHandler =  async () => {
     setLoadingWishListIcon(true);
-    setTimeout(() => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+      // // attempt to add the item to the user's wishlist
+      await axios.post('/api/users/wishlistitem', { 
+        userID,
+        productID, 
+        name: productName, 
+        quantity, 
+        image: primaryImageForColor,
+        color,
+        size
+      }, config);
+      toast.success('Added to wishlist!', 
+        { 
+          // position: "bottom-center",
+          position: "top-right",
+          autoClose: 3500,
+        }
+      );
       setLoadingWishListIcon(false);
       setInWishList(true);
-    }, 2000);
+      // store user info in local storage
+      // localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      setLoadingWishListIcon(false);
+    }    
   }
 
   const removeFromWishListHandler = () => {
