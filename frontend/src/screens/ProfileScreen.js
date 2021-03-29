@@ -18,8 +18,8 @@ const ProfileScreen = ({ history }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    // if a user is not already logged in, redirect them
-    if(!userInfo){ history.push('/login') };
+    // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
+    if(!userInfo.name){ history.push('/login') };
   }, [ history, userInfo ]);
 
   return (
