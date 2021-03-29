@@ -3,34 +3,21 @@ import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
 import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
-// const defaultLoginState = {
-//   userInfo: {
-//     wishList: []
-//   }
-// }
+
 
 // See if there is userInfo stored in local storage
-// const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
-// console.log('userInfoFromStorage')
-// console.log(userInfoFromStorage)
+const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+console.log('userInfoFromStorage')
+console.log(userInfoFromStorage)
 //If so, set the initial state for userLoginReducer to that, otherwise use the default state
-// const initialState = (userInfoFromStorage || { userInfo: {wishList: [] } });
-// const initialState = (userInfoFromStorage || {
-//   name: 'Test',
-//   wishList: [] 
-// });
+const initialState = (userInfoFromStorage || { userInfo: {cart: [], wishList: [] } });
+console.log('initialState:')
+console.log(initialState);
 
-// const initialState = {
-//   userLogin: { userInfo: userInfoFromStorage }
-// };
-
-// const defaultLoginState = {
-//   wishList: []
-// }
 // export const userLoginReducer = (state = {}, action) => {
-export const userLoginReducer = (state = { userInfo: { wishList: [], cart: [] }}, action) => {
+// export const userLoginReducer = (state = { userInfo: { wishList: [], cart: [] }}, action) => {
 // export const userLoginReducer = (state = { test1: 'test' }, action) => {
-// export const userLoginReducer = (state = { userInfo: initialState }, action) => {
+export const userLoginReducer = (state = { userInfo: initialState }, action) => {
   switch(action.type) {
     case USER_LOGIN_REQUEST:
       return { ...state, loading: true };
@@ -40,7 +27,7 @@ export const userLoginReducer = (state = { userInfo: { wishList: [], cart: [] }}
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload };
     case USER_LOGOUT:
-      return {}
+      return { userInfo: {cart: [], wishList: [] } }
     default: 
       return state;
   } 
