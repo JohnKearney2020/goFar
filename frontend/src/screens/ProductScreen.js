@@ -17,6 +17,7 @@ import ProductMaterials from '../components/ProductComponents/ProductMaterials';
 import ProductReviews from '../components/ProductComponents/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
+import WishListButton from '../components/ProductComponents/WishListButton';
 
 const ProductScreen = ({ match }) => {
 
@@ -302,7 +303,7 @@ const ProductScreen = ({ match }) => {
                 {addToCartSizeMessage &&
                   <Message variant='danger'>Please choose a size</Message>
                 }
-                <ListGroup horizontal>
+                <ListGroup horizontal className='align-items-center'>
                     <ListGroup.Item className='border-0'>
                       <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
                         {[...Array(qtyInStock).keys()].map(x => (
@@ -314,6 +315,9 @@ const ProductScreen = ({ match }) => {
                           )
                         ))}
                       </Form.Control>
+                    </ListGroup.Item>
+                    <ListGroup.Item className='border-0'>
+                      <WishListButton productID={product._id} />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
                       <Button 

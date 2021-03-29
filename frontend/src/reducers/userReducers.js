@@ -3,10 +3,37 @@ import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
 import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 
+// const defaultLoginState = {
+//   userInfo: {
+//     wishList: []
+//   }
+// }
+
+// See if there is userInfo stored in local storage
+// const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+// console.log('userInfoFromStorage')
+// console.log(userInfoFromStorage)
+//If so, set the initial state for userLoginReducer to that, otherwise use the default state
+// const initialState = (userInfoFromStorage || { userInfo: {wishList: [] } });
+// const initialState = (userInfoFromStorage || {
+//   name: 'Test',
+//   wishList: [] 
+// });
+
+// const initialState = {
+//   userLogin: { userInfo: userInfoFromStorage }
+// };
+
+// const defaultLoginState = {
+//   wishList: []
+// }
 export const userLoginReducer = (state = { }, action) => {
+// export const userLoginReducer = (state = { userInfo: { wishList: [] }}, action) => {
+// export const userLoginReducer = (state = { test1: 'test' }, action) => {
+// export const userLoginReducer = (state = { userInfo: initialState }, action) => {
   switch(action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case USER_LOGIN_SUCCESS:
       return { loading: false, userInfo: action.payload };
     case USER_LOGIN_FAIL:

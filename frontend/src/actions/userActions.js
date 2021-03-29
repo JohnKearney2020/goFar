@@ -185,9 +185,21 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
         autoClose: 3500,
       }
     );
+    //If we update the user profile successfully, we want to dispatch the USER_LOGIN_SUCCESS action again, but if we simply pass
+    // 'payload: data' it will populate userInfo with some sensitive information like addresses and phone number that we don't
+    // want to be stored in local storage, so we can't just send it 'payload: data'
+    const userData = {
+      _id: data._id,
+      name: data.name,
+      email: data.email,
+      isAdmin: data.isAdmin,
+      cart: data.cart,
+      wishList: data.wishList,
+      token: data.token
+    }
     dispatch({
       type: USER_LOGIN_SUCCESS,
-      payload: data
+      payload: userData
     });
 
     localStorage.setItem('userInfo', JSON.stringify(data));
