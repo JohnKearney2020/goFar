@@ -27,13 +27,14 @@ import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_P
 // const defaultLoginState = {
 //   wishList: []
 // }
-export const userLoginReducer = (state = { }, action) => {
-// export const userLoginReducer = (state = { userInfo: { wishList: [] }}, action) => {
+// export const userLoginReducer = (state = {}, action) => {
+export const userLoginReducer = (state = { userInfo: { wishList: [], cart: [] }}, action) => {
 // export const userLoginReducer = (state = { test1: 'test' }, action) => {
 // export const userLoginReducer = (state = { userInfo: initialState }, action) => {
   switch(action.type) {
     case USER_LOGIN_REQUEST:
       return { ...state, loading: true };
+      // return { loading: true };
     case USER_LOGIN_SUCCESS:
       return { loading: false, userInfo: action.payload };
     case USER_LOGIN_FAIL:

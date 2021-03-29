@@ -20,7 +20,7 @@ let initialState = {};
 if(userInfoFromStorage !== null){
   console.log('useInfoFromStorage:')
   console.log(userInfoFromStorage);
-  initialState = userInfoFromStorage;
+  initialState = {userLogin: { userInfo: userInfoFromStorage }};
 } else {
   initialState = { 
     userLogin: {
@@ -32,8 +32,8 @@ if(userInfoFromStorage !== null){
   };
 }
 // const initialState = userInfoFromStorage ? userInfoFromStorage : { userLogin: { wishList: [] } };
-console.log('initial state:')
-console.log(initialState)
+// console.log('initial state:')
+// console.log(initialState)
 
 // const initialState = {
 //   userLogin: { userInfo: {userInfoFromStorage} }
