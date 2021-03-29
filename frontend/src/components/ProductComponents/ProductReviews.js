@@ -50,8 +50,8 @@ const ProductReviews = () => {
           {/* </Card.Header> */}
           <Accordion.Collapse eventKey='0'>
             <Card.Body>
-              {firstReviewsArray.map(eachReview => (
-                <h4>{eachReview}</h4>
+              {firstReviewsArray.map((eachReview, idx) => (
+                <h4 key={idx}>{eachReview}</h4>
               ))}
             </Card.Body>
           </Accordion.Collapse>
