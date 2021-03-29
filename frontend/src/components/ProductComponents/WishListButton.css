@@ -1,0 +1,13 @@
+.fa-spinner {
+  animation: fa-spin 2s linear infinite;
+}
+
+.wishListIcon {
+  color: #D9534F;
+  transition: transform .3s ease;
+}
+
+.wishListIcon:hover {
+  transform: scale(1.2);
+}
+

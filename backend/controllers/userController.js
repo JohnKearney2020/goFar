@@ -86,7 +86,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404); //not found
-    throw new Error('Invalid email or password');
+    throw new Error('Could not find that user.');
   }
 })
 
@@ -139,4 +139,69 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+
+// @desc     Get user wishlist
+// @route    GET /api/users/wishlist
+// @access   Private
+const getUserWishList = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if(user) {
+    res.json({
+      wishList: user.wishList,
+    })
+  } else {
+    res.status(404); //not found
+    throw new Error('Could not find that user.');
+  }
+})
+
+// @desc     Update user wishlist
+// @route    PUT /api/users//wishlistitem
+// @access   Private
+const addUserWishListItem = asyncHandler(async (req, res) => {
+  const { userID, name, productID, quantity, image, color } = req.body;
+  const user = await User.findById(userID);
+  if(user) {
+    //See if we are adding or deleting a wishlist item
+    let oldWishList = [...user.wishList]
+    console.log(oldWishList);
+    // add the new item to the wishlist
+    oldWishList.push({ productID, name, color, quantity, image });
+    user.wishList = oldWishList;
+    console.log('new wishlist:')
+    console.log(user.wishlist);
+    console.log('user:')
+    console.log(user);
+
+    //How to delete existing addresses
+    //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
+    // if(req.body.newAddress){
+    //   let addressTemp = [...user.addresses];//copy the old addresses
+    //   if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
+    //     addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
+    //       eachIndex.isPrimary = false
+    //     ))
+    //   }
+    //   // user.addresses = addressTemp.concat([req.body.newAddress]);
+    //   user.addresses = addressTemp.concat(req.body.newAddress);
+    // }
+    // user.wishList = user.wishList.push(req.body.wishList) || user.wishList;
+    // user.cart = user.cart.push(req.body.cart) || user.cart;
+
+    // Update the user's info
+    const updatedUser = await user.save();
+
+    res.json({ //201 status means something was created
+      wishList: updatedUser.wishList, 
+    })
+    // res.json({ //201 status means something was created
+    //   wishList: oldWishList, 
+    // })
+
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found');
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishList, addUserWishListItem };

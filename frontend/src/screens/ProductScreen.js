@@ -316,7 +316,7 @@ const ProductScreen = ({ match }) => {
                         ))}
                       </Form.Control>
                     </ListGroup.Item>
-                    <ListGroup.Item className='border-0'>
+                    <ListGroup.Item className='border-0 px-1'>
                       <WishListButton productID={product._id} />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
