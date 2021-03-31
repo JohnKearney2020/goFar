@@ -70,7 +70,7 @@ const LoginScreen = ({ location, history }) => {
             className={emailMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {emailMessage && <div class="invalid-feedback">{emailMessage}</div>
+          {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
           }
         </Form.Group>
         <Form.Group controlId='password'>
@@ -83,7 +83,7 @@ const LoginScreen = ({ location, history }) => {
             className={passwordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {passwordMessage && <div class="invalid-feedback">{passwordMessage}</div>
+          {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
           }
         </Form.Group>
         <Button type='submit' variant='outline-primary' disabled={loading}>

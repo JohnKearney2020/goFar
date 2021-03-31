@@ -37,6 +37,7 @@ const ProductScreen = ({ match }) => {
   const [clearanceColors, setClearanceColors] = useState([]);
   const [qtyForCart, setQtyForCart] = useState(1);
   const [addToCartSizeMessage, setAddToCartSizeMessage] = useState(false);
+  const [primaryImageForColor, setPrimaryImageForColor] = useState('');
 
   // ==============================================================
   //               Pull Product data from global state
@@ -87,6 +88,18 @@ const ProductScreen = ({ match }) => {
       }
     }
   }, [product, colorFromUrl, loaded]);
+
+  // useEffect(() => {
+  //   let sizeObjArray = [...product.sizes];
+  //   let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
+  //   let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
+  //   let levelThree = levelTwo[levelTwo.findIndex(i => i.size === selectedSize)];
+
+  //   // let primaryImageForColor = 
+  //   // return () => {
+  //   //   cleanup
+  //   // }
+  // }, [selectedColor]);
 
   const sizeCategoryHandler = (e) => {
     //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. from 'Regular' to 'Tall', or vice versa
@@ -197,6 +210,7 @@ const ProductScreen = ({ match }) => {
                 loaded={loaded}
                 // primaryImageFromProductScreen={primaryImageForCarousel}
                 selectedColor={selectedColor}
+                setPrimaryImageForColor={setPrimaryImageForColor}
               />
             </Col>
             <Col md={6}>
@@ -316,8 +330,15 @@ const ProductScreen = ({ match }) => {
                         ))}
                       </Form.Control>
                     </ListGroup.Item>
-                    <ListGroup.Item className='border-0'>
-                      <WishListButton productID={product._id} />
+                    <ListGroup.Item className='border-0 px-1'>
+                      <WishListButton 
+                        productID={product._id} 
+                        productName={product.name} 
+                        color={selectedColor}
+                        size={selectedSize}
+                        quantity={qtyForCart} 
+                        primaryImageForColor={primaryImageForColor} 
+                      />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
                       <Button 

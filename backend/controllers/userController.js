@@ -1,5 +1,8 @@
 import asyncHandler from 'express-async-handler';
+import mongoose from 'mongoose';
+
 import User from '../models/userModel.js';
+import Product from '../models/productModel.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc     Auth user & get token
@@ -86,7 +89,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404); //not found
-    throw new Error('Invalid email or password');
+    throw new Error('Could not find that user.');
   }
 })
 
@@ -94,6 +97,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/profile
 // @access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
+  //remember, req.user is passed here automatically by our authorization middleware
   const user = await User.findById(req.user._id);
   if(user) {
     user.name = req.body.name || user.name;
@@ -139,4 +143,69 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+
+// @desc     Get user wishlist products. The wishlist just has product id's, name, size, qty, and an image. This pulls the
+//           full product data from the database for each product id in the user's wishlist
+// @route    GET /api/users/wishlist
+// @access   Private
+const getUserWishListProducts = asyncHandler(async (req, res) => {
+  const productsFromWishlist = await Product.find({ '_id': { $in: req.body.arrayOfProductIDs }});
+  if(productsFromWishlist) {
+    res.json(
+      productsFromWishlist)
+  } else {
+    res.status(404); //not found
+    throw new Error(`Could not find products with those id's.`);
+  }
+})
+
+// @desc     Update user wishlist
+// @route    PUT /api/users/wishlistitem
+// @access   Private
+const addUserWishListItem = asyncHandler(async (req, res) => {
+  const { userID, productID, name, color, size, quantity, image } = req.body;
+  const user = await User.findById(userID);
+  if(user) {
+    //See if we are adding or deleting a wishlist item
+    let oldWishList = [...user.wishList]
+    console.log(oldWishList);
+    // add the new item to the wishlist
+    oldWishList.push({ productID, name, color, size, quantity, image });
+    user.wishList = oldWishList;
+    console.log('new wishlist:')
+    console.log(user.wishlist);
+    console.log('user:')
+    console.log(user);
+
+    //How to delete existing addresses
+    //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
+    // if(req.body.newAddress){
+    //   let addressTemp = [...user.addresses];//copy the old addresses
+    //   if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
+    //     addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
+    //       eachIndex.isPrimary = false
+    //     ))
+    //   }
+    //   // user.addresses = addressTemp.concat([req.body.newAddress]);
+    //   user.addresses = addressTemp.concat(req.body.newAddress);
+    // }
+    // user.wishList = user.wishList.push(req.body.wishList) || user.wishList;
+    // user.cart = user.cart.push(req.body.cart) || user.cart;
+
+    // Update the user's info
+    const updatedUser = await user.save();
+
+    res.json({ //201 status means something was created
+      wishList: updatedUser.wishList, 
+    })
+    // res.json({ //201 status means something was created
+    //   wishList: oldWishList, 
+    // })
+
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found');
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishListProducts, addUserWishListItem };

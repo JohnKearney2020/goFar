@@ -13,6 +13,14 @@ const wishListSchema = mongoose.Schema({
       type: String,
       required: true
     },
+    color: {
+      type: String,
+      required: false
+    },
+    size: {
+      type: String,
+      required: false
+    },
     quantity: {
       type: Number,
       required: true
@@ -39,6 +47,10 @@ const cartSchema = mongoose.Schema({
     name: {
       type: String,
       required: true
+    },
+    color: {
+      type: String,
+      required: false
     },
     quantity: {
       type: Number,

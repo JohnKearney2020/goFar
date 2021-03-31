@@ -2,6 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
+
 // import SearchBox from './SearchBox';
 import { logout } from '../../actions/userActions';
 
@@ -26,6 +30,12 @@ const Header = () => {
           <Navbar.Collapse id='basic-navbar-nav'>
             {/* <SearchBox /> */}
             <Nav className='ml-auto'>
+              {/* WishList Link */}
+              <LinkContainer to='/wishlist'>
+                <Nav.Link>
+                  <FontAwesomeIcon icon={solidHeart} /> Wishlist
+                </Nav.Link>
+              </LinkContainer>
               {/* Cart Link */}
               <LinkContainer to='/cart'>
                 <Nav.Link>
