@@ -10,5 +10,6 @@ router.post('/login', authUser);
 // Protected Routes
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
 router.route('/wishlistitem').post(protect, addUserWishListItem);
+router.route('/wishlist').get(protect, getUserWishList);
 
 export default router;
