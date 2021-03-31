@@ -2,17 +2,17 @@ import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } 
 import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants';
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
 import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
-
+import { WISHLIST_PRODUCT_DETAILS_REQUEST, WISHLIST_PRODUCT_DETAILS_SUCCESS, WISHLIST_PRODUCT_DETAILS_FAIL, WISHLIST_PRODUCT_DETAILS_RESET} from '../constants/userConstants';
 
 
 // See if there is userInfo stored in local storage
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
-console.log('userInfoFromStorage')
-console.log(userInfoFromStorage)
+// console.log('userInfoFromStorage')
+// console.log(userInfoFromStorage)
 //If so, set the initial state for userLoginReducer to that, otherwise use the default state
 const initialState = (userInfoFromStorage || { userInfo: {cart: [], wishList: [] } });
-console.log('initialState:')
-console.log(initialState);
+// console.log('initialState:')
+// console.log(initialState);
 
 // export const userLoginReducer = (state = {}, action) => {
 // export const userLoginReducer = (state = { userInfo: { wishList: [], cart: [] }}, action) => {
@@ -80,9 +80,27 @@ export const userUpdateProfileReducer = ( state = { }, action ) => {
   } 
 }
 
-// export const USER_UPDATE_PROFILE_REQUEST = 'USER_DETAILS_PROFILE_REQUEST';
-// export const USER_UPDATE_PROFILE_SUCCESS = 'USER_DETAILS_PROFILE_SUCCESS';
-// export const USER_UPDATE_PROFILE_FAIL = 'USER_DETAILS_PROFILE_FAIL';
-// export const USER_UPDATE_PROFILE_RESET = 'USER_UPDATE_PROFILE_RESET';
+export const wishListDetailsReducer = ( state = { wishListProducts: [] }, action ) => {
+  switch(action.type) {
+    case WISHLIST_PRODUCT_DETAILS_REQUEST:
+      return { loading: true };
+    case WISHLIST_PRODUCT_DETAILS_SUCCESS:
+      return { loading: false, success: true, wishListProducts: action.payload };
+    case WISHLIST_PRODUCT_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    case WISHLIST_PRODUCT_DETAILS_RESET:
+      return { };
+    default: 
+      return state;
+  } 
+}
+
+
+
+
+
+
+
+// import { WISHLIST_PRODUCT_DETAILS_REQUEST, WISHLIST_PRODUCT_DETAILS_SUCCESS, WISHLIST_PRODUCT_DETAILS_FAIL, WISHLIST_PRODUCT_DETAILS_RESET} from '../constants/userConstants';
 
 

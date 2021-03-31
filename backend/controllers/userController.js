@@ -1,5 +1,8 @@
 import asyncHandler from 'express-async-handler';
+import mongoose from 'mongoose';
+
 import User from '../models/userModel.js';
+import Product from '../models/productModel.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc     Auth user & get token
@@ -94,6 +97,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/profile
 // @access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
+  //remember, req.user is passed here automatically by our authorization middleware
   const user = await User.findById(req.user._id);
   if(user) {
     user.name = req.body.name || user.name;
@@ -140,18 +144,18 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 })
 
 
-// @desc     Get user wishlist
+// @desc     Get user wishlist products. The wishlist just has product id's, name, size, qty, and an image. This pulls the
+//           full product data from the database for each product id in the user's wishlist
 // @route    GET /api/users/wishlist
 // @access   Private
-const getUserWishList = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  if(user) {
-    res.json({
-      wishList: user.wishList,
-    })
+const getUserWishListProducts = asyncHandler(async (req, res) => {
+  const productsFromWishlist = await Product.find({ '_id': { $in: req.body.arrayOfProductIDs }});
+  if(productsFromWishlist) {
+    res.json(
+      productsFromWishlist)
   } else {
     res.status(404); //not found
-    throw new Error('Could not find that user.');
+    throw new Error(`Could not find products with those id's.`);
   }
 })
 
@@ -204,4 +208,4 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishList, addUserWishListItem };
+export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishListProducts, addUserWishListItem };

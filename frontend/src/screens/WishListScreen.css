@@ -1,0 +1,19 @@
+.tableRow {
+  /* height: 50px!important; */
+}
+
+td .imageCell{
+  /* height: 100%; */
+}
+
+.tableImage {
+  height: 120px;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tableText {
+  vertical-align: middle !important;
+  text-align: center !important;
+}

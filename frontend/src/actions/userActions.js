@@ -5,6 +5,7 @@ import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } 
 import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from '../constants/userConstants';
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
 import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL } from '../constants/userConstants';
+import { WISHLIST_PRODUCT_DETAILS_REQUEST, WISHLIST_PRODUCT_DETAILS_SUCCESS, WISHLIST_PRODUCT_DETAILS_FAIL, WISHLIST_PRODUCT_DETAILS_RESET} from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -133,7 +134,7 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
         Authorization: `Bearer ${userInfo.token}` //this goes to the 'api/users/profile' route which is a protected route. Our middleware is expecting a token
       }
     }
-    // attempt to get user details
+    // attempt to update user details
     const { data } = await axios.put(`/api/users/profile`, user, config);
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
@@ -206,6 +207,37 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+// The get state parameter is needed b/c we will need a JWT from the state for this
+export const getWishListProductDetails = (arrayOfProductIDs) => async (dispatch, getState) => {
+  console.log('in wishlistproductdetails userAction, arrayOfProductIDs:')
+  try {
+    dispatch({
+      type: WISHLIST_PRODUCT_DETAILS_REQUEST
+    });
+
+    const { userLogin: { userInfo } } = getState();
+
+    const config = { // set headers to json
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}` //this goes to the 'api/users/profile' route which is a protected route. Our middleware is expecting a token
+      }
+    }
+    // attempt to get wishlist product details
+    const { data } = await axios.post(`/api/users/wishlist`, arrayOfProductIDs, config );
+    dispatch({
+      type: WISHLIST_PRODUCT_DETAILS_SUCCESS,
+      payload: data
+    })
+
+  } catch (error) {
+    dispatch({
+      type: WISHLIST_PRODUCT_DETAILS_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }
