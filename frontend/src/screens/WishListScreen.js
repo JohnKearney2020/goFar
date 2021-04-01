@@ -38,7 +38,7 @@ const WishListScreen = ({ history }) => {
 
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
       console.log('we have a wishlist')
-      let tempArrayProductIDs = wishList.map((eachItem, idx) => {
+      let tempArrayProductIDs = wishList.map((eachItem) => {
         return eachItem.productID;
       })
       dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
@@ -56,6 +56,8 @@ const WishListScreen = ({ history }) => {
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
       {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
       {loading ? <Loader /> :
+        <>
+        {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
         <Table striped hover responsive size="sm">
           <thead>
             <tr className='tableRow'>
@@ -81,7 +83,8 @@ const WishListScreen = ({ history }) => {
               />
             ))}
           </tbody>
-        </Table>      
+        </Table> 
+        </>
       }
     </>
   )

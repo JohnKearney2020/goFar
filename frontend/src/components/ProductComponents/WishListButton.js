@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import ReactDom from 'react-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
 import { useSelector } from 'react-redux';
+import Message from '../Message';
 import './WishListButton.css';
 
 const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor }) => {
@@ -14,10 +16,8 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
-
-  const userDetails = useSelector(state => state.userDetails);
-  const { user } = userDetails;
-  const { addresses } = user;
+  const [showLoggedOutMessage, setShowLoggedOutMessage] = useState(false);
+  const messageIfLoggedOut = 'Create an account to add items to your wishlist.'
 
   useEffect(() => {
     // console.log(`productID: ${productID}`)
@@ -25,16 +25,19 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     //   console.log(Object.values(addresses[0]))
     // }
     if(userInfo){
-      console.log('in WishListButton useEffect')
-      console.log(`productID: ${productID}`)
+      // console.log('in WishListButton useEffect')
+      // console.log(`productID: ${productID}`)
     }
     return () => {
       
     }
-  }, [addresses,productID, userInfo])
+  }, [productID, userInfo])
 
   const addToWishListHandler =  async () => {
-    console.log(`wishlist button test size category: ${sizeCategory}`)
+    if(!userInfo.name) { //If users are not logged in show them a message about the wishlist feature and exit the function
+      setShowLoggedOutMessage(true);
+      return;
+    }
     setLoadingWishListIcon(true);
     try {
       const config = {
@@ -86,6 +89,11 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         ( inWishList ? <FontAwesomeIcon className='wishListIcon' icon={solidHeart} size="3x" onClick={removeFromWishListHandler} /> : 
         <FontAwesomeIcon className='wishListIcon' icon={outlineHeart} size="3x" onClick={addToWishListHandler}/> )
       }
+      { showLoggedOutMessage &&  ReactDom.createPortal(
+        <Message variant='info'>{messageIfLoggedOut}</Message>,
+        document.getElementById('wishListMessage')
+      )};
+      
     </>
   )
 }

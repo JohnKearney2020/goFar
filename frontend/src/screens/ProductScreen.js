@@ -44,7 +44,7 @@ const ProductScreen = ({ match }) => {
   //               Pull Product data from global state
   //===============================================================
   useEffect(() => {
-    console.log('in productScreenTest2 1st useEffect()')
+    // console.log('in productScreenTest2 1st useEffect()')
     dispatch(listProductDetails(match.params.id));
     return () => {
       // console.log('in cleanup function of ProductScreenTest2.js');
@@ -233,8 +233,8 @@ const ProductScreen = ({ match }) => {
                 {/* Prices and Reviews */}
                 <ListGroup horizontal className='justify-content-between'>
                   <ListGroup.Item className='border-0'>
-                    {/* <PriceRanges product={product}/> */}
-                    {colorSalePrice ?
+                    {/* For some reason, I can't compare to 0 or 0.00 to see if colorSalePrice === 0.00 */}
+                    {colorSalePrice !== addDecimals(0) ?
                       <span className='productCardSalePrices'><del>${productPrice}</del> <span className='text-danger productCardSalePrices'>${colorSalePrice}</span></span> :
                       <span className='productCardSalePrices'>${productPrice}</span>
                     }
@@ -353,6 +353,8 @@ const ProductScreen = ({ match }) => {
                       </Button>
                     </ListGroup.Item>
                 </ListGroup>
+                {/* This is a React Portal defined in the WishListButton component */}
+                <div id="wishListMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}
