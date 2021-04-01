@@ -163,20 +163,24 @@ const getUserWishListProducts = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/wishlistitem
 // @access   Private
 const addUserWishListItem = asyncHandler(async (req, res) => {
-  const { userID, productID, name, color, size, quantity, image } = req.body;
+  const { userID, productID, name, color, size, sizeCategory, image } = req.body;
   const user = await User.findById(userID);
   if(user) {
+
+    // console.log('Add wishlist item checks:')
+    // console.log(`userID: ${userID}`)
+    // console.log(`productID: ${productID}`)
+    // console.log(`name: ${name}`)
+    // console.log(`color: ${color}`)
+    // console.log(`size: ${size}`)
+    // console.log(`sizeCategory: ${sizeCategory}`)
+    // console.log(`image: ${image}`)
     //See if we are adding or deleting a wishlist item
     let oldWishList = [...user.wishList]
     console.log(oldWishList);
     // add the new item to the wishlist
-    oldWishList.push({ productID, name, color, size, quantity, image });
+    oldWishList.push({ productID, name, color, size, sizeCategory, image });
     user.wishList = oldWishList;
-    console.log('new wishlist:')
-    console.log(user.wishlist);
-    console.log('user:')
-    console.log(user);
-
     //How to delete existing addresses
     //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
     // if(req.body.newAddress){

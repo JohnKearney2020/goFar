@@ -80,6 +80,7 @@ const WishListScreen = ({ history }) => {
                 productName={eachProduct.name}
                 color={eachProduct.color}
                 size={eachProduct.size}
+                sizeCategory={eachProduct.sizeCategory}
                 dateAdded={eachProduct.createdAt}
                 productImage={eachProduct.image}
               />

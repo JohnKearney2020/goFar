@@ -41,6 +41,7 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_LOGOUT });
+  dispatch({ type: WISHLIST_PRODUCT_DETAILS_RESET });
   toast.info('Log Out Successful!', { position: 'top-right', autoClose: 3500 });
 }
 

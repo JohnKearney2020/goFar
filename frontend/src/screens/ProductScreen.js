@@ -336,7 +336,7 @@ const ProductScreen = ({ match }) => {
                         productName={product.name} 
                         color={selectedColor}
                         size={selectedSize}
-                        quantity={qtyForCart} 
+                        sizeCategory={selectedSizeCategory}
                         primaryImageForColor={primaryImageForColor} 
                       />
                     </ListGroup.Item>

@@ -89,7 +89,7 @@ export const wishListDetailsReducer = ( state = { wishListProducts: [] }, action
     case WISHLIST_PRODUCT_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case WISHLIST_PRODUCT_DETAILS_RESET:
-      return { };
+      return { wishListProducts: [] };
     default: 
       return state;
   } 

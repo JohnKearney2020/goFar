@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader';
 import './WishListButton.css';
 
-const WishListButton = ({ productID, productName, color, size, quantity, primaryImageForColor }) => {
+const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor }) => {
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, wishList } = userInfo;
@@ -39,6 +39,7 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
   }, [addresses,productID])
 
   const addToWishListHandler =  async () => {
+    console.log(`wishlist button test size category: ${sizeCategory}`)
     setLoadingWishListIcon(true);
     try {
       const config = {
@@ -51,11 +52,11 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
       await axios.post('/api/users/wishlistitem', { 
         userID,
         productID, 
-        name: productName, 
-        quantity, 
-        image: primaryImageForColor,
+        name: productName,
         color,
-        size
+        size,
+        sizeCategory, 
+        image: primaryImageForColor,
       }, config);
       toast.success('Added to wishlist!', 
         { 
