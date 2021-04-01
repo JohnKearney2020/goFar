@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import AddressCard from './AddressCard';
 import Loader from '../Loader';
@@ -18,7 +18,7 @@ const Addresses = () => {
   const addresses = user.addresses;
 
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
-  const { loading: updateProfileLoading, error: updateAddressError, success, userInfo: updatedUserInfo } = userUpdateProfile;
+  const { error: updateAddressError  } = userUpdateProfile;
 
   const [addressesToDisplay, setAddressesToDisplay] = useState([]);
 

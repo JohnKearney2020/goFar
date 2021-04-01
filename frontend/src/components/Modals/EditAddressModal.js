@@ -9,11 +9,11 @@ const EditAddressModal = ({ show, closeModalHandler, address }) => {
   const dispatch = useDispatch();
 
   const userDetails = useSelector(state => state.userDetails);
-  const { loading, error, user } = userDetails;
+  const { user } = userDetails;
   const { addresses } = user;
 
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
-  const { loading: updateProfileLoading, success, userInfo: updatedUserInfo } = userUpdateProfile;
+  const { loading: updateProfileLoading } = userUpdateProfile;
 
   const[addressName, setAddressName] = useState(address.addressName);
   const[addressLine1, setAddressLine1] = useState(address.line1);

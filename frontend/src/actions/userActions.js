@@ -143,36 +143,36 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
     })
     //Handle Success Cases
     let successMessage = '';
-    let notificationType = '';
+    // let notificationType = '';
     let position = '';
     switch (userUpdateType) {
       case 'newAddress':
         successMessage = 'New Address Added!';
-        notificationType = 'success';
+        // notificationType = 'success';
         position = 'bottom-center';
         // position = '';
         break;
       case 'deleteAddress':
         successMessage = 'Address Deleted!';
-        notificationType = 'success';
+        // notificationType = 'success';
         // position = 'bottom-center';
         position = 'top-center';
         break;
       case 'updateAddress':
         successMessage = 'Address Updated!';
-        notificationType = 'success';
+        // notificationType = 'success';
         // position = 'bottom-center';
         position = 'top-center';
         break;
       case 'makePrimary':
         successMessage = 'New Primary Address Set!';
-        notificationType = 'success';
+        // notificationType = 'success';
         // position = 'bottom-center';
         position = 'top-center';
         break;
       case 'userUpdate':
         successMessage = 'User Profile Information Updated!';
-        notificationType = 'success';
+        // notificationType = 'success';
         // position = 'bottom-center';
         position = 'top-center';
         break;

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Table, Image } from 'react-bootstrap';
+import React, { useEffect, useRef } from 'react';
+import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getWishListProductDetails } from '../actions/userActions';
@@ -15,8 +15,8 @@ const WishListScreen = ({ history }) => {
   const haveFetchedWishListProductData = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
-  const { name, color, size, image, createdAt } = wishList;
+  const { wishList } = userInfo;
+
 
 
   // color={color}
@@ -26,12 +26,7 @@ const WishListScreen = ({ history }) => {
   // productImage={image}
 
   const productsFromWishlist = useSelector(state => state.wishListProductDetails);
-  const { loading, wishListProducts } = productsFromWishlist;
-
-
-  // const [arrayOfProductIDs, setArrayOfProductIDs] = useState([]);
-  
-  let tempArrayProductIDs = [];
+  const { loading } = productsFromWishlist;
 
   useEffect(() => {
     console.log('in WishListScreen.js useEffect');
@@ -43,7 +38,7 @@ const WishListScreen = ({ history }) => {
 
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
       console.log('we have a wishlist')
-      tempArrayProductIDs = wishList.map((eachItem, idx) => {
+      let tempArrayProductIDs = wishList.map((eachItem, idx) => {
         return eachItem.productID;
       })
       dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
@@ -54,7 +49,7 @@ const WishListScreen = ({ history }) => {
     return () => {
       
     }
-  }, [history, userInfo]);
+  }, [history, userInfo, dispatch, wishList]);
 
   return (
     <>

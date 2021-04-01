@@ -4,21 +4,16 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
-import { Row, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-
-import Loader from '../../components/Loader';
+import { useSelector } from 'react-redux';
 import './WishListButton.css';
 
 const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor }) => {
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
+  const { _id:userID } = userInfo;
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
-  // const [wishListIcon, setWishListIcon] = useState('outlineHeart');
-  // const [wishListIcon, setWishListIcon] = useState('solidHeart');
 
   const userDetails = useSelector(state => state.userDetails);
   const { user } = userDetails;
@@ -36,7 +31,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     return () => {
       
     }
-  }, [addresses,productID])
+  }, [addresses,productID, userInfo])
 
   const addToWishListHandler =  async () => {
     console.log(`wishlist button test size category: ${sizeCategory}`)
