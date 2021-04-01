@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { addDecimals } from '../../utilityFunctions/addDecimals';
 
 const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded}) => {
 
@@ -35,7 +36,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
       //=========================================
       // Products without sizes - easiest case
       if(hasSizes === false){
-        defaultSalePrice !== 0 ? setTablePrice(defaultSalePrice) : setTablePrice(defaultPrice);
+        defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultSalePrice));
         setQtyForTable(defaultQty);
       }
       // Products with sizes - most challenging case
@@ -55,7 +56,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
         let qtyInStock = levelThree.qty;
         //Update our local state to reflect what we've found
         setQtyForTable(qtyInStock); // For the Qty Available column
-        colorSalePrice === 0 ? setTablePrice(sizeCatDefaultPrice) : setTablePrice(colorSalePrice); // For the price column
+        colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
     }
 
