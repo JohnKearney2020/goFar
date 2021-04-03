@@ -61,7 +61,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
 
   // }, [primaryImage, colorFromUrl, product.images])
   // }, [loaded, colorFromUrl, product.defaultImages, product.defaultVideo, product.images])
-  }, [colorFromUrl, loaded, product.defaultImages, product.defaultVideo, product.images, selectedColor]);
+  }, [colorFromUrl, loaded, product.defaultImages, product.defaultVideo, product.images, selectedColor, setPrimaryImageForColor]);
 
   const carouselClickHandler = (e) => {
       setPrimaryImage(e.target.src) // Change the main image to the one that was clicked

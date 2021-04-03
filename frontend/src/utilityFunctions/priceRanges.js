@@ -1,10 +1,11 @@
 import { sortLowToHigh } from '../utilityFunctions/sortingFunctions';
+import { addDecimals } from '../utilityFunctions/addDecimals';
 
 // product.sizes.sizeCategories
 export const findDefaultPriceRange = (arrayOfPrices) => {
   let prices = [];
   for(let eachSizeCategory of arrayOfPrices){
-    prices.push(eachSizeCategory.sizeCategoryDefaultPrice);
+    prices.push(addDecimals(eachSizeCategory.sizeCategoryDefaultPrice));
   }
   prices.sort(sortLowToHigh);
   return prices;
@@ -14,7 +15,7 @@ export const findSalePriceRange = (arrayOfPrices) => {
   let prices = [];
   for(let eachSizeCategoryName of arrayOfPrices){
     for(let eachColor of eachSizeCategoryName.sizeCategoryColorsAndSizes){
-      if(eachColor.colorSalePrice !== 0) prices.push(eachColor.colorSalePrice);
+      if(eachColor.colorSalePrice !== 0) prices.push(addDecimals(eachColor.colorSalePrice));
     }
   }
   prices.sort(sortLowToHigh);

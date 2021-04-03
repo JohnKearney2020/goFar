@@ -18,6 +18,7 @@ import ProductReviews from '../components/ProductComponents/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
+import { addDecimals } from '../utilityFunctions/addDecimals';
 
 const ProductScreen = ({ match }) => {
 
@@ -43,7 +44,7 @@ const ProductScreen = ({ match }) => {
   //               Pull Product data from global state
   //===============================================================
   useEffect(() => {
-    console.log('in productScreenTest2 1st useEffect()')
+    // console.log('in productScreenTest2 1st useEffect()')
     dispatch(listProductDetails(match.params.id));
     return () => {
       // console.log('in cleanup function of ProductScreenTest2.js');
@@ -80,11 +81,11 @@ const ProductScreen = ({ match }) => {
         let sizesAndPricesObjArray = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryColorsAndSizes;
         let initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorFromUrl)].colorSalePrice;
         let initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryDefaultPrice;
-        setColorSalePrice(initialSalePrice);
-        setProductPrice(initialDefaultPrice);
+        setColorSalePrice(addDecimals(initialSalePrice));
+        setProductPrice(addDecimals(initialDefaultPrice));
       } else { //if the product does not have sizes
-        setColorSalePrice(product.defaultSalePrice);
-        setProductPrice(product.defaultPrice);
+        setColorSalePrice(addDecimals(product.defaultSalePrice));
+        setProductPrice(addDecimals(product.defaultPrice));
       }
     }
   }, [product, colorFromUrl, loaded]);
@@ -117,12 +118,12 @@ const ProductScreen = ({ match }) => {
   
       // Find new default price
       let newSizeCatDefaultPrice = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryDefaultPrice;
-      setProductPrice(newSizeCatDefaultPrice);
+      setProductPrice(addDecimals(newSizeCatDefaultPrice));
   
       // Find new sale price
       let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === sizeCat)].sizeCategoryColorsAndSizes;
       let newSizeCatSalePrice = levelOne[levelOne.findIndex(index => index.color === selectedColor)].colorSalePrice;
-      setColorSalePrice(newSizeCatSalePrice);
+      setColorSalePrice(addDecimals(newSizeCatSalePrice));
     }
   }
 
@@ -138,7 +139,7 @@ const ProductScreen = ({ match }) => {
       // console.log(sizesAndPricesObjArray);
       let colorSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorClicked)].colorSalePrice;
       // console.log(colorSalePrice)
-      setColorSalePrice(colorSalePrice);
+      setColorSalePrice(addDecimals(colorSalePrice));
       // If we felt adventurous we could string this all into one line like below, but for ease of reading the code I did not;
       // console.log(sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes[sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes.findIndex(index => index.color === colorClicked)].colorSalePrice);
       // const colorSpecificImgObjArray = imageObjArray[imageObjArray.findIndex(index => index.color === colorClicked)].colorImages;
@@ -232,8 +233,8 @@ const ProductScreen = ({ match }) => {
                 {/* Prices and Reviews */}
                 <ListGroup horizontal className='justify-content-between'>
                   <ListGroup.Item className='border-0'>
-                    {/* <PriceRanges product={product}/> */}
-                    {colorSalePrice ?
+                    {/* For some reason, I can't compare to 0 or 0.00 to see if colorSalePrice === 0.00 */}
+                    {colorSalePrice !== addDecimals(0) ?
                       <span className='productCardSalePrices'><del>${productPrice}</del> <span className='text-danger productCardSalePrices'>${colorSalePrice}</span></span> :
                       <span className='productCardSalePrices'>${productPrice}</span>
                     }
@@ -336,7 +337,7 @@ const ProductScreen = ({ match }) => {
                         productName={product.name} 
                         color={selectedColor}
                         size={selectedSize}
-                        quantity={qtyForCart} 
+                        sizeCategory={selectedSizeCategory}
                         primaryImageForColor={primaryImageForColor} 
                       />
                     </ListGroup.Item>
@@ -352,6 +353,8 @@ const ProductScreen = ({ match }) => {
                       </Button>
                     </ListGroup.Item>
                 </ListGroup>
+                {/* This is a React Portal defined in the WishListButton component */}
+                <div id="wishListMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}

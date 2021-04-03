@@ -33,10 +33,10 @@ const UserInfo = () => {
   const { userInfo } = userLogin;
 
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
-  const { loading: updateProfileLoading, success, userInfo: updatedUserInfo } = userUpdateProfile;
+  const { loading: updateProfileLoading, success } = userUpdateProfile;
 
   const noAddressMessage = 'No addresses on file. Click the "Addresses" tab to add an address.';
-  const updateAddressMessage = 'You can update your primary address by clicking the "Addresses" tab.'
+  // const updateAddressMessage = 'You can update your primary address by clicking the "Addresses" tab.'
   const isGuestMessage1 = 'As a guest you cannot change the Name, Email, or Password fields. You can update the Phone Number field.';
   const isGuestMessage2 = 'Try out various CRUD operations on the Addresses, Wishlist, and Orders Tabs. You have the same abilities there as any other user. ';
   // const isGuestMessage3 = 'Try adding, deleting, and editing addresses on the Addresses tab.';

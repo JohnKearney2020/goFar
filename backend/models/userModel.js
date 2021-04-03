@@ -21,9 +21,9 @@ const wishListSchema = mongoose.Schema({
       type: String,
       required: false
     },
-    quantity: {
-      type: Number,
-      required: true
+    sizeCategory: {
+      type: String,
+      required: false
     },
     image: {
       type: String,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Row, Button } from 'react-bootstrap';
@@ -14,28 +14,16 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
   const dispatch = useDispatch();
 
   const userDetails = useSelector(state => state.userDetails);
-  const { loading, error, user } = userDetails;
+  const { user } = userDetails;
   const { addresses } = user;
 
   // const [addressesToDisplay, setAddressesToDisplay] = useState([]);
 
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
-  const { loading: updateProfileLoading, success, userInfo: updatedUserInfo } = userUpdateProfile;
+  const { loading: updateProfileLoading } = userUpdateProfile;
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditAddressModal, setShowEditAddressModal] = useState(false);
-
-  // import { updateUserProfile } from '../../actions/userActions';
-
-
-  // const [updatedAddresses, setUpdatedAddresses] = useState([]);
-
-  // useEffect(() => {
-  //   setAddressesToDisplay(addresses);
-  //   return () => {
-      
-  //   }
-  // }, []);
 
   const showModalHandler = () => {
     setShowConfirmModal(true);
@@ -90,10 +78,6 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
     console.log(newAddresses)
     dispatch(updateUserProfile({ addresses: newAddresses }, 'deleteAddress'));
 
-  }
-
-  const updateAddressHandler = () => {
-    console.log('update button clicked!')
   }
 
   return (

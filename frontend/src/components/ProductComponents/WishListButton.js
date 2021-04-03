@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import ReactDom from 'react-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
-import { Row, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-
-import Loader from '../../components/Loader';
+import { useSelector } from 'react-redux';
+import Message from '../Message';
 import './WishListButton.css';
 
-const WishListButton = ({ productID, productName, color, size, quantity, primaryImageForColor }) => {
+const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor }) => {
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
+  const { _id:userID } = userInfo;
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
-  // const [wishListIcon, setWishListIcon] = useState('outlineHeart');
-  // const [wishListIcon, setWishListIcon] = useState('solidHeart');
-
-  const userDetails = useSelector(state => state.userDetails);
-  const { user } = userDetails;
-  const { addresses } = user;
+  const [showLoggedOutMessage, setShowLoggedOutMessage] = useState(false);
+  const messageIfLoggedOut = 'Create an account to add items to your wishlist.'
 
   useEffect(() => {
     // console.log(`productID: ${productID}`)
@@ -30,15 +25,19 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
     //   console.log(Object.values(addresses[0]))
     // }
     if(userInfo){
-      console.log('in WishListButton useEffect')
-      console.log(`productID: ${productID}`)
+      // console.log('in WishListButton useEffect')
+      // console.log(`productID: ${productID}`)
     }
     return () => {
       
     }
-  }, [addresses,productID])
+  }, [productID, userInfo])
 
   const addToWishListHandler =  async () => {
+    if(!userInfo.name) { //If users are not logged in show them a message about the wishlist feature and exit the function
+      setShowLoggedOutMessage(true);
+      return;
+    }
     setLoadingWishListIcon(true);
     try {
       const config = {
@@ -51,11 +50,11 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
       await axios.post('/api/users/wishlistitem', { 
         userID,
         productID, 
-        name: productName, 
-        quantity, 
-        image: primaryImageForColor,
+        name: productName,
         color,
-        size
+        size,
+        sizeCategory, 
+        image: primaryImageForColor,
       }, config);
       toast.success('Added to wishlist!', 
         { 
@@ -75,13 +74,39 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
     }    
   }
 
-  const removeFromWishListHandler = () => {
+  const removeFromWishListHandler = async () => {
     console.log('clicked remove from wishlist')
     setLoadingWishListIcon(true);
-    setTimeout(() => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+      // attempt to remove the item from the user's wishlist
+      // await axios.delete(`/api/users/wishlistitem/${productID}`, { userID, color, size, sizeCategory }, config);
+      await axios.delete(`/api/users/wishlistitem/${productID}`, config);
       setLoadingWishListIcon(false);
+      toast.success('Item removed from wishlist!', 
+        { 
+          // position: "bottom-center",
+          position: "top-right",
+          autoClose: 3500,
+        }
+      );
       setInWishList(false);
-    }, 2000);
+      // store user info in local storage
+      // localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      setLoadingWishListIcon(false);
+    }
+    // setTimeout(() => {
+    //   setLoadingWishListIcon(false);
+    //   setInWishList(false);
+    // }, 2000);
   }
 
   return (
@@ -90,6 +115,11 @@ const WishListButton = ({ productID, productName, color, size, quantity, primary
         ( inWishList ? <FontAwesomeIcon className='wishListIcon' icon={solidHeart} size="3x" onClick={removeFromWishListHandler} /> : 
         <FontAwesomeIcon className='wishListIcon' icon={outlineHeart} size="3x" onClick={addToWishListHandler}/> )
       }
+      { showLoggedOutMessage &&  ReactDom.createPortal(
+        <Message variant='info'>{messageIfLoggedOut}</Message>,
+        document.getElementById('wishListMessage')
+      )};
+      
     </>
   )
 }
