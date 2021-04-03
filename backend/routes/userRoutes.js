@@ -10,7 +10,9 @@ router.post('/login', authUser);
 // Protected Routes
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
 router.route('/wishlistitem/').post(protect, addUserWishListItem);
-router.route('/wishlistitem/:id').delete(protect, deleteUserWishListItem);
+// router.route('/wishlistitem/:id').delete(protect, deleteUserWishListItem);
+// router.route('/wishlistitem/:id&:color&:size&:sizecategory').delete(protect, deleteUserWishListItem);
+router.route('/wishlistitem/:userid&:productid&:color&:size&:sizecategory').delete(protect, deleteUserWishListItem);
 router.route('/wishlist').post(protect, getUserWishListProducts);
 
 export default router;
