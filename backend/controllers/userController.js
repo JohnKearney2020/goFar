@@ -159,57 +159,78 @@ const getUserWishListProducts = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc     Update user wishlist
+// @desc     Add on item to user wishlist
 // @route    PUT /api/users/wishlistitem
 // @access   Private
 const addUserWishListItem = asyncHandler(async (req, res) => {
   const { userID, productID, name, color, size, sizeCategory, image } = req.body;
   const user = await User.findById(userID);
   if(user) {
-
-    // console.log('Add wishlist item checks:')
-    // console.log(`userID: ${userID}`)
-    // console.log(`productID: ${productID}`)
-    // console.log(`name: ${name}`)
-    // console.log(`color: ${color}`)
-    // console.log(`size: ${size}`)
-    // console.log(`sizeCategory: ${sizeCategory}`)
-    // console.log(`image: ${image}`)
-    //See if we are adding or deleting a wishlist item
     let oldWishList = [...user.wishList]
-    console.log(oldWishList);
     // add the new item to the wishlist
     oldWishList.push({ productID, name, color, size, sizeCategory, image });
     user.wishList = oldWishList;
-    //How to delete existing addresses
-    //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
-    // if(req.body.newAddress){
-    //   let addressTemp = [...user.addresses];//copy the old addresses
-    //   if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
-    //     addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
-    //       eachIndex.isPrimary = false
-    //     ))
-    //   }
-    //   // user.addresses = addressTemp.concat([req.body.newAddress]);
-    //   user.addresses = addressTemp.concat(req.body.newAddress);
-    // }
-    // user.wishList = user.wishList.push(req.body.wishList) || user.wishList;
-    // user.cart = user.cart.push(req.body.cart) || user.cart;
-
     // Update the user's info
     const updatedUser = await user.save();
 
     res.json({ //201 status means something was created
       wishList: updatedUser.wishList, 
     })
-    // res.json({ //201 status means something was created
-    //   wishList: oldWishList, 
-    // })
-
   } else {
     res.status(404); //not found
     throw new Error('User not found');
   }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishListProducts, addUserWishListItem };
+// @desc     Delete an item from the user's wishlist
+// @route    DELETE /api/users/wishlistitem/{id}
+// @access   Private
+const deleteUserWishListItem = asyncHandler(async (req, res) => {
+  //verify the id we passed is a valid mongose ObjectId
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400); // see comments below on status code 400 
+    throw new Error('Invalid Product Id - the Id does not meet valid mongoose ObjectId standards.');
+  }
+  const user = await User.findById(req.body.userID);
+  //make sure the user does in fact exist
+  if(user){
+    const productIDToDelete = req.params.id;
+    const productColorToDelete = req.body.color;
+    const productSizeToDelete = req.body.size;
+    const productSizeCatToDelete = req.body.sizeCategory;
+    const wishListToFilter = [...user.wishList] //Copy the user's wishlist
+
+    let foundMatchingProduct = false;
+    //Callback function for the .filter() below
+    const filterOutThatWishListItem = (wishListItem) => { 
+      if( //If the id, color, size, and sizecat all match, return false b/c filter only returns items on a true
+        wishListItem.productID.toString() === productIDToDelete && 
+        wishListItem.color.toString() === productColorToDelete &&
+        wishListItem.size.toString() === productSizeToDelete &&
+        wishListItem.sizeCategory.toString() === productSizeCatToDelete
+      ){
+        foundMatchingProduct = true;
+        return false 
+      };
+      return true; //all other items will be returned
+    }
+    //Filter out the item we wish to delete. Find the item with a matching ProductID, size, color, and size category
+    const filteredWishList = wishListToFilter.filter(filterOutThatWishListItem);
+    if(foundMatchingProduct){ //If we did in fact find a product in the user's wishlist that had a matching ID, color, size, and size catergory 
+      user.wishList = filteredWishList; //Update the user's wishlist
+      const updatedUser = await user.save();//Save the updated user on the database
+      res.json({
+        wishList: updatedUser.wishList
+      })
+    } else {
+      res.status(404);
+      throw new Error('That product was not found in your wishlist. Cannot remove from wishlist.');
+    }
+
+  } else { //If we did not find a user with that UserID
+    res.status(404); //Here we set the status we want. If we omit this, our custom error middleware will set the status to a default of 500
+    throw new Error('User not found. Cannot add to wishlist.');
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishListProducts, addUserWishListItem, deleteUserWishListItem };

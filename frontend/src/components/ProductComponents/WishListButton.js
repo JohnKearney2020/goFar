@@ -77,10 +77,36 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   const removeFromWishListHandler = () => {
     console.log('clicked remove from wishlist')
     setLoadingWishListIcon(true);
-    setTimeout(() => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+      console.log(`delete wishlist item product id: ${productID}`)
+      // // attempt to add the item to the user's wishlist
+      await axios.delete(`/api/users/wishlistitem/${productID}`, { userID }, config);
+      toast.success('Item removed from wishlist!', 
+        { 
+          // position: "bottom-center",
+          position: "top-right",
+          autoClose: 3500,
+        }
+      );
       setLoadingWishListIcon(false);
       setInWishList(false);
-    }, 2000);
+      // store user info in local storage
+      // localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      setLoadingWishListIcon(false);
+    }
+    // setTimeout(() => {
+    //   setLoadingWishListIcon(false);
+    //   setInWishList(false);
+    // }, 2000);
   }
 
   return (
