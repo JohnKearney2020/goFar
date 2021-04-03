@@ -74,7 +74,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     }    
   }
 
-  const removeFromWishListHandler = () => {
+  const removeFromWishListHandler = async () => {
     console.log('clicked remove from wishlist')
     setLoadingWishListIcon(true);
     try {
@@ -84,9 +84,10 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
           Authorization: `Bearer ${userInfo.token}`
         }
       }
-      console.log(`delete wishlist item product id: ${productID}`)
-      // // attempt to add the item to the user's wishlist
-      await axios.delete(`/api/users/wishlistitem/${productID}`, { userID }, config);
+      // attempt to remove the item from the user's wishlist
+      // await axios.delete(`/api/users/wishlistitem/${productID}`, { userID, color, size, sizeCategory }, config);
+      await axios.delete(`/api/users/wishlistitem/${productID}`, config);
+      setLoadingWishListIcon(false);
       toast.success('Item removed from wishlist!', 
         { 
           // position: "bottom-center",
@@ -94,7 +95,6 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
           autoClose: 3500,
         }
       );
-      setLoadingWishListIcon(false);
       setInWishList(false);
       // store user info in local storage
       // localStorage.setItem('userInfo', JSON.stringify(data));
