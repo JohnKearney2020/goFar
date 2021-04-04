@@ -125,7 +125,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     //Update the user's info
     const updatedUser = await user.save();
 
-    res.json({ //201 status means something was created
+    res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
@@ -173,8 +173,19 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
     // Update the user's info
     const updatedUser = await user.save();
 
-    res.json({ //201 status means something was created
-      wishList: updatedUser.wishList, 
+    // res.json({ //201 status means something was created
+    //   wishList: updatedUser.wishList, 
+    // })
+    res.status(201).json({ //201 status means something was created
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      addresses: updatedUser.addresses,
+      phoneNumber: updatedUser.phoneNumber,
+      cart: updatedUser.cart,
+      wishList: updatedUser.wishList,
+      token: generateToken(updatedUser._id) 
     })
   } else {
     res.status(404); //not found
