@@ -183,14 +183,13 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
 })
 
 // // @desc     Delete an item from the user's wishlist
-// // @route    DELETE /api/users/wishlistitem/{id}
-// // @route    DELETE /api/users/wishlistitem/:userid&:productid&:color&:size&:sizecategory
+// // @route    DELETE /api/users/wishlistitem/:{userid}&:{productid}&:{color}&:{size}&:{sizecategory}
 // // @access   Private
 const deleteUserWishListItem = asyncHandler(async (req, res) => {
   //verify the id we passed is a valid mongose ObjectId
   if (!mongoose.Types.ObjectId.isValid(req.params.userid) || !mongoose.Types.ObjectId.isValid(req.params.productid)) {
     res.status(400); // see comments below on status code 400 
-    throw new Error('Invalid Product Id - the Id does not meet valid mongoose ObjectId standards.');
+    throw new Error('Invalid Product or User id - the id does not meet valid mongoose ObjectId standards.');
   }
   const user = await User.findById(req.params.userid);
   //make sure the user does in fact exist
@@ -200,7 +199,6 @@ const deleteUserWishListItem = asyncHandler(async (req, res) => {
     const productSizeToDelete = req.params.size;
     const productSizeCatToDelete = req.params.sizecategory;
     const wishListToFilter = [...user.wishList] //Copy the user's wishlist
-
     let foundMatchingProduct = false;
     //Callback function for the .filter() below
     const filterOutThatWishListItem = (wishListItem) => { 
@@ -229,8 +227,8 @@ const deleteUserWishListItem = asyncHandler(async (req, res) => {
     }
 
   } else { //If we did not find a user with that UserID
-    res.status(404); //Here we set the status we want. If we omit this, our custom error middleware will set the status to a default of 500
-    throw new Error('User not found. Cannot add to wishlist.');
+    res.status(404);
+    throw new Error('User not found. Cannot remove from wishlist.');
   }
 })
 
