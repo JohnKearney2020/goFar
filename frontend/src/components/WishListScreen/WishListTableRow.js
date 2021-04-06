@@ -4,10 +4,13 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 // import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
+
 
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 import FormContainer from '../FormContainer';
+import Message from '../Message';
 
 const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded, index}) => {
 
@@ -19,7 +22,9 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
   //Set up local state
   const [tablePrice, setTablePrice] = useState(0);
   const [qtyForTable, setQtyForTable] = useState(0);
-  const [qtyForCart, setQtyForCart] = useState(0);
+  const [qtyForCart, setQtyForCart] = useState(1);
+  const [disableCart, setDisableCart] = useState(false);
+  const [cartErrorMessage, setCartErrorMessage] = useState(false);
 
 
   // Format the date for the Date column
@@ -44,6 +49,11 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
       // Products without sizes - easiest case
       if(hasSizes === false){
         defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
+        if(defaultQty === 0){ // If none are in stock, disable the cart button and qty input and display an 'out of stock' message to the user
+          setDisableCart(true);
+          setQtyForTable(0);
+          setQtyForCart(0);
+        }
         setQtyForTable(defaultQty);
       }
       // Products with sizes - most challenging case
@@ -51,7 +61,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
         //Drill down into the product object based on the user's chosen size and color
         //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
         let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory)];
-        console.log(levelOne)
+        // console.log(levelOne)
         let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice; // Find that size category's default price.
         //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
         let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color)]
@@ -70,7 +80,32 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
     return () => {
       
     }
-  }, [wishListProducts.length, product, color, size, sizeCategory])
+  }, [wishListProducts.length, product, color, size, sizeCategory]);
+
+  const qtyForCartHandler = (e) => {
+    console.log(e.target.value);
+    let newQtyForCart = e.target.value;
+    // if(newQtyForCart > 0 && cartErrorMessage) { setCartErrorMessage(null) };
+    setQtyForCart(newQtyForCart);
+  }
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    setCartErrorMessage(false);
+    console.log('in cart handler')
+    console.log(`qty for cart: ${qtyForCart}`)
+    //Form Validation
+    // if(qtyForCart === '0'){ //If the user tries to add quantity zero to their cart
+    //   setCartErrorMessage(true);
+    //   toast.error('Choose a quantity greater than zero...', { position: "top-center", autoClose: 3500 });
+    //   return;
+    // }
+    // if(qtyForCart > qtyForTable){//If the user tries to add more than are in stock
+    //   setCartErrorMessage(true);
+    //   toast.error(`Too many selected. Only ${qtyForTable} in stock.`, { position: "top-center", autoClose: 3500 });
+    //   return;
+    // }
+  }
     
   return (
     <tr className='tableRow'>
@@ -83,29 +118,55 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
       <td className='tableText'>{sizeForTable}</td>
       {/* <td className='tableText'>$65</td> */}
       <td className='tableText'>${tablePrice}</td>
-      <td className='tableText'>{qtyForTable > 10 ? '10+' : qtyForTable}</td>
+      {/* <td className='tableText'>{qtyForTable === 0 ? 'Out of Stock' : ( qtyForTable > 10 ? '10+' : qtyForTable )}</td> */}
+      <td className='tableText'>{qtyForTable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : ( qtyForTable > 10 ? '10+' : (qtyForTable <= 5 ? <span className='text-danger font-weight-bold'>{qtyForTable}</span> : qtyForTable ))}</td>
       <td className='tableText'>{dateForTable}</td>
       <td className='tableText'>
         {/* <FormContainer> */}
-          <Form type='submit'>
+          <Form type='submit' onSubmit={addToCartHandler}>
             <Form.Row>
               <Col>
-                <Form.Control 
-                  type='text' 
+                {/* <Form.Control 
+                  type='number' 
+                  // size='sm'
                   // placeholder='Confirm password' 
-                  value='1'
+                  value={qtyForCart}
                   // onChange={(e) => setConfirmPassword(e.target.value)}
-                  // className={confirmPasswordMessage === null ? '' : 'is-invalid'}
-                  style={index % 2 === 0 ? {'background-color': 'white'} :{'background-color': '#f7f7f9'}}
+                  className={cartErrorMessage === false ? '' : 'is-invalid'}
+                  style={index % 2 === 0 ? { 'backgroundColor': 'white' } :{ 'backgroundColor': '#f7f7f9' }}
+                  disabled={disableCart}
+                  onChange={qtyForCartHandler}
                 >
-                </Form.Control>              
+                </Form.Control> */}
+                {/* { cartErrorMessage && <div className="invalid-feedback">{cartErrorMessage}</div> }               */}
+                {/* <Form.Control as='select' value={qtyForTable <= 10 ? qtyForTable : 10} onChange={(e) => qtyForCartHandler(e.target.value)} disabled={disableCart}> */}
+                <Form.Control 
+                  as='select' 
+                  // value={qtyForTable <= 10 ? qtyForTable : 10} 
+                  defaultValue='test'
+                  value={qtyForCart} 
+                  onChange={(e) => setQtyForCart(e.target.value)} 
+                  // onChange={qtyForCartHandler} 
+                  disabled={disableCart}
+                  // style={{"color": "black"}}
+                >
+                  {[...Array(qtyForTable).keys()].map(x => (
+                    // Limit the user to a max of 10 items added to the cart at once
+                    (x + 1 <= 10 &&
+                      <option key={x+1} value={x + 1}>
+                      {x + 1}
+                      </option>
+                    )
+                  ))}
+                </Form.Control>
               </Col>
               <Col>
-                <Button size='sm'>
+                <Button size='sm' disabled={disableCart} type='submit'>
                   <FontAwesomeIcon className='' icon={faCartPlus} size="3x" />
                 </Button>
               </Col>
             </Form.Row>
+            {/* {cartErrorMessage && <Message variant='danger'>{cartErrorMessage}</Message>} */}
           </Form>
         {/* </FormContainer> */}
       </td>

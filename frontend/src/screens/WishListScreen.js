@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Form } from 'react-bootstrap';
 
 import { getWishListProductDetails } from '../actions/userActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
@@ -18,7 +19,6 @@ const WishListScreen = ({ history }) => {
   const { wishList } = userInfo;
 
 
-
   // color={color}
   // size={size}
   // dateAdded={dateAdded}
@@ -31,8 +31,8 @@ const WishListScreen = ({ history }) => {
   useEffect(() => {
     console.log('in WishListScreen.js useEffect');
 
-    console.log('wishlist from global state:')
-    console.log(wishList)
+    // console.log('wishlist from global state:')
+    // console.log(wishList)
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
 
@@ -84,8 +84,9 @@ const WishListScreen = ({ history }) => {
                 index={idx}
               />
             ))}
+
           </tbody>
-        </Table> 
+        </Table>
         </>
       }
     </>
