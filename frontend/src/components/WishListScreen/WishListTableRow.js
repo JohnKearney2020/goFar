@@ -9,7 +9,7 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 import FormContainer from '../FormContainer';
 
-const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded}) => {
+const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded, index}) => {
 
   // Get our array of wishlist products from the global state.
   const wishListProducts = useSelector(state => state.wishListProductDetails.wishListProducts);
@@ -96,7 +96,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
                   value='1'
                   // onChange={(e) => setConfirmPassword(e.target.value)}
                   // className={confirmPasswordMessage === null ? '' : 'is-invalid'}
-                  className=''
+                  style={index % 2 === 0 ? {'background-color': 'white'} :{'background-color': '#f7f7f9'}}
                 >
                 </Form.Control>              
               </Col>

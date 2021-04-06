@@ -81,6 +81,7 @@ const WishListScreen = ({ history }) => {
                 sizeCategory={eachProduct.sizeCategory}
                 dateAdded={eachProduct.createdAt}
                 productImage={eachProduct.image}
+                index={idx}
               />
             ))}
           </tbody>
