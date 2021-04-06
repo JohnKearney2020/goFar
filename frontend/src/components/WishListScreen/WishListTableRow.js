@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Image } from 'react-bootstrap';
+import { Image, Button, Form, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faHeart as solidHeart, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+// import { faHeart as outlineHeart } from '@fortawesome/free-regular-svg-icons';
+
 import { addDecimals } from '../../utilityFunctions/addDecimals';
+import FormContainer from '../FormContainer';
 
 const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded}) => {
 
@@ -13,6 +19,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
   //Set up local state
   const [tablePrice, setTablePrice] = useState(0);
   const [qtyForTable, setQtyForTable] = useState(0);
+  const [qtyForCart, setQtyForCart] = useState(0);
 
 
   // Format the date for the Date column
@@ -78,6 +85,30 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
       <td className='tableText'>${tablePrice}</td>
       <td className='tableText'>{qtyForTable > 10 ? '10+' : qtyForTable}</td>
       <td className='tableText'>{dateForTable}</td>
+      <td className='tableText'>
+        {/* <FormContainer> */}
+          <Form type='submit'>
+            <Form.Row>
+              <Col>
+                <Form.Control 
+                  type='text' 
+                  // placeholder='Confirm password' 
+                  value='1'
+                  // onChange={(e) => setConfirmPassword(e.target.value)}
+                  // className={confirmPasswordMessage === null ? '' : 'is-invalid'}
+                  className=''
+                >
+                </Form.Control>              
+              </Col>
+              <Col>
+                <Button size='sm'>
+                  <FontAwesomeIcon className='' icon={faCartPlus} size="3x" />
+                </Button>
+              </Col>
+            </Form.Row>
+          </Form>
+        {/* </FormContainer> */}
+      </td>
     </tr>
   )
 }

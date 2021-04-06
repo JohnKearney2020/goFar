@@ -68,6 +68,7 @@ const WishListScreen = ({ history }) => {
               <th className='tableText'>Price</th>
               <th className='tableText'>Qty Avail</th>
               <th className='tableText'>Date Added</th>
+              <th className='tableText'>Add to Cart</th>
             </tr>
           </thead>
           <tbody>
