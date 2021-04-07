@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, ListGroup, Col, Row } from 'react-bootstrap';
+import { ListGroup, Col, Row } from 'react-bootstrap';
 
 import { getWishListProductDetails } from '../actions/userActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
-import WishListTableRow from '../components/WishListScreen/WishListTableRow';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
@@ -19,26 +17,16 @@ const WishListScreen = ({ history }) => {
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, wishList } = userInfo;
 
-
-  // color={color}
-  // size={size}
-  // dateAdded={dateAdded}
-  // productName={name}
-  // productImage={image}
-
   const productsFromWishlist = useSelector(state => state.wishListProductDetails);
   const { loading } = productsFromWishlist;
 
   useEffect(() => {
     console.log('in WishListScreen.js useEffect');
-
-    // console.log('wishlist from global state:')
-    // console.log(wishList)
-    // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
+    // if a user is not already logged in, redirect them. Also, if a user logs out from the wishlist screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
 
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
-      console.log('we have a wishlist')
+      // console.log('we have a wishlist')
       let tempArrayProductIDs = wishList.map((eachItem) => {
         return eachItem.productID;
       })
@@ -47,24 +35,23 @@ const WishListScreen = ({ history }) => {
     } else {
       console.log('the user does not have a wishlist');
     }
-    return () => {
+    // return () => {
       
-    }
+    // }
   }, [history, userInfo, dispatch, wishList]);
 
   return (
     <>
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
-      {/* {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>} */}
       {loading ? <Loader /> :
         <>
         {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
         <ListGroup variant='flush'>
         {/*===================*/}
-        {/* Table Header */}
+        {/*    Table Header   */}
         {/*===================*/}
-          <ListGroup.Item>
-            <Row className='align-items-center justify-content-center d-none d-md-flex' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
+          <ListGroup.Item className='d-none d-md-block'>
+            <Row className='align-items-center justify-content-center' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
               <Col md={5} className='text-center'>
                 <span className='font-weight-bold'>Product</span>
               </Col>
