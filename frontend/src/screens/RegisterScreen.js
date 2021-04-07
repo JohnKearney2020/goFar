@@ -88,7 +88,7 @@ const RegisterScreen = ({ location, history }) => {
             className={nameMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {nameMessage && <div class="invalid-feedback">{nameMessage}</div>
+          {nameMessage && <div className="invalid-feedback">{nameMessage}</div>
           }
         </Form.Group>
         <Form.Group controlId='email'>
@@ -101,7 +101,7 @@ const RegisterScreen = ({ location, history }) => {
             className={emailMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {emailMessage && <div class="invalid-feedback">{emailMessage}</div>
+          {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
           }
         </Form.Group>
         <Form.Group controlId='password'>
@@ -114,7 +114,7 @@ const RegisterScreen = ({ location, history }) => {
             className={passwordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {passwordMessage && <div class="invalid-feedback">{passwordMessage}</div>
+          {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
           }
         </Form.Group>
         <Form.Group controlId='confirmPassword'>
@@ -127,7 +127,7 @@ const RegisterScreen = ({ location, history }) => {
             className={confirmPasswordMessage === null ? '' : 'is-invalid'}
           >
           </Form.Control>
-          {confirmPasswordMessage && <div class="invalid-feedback">{confirmPasswordMessage}</div>
+          {confirmPasswordMessage && <div className="invalid-feedback">{confirmPasswordMessage}</div>
           }
         </Form.Group>
         <Button type='submit' variant='outline-primary' disabled={loading}>
