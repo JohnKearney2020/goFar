@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
-import Message from '../Message';
 
 const WishListRow = ({ productID, productName, color, size, sizeCategory, productImage, dateAdded, index }) => {
   
@@ -75,9 +74,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
         //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
         let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size)];
         let qtyInStock = levelThree.qty;
-        // console.log('level two:')
-        // console.log(levelTwo)
-        //If there are zero in stock for that size, see if it's in stock in other sizes and size categories
+        //If there are zero in stock for that size, see if it's in stock in other sizes in that size category.
         if(qtyInStock === 0){
           setDisableCart(true);
           //Start at level two, all sizes in that color and size category, and look through all sizes there
@@ -107,8 +104,6 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
   }
 
   const deleteWishListItemHandler = async () => {
-    console.log('clicked delete!');
-    // setWishListErrorMessage('');
     setLoadingDeleteIcon(true);
     try {
       const config = {
@@ -117,11 +112,9 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
           Authorization: `Bearer ${userInfo.token}`
         }
       }
-      //attempt to add the item to the user's wishlist
+      //attempt to remove the item from the user's wishlist
       // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
-      // productID, productName, color, size, sizeCategory, productImage, dateAdded, index}
       const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
-      console.log(data)
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({
@@ -129,13 +122,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success(`Removed ${productName} from wishlist!`, 
-        { 
-          // position: "bottom-center",
-          position: "top-right",
-          autoClose: 3500,
-        }
-      );
+      toast.success(`Removed ${productName} from wishlist!`, { position: "top-right", autoClose: 3500 } );
       setLoadingDeleteIcon(false);
     } catch (error) {
       console.log('there was an error')
@@ -143,7 +130,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       setLoadingDeleteIcon(false);
     }    
   }
-  // productID, productName, color, size, sizeCategory, productImage, dateAdded, index
+  
   return (
     <>
       <ListGroup.Item>

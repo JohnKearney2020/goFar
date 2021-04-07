@@ -310,7 +310,7 @@ const ProductScreen = ({ match }) => {
                   />
                 }
                 {/* Quantity Alert */}
-                {qtyInStock <= 5 && qtyInStock &&
+                {qtyInStock <= 5 && qtyInStock !== 0 &&
                   <QuantityAlert qtyInStock={qtyInStock}/>
                 }
                 <hr />
@@ -318,8 +318,6 @@ const ProductScreen = ({ match }) => {
                 {addToCartSizeMessage &&
                   <Message variant='danger'>Please choose a size</Message>
                 }
-                {/* This is a React Portal defined in the WishListButton component */}
-                {/* <div id="wishListErrorMessage"></div> */}
                 <ListGroup horizontal className='align-items-center'>
                     <ListGroup.Item className='border-0'>
                       <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)} disabled={!(selectedSize !== '' && qtyInStock > 0)}>

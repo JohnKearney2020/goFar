@@ -25,7 +25,7 @@ const WishListScreen = ({ history }) => {
     if(!userInfo.name){ history.push('/login') };
 
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
-      console.log('we have a wishlist')
+      // console.log('we have a wishlist')
       let tempArrayProductIDs = wishList.map((eachItem) => {
         return eachItem.productID;
       })
@@ -47,10 +47,10 @@ const WishListScreen = ({ history }) => {
         {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
         <ListGroup variant='flush'>
         {/*===================*/}
-        {/* Table Header */}
+        {/*    Table Header   */}
         {/*===================*/}
-          <ListGroup.Item>
-            <Row className='align-items-center justify-content-center d-none d-md-flex' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
+          <ListGroup.Item className='d-none d-md-block'>
+            <Row className='align-items-center justify-content-center' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
               <Col md={5} className='text-center'>
                 <span className='font-weight-bold'>Product</span>
               </Col>

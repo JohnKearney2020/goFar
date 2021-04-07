@@ -18,7 +18,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
-  const [wishListErrorMessage, setWishListErrorMessage] = useState('');
+  const [wishListErrorMessage, setWishListErrorMessage] = useState(null);
 
   useEffect(() => {
     console.log('size, color, or sizeCategory changed')
@@ -74,13 +74,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success('Added to wishlist!', 
-        { 
-          // position: "bottom-center",
-          position: "top-right",
-          autoClose: 3500,
-        }
-      );
+      toast.success(`Added ${productName} to your wishlist!`, { position: "top-right", autoClose: 3500 } );
       setLoadingWishListIcon(false);
       setInWishList(true);
       // store user info in local storage
@@ -88,6 +82,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     } catch (error) {
       console.log('there was an error')
       console.log(error)
+      toast.error(`Could not add ${productName} to your wishlist. Try again later.`, { position: "top-right", autoClose: 3500 });
       setLoadingWishListIcon(false);
     }    
   }
@@ -102,23 +97,23 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
           Authorization: `Bearer ${userInfo.token}`
         }
       }
-      // attempt to remove the item from the user's wishlist
-      // await axios.delete(`/api/users/wishlistitem/${productID}`, { userID, color, size, sizeCategory }, config);
-      await axios.delete(`/api/users/wishlistitem/${productID}`, config);
+
+      const { data } = await axios.delete(`/api/users/wishlistitem/${userID}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
+      // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
+      // dispatch the user login again to update the user's wishlist in the global state
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      toast.success(`Removed ${productName} from your wishlist!`, { position: "top-right", autoClose: 3500 } );
       setLoadingWishListIcon(false);
-      toast.success('Item removed from wishlist!', 
-        { 
-          // position: "bottom-center",
-          position: "top-right",
-          autoClose: 3500,
-        }
-      );
       setInWishList(false);
-      // store user info in local storage
-      // localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
       console.log('there was an error')
       console.log(error)
+      toast.error(`Could not remove ${productName} from your wishlist. Try again later.`, { position: "top-right", autoClose: 3500 } );
+      setWishListErrorMessage(`Could not remove ${productName} from your wishlist. Try again later.`)
       setLoadingWishListIcon(false);
     }
   }
