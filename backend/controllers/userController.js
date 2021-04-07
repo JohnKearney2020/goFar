@@ -275,7 +275,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/cartitem
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
-  const { userID, productID, name, quantity, color, size, sizeCategory, image } = req.body;
+  const { userID, productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
   console.log(`userID: ${userID}`)
   console.log(`productID: ${productID}`)
   console.log(`name: ${name}`)
@@ -288,14 +288,11 @@ const addCartItem = asyncHandler(async (req, res) => {
   if(user) {
     let oldCart = [...user.cart]
     // add the new item to the cart
-    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image });
+    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image, savedForLater });
     user.cart = oldCart;
     // Update the user's info
     const updatedUser = await user.save();
 
-    // res.json({ //201 status means something was created
-    //   wishList: updatedUser.wishList, 
-    // })
     res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
