@@ -29,42 +29,40 @@ const wishListSchema = mongoose.Schema({
       type: String,
       required: true
     }
-  // wishListProduct: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: false, //a user's wishlist can be empty
-  //   ref: 'Product',
-  // }
 }, {
   timestamps: true
 });
 
 const cartSchema = mongoose.Schema({
-    productID: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
-      ref: 'Product'
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    color: {
-      type: String,
-      required: false
-    },
-    quantity: {
-      type: Number,
-      required: true
-    },
-    image: {
-      type: String,
-      required: true
-    }
-  // wishListProduct: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: false, //a user's wishlist can be empty
-  //   ref: 'Product',
-  // }
+  productID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
+    ref: 'Product'
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true
+  },
+  color: {
+    type: String,
+    required: false
+  },
+  size: {
+    type: String,
+    required: false
+  },
+  sizeCategory: {
+    type: String,
+    required: false
+  },
+  image: {
+    type: String,
+    required: true
+  }
 }, {
   timestamps: true
 });

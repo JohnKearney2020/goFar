@@ -143,7 +143,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 })
 
-
+//========================================================================================================================
+//                                                              Wishlist
+//========================================================================================================================
 // @desc     Get user wishlist products. The wishlist just has product id's, name, size, qty, and an image. This pulls the
 //           full product data from the database for each product id in the user's wishlist
 // @route    GET /api/users/wishlist
@@ -251,5 +253,132 @@ const deleteUserWishListItem = asyncHandler(async (req, res) => {
   }
 })
 
+//========================================================================================================================
+//                                                              Cart
+//========================================================================================================================
+// @desc     Get user cart products. The cart just has product id's, name, qty, size, sizeCategory and an image. This pulls the
+//           full product data from the database for each product id in the user's wishlist
+// @route    GET /api/users/cart
+// @access   Private
+const getCart = asyncHandler(async (req, res) => {
+  const productsFromCart = await Product.find({ '_id': { $in: req.body.arrayOfProductIDs }});
+  if(productsFromCart) {
+    res.json(
+      productsFromCart)
+  } else {
+    res.status(404); //not found
+    throw new Error(`Could not find products with those id's.`);
+  }
+})
 
-export { authUser, getUserProfile, registerUser, updateUserProfile, getUserWishListProducts, addUserWishListItem, deleteUserWishListItem };
+// @desc     Add on item to user cart
+// @route    PUT /api/users/cartitem
+// @access   Private
+const addCartItem = asyncHandler(async (req, res) => {
+  const { userID, productID, name, quantity, color, size, sizeCategory, image } = req.body;
+  console.log(`userID: ${userID}`)
+  console.log(`productID: ${productID}`)
+  console.log(`name: ${name}`)
+  console.log(`quantity: ${quantity}`)
+  console.log(`color: ${color}`)
+  console.log(`size: ${size}`)
+  console.log(`sizeCategory: ${sizeCategory}`)
+  console.log(`image: ${image}`)
+  const user = await User.findById(userID);
+  if(user) {
+    let oldCart = [...user.cart]
+    // add the new item to the cart
+    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image });
+    user.cart = oldCart;
+    // Update the user's info
+    const updatedUser = await user.save();
+
+    // res.json({ //201 status means something was created
+    //   wishList: updatedUser.wishList, 
+    // })
+    res.status(201).json({ //201 status means something was created
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      cart: updatedUser.cart,
+      wishList: updatedUser.wishList,
+      token: generateToken(updatedUser._id) 
+    })
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found');
+  }
+});
+
+// // @desc     Delete an item from the user's wishlist
+// // @route    DELETE /api/users/cartitem/:{userid}&:{productid}&:{color}&:{size}&:{sizecategory}
+// // @access   Private
+const deleteCartItem = asyncHandler(async (req, res) => {
+  //verify the id we passed is a valid mongose ObjectId
+  if (!mongoose.Types.ObjectId.isValid(req.params.userid) || !mongoose.Types.ObjectId.isValid(req.params.productid)) {
+    res.status(400); // see comments below on status code 400 
+    throw new Error('Invalid Product or User id - the id does not meet valid mongoose ObjectId standards.');
+  }
+  const user = await User.findById(req.params.userid);
+  //make sure the user does in fact exist
+  if(user){
+    const productIDToDelete = req.params.productid;
+    const productColorToDelete = req.params.color;
+    const productSizeToDelete = req.params.size;
+    const productSizeCatToDelete = req.params.sizecategory;
+    const wishListToFilter = [...user.wishList] //Copy the user's wishlist
+    let foundMatchingProduct = false;
+    //Callback function for the .filter() below
+    const filterOutThatWishListItem = (wishListItem) => { 
+      if( //If the id, color, size, and sizecat all match, return false b/c filter only returns items on a true
+        wishListItem.productID.toString() === productIDToDelete && 
+        wishListItem.color.toString() === productColorToDelete &&
+        wishListItem.size.toString() === productSizeToDelete &&
+        wishListItem.sizeCategory.toString() === productSizeCatToDelete
+      ){
+        foundMatchingProduct = true;
+        return false 
+      };
+      return true; //all other items will be returned
+    }
+    //Filter out the item we wish to delete. Find the item with a matching ProductID, size, color, and size category
+    const filteredWishList = wishListToFilter.filter(filterOutThatWishListItem);
+    if(foundMatchingProduct){ //If we did in fact find a product in the user's wishlist that had a matching ID, color, size, and size catergory 
+      user.wishList = filteredWishList; //Update the user's wishlist
+      const updatedUser = await user.save();//Save the updated user on the database
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        // addresses: updatedUser.addresses,
+        // phoneNumber: updatedUser.phoneNumber,
+        cart: updatedUser.cart,
+        wishList: updatedUser.wishList,
+        token: generateToken(updatedUser._id) 
+      })
+    } else {
+      res.status(404);
+      throw new Error('That product was not found in your wishlist. Cannot remove from wishlist.');
+    }
+
+  } else { //If we did not find a user with that UserID
+    res.status(404);
+    throw new Error('User not found. Cannot remove from wishlist.');
+  }
+})
+
+
+export { 
+  authUser, 
+  getUserProfile, 
+  registerUser, 
+  updateUserProfile, 
+  getUserWishListProducts, 
+  addUserWishListItem, 
+  deleteUserWishListItem,
+  getCart,
+  addCartItem,
+  deleteCartItem
+};
