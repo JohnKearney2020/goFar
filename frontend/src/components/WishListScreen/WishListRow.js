@@ -47,7 +47,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       // Destructure the product object. Doing this outside the useEffect was giving 'undefined' errors
       const { name, defaultPrice, defaultQty, defaultSalePrice, sizes, hasSizes:productHasSizes } = product;
       if(productHasSizes) { setHasSizes(true) }
-      console.log(`in wishlist table row useEffect for ${name}`);
+      // console.log(`in wishlist table row useEffect for ${name}`);
 
       //=========================================
       //Find the current price and qty available
@@ -83,7 +83,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
           //Start at level two, all sizes in that color and size category, and look through all sizes there
           for(let eachSize of levelTwo.sizeCategorySizes){
             if(eachSize.qty !== 0){
-              console.log('available in other sizes')
+              // console.log('available in other sizes')
               setAvailableInOtherSizes(true);
               break;
             }
@@ -95,9 +95,9 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       }
     }
 
-    return () => {
+    // return () => {
       
-    }
+    // }
   }, [wishListProducts.length, product, color, size, sizeCategory, hasSizes]);
 
   const addToCartHandler = (e) => {

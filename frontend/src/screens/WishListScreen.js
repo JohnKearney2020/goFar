@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, ListGroup, Col, Row } from 'react-bootstrap';
+import { ListGroup, Col, Row } from 'react-bootstrap';
 
 import { getWishListProductDetails } from '../actions/userActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
-import WishListTableRow from '../components/WishListScreen/WishListTableRow';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
@@ -17,23 +15,12 @@ const WishListScreen = ({ history }) => {
   const haveFetchedWishListProductData = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
-
-
-  // color={color}
-  // size={size}
-  // dateAdded={dateAdded}
-  // productName={name}
-  // productImage={image}
+  const { wishList } = userInfo;
 
   const productsFromWishlist = useSelector(state => state.wishListProductDetails);
   const { loading } = productsFromWishlist;
 
   useEffect(() => {
-    console.log('in WishListScreen.js useEffect');
-
-    // console.log('wishlist from global state:')
-    // console.log(wishList)
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
 
@@ -45,17 +32,16 @@ const WishListScreen = ({ history }) => {
       dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
       haveFetchedWishListProductData.current = false;
     } else {
-      console.log('the user does not have a wishlist');
+      // console.log('the user does not have a wishlist');
     }
-    return () => {
+    // return () => {
       
-    }
+    // }
   }, [history, userInfo, dispatch, wishList]);
 
   return (
     <>
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
-      {/* {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>} */}
       {loading ? <Loader /> :
         <>
         {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
