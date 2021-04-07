@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form } from 'react-bootstrap';
+import { Form, ListGroup, Col, Row } from 'react-bootstrap';
 
 import { getWishListProductDetails } from '../actions/userActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
@@ -9,6 +9,7 @@ import WishListTableRow from '../components/WishListScreen/WishListTableRow';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
+import WishListRow from '../components/WishListScreen/WishListRow';
 
 const WishListScreen = ({ history }) => {
 
@@ -58,35 +59,51 @@ const WishListScreen = ({ history }) => {
       {loading ? <Loader /> :
         <>
         {wishList.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
-        <Table striped hover responsive size="sm">
-          <thead>
-            <tr className='tableRow'>
-              <th className='tableText'></th>
-              <th className='tableText'>Product Name</th>
-              <th className='tableText'>Color</th>
-              <th className='tableText'>Size</th>
-              <th className='tableText'>Price</th>
-              <th className='tableText'>Qty Avail</th>
-              <th className='tableText'>Date Added</th>
-              <th className='tableText'>Add to Cart</th>
-              <th className='tableText'>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {wishList.map((eachProduct, idx) => (
-              <WishListTableRow key={idx} 
-                productID={eachProduct.productID}
-                productName={eachProduct.name}
-                color={eachProduct.color}
-                size={eachProduct.size}
-                sizeCategory={eachProduct.sizeCategory}
-                dateAdded={eachProduct.createdAt}
-                productImage={eachProduct.image}
-                index={idx}
-              />
-            ))}
-          </tbody>
-        </Table>
+        <ListGroup variant='flush'>
+        {/*===================*/}
+        {/* Table Header */}
+        {/*===================*/}
+          <ListGroup.Item>
+            <Row className='align-items-center justify-content-center d-none d-md-flex' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
+              <Col md={5} className='text-center'>
+                <span className='font-weight-bold'>Product</span>
+              </Col>
+              <Col md={1} className='text-center'>
+                <span className='font-weight-bold'>Color</span>
+              </Col>
+              <Col md={1} className='text-center'>
+                <span className='font-weight-bold'>Size</span>
+              </Col>
+              <Col md={1} className='text-center'>
+                <span className='font-weight-bold'>Qty Available</span>              
+              </Col>
+              <Col md={1} className='text-center'>
+                <span className='font-weight-bold'>Current Price</span>
+              </Col>
+              <Col md={2} className='text-center'>
+                <span className='font-weight-bold'>Add to Cart</span> 
+              </Col>
+              <Col md={1} className='text-center'>
+                <span className='font-weight-bold'>Delete</span> 
+              </Col>
+            </Row> 
+          </ListGroup.Item>
+          {/*===================*/}
+          {/* Items in Wishlist */}
+          {/*===================*/}
+          {wishList.map((eachProduct, idx) => (
+            <WishListRow key={idx}
+              productID={eachProduct.productID}
+              productName={eachProduct.name}
+              color={eachProduct.color}
+              size={eachProduct.size}
+              sizeCategory={eachProduct.sizeCategory}
+              dateAdded={eachProduct.createdAt}
+              productImage={eachProduct.image}
+              // index={idx}
+            />
+          ))}
+          </ListGroup>
         </>
       }
     </>
@@ -94,3 +111,4 @@ const WishListScreen = ({ history }) => {
 }
 
 export default WishListScreen;
+
