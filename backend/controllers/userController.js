@@ -181,8 +181,8 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-      addresses: updatedUser.addresses,
-      phoneNumber: updatedUser.phoneNumber,
+      // addresses: updatedUser.addresses,
+      // phoneNumber: updatedUser.phoneNumber,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
       token: generateToken(updatedUser._id) 
@@ -230,7 +230,15 @@ const deleteUserWishListItem = asyncHandler(async (req, res) => {
       user.wishList = filteredWishList; //Update the user's wishlist
       const updatedUser = await user.save();//Save the updated user on the database
       res.json({
-        wishList: updatedUser.wishList
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        // addresses: updatedUser.addresses,
+        // phoneNumber: updatedUser.phoneNumber,
+        cart: updatedUser.cart,
+        wishList: updatedUser.wishList,
+        token: generateToken(updatedUser._id) 
       })
     } else {
       res.status(404);

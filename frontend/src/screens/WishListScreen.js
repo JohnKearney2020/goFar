@@ -16,7 +16,7 @@ const WishListScreen = ({ history }) => {
   const haveFetchedWishListProductData = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { wishList } = userInfo;
+  const { _id:userID, wishList } = userInfo;
 
 
   // color={color}
@@ -69,12 +69,13 @@ const WishListScreen = ({ history }) => {
               <th className='tableText'>Qty Avail</th>
               <th className='tableText'>Date Added</th>
               <th className='tableText'>Add to Cart</th>
+              <th className='tableText'>Delete</th>
             </tr>
           </thead>
           <tbody>
             {wishList.map((eachProduct, idx) => (
               <WishListTableRow key={idx} 
-                // fullProduct={eachProduct}
+                productID={eachProduct.productID}
                 productName={eachProduct.name}
                 color={eachProduct.color}
                 size={eachProduct.size}
@@ -84,7 +85,6 @@ const WishListScreen = ({ history }) => {
                 index={idx}
               />
             ))}
-
           </tbody>
         </Table>
         </>

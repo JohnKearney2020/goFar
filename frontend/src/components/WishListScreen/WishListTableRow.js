@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Button, Form, Col, Row, Link } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { Image, Button, Form, Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
+import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 import Message from '../Message';
 
-const WishListTableRow = ({ productName, color, size, sizeCategory, productImage, dateAdded, index}) => {
+const WishListTableRow = ({ productID, productName, color, size, sizeCategory, productImage, dateAdded, index}) => {
+  
+  const dispatch = useDispatch();
+
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
 
   // Get our array of wishlist products from the global state.
   const wishListProducts = useSelector(state => state.wishListProductDetails.wishListProducts);
@@ -22,6 +31,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
   const [disableCart, setDisableCart] = useState(false);
   const [availableInOtherSizes, setAvailableInOtherSizes] = useState(false);
   const [hasSizes, setHasSizes] = useState(false);
+  const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
 
   // Format the date for the Date column
   const dateObject = new Date(dateAdded);
@@ -71,7 +81,6 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
         // console.log(levelTwo)
         //If there are zero in stock for that size, see if it's in stock in other sizes and size categories
         if(qtyInStock === 0){
-          let foundAnotherSize = false;
           setDisableCart(true);
           //Start at level two, all sizes in that color and size category, and look through all sizes there
           for(let eachSize of levelTwo.sizeCategorySizes){
@@ -91,7 +100,7 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
     return () => {
       
     }
-  }, [wishListProducts.length, product, color, size, sizeCategory]);
+  }, [wishListProducts.length, product, color, size, sizeCategory, hasSizes]);
 
 
   const addToCartHandler = (e) => {
@@ -99,25 +108,68 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
     console.log('in cart handler')
     console.log(`qty for cart: ${qtyForCart}`)
   }
+
+  const deleteWishListItemHandler = async () => {
+    console.log('clicked delete!');
+    // setWishListErrorMessage('');
+    setLoadingDeleteIcon(true);
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+      //attempt to add the item to the user's wishlist
+      // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
+      // productID, productName, color, size, sizeCategory, productImage, dateAdded, index}
+      const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
+      console.log(data)
+      // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
+      // dispatch the user login again to update the user's wishlist in the global state
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      toast.success('Removed from wishlist!', 
+        { 
+          // position: "bottom-center",
+          position: "top-right",
+          autoClose: 3500,
+        }
+      );
+      setLoadingDeleteIcon(false);
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      setLoadingDeleteIcon(false);
+    }    
+  }
     
   return (
     <tr className='tableRow'>
       <td className='tableText'>
-        <Image className='tableImage' src={productImage}/>
+        <Link to={`/product/${productID}/${color}`} >
+          <Image className='tableImage' src={productImage}/>        
+        </Link>
       </td>
-      <td className='tableText'>{productName}</td>
+      <td className='tableText'>
+        <Link to={`/product/${productID}/${color}`} >
+          {productName}        
+        </Link>
+      </td>
       <td className='tableText'>{color}</td>
       <td className='tableText'>{sizeForTable}</td>
       <td className='tableText'>${tablePrice}</td>
       <td className='tableText'>{qtyForTable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : ( qtyForTable > 10 ? '10+' : (qtyForTable <= 5 ? <span className='text-danger font-weight-bold'>{qtyForTable}</span> : qtyForTable ))}</td>
       <td className='tableText'>{dateForTable}</td>
       <td className='tableText'>
-        <Form type='submit' onSubmit={addToCartHandler}>
-          <Row className='align-items-center justify-content-center'>
-          {(qtyForCart === 0 && hasSizes === false) && <span className='text-danger font-weight-bold'>Out of Stock</span> } 
-          {(qtyForTable === 0 && hasSizes === true && availableInOtherSizes === true) && <span className='text-danger font-weight-bold'>Available in Other Sizes</span> } 
-          { qtyForTable !== 0 &&
-            <>
+        {(qtyForCart === 0 && hasSizes === false) && <span className='text-danger font-weight-bold'>Out of Stock</span> } 
+        {(qtyForTable === 0 && hasSizes === true && availableInOtherSizes === true) && <span className='text-danger font-weight-bold'>Available in Other Sizes</span> } 
+        {qtyForTable !== 0 &&
+          <Form type='submit' onSubmit={addToCartHandler}>
+            <Row className='align-items-center justify-content-center'>
               <Col className='px-0'>
                 <Form.Control 
                   as='select'
@@ -140,40 +192,17 @@ const WishListTableRow = ({ productName, color, size, sizeCategory, productImage
                   <FontAwesomeIcon className='' icon={faCartPlus} size="2x" />
                 </Button>
               </Col>
-            </>
-          }      
-            {/* {(qtyForCart === 0 && hasSizes === false) ? <span className='text-danger'>Out of Stock</span> : 
-              ((qtyForCart === 0 && hasSizes === true && availableInOtherSizes === true) ? <span className='text-danger'>Available in Other Sizes</span> : 
-                <>
-                  <Col className='px-0'>
-                    <Form.Control 
-                      as='select'
-                      value={qtyForCart} 
-                      onChange={(e) => setQtyForCart(e.target.value)} 
-                      disabled={disableCart}
-                      className='px-2'
-                    >
-                      {[...Array(qtyForTable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
-                        (x + 1 <= 10 &&
-                          <option key={x+1} value={x + 1}>
-                          {x + 1}
-                          </option>
-                        )
-                      ))}
-                    </Form.Control>
-                  </Col>
-                  <Col>
-                    <Button size='sm' disabled={disableCart} type='submit'>
-                      <FontAwesomeIcon className='' icon={faCartPlus} size="2x" />
-                    </Button>
-                  </Col>
-                </>
-              )
-            } */}
-          </Row>
-        </Form>
+            </Row>
+          </Form>
+        }
       </td>
-    </tr>
+      <td className='tableText'>
+        
+        <Button size='sm' variant='danger' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
+          <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
+        </Button>
+      </td>
+    </tr>      
   )
 }
 
