@@ -62,6 +62,10 @@ const cartSchema = mongoose.Schema({
   image: {
     type: String,
     required: true
+  },
+  savedForLater: {
+    type: Boolean,
+    required: false
   }
 }, {
   timestamps: true

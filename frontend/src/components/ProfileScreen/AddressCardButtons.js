@@ -64,11 +64,6 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
     if(updateProfileLoading){ return } //prevent users from clicking multiple times
     const oldAddresses = [...addresses];
     const newAddresses = oldAddresses.filter((address) => {
-      // if(address._id === addressID) { 
-      //   address.isPrimary = true 
-      // } else { 
-      //   address.isPrimary = false 
-      // }
       return address._id !== addressID;
     })
     if(isPrimary && newAddresses.length > 0){

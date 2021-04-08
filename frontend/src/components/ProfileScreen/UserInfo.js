@@ -83,14 +83,6 @@ const UserInfo = () => {
       setEmailMessage('Email field cannot be empty');
       anyErrors = true;
     }
-    // if(password === ''){
-    //   setPasswordMessage('Password field cannot be empty');
-    //   anyErrors = true;
-    // }
-    // if(confirmPassword === ''){
-    //   setConfirmPasswordMessage('Confirm password field cannot be empty');
-    //   anyErrors = true;
-    // }
     if(password !== confirmPassword) {
       setPasswordMessage('Your passwords do not match');
       setConfirmPasswordMessage('Your passwords do not match');

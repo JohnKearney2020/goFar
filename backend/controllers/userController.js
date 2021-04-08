@@ -105,20 +105,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     //New Addresses
     user.addresses = req.body.addresses || user.addresses;
-    //How to delete existing addresses
-    //send the id's of the addresses a user wants to delete, then use .filter on the old addresses to eliminate them by id
-    // if(req.body.newAddress){
-    //   let addressTemp = [...user.addresses];//copy the old addresses
-    //   if(req.body.newAddress.isPrimary){ //if the new address has been marked as a primary address
-    //     addressTemp.forEach(eachIndex => ( //loop through the old addresses and update the isPrimary field to false
-    //       eachIndex.isPrimary = false
-    //     ))
-    //   }
-    //   // user.addresses = addressTemp.concat([req.body.newAddress]);
-    //   user.addresses = addressTemp.concat(req.body.newAddress);
-    // }
-    // user.wishList = user.wishList.push(req.body.wishList) || user.wishList;
-    // user.cart = user.cart.push(req.body.cart) || user.cart;
     if(req.body.password) {
       user.password = req.body.password; //the middleware we created in the user model will automatically encrypt this password
     }
@@ -168,23 +154,13 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
   const { userID, productID, name, color, size, sizeCategory, image } = req.body;
   const user = await User.findById(userID);
   if(user) {
-    let oldWishList = [...user.wishList]
-    // add the new item to the wishlist
-    oldWishList.push({ productID, name, color, size, sizeCategory, image });
-    user.wishList = oldWishList;
     // Update the user's info
     const updatedUser = await user.save();
-
-    // res.json({ //201 status means something was created
-    //   wishList: updatedUser.wishList, 
-    // })
     res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-      // addresses: updatedUser.addresses,
-      // phoneNumber: updatedUser.phoneNumber,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
       token: generateToken(updatedUser._id) 
@@ -275,7 +251,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/cartitem
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
-  const { userID, productID, name, quantity, color, size, sizeCategory, image } = req.body;
+  const { userID, productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
   console.log(`userID: ${userID}`)
   console.log(`productID: ${productID}`)
   console.log(`name: ${name}`)
@@ -288,14 +264,11 @@ const addCartItem = asyncHandler(async (req, res) => {
   if(user) {
     let oldCart = [...user.cart]
     // add the new item to the cart
-    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image });
+    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image, savedForLater });
     user.cart = oldCart;
     // Update the user's info
     const updatedUser = await user.save();
 
-    // res.json({ //201 status means something was created
-    //   wishList: updatedUser.wishList, 
-    // })
     res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -327,15 +300,15 @@ const deleteCartItem = asyncHandler(async (req, res) => {
     const productColorToDelete = req.params.color;
     const productSizeToDelete = req.params.size;
     const productSizeCatToDelete = req.params.sizecategory;
-    const wishListToFilter = [...user.wishList] //Copy the user's wishlist
+    const cartToFilter = [...user.cart] //Copy the user's wishlist
     let foundMatchingProduct = false;
     //Callback function for the .filter() below
-    const filterOutThatWishListItem = (wishListItem) => { 
+    const filterOutThatCartItem = (cartItem) => { 
       if( //If the id, color, size, and sizecat all match, return false b/c filter only returns items on a true
-        wishListItem.productID.toString() === productIDToDelete && 
-        wishListItem.color.toString() === productColorToDelete &&
-        wishListItem.size.toString() === productSizeToDelete &&
-        wishListItem.sizeCategory.toString() === productSizeCatToDelete
+        cartItem.productID.toString() === productIDToDelete && 
+        cartItem.color.toString() === productColorToDelete &&
+        cartItem.size.toString() === productSizeToDelete &&
+        cartItem.sizeCategory.toString() === productSizeCatToDelete
       ){
         foundMatchingProduct = true;
         return false 
@@ -343,32 +316,54 @@ const deleteCartItem = asyncHandler(async (req, res) => {
       return true; //all other items will be returned
     }
     //Filter out the item we wish to delete. Find the item with a matching ProductID, size, color, and size category
-    const filteredWishList = wishListToFilter.filter(filterOutThatWishListItem);
-    if(foundMatchingProduct){ //If we did in fact find a product in the user's wishlist that had a matching ID, color, size, and size catergory 
-      user.wishList = filteredWishList; //Update the user's wishlist
+    const filteredCart = cartToFilter.filter(filterOutThatCartItem);
+    if(foundMatchingProduct){ //If we did in fact find a product in the user's cart that had a matching ID, color, size, and size catergory 
+      user.cart = filteredCart; //Update the user's wishlist
       const updatedUser = await user.save();//Save the updated user on the database
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
-        // addresses: updatedUser.addresses,
-        // phoneNumber: updatedUser.phoneNumber,
         cart: updatedUser.cart,
         wishList: updatedUser.wishList,
         token: generateToken(updatedUser._id) 
       })
     } else {
       res.status(404);
-      throw new Error('That product was not found in your wishlist. Cannot remove from wishlist.');
+      throw new Error('That product was not found in your cart. Cannot remove from cart.');
     }
-
   } else { //If we did not find a user with that UserID
     res.status(404);
-    throw new Error('User not found. Cannot remove from wishlist.');
+    throw new Error('User not found. Cannot remove from cart.');
   }
 })
 
+// @desc     Update item in user's cart
+// @route    PUT /api/users/cartitem
+// @access   Private
+const updateCartQty = asyncHandler(async (req, res) => {
+  //remember, req.user is passed here automatically by our authorization middleware
+  const user = await User.findById(req.user._id);
+  // const user = await User.findById(req.body.userID);
+  if(user) {
+    user.cart = req.body.cart || user.cart;
+    //Update the user's info
+    const updatedUser = await user.save();
+    res.status(201).json({ //201 status means something was created
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      cart: updatedUser.cart,
+      wishList: updatedUser.wishList,
+      token: generateToken(updatedUser._id) 
+    })
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found. Cannot change the qty in the cart.');
+  }
+})
 
 export { 
   authUser, 
@@ -380,5 +375,6 @@ export {
   deleteUserWishListItem,
   getCart,
   addCartItem,
-  deleteCartItem
+  deleteCartItem,
+  updateCartQty
 };
