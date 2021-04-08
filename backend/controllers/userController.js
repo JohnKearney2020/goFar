@@ -154,8 +154,13 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
   const { userID, productID, name, color, size, sizeCategory, image } = req.body;
   const user = await User.findById(userID);
   if(user) {
+    let oldWishList = [...user.wishList]
+    // add the new item to the wishlist
+    oldWishList.push({ productID, name, color, size, sizeCategory, image });
+    user.wishList = oldWishList;
     // Update the user's info
     const updatedUser = await user.save();
+
     res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -252,15 +257,6 @@ const getCart = asyncHandler(async (req, res) => {
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
   const { userID, productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
-  console.log(`userID: ${userID}`)
-  console.log(`productID: ${productID}`)
-  console.log(`name: ${name}`)
-  console.log(`quantity: ${quantity}`)
-  console.log(`color: ${color}`)
-  console.log(`size: ${size}`)
-  console.log(`sizeCategory: ${sizeCategory}`)
-  console.log(`image: ${image}`)
-  const user = await User.findById(userID);
   if(user) {
     let oldCart = [...user.cart]
     // add the new item to the cart
@@ -268,7 +264,6 @@ const addCartItem = asyncHandler(async (req, res) => {
     user.cart = oldCart;
     // Update the user's info
     const updatedUser = await user.save();
-
     res.status(201).json({ //201 status means something was created
       _id: updatedUser._id,
       name: updatedUser.name,
