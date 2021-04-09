@@ -256,7 +256,8 @@ const getCart = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/cartitem
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
-  const { userID, productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
+  const { productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
+  const user = await User.findById(req.user._id);
   if(user) {
     let oldCart = [...user.cart]
     // add the new item to the cart

@@ -18,6 +18,7 @@ import ProductReviews from '../components/ProductComponents/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
+import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
 
 const ProductScreen = ({ match }) => {
@@ -186,18 +187,7 @@ const ProductScreen = ({ match }) => {
     }
   }
   
-  const addToCartHandler = (e) => {
-    console.log('clicked add to cart!');
-    console.log(`selected size: ${selectedSize}`)
-    console.log(`selected qty: ${qtyForCart}`)
-    if(selectedSize === '') {
-      setAddToCartSizeMessage(true);
-      return;
-    }
-    if(addToCartSizeMessage) {
-      setAddToCartSizeMessage(false);
-    }
-  }
+
 
   return (
     <>
@@ -342,15 +332,15 @@ const ProductScreen = ({ match }) => {
                       />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
-                      <Button 
-                        className='btn-block' 
-                        type='button' 
-                        variant="dark" 
-                        onClick={addToCartHandler}
-                        // disabled={selectedSize === ''}
-                      >
-                        Add to Cart
-                      </Button>
+                      <AddToCartButton 
+                        productID={product._id} 
+                        productName={product.name} 
+                        color={selectedColor}
+                        quantity={qtyForCart}
+                        size={selectedSize}
+                        sizeCategory={selectedSizeCategory}
+                        primaryImageForColor={primaryImageForColor}                       
+                      />
                     </ListGroup.Item>
                 </ListGroup>
                 {/* This is a React Portal defined in the WishListButton component */}
