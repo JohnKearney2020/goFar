@@ -257,7 +257,6 @@ const getCart = asyncHandler(async (req, res) => {
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
   const { productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
-  console.log('type of quantity: ', typeof quantity)
   const user = await User.findById(req.user._id);
   if(user) {
     let oldCart = [...user.cart]
@@ -266,7 +265,8 @@ const addCartItem = asyncHandler(async (req, res) => {
     let alreadyInCart = false;
     for(let eachProduct of oldCart){
       if(eachProduct.productID.toString() === productID && eachProduct.color.toString() === color  && eachProduct.size.toString() === size && eachProduct.sizeCategory.toString() == sizeCategory){
-        eachProduct.quantity += Number(quantity);
+        // eachProduct.quantity += Number(quantity);
+        eachProduct.quantity = Number(quantity);
         alreadyInCart = true; //We now know this combination already exists in the cart
         break;
       }

@@ -310,7 +310,7 @@ const ProductScreen = ({ match }) => {
                 }
                 <ListGroup horizontal className='align-items-center'>
                     <ListGroup.Item className='border-0'>
-                      <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
+                      <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(Number(e.target.value))} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
                         {[...Array(qtyInStock).keys()].map(x => (
                           // Limit the user to a max of 10 items added to the cart at once
                           (x + 1 <= 10 &&
@@ -337,6 +337,7 @@ const ProductScreen = ({ match }) => {
                         productName={product.name} 
                         color={selectedColor}
                         quantity={qtyForCart}
+                        qtyInStock={qtyInStock}
                         size={selectedSize}
                         sizeCategory={selectedSizeCategory}
                         primaryImageForColor={primaryImageForColor}                       
@@ -346,7 +347,9 @@ const ProductScreen = ({ match }) => {
                 {/* This is a React Portal defined in the WishListButton component */}
                 <div id="wishListErrorMessage"></div>
                 {/* This is a React Portal defined in the AddToCartButton component */}
-                <div id="CartErrorMessage"></div>
+                <div id="cartErrorMessage"></div>
+                {/* This is a React Portal defined in the AddToCartButton component */}
+                <div id="cartWarningMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}
