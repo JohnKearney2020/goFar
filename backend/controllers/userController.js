@@ -257,11 +257,23 @@ const getCart = asyncHandler(async (req, res) => {
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
   const { productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;
+  console.log('type of quantity: ', typeof quantity)
   const user = await User.findById(req.user._id);
   if(user) {
     let oldCart = [...user.cart]
-    // add the new item to the cart
-    oldCart.push({ productID, name, quantity, color, size, sizeCategory, image, savedForLater });
+    // Check to see if the product with that color, size, and size category is already in the cart
+    // If it is, increase the quantity of that combination by the quantity sent by the user instead of adding a new instance of that combination to the cart
+    let alreadyInCart = false;
+    for(let eachProduct of oldCart){
+      if(eachProduct.productID.toString() === productID && eachProduct.color.toString() === color  && eachProduct.size.toString() === size && eachProduct.sizeCategory.toString() == sizeCategory){
+        eachProduct.quantity += Number(quantity);
+        alreadyInCart = true; //We now know this combination already exists in the cart
+        break;
+      }
+    }
+    if(alreadyInCart === false){ // add the new item to the cart if it doesn't already exist in the cart
+      oldCart.push({ productID, name, quantity, color, size, sizeCategory, image, savedForLater });
+    }
     user.cart = oldCart;
     // Update the user's info
     const updatedUser = await user.save();
