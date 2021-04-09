@@ -345,6 +345,8 @@ const ProductScreen = ({ match }) => {
                 </ListGroup>
                 {/* This is a React Portal defined in the WishListButton component */}
                 <div id="wishListErrorMessage"></div>
+                {/* This is a React Portal defined in the AddToCartButton component */}
+                <div id="CartErrorMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}

@@ -8,7 +8,7 @@ import { faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import Message from '../Message';
-import './WishListButton.css';
+import './AddToCartButton.css';
 
 const AddToCartButton = ({ productID, productName, color, quantity, size, sizeCategory, primaryImageForColor }) => {
   const dispatch = useDispatch();
@@ -83,8 +83,6 @@ const AddToCartButton = ({ productID, productName, color, quantity, size, sizeCa
         localStorage.setItem('userInfo', JSON.stringify(data));
         toast.success(`Added ${productName} to your cart!`, { position: "top-right", autoClose: 3500 } );
         setLoadingCartIcon(false);
-        // store user info in local storage
-        // localStorage.setItem('userInfo', JSON.stringify(data));
       } catch (error) {
         console.log('there was an error')
         console.log(error)
@@ -92,56 +90,28 @@ const AddToCartButton = ({ productID, productName, color, quantity, size, sizeCa
         setLoadingCartIcon(false);
       }  
     }
+    //If a user is NOT logged in
   }
-
-  // const removeFromWishListHandler = async () => {
-  //   console.log('clicked remove from wishlist')
-  //   setLoadingCartIcon(true);
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${userInfo.token}`
-  //       }
-  //     }
-
-  //     const { data } = await axios.delete(`/api/users/wishlistitem/${userID}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
-  //     // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
-  //     // dispatch the user login again to update the user's wishlist in the global state
-  //     dispatch({
-  //       type: USER_LOGIN_SUCCESS,
-  //       payload: data
-  //     });
-  //     localStorage.setItem('userInfo', JSON.stringify(data));
-  //     toast.success(`Removed ${productName} from your wishlist!`, { position: "top-right", autoClose: 3500 } );
-  //     setLoadingCartIcon(false);
-  //     setInWishList(false);
-  //   } catch (error) {
-  //     console.log('there was an error')
-  //     console.log(error)
-  //     toast.error(`Could not remove ${productName} from your wishlist. Try again later.`, { position: "top-right", autoClose: 3500 } );
-  //     setCartErrorMessage(`Could not remove ${productName} from your wishlist. Try again later.`)
-  //     setLoadingCartIcon(false);
-  //   }
-  // }
 
   return (
     <>
       <Button 
-        className='btn-block' 
+        className='btn-block addToCartButton' 
         type='button' 
         variant="dark" 
         onClick={addToCartHandler}
-        // disabled={selectedSize === ''}
+        disabled={loadingCartIcon}
       >
-        {loadingCartIcon ? <FontAwesomeIcon className='wishListIcon' icon={spinner} size="2x" /> : 
-          'Add to Cart'
-        }
+        <div className='text-center'>
+          {loadingCartIcon ? <FontAwesomeIcon className='' icon={spinner} size="2x"/>: 
+              'Add to Cart'
+          }
+        </div>
       </Button>
-      {/* { CartErrorMessage &&  ReactDom.createPortal(
+      { CartErrorMessage &&  ReactDom.createPortal(
         <Message variant='danger'>{CartErrorMessage}</Message>,
         document.getElementById('CartErrorMessage')
-      )} */}
+      )}
     </>
   )
 }
