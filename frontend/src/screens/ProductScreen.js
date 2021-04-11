@@ -18,6 +18,7 @@ import ProductReviews from '../components/ProductComponents/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
+import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
 
 const ProductScreen = ({ match }) => {
@@ -186,18 +187,7 @@ const ProductScreen = ({ match }) => {
     }
   }
   
-  const addToCartHandler = (e) => {
-    console.log('clicked add to cart!');
-    console.log(`selected size: ${selectedSize}`)
-    console.log(`selected qty: ${qtyForCart}`)
-    if(selectedSize === '') {
-      setAddToCartSizeMessage(true);
-      return;
-    }
-    if(addToCartSizeMessage) {
-      setAddToCartSizeMessage(false);
-    }
-  }
+
 
   return (
     <>
@@ -320,7 +310,7 @@ const ProductScreen = ({ match }) => {
                 }
                 <ListGroup horizontal className='align-items-center'>
                     <ListGroup.Item className='border-0'>
-                      <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(e.target.value)} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
+                      <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(Number(e.target.value))} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
                         {[...Array(qtyInStock).keys()].map(x => (
                           // Limit the user to a max of 10 items added to the cart at once
                           (x + 1 <= 10 &&
@@ -342,19 +332,24 @@ const ProductScreen = ({ match }) => {
                       />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
-                      <Button 
-                        className='btn-block' 
-                        type='button' 
-                        variant="dark" 
-                        onClick={addToCartHandler}
-                        // disabled={selectedSize === ''}
-                      >
-                        Add to Cart
-                      </Button>
+                      <AddToCartButton 
+                        productID={product._id} 
+                        productName={product.name} 
+                        color={selectedColor}
+                        quantity={qtyForCart}
+                        qtyInStock={qtyInStock}
+                        size={selectedSize}
+                        sizeCategory={selectedSizeCategory}
+                        primaryImageForColor={primaryImageForColor}                       
+                      />
                     </ListGroup.Item>
                 </ListGroup>
                 {/* This is a React Portal defined in the WishListButton component */}
                 <div id="wishListErrorMessage"></div>
+                {/* This is a React Portal defined in the AddToCartButton component */}
+                <div id="cartErrorMessage"></div>
+                {/* This is a React Portal defined in the AddToCartButton component */}
+                <div id="cartWarningMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}

@@ -15,7 +15,7 @@ router.route('/wishlistitem/').post(protect, addUserWishListItem);
 router.route('/wishlistitem/:userid&:productid&:color&:size&:sizecategory').delete(protect, deleteUserWishListItem);
 router.route('/wishlist').post(protect, getUserWishListProducts);
 // Cart
-router.route('/cartitem/').post(protect, addCartItem).put(protect, updateCartQty);
+router.route('/cartitem').post(protect, addCartItem).put(protect, updateCartQty);
 router.route('/cartitem/:userid&:productid&:color&:size&:sizecategory').delete(protect, deleteCartItem);
 router.route('/cart/').post(protect, getCart);
 
