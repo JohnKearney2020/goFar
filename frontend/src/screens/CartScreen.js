@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row } from 'react-bootstrap';
 
-import { getWishListProductDetails } from '../actions/userActions';
+import { getCartProductDetails } from '../actions/cartActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -28,12 +28,12 @@ const CartScreen = ({ history }) => {
         return eachItem.productID;
       })
       console.log(tempArrayProductIDs)
-    //   dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
-    //   haveFetchedWishListProductData.current = false;
-    // } else {
-    //   // console.log('the user does not have a wishlist');
-    // }
-    // return () => {
+      dispatch(getCartProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
+      haveFetchedCartData.current = false;
+    } else {
+      // console.log('the user does not have a wishlist');
+    }
+    return () => {
       
     }
   }, [history, userInfo, dispatch, cart]);

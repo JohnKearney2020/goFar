@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, wishListDetailsReducer } from './reducers/userReducers';
+import { cartDetailsReducer } from './reducers/cartReducers';
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -11,7 +12,8 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
-  wishListProductDetails: wishListDetailsReducer
+  wishListProductDetails: wishListDetailsReducer,
+  cartProductDetails: cartDetailsReducer
 });
 
 //See if user info has been stored in local storage
