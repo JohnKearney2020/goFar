@@ -15,3 +15,10 @@ code {
 .container {
   /* width: 100%!important; */
 }
+
+/*--- Extra Bootstrap Column Padding --*/
+
+/* we need to select all column classes */
+/* [class*="col-"] {
+  padding: 0rem;
+} */
