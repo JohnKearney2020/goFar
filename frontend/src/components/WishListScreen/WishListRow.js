@@ -38,7 +38,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
 
   // Format the size for the Size column
   let sizeForTable = '';
-  sizeCategory!== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
+  sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
   useEffect(() => {
     // console.log('in wishlist table row useEffect')
