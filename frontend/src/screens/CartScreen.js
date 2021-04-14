@@ -59,7 +59,7 @@ const CartScreen = ({ history }) => {
       <OffsetPageHeader leftHeaderText='Your Cart' rightHeaderText='Your Cart' hrBoolean={false}/>
       {loading ? <Loader /> :
         <>
-        {cart.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your cart is empty.</Message>}
+        {cart.length === 0 && <Message variant='info'>Your cart is empty.</Message>}
         {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage}/>}
         {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
           <Row> {/* Cart Items */}
@@ -151,11 +151,14 @@ const CartScreen = ({ history }) => {
           {/* ============================================================================================================== */}
           {/* <Card body>Saved for Later</Card> */}
           {/* <h4 class=""></h4> */}
-          <Card className='my-5' style={{"backgroundColor": "#343A40"}}>
+          <Card className='mt-5 mb-3' style={{"backgroundColor": "#343A40"}}>
             <Card.Body className='text-center'>
               <h5 className='m-0 text-white'>Saved for Later</h5>
             </Card.Body>
           </Card>
+          {cart.length === 0 ? <Message variant='info'>Your cart is empty - no items saved for later</Message> :
+            (savedForLater.length === 0 && <Message variant='info'>You have no items saved for later.</Message>) 
+          }
           <Row>
             <Col md={8}> {/* Left Side of Screen */}
               <ListGroup variant='flush'>
