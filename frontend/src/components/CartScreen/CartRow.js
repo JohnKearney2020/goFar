@@ -187,7 +187,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         {/* <Col md={2}>
           {qty}
         </Col> */}
-        <Col md={1} className=''>
+        <Col md={1} className='d-flex justify-content-center'>
           <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
             <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
           </Button>
