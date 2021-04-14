@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
 
@@ -18,12 +18,11 @@ const CartScreen = ({ history }) => {
   const { cart } = userInfo;
 
   const productsFromCart = useSelector(state => state.cartProductDetails);
-  const { loading, cartProducts } = productsFromCart;
+  const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
+
+  const [cartQtyMessage, setCartQtyMessage] = useState(null);
 
   useEffect(() => {
-    // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
-    // if(!userInfo.name){ history.push('/login') };
-
     if(cart.length > 0 && haveFetchedCartData.current === false){
       console.log('we have a cart')
       let arrayOfProductIDs = cart.map((eachItem) => {
@@ -46,7 +45,9 @@ const CartScreen = ({ history }) => {
       {loading ? <Loader /> :
         <>
         {cart.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your cart is empty.</Message>}
+        {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>}
           <Row>
+            <div id="cartQtyMessage"></div>
             <Col md={8}> {/* Left Side of Screen */}
               <ListGroup variant='flush'>
               {/*===================*/}
@@ -90,6 +91,7 @@ const CartScreen = ({ history }) => {
                     productImage={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
+                    setCartQtyMessage={setCartQtyMessage}
                   />
                 ))}
               </ListGroup>
@@ -126,3 +128,8 @@ const CartScreen = ({ history }) => {
 
 export default CartScreen;
 
+
+// { cartQtyMessage &&  ReactDom.createPortal(
+//   <Message variant='info'>{cartQtyMessage}</Message>,
+//   document.getElementById('cartQtyMessage')
+// )}
