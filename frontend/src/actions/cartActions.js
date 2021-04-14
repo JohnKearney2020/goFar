@@ -4,8 +4,6 @@ import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUC
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, getState) => {
-  console.log('in cartProductDetails userAction, arrayOfProductIDs:')
-  console.log(arrayOfProductIDs)
   try {
     dispatch({
       type: CART_PRODUCT_DETAILS_REQUEST

@@ -10,7 +10,7 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 import Message from '../Message';
 
-const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, setCartQtyMessage }) => {
+const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage }) => {
   // Format the size for the Size column
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
@@ -44,7 +44,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
       //Find the current price and qty available
       //=========================================
       // Products without sizes - easiest case
-      if(hasSizes === false){
+      if(productHasSizes === false){
         defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
         if(defaultQty === 0){ // If none are in stock, disable the cart button and qty input and display an 'out of stock' message to the user
           setDisableCart(true);
@@ -56,12 +56,21 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
           setQtyForTable(qty); 
         } else { //If the user wants more than are available
           setQtyForTable(defaultQty);
-          setCartQtyMessage(`One or more items in your cart are no longer available in the quantity you originally requested. We've updated your cart with the largest quantity we could give you based on current stock. Checkout soon so you don't miss out!`)
+          console.log(`user wanted ${qty} of ${name}, but we only have ${defaultQty} in stock`)
+          // setTheArray(oldArray => [...oldArray, newElement]);
+          setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
+            name,
+            color,
+            size,
+            sizeCategory,
+            originalQty: qty,
+            newQty: defaultQty
+          }])
         }
       }
       // Products with sizes - most challenging case
       if(sizes.length > 0){ //Drill down into the product object based on the user's chosen size and color
-        console.log(`${name} has sizes`)
+        // console.log(`${name} has sizes`)
         //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
         let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory)];
         // console.log(levelOne)
@@ -73,7 +82,6 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
         let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size)];
         let qtyInStock = levelThree.qty;
-        console.log(`qtyInStock for ${name}: ${qtyInStock}`)
         //If there are zero in stock for that size, see if it's in stock in other sizes in that size category.
         if(qtyInStock === 0){
           setDisableCart(true);
@@ -88,11 +96,19 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         }
         //Update our local state to reflect what we've found
         //Compare the qty the user originally added to the cart to the quantity currently available
-        if(qty < qtyInStock){
+        if(qty < qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
           setQtyForTable(qty);
-        } else {
+        } else { //If the qty the user wanted is MORE than the qty we have in stock
+          // console.log(`user wanted ${qty} of ${name}, but we only have ${qtyInStock} in stock`)
           setQtyForTable(qtyInStock)
-          setCartQtyMessage(`One or more items in your cart are no longer available in the quantity you originally requested. We've updated your cart with the largest quantity we could give you based on current stock. Checkout soon so you don't miss out!`)
+          setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
+            name,
+            color,
+            size,
+            sizeCategory,
+            originalQty: qty,
+            newQty: qtyInStock
+          }])
         }
         // setQtyForTable(qtyInStock); // For the Qty Available column
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
@@ -102,7 +118,8 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
     // return () => {
       
     // }
-  }, [cartProducts.length, product, color, size, sizeCategory, hasSizes]);
+  // }, [cartProducts.length, product, color, size, sizeCategory, hasSizes]);
+  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage]);
 
   const deleteWishListItemHandler = () => {
     console.log('delete from cart clicked')

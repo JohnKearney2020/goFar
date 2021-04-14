@@ -8,6 +8,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
 import CartRow from '../components/CartScreen/CartRow';
+import CartMessage from '../components/CartScreen/CartMessage';
 
 const CartScreen = ({ history }) => {
 
@@ -20,15 +21,15 @@ const CartScreen = ({ history }) => {
   const productsFromCart = useSelector(state => state.cartProductDetails);
   const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
 
-  const [cartQtyMessage, setCartQtyMessage] = useState(null);
+  const [cartQtyMessage, setCartQtyMessage] = useState([]);
 
   useEffect(() => {
     if(cart.length > 0 && haveFetchedCartData.current === false){
-      console.log('we have a cart')
+      // console.log('we have a cart')
       let arrayOfProductIDs = cart.map((eachItem) => {
         return eachItem.productID;
       })
-      console.log(arrayOfProductIDs)
+      // console.log(arrayOfProductIDs)
       dispatch(getCartProductDetails({ arrayOfProductIDs }));
       haveFetchedCartData.current = false;
     } else {
@@ -45,7 +46,8 @@ const CartScreen = ({ history }) => {
       {loading ? <Loader /> :
         <>
         {cart.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your cart is empty.</Message>}
-        {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>}
+        {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage}/>}
+        {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
           <Row>
             <div id="cartQtyMessage"></div>
             <Col md={8}> {/* Left Side of Screen */}
@@ -91,6 +93,7 @@ const CartScreen = ({ history }) => {
                     productImage={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
+                    cartQtyMessage={cartQtyMessage}
                     setCartQtyMessage={setCartQtyMessage}
                   />
                 ))}
