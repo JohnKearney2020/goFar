@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
+import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
 import { getCartProductDetails } from '../actions/cartActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
@@ -48,9 +48,9 @@ const CartScreen = ({ history }) => {
         {cart.length === 0 && <Message variant='info' style={{ margin: '8rem'}}>Your cart is empty.</Message>}
         {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage}/>}
         {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
-          <Row>
+          <Row> {/* Cart Items */}
             <div id="cartQtyMessage"></div>
-            <Col md={8}> {/* Left Side of Screen */}
+            <Col className='' md={8}> {/* Left Side of Screen */}
               <ListGroup variant='flush'>
               {/*===================*/}
               {/*    Table Header   */}
@@ -102,7 +102,9 @@ const CartScreen = ({ history }) => {
             {/* =================================================================================== */}
             {/*                             Subtotal and Final Price of Cart                        */}
             {/* =================================================================================== */}
-            <Col md={4}>
+            {/* <Col md={4} className='h-100 w-100 d-flex flex-column align-items-end'> */}
+            <Col md={4} className=''>
+            {/* <Col md={4} className='justify-content-center'> */}
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
@@ -120,8 +122,97 @@ const CartScreen = ({ history }) => {
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
-              </Card>             
+              </Card>
+              <Card className='my-5'>
+                <Card.Img src='https://i.imgur.com/09uggrQ.jpg' />
+                <Card.Header className='text-center'>
+                  <h6 className='m-0'>Get excited about $49 free shipping</h6>
+                </Card.Header>
+              </Card>
             </Col>
+          </Row>
+          {/* <hr className='m-5'/> */}
+          {/* ============================================================================================================== */}
+          {/*                                             Saved for Later Items                                              */}
+          {/* ============================================================================================================== */}
+          {/* <Card body>Saved for Later</Card> */}
+          {/* <h4 class=""></h4> */}
+          <Card className='my-5' style={{"backgroundColor": "#343A40"}}>
+            <Card.Body className='text-center'>
+              <h5 className='m-0 text-white'>Saved for Later</h5>
+            </Card.Body>
+          </Card>
+          <Row>
+            <Col md={8}> {/* Left Side of Screen */}
+              <ListGroup variant='flush'>
+              {/*===================*/}
+              {/*    Table Header   */}
+              {/*===================*/}
+                <ListGroup.Item className='d-none d-md-block'>
+                  <Row className='align-items-center justify-content-center' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
+                    <Col md={5} className='text-center'>
+                      <span className='font-weight-bold'>Product</span>
+                    </Col>
+                    <Col md={1} className='text-center'>
+                      <span className='font-weight-bold'>Color</span>
+                    </Col>
+                    <Col md={2} className='text-center'>
+                      <span className='font-weight-bold'>Size</span>
+                    </Col>
+                    <Col md={1} className='text-center'>
+                      <span className='font-weight-bold'>Qty</span>              
+                    </Col>
+                    <Col md={2} className='text-center'>
+                      <span className='font-weight-bold'>Current Price</span>
+                    </Col>
+                    <Col md={1} className='text-center'>
+                      {/* <span className='font-weight-bold'>Delete</span>  */}
+                    </Col>
+                  </Row> 
+                </ListGroup.Item>
+                {/*===================*/}
+                {/* Items in Cart */}
+                {/*===================*/}
+                {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
+                {cart.map((eachProduct, idx) => (
+                  <CartRow key={idx}
+                    productID={eachProduct.productID}
+                    productName={eachProduct.name}
+                    color={eachProduct.color}
+                    size={eachProduct.size}
+                    sizeCategory={eachProduct.sizeCategory}
+                    qty={eachProduct.quantity}
+                    dateAdded={eachProduct.createdAt}
+                    productImage={eachProduct.image}
+                    savedForLater={eachProduct.savedForLater}
+                    index={idx}
+                    cartQtyMessage={cartQtyMessage}
+                    setCartQtyMessage={setCartQtyMessage}
+                  />
+                ))}
+              </ListGroup>
+            </Col> {/* End of Left Side of Screen */}
+            {/* =================================================================================== */}
+            {/*                   Placeholder Offset b/c of subtotal component above                */}
+            {/* =================================================================================== */}
+            <Col md={4} className='d-flex justify-content-center align-items-center'>
+              <Card>
+                <Card.Img src='https://i.imgur.com/QBBE0Wc.jpg' />
+                <Card.Header className='text-center'>
+                  <h6 className='m-0'>Start your adventure today</h6>
+                </Card.Header>
+              </Card>
+              {/* <Image src="https://i.imgur.com/Y0tnMBr.jpg" fluid/>       */}
+              {/* <Image src="https://i.imgur.com/QBBE0Wc.jpg" fluid rounded />       */}
+            </Col>
+          </Row>
+          <Row className='w-100' style={{"height": "400px"}}>
+              <Col md={8} className='h-100'>
+
+              </Col>
+              <Col md={4} className='h-100'>
+                
+              </Col>
           </Row>
         </>
       }
