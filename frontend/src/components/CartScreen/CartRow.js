@@ -61,6 +61,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
       }
       // Products with sizes - most challenging case
       if(sizes.length > 0){ //Drill down into the product object based on the user's chosen size and color
+        console.log(`${name} has sizes`)
         //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
         let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory)];
         // console.log(levelOne)
@@ -72,6 +73,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
         let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size)];
         let qtyInStock = levelThree.qty;
+        console.log(`qtyInStock for ${name}: ${qtyInStock}`)
         //If there are zero in stock for that size, see if it's in stock in other sizes in that size category.
         if(qtyInStock === 0){
           setDisableCart(true);
@@ -85,7 +87,14 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
           }
         }
         //Update our local state to reflect what we've found
-        setQtyForTable(qtyInStock); // For the Qty Available column
+        //Compare the qty the user originally added to the cart to the quantity currently available
+        if(qty < qtyInStock){
+          setQtyForTable(qty);
+        } else {
+          setQtyForTable(qtyInStock)
+          setCartQtyMessage(`One or more items in your cart are no longer available in the quantity you originally requested. We've updated your cart with the largest quantity we could give you based on current stock. Checkout soon so you don't miss out!`)
+        }
+        // setQtyForTable(qtyInStock); // For the Qty Available column
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
     }
