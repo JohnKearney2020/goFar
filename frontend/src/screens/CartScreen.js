@@ -21,6 +21,8 @@ const CartScreen = ({ history }) => {
   const productsFromCart = useSelector(state => state.cartProductDetails);
   const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
 
+  const [filteredCart, setFilteredCart] = useState([]);
+  const [savedForLater, setSavedForLater] = useState([]);
   const [cartQtyMessage, setCartQtyMessage] = useState([]);
 
   useEffect(() => {
@@ -32,6 +34,18 @@ const CartScreen = ({ history }) => {
       // console.log(arrayOfProductIDs)
       dispatch(getCartProductDetails({ arrayOfProductIDs }));
       haveFetchedCartData.current = false;
+      //Seperate the cart items 
+      const filteredCartItems = []; //will hold cart items not saved for later
+      const savedForLaterItems = []; //will hold saved for later items
+      cart.forEach(cartItem => {
+        cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
+      });
+      console.log(`Filtered Cart Items:`)
+      console.log(filteredCartItems)
+      console.log(`Saved For Later Cart Items:`)
+      console.log(savedForLaterItems)
+      setFilteredCart(filteredCartItems);
+      setSavedForLater(savedForLaterItems);
     } else {
       // console.log('the user does not have a wishlist');
     }
@@ -81,7 +95,7 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {cart.map((eachProduct, idx) => (
+                {filteredCart.map((eachProduct, idx) => (
                   <CartRow key={idx}
                     productID={eachProduct.productID}
                     productName={eachProduct.name}
@@ -174,7 +188,7 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {cart.map((eachProduct, idx) => (
+                {savedForLater.map((eachProduct, idx) => (
                   <CartRow key={idx}
                     productID={eachProduct.productID}
                     productName={eachProduct.name}
@@ -196,23 +210,13 @@ const CartScreen = ({ history }) => {
             {/*                   Placeholder Offset b/c of subtotal component above                */}
             {/* =================================================================================== */}
             <Col md={4} className='d-flex justify-content-center align-items-center'>
-              <Card>
+              <Card className='mb-5'>
                 <Card.Img src='https://i.imgur.com/QBBE0Wc.jpg' />
                 <Card.Header className='text-center'>
                   <h6 className='m-0'>Start your adventure today</h6>
                 </Card.Header>
               </Card>
-              {/* <Image src="https://i.imgur.com/Y0tnMBr.jpg" fluid/>       */}
-              {/* <Image src="https://i.imgur.com/QBBE0Wc.jpg" fluid rounded />       */}
             </Col>
-          </Row>
-          <Row className='w-100' style={{"height": "400px"}}>
-              <Col md={8} className='h-100'>
-
-              </Col>
-              <Col md={4} className='h-100'>
-                
-              </Col>
           </Row>
         </>
       }
