@@ -1,4 +1,9 @@
-.cartMessageListItem {
+.cartMessageListItemInfo {
   background-color: #d2ebf5;
+  border: 0;
+}
+.cartMessageListItemDanger {
+  /* background-color: red; */
+  background-color: #F7DDDC;
   border: 0;
 }
