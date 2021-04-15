@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDom from 'react-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { Image, Button, Form, Col, Row, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -13,17 +15,25 @@ import Message from '../Message';
 import './CartRow.css';
 
 const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage, cartMovedMessage, setCartMovedMessage }) => {
+  console.log('type of setCartMovedMessage')
+  console.log(typeof setCartMovedMessage)
+
+  const dispatch = useDispatch();
+
   // Format the size for the Size column
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
+  const userInfo = useSelector(state => state.userLogin.userInfo);
+  // const { cart } = userInfo;
 
-  // Get our array of wishlist products from the global state.
+  // Get our array of cart products from the global state.
   const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
   // Find the product specific to this cart table row
   const product = cartProducts[cartProducts.findIndex(i => i.name === productName)];
 
   //Set up local state
+  const haveUpdatedQuantities = useRef(false);
   const [tablePrice, setTablePrice] = useState(0);
   const [qtyForTable, setQtyForTable] = useState(0);
   const [qtyForCart, setQtyForCart] = useState(1);
@@ -31,15 +41,53 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
   const [availableInOtherSizes, setAvailableInOtherSizes] = useState(false);
   const [hasSizes, setHasSizes] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
+  
+  // ===================================================================================================
+  //            Async Function for Updating an Item's Qty / Moving it to Saved For Later
+  // ===================================================================================================
+  // this is used in the useEffect() below
+  const updateCartQty = async (qty, savedForLater) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    try {
+      const { data } = await axios.put('/api/users/cart/cartitem', {
+        productID, 
+        name: productName,
+        color,
+        newQty: qty,
+        size,
+        sizeCategory, 
+        savedForLater: savedForLater
+      }, config);
+      // console.log(data)
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      haveUpdatedQuantities.current = true;
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      toast.error(`We could not update your cart with accurate quantities based on what is in stock. Please try again later.`, { position: "top-right", autoClose: 3500 });
+      // setLoadingCartIcon(false);
+    }
+  }
+//=================================================================================================================================
 
 
   useEffect(() => {
     // console.log('in wishlist table row useEffect')
-    if(cartProducts.length > 0 && product){
+    if(cartProducts.length > 0 && product && haveUpdatedQuantities.current === false){
       // Destructure the product object. Doing this outside the useEffect was giving 'undefined' errors
       const { name, defaultPrice, defaultQty, defaultSalePrice, sizes, hasSizes:productHasSizes } = product;
       if(productHasSizes) { setHasSizes(true) }
-      // console.log(`in wishlist table row useEffect for ${name}`);
+      console.log(`in wishlist table row useEffect for ${name} ${color} ${size} ${sizeCategory}`);
 
       //=========================================
       //Find the current price and qty available
@@ -97,7 +145,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         }
         //Update our local state to reflect what we've found
         //Compare the qty the user originally added to the cart to the quantity currently available
-        if(qty < qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
+        if(qty <= qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
           setQtyForTable(qty);
         } else if(qty > qtyInStock && qtyInStock !== 0){ //If the qty the user wanted is MORE than the qty we have in stock
           // console.log(`user wanted ${qty} of ${name}, but we only have ${qtyInStock} in stock`)
@@ -110,7 +158,11 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
             originalQty: qty,
             newQty: qtyInStock
           }])
+          //attempt to update the qty of the item in the user's cart
+          updateCartQty(qtyInStock, false);
         } else { //If the qtyInStock is zero
+          console.log(`Quantity in stock for ${name} ${color} size ${size} is ${qtyInStock}`)
+          console.log(`Original Quantity for ${name} ${color} size ${size} is ${qty}`)
           setQtyForTable(0);
           setCartMovedMessage(cartMovedMessage => [...cartMovedMessage, {
             name,
@@ -120,12 +172,14 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
             originalQty: qty,
             newQty: qtyInStock
           }])
+          //attempt to update the qty of the item in the user's cart AND move it to Saved for Later
+          updateCartQty(qtyInStock, true);
         }
         // setQtyForTable(qtyInStock); // For the Qty Available column
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
     }
-  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage]);
+  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage, setCartMovedMessage, productID, productName, userInfo.token, dispatch]);
 
   const deleteWishListItemHandler = () => {
     console.log('delete from cart clicked')

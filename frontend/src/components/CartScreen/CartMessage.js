@@ -1,14 +1,7 @@
 import React from 'react';
-import { Alert, ListGroup, Row, Col } from 'react-bootstrap';
+import { Alert, ListGroup } from 'react-bootstrap';
 
 import './CartMessage.css';
-
-// name,
-// color,
-// size,
-// sizeCategory,
-// originalQty: qty,
-// newQty: defaultQty
 
 const CartMessage = ({ variant, itemsChanged, outOfStock }) => {
   return (
