@@ -22,8 +22,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
   const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
   // Find the product specific to this cart table row
   const product = cartProducts[cartProducts.findIndex(i => i.name === productName)];
-  // console.log(`product in CartRow:`)
-  // console.log(product);
+
   //Set up local state
   const [tablePrice, setTablePrice] = useState(0);
   const [qtyForTable, setQtyForTable] = useState(0);
@@ -116,11 +115,6 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
     }
-
-    // return () => {
-      
-    // }
-  // }, [cartProducts.length, product, color, size, sizeCategory, hasSizes]);
   }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage]);
 
   const deleteWishListItemHandler = () => {
@@ -130,7 +124,6 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
   return (
     <>
       <ListGroup.Item className=''>
-      {/* <Row className='align-items-center justify-content-center'> */}
       <Row className='align-items-center'>
         {/* ===================== */}
         {/*     Product Image     */}
@@ -155,7 +148,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         {/* ===================== */}
         <Col md={2} className='text-center'>{sizeForTable}</Col>
         {/* ===================== */}
-        {/*      Qty Available    */}
+        {/*          Qty          */}
         {/* ===================== */}
         <Col md={1} className='text-center'>
           {qtyForTable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : qtyForTable }
@@ -196,9 +189,8 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         </Col>
       </Row>
       <Row className='justify-content-start mt-2 ml-1'>
-        {savedForLater === true ? <Button className='p-0 px-2' variant="secondary">Move to Cart</Button> : <Button className='p-0 px-2' variant="secondary">Move to Wishlist</Button>}
-        <Button className='p-0 px-2 cartRowButton' variant="secondary">Move to Wishlist</Button>|
-        <Button className='py-0 px-2 cartRowButton' variant="secondary">Delete</Button>
+        {savedForLater === true ? <Button className='p-0 px-2' variant="secondary">Move to Cart</Button> : <Button className='p-0 px-2' variant="secondary">Save for Later</Button>}|
+        <Button className='p-0 px-2 cartRowButton' variant="secondary">Move to Wishlist</Button>
       </Row>
     </ListGroup.Item>
   </>

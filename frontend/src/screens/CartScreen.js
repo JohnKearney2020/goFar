@@ -209,9 +209,7 @@ const CartScreen = ({ history }) => {
                 ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
-            {/* =================================================================================== */}
-            {/*                   Placeholder Offset b/c of subtotal component above                */}
-            {/* =================================================================================== */}
+            {/* Right Side of Screen */}
             <Col md={4} className='d-flex justify-content-center align-items-center'>
               <Card className='mb-5'>
                 <Card.Img src='https://i.imgur.com/QBBE0Wc.jpg' />
