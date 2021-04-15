@@ -12,7 +12,7 @@ import Message from '../Message';
 
 import './CartRow.css';
 
-const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage }) => {
+const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage, cartMovedMessage, setCartMovedMessage }) => {
   // Format the size for the Size column
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
@@ -99,10 +99,20 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         //Compare the qty the user originally added to the cart to the quantity currently available
         if(qty < qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
           setQtyForTable(qty);
-        } else { //If the qty the user wanted is MORE than the qty we have in stock
+        } else if(qty > qtyInStock && qtyInStock !== 0){ //If the qty the user wanted is MORE than the qty we have in stock
           // console.log(`user wanted ${qty} of ${name}, but we only have ${qtyInStock} in stock`)
           setQtyForTable(qtyInStock)
           setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
+            name,
+            color,
+            size,
+            sizeCategory,
+            originalQty: qty,
+            newQty: qtyInStock
+          }])
+        } else { //If the qtyInStock is zero
+          setQtyForTable(0);
+          setCartMovedMessage(cartMovedMessage => [...cartMovedMessage, {
             name,
             color,
             size,

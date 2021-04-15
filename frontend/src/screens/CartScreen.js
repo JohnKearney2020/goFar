@@ -24,6 +24,7 @@ const CartScreen = ({ history }) => {
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
   const [cartQtyMessage, setCartQtyMessage] = useState([]);
+  const [cartMovedMessage, setCartMovedMessage] = useState([]);
 
   useEffect(() => {
     if(cart.length > 0 && haveFetchedCartData.current === false){
@@ -60,7 +61,8 @@ const CartScreen = ({ history }) => {
       {loading ? <Loader /> :
         <>
         {cart.length === 0 && <Message variant='info'>Your cart is empty.</Message>}
-        {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage}/>}
+        {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage} outOfStock={false}/>}
+        {cartMovedMessage.length > 0 && <CartMessage variant='danger' itemsChanged={cartMovedMessage} outOfStock={true}/>}
         {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
           <Row> {/* Cart Items */}
             <div id="cartQtyMessage"></div>
@@ -109,6 +111,8 @@ const CartScreen = ({ history }) => {
                     index={idx}
                     cartQtyMessage={cartQtyMessage}
                     setCartQtyMessage={setCartQtyMessage}
+                    cartMovedMessage={cartMovedMessage} 
+                    setCartMovedMessage={setCartMovedMessage}
                   />
                 ))}
               </ListGroup>

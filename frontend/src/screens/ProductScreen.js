@@ -34,7 +34,7 @@ const ProductScreen = ({ match }) => {
   const [selectedSizeCategory, setSelectedSizeCategory] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [activeKey, setActiveKey] = useState('');
-  const [qtyInStock, setQtyInStock] = useState('');
+  const [qtyInStock, setQtyInStock] = useState(0);
   const [productColors, setProductColors] = useState([]);
   const [clearanceColors, setClearanceColors] = useState([]);
   const [qtyForCart, setQtyForCart] = useState(1);

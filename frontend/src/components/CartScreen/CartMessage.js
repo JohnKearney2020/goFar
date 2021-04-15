@@ -10,10 +10,11 @@ import './CartMessage.css';
 // originalQty: qty,
 // newQty: defaultQty
 
-const CartMessage = ({ variant, itemsChanged }) => {
+const CartMessage = ({ variant, itemsChanged, outOfStock }) => {
   return (
     <Alert variant={variant}>
-      <p className='lead'>The items below in your cart are no longer available in the quantity you originally requested. We've updated your cart with the largest quantity we could give you based on current stock. Checkout soon so you don't miss out!</p>
+      {!outOfStock && <p className='lead'>The items below in your cart are no longer available in the quantity you originally requested. We've updated your cart with the largest quantity we could give you based on current stock. Checkout soon so you don't miss out!</p>}
+      {outOfStock && <p className='lead'>The items below in your cart are no longer available. We've automatically saved them for later for you.</p>}
       <hr />
       <ListGroup>
         {itemsChanged.map((eachItem, Idx) => (
