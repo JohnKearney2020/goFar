@@ -10,6 +10,8 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 import Message from '../Message';
 
+import './CartRow.css';
+
 const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage }) => {
   // Format the size for the Size column
   let sizeForTable = '';
@@ -189,13 +191,15 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         </Col> */}
         <Col md={1} className='d-flex justify-content-center'>
           <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
-            <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
+            <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
           </Button>
-          {/* <Button>
-            P
-          </Button> */}
         </Col>
-      </Row> 
+      </Row>
+      <Row className='justify-content-start mt-2 ml-1'>
+        {savedForLater === true ? <Button className='p-0 px-2' variant="secondary">Move to Cart</Button> : <Button className='p-0 px-2' variant="secondary">Move to Wishlist</Button>}
+        <Button className='p-0 px-2 cartRowButton' variant="secondary">Move to Wishlist</Button>|
+        <Button className='py-0 px-2 cartRowButton' variant="secondary">Delete</Button>
+      </Row>
     </ListGroup.Item>
   </>
   )
