@@ -196,10 +196,15 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         </Col>
       </Row>
       <Row className='justify-content-start mt-2 ml-1'>
-        {savedForLater === true ? <Button className='p-0 px-2' variant="secondary">Move to Cart</Button> : <Button className='p-0 px-2' variant="secondary">Move to Wishlist</Button>}
+        {savedForLater === true ? <Button className='p-0 px-2' variant="secondary">Move to Cart</Button> : <Button className='p-0 px-2' variant="secondary">Move to Wishlist</Button>}|
         <Button className='p-0 px-2 cartRowButton' variant="secondary">Move to Wishlist</Button>|
         <Button className='py-0 px-2 cartRowButton' variant="secondary">Delete</Button>
       </Row>
+      {/* <Row className='justify-content-start mt-2 ml-1'>
+        {savedForLater === true ? <Button className='p-0 px-2 mr-1' variant="outline-secondary">Move to Cart</Button> : <Button className='p-0 px-2  mr-1' variant="outline-secondary">Move to Wishlist</Button>}
+        <Button className='p-0 px-2 cartRowButton  mr-1' variant="outline-secondary">Move to Wishlist</Button>
+        <Button className='py-0 px-2 cartRowButton  mr-1' variant="outline-secondary">Delete</Button>
+      </Row> */}
     </ListGroup.Item>
   </>
   )
