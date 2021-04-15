@@ -25,7 +25,7 @@ const getCart = asyncHandler(async (req, res) => {
 })
 
 // @desc     Add on item to user cart
-// @route    PUT /api/users/cartitem
+// @route    POST /api/users/cartitem
 // @access   Private
 const addCartItem = asyncHandler(async (req, res) => {
   const { productID, name, quantity, color, size, sizeCategory, image, savedForLater } = req.body;

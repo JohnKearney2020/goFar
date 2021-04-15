@@ -97,7 +97,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         }
         //Update our local state to reflect what we've found
         //Compare the qty the user originally added to the cart to the quantity currently available
-        if(qty < qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
+        if(qty <= qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
           setQtyForTable(qty);
         } else if(qty > qtyInStock && qtyInStock !== 0){ //If the qty the user wanted is MORE than the qty we have in stock
           // console.log(`user wanted ${qty} of ${name}, but we only have ${qtyInStock} in stock`)
@@ -111,6 +111,8 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
             newQty: qtyInStock
           }])
         } else { //If the qtyInStock is zero
+          console.log(`Quantity in stock for ${name} ${color} size ${size} is ${qtyInStock}`)
+          console.log(`Original Quantity for ${name} ${color} size ${size} is ${qty}`)
           setQtyForTable(0);
           setCartMovedMessage(cartMovedMessage => [...cartMovedMessage, {
             name,
@@ -125,7 +127,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, produ
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
     }
-  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage]);
+  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage, setCartMovedMessage]);
 
   const deleteWishListItemHandler = () => {
     console.log('delete from cart clicked')
