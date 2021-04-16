@@ -35,44 +35,18 @@ export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, get
 }
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
-export const setCartQtyMessage = (arrayOfChangedItems) => async (dispatch, getState) => {
-  const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
+export const addCartQtyMessage = (arrayOfChangedItems) => async (dispatch) => {
+  // const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
+  console.log('in qty message action')
+  console.log(arrayOfChangedItems)
   try {
     dispatch({
       type: CART_QTY_MESSAGE_REQUEST
     });
-
-    const { userLogin: { userInfo } } = getState();
-
-    const config = { // set headers to json
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}` //this goes to the 'api/users/profile' route which is a protected route. Our middleware is expecting a token
-      }
-    }
-    // attempt to get wishlist product details
-    // const { data } = await axios.post(`/api/users/cart`, arrayOfProductIDs, config );
-
-    const { data } = await axios.put('/api/users/cart/cartitem', {
-      productID, 
-      name: productName,
-      newQty: qty,
-      color,
-      size,
-      sizeCategory,
-      price,
-      savedForLater: savedForLater
-    }, config);
-    // console.log(data)
     dispatch({
       type: CART_QTY_MESSAGE_SUCCESS,
-      payload: data
+      payload: arrayOfChangedItems
     })
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data
-    });
-    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: CART_QTY_MESSAGE_FAIL,

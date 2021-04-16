@@ -18,7 +18,7 @@ const CartMessage = ({ variant, itemsChanged, outOfStock }) => {
               <span>{eachItem.color} / </span>
               <span>{eachItem.size} / </span>
               <span>{eachItem.sizeCategory}, </span>
-              Old Qty: <span className='font-weight-bold'>{eachItem.originalQty}</span>,
+              Old Qty: <span className='font-weight-bold'>{eachItem.oldQty}</span>,
               New Qty: <span className='font-weight-bold'>{eachItem.newQty}</span>
             </span>
           </ListGroup.Item>

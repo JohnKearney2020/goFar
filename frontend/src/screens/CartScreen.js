@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
-import { getCartProductDetails } from '../actions/cartActions';
+import { getCartProductDetails, addCartQtyMessage } from '../actions/cartActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -50,17 +50,12 @@ const CartScreen = ({ history }) => {
     // if(haveUpdatedQtysPrices.current === false && haveFetchedCartData.current === true){
     if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
       console.log('in update qtys and prices part of cart screen useEffect')
-      //Compare qty's in the user's cart to qty's we have in stock and update if necessary
-      // let newUpdatedCart = [...cart];
-      // let newUpdatedCart = JSON.parse(JSON.stringify(cart));
+      const qtyMessageArray = [];
+      const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
       let madeChanges = false; //Keep track of if we need to make changes to the cart or not
-      // console.log('copied cart')
-      // console.log(newUpdatedCart)
-
       // Loop through the user's cart
       for(let cartItem of newUpdatedCart){
-
         let { productID: id1, //deconstruct the item object from the cart
           name:name1,
           quantity:userQuantity,
@@ -72,37 +67,45 @@ const CartScreen = ({ history }) => {
           savedForLater,
           createdAt
         } = cartItem;
-
-        // console.log('cartItem:')
-        // console.log(cartItem)
           // Loop through the detailed cart items and find a match
           for(let upToDateItem of cartProducts){
-            // console.log('upToDateItem')
-            // console.log(upToDateItem)
-            const { // Destructure the upToDateItem object
-              _id: id2, 
-              name:name2, 
-              defaultPrice, 
-              defaultSalePrice, 
-              defaultQty, 
-              sizes, 
-              hasSizes 
-            } = upToDateItem;
+            // Destructure the upToDateItem object
+            const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
             // Drill down into the detailed product object to look for a match
-            //=========================================
-            //Find the current price and qty available
-            //=========================================
+            //====================================================================================================================================================
+            //                                                  Find the current price and qty available
+            //====================================================================================================================================================
             // Products without sizes - easiest case
             if(hasSizes === false){
               if(id1 === id2){ //If the product ID's match. Site does not have functionality for items with one size to have different prices for different colors.
                 //Update the price
                 defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
                 //Update the qty if needed
-                if(defaultQty === 0 || cartItem.quantity > defaultQty){ //If the item is out of stock, or the user has more in their cart than are in stock
+                if(defaultQty === 0){ //If the item is now out of stock
                   cartItem.quantity = defaultQty;
+                  cartItem.savedForLater = true;
+                  movedMessageArray.push({ //Add to message about moved items
+                    name: name1,
+                    color: color1,
+                    size: size1,
+                    sizeCategory: sizeCategory1,
+                    oldQty: userQuantity,
+                    newQty: defaultQty
+                  })
+                } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
+                  cartItem.quantity = defaultQty;
+                  qtyMessageArray.push({ //Add to message about reduced quantities
+                    name: name1,
+                    color: color1,
+                    size: size1,
+                    sizeCategory: sizeCategory1,
+                    oldQty: userQuantity,
+                    newQty: defaultQty
+                  })
                 }
               }
             }
+            // Products with sizes - harder case
 
             // if(hasSizes === false){
             //   // defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
@@ -132,7 +135,11 @@ const CartScreen = ({ history }) => {
           // }
           console.log(`updated cart, not yet saved`)
           console.log(newUpdatedCart)
-        }
+        } //End of the for loop thru cart and cart details
+        haveUpdatedQtysPrices.current = true;
+        console.log(qtyMessageArray);
+        // dispatch(getCartProductDetails({ arrayOfProductIDs }));
+        dispatch(addCartQtyMessage(qtyMessageArray));
       }
 
 
@@ -151,7 +158,6 @@ const CartScreen = ({ history }) => {
       // console.log(savedForLaterItems)
       // setFilteredCart(filteredCartItems);
       // setSavedForLater(savedForLaterItems);
-      haveUpdatedQtysPrices.current = true;
     } else {
       // console.log('the user does not have a wishlist');
     }
