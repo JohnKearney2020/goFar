@@ -14,7 +14,7 @@ import Message from '../Message';
 
 import './CartRow.css';
 
-const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartMovedMessage, setCartMovedMessage }) => {
+const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image, dateAdded, index, savedForLater, cartMovedMessage, setCartMovedMessage }) => {
   // console.log('type of setCartMovedMessage')
   // console.log(typeof setCartMovedMessage)
 

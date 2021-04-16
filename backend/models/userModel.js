@@ -70,6 +70,10 @@ const cartSchema = mongoose.Schema({
   savedForLater: {
     type: Boolean,
     required: false
+  },
+  createdAt: {
+    type: Date,
+    immutable: true
   }
 }, {
   timestamps: true

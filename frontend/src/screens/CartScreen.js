@@ -13,6 +13,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
 // import CartRow from '../components/CartScreen/CartRow';
+import CartRow2 from '../components/CartScreen/CartRow2';
 import CartMessage from '../components/CartScreen/CartMessage';
 
 const CartScreen = ({ history }) => {
@@ -38,8 +39,6 @@ const CartScreen = ({ history }) => {
   // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
-  // const [cartQtyMessage, setCartQtyMessage] = useState([]);
-  // const [cartMovedMessage, setCartMovedMessage] = useState([]);
 
   useEffect(() => {
     //============================================================================================================
@@ -57,11 +56,8 @@ const CartScreen = ({ history }) => {
     //============================================================================================================
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
-    // if(haveUpdatedQtysPrices.current === false && haveFetchedCartData.current === true){
     if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
       console.log('in update qtys and prices part of cart screen useEffect')
-      console.log('cartProducts:')
-      console.log(cartProducts)
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
@@ -70,10 +66,6 @@ const CartScreen = ({ history }) => {
       for(let eachItem of newUpdatedCart){
         delete eachItem.updatedAt;
       }
-      console.log('cart after deleting updatedAt key:')
-      console.log(newUpdatedCart);
-      // let copyOfCartDetails = cloneDeep(cartProducts);
-      let madeChanges = false; //Keep track of if we need to make changes to the cart or not
       // Loop through the user's cart
       for(let cartItem of newUpdatedCart){
         let { productID: id1, //deconstruct the item object from the cart
@@ -87,7 +79,6 @@ const CartScreen = ({ history }) => {
           savedForLater,
           createdAt
         } = cartItem;
-          console.log(`name1: ${name1}, quantity: ${userQuantity}, color1: ${color1}, size1: ${size1}, sizeCategory1: ${sizeCategory1} `)
           // Loop through the detailed cart items and find a match
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
@@ -137,17 +128,14 @@ const CartScreen = ({ history }) => {
                 // Find that size category's default price.
                 let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
                 //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
-                console.log(`problematic color?: ${color1}`)
                 let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
-                console.log('levelTwo:')
-                console.log(levelTwo)
                 //See if that color is on sale
                 let colorSalePrice = levelTwo.colorSalePrice;
                 //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
                 let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
-                // console.log(levelThree);
                 let qtyInStock = levelThree.qty;
-                console.log(`qtyInStock: ${qtyInStock}`)
+                // Update the price
+                colorSalePrice !== 0 ? cartItem.price = colorSalePrice : cartItem.price = sizeCatDefaultPrice;
                 //Update the qty if needed
                 if(qtyInStock === 0){ //If the item is now out of stock
                   if(userQuantity !== 0){
@@ -176,20 +164,8 @@ const CartScreen = ({ history }) => {
               }
             } //End of the INNER for loop thru cart and cart details
           }
-        // haveUpdatedQtysPrices.current = true;
-        // console.log(`updated cart, not yet saved`)
-        // console.log(newUpdatedCart)
-        // // console.log(qtyMessageArray);
-        // // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-        // if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
-        // if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-
       } //End of the OUTER for loop thru cart and cart details
 
-      console.log('original cart:')
-      console.log(cart)
-      console.log(`updated cart, not yet saved`)
-      console.log(newUpdatedCart)
       if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
       if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
       //Update the cart in our Database
@@ -211,6 +187,7 @@ const CartScreen = ({ history }) => {
           });
           localStorage.setItem('userInfo', JSON.stringify(data));
           console.log('cart updated successfully')
+          haveUpdatedQtysPrices.current = true;
         } catch (error) {
           console.log('there was an error updating the cart with up to date values')
           console.log(error)
@@ -218,64 +195,29 @@ const CartScreen = ({ history }) => {
         }
       }
 
-      updateOurCart(newUpdatedCart);
-      haveUpdatedQtysPrices.current = true;
-
-
-      // /api/users/cart/updatewholecart
-      // const { data } = await axios.put('/api/users/cart/updatewholecart')
-
-
-      //Seperate the cart items 
-      // const filteredCartItems = []; //will hold cart items not saved for later
-      // const savedForLaterItems = []; //will hold saved for later items
-      // cart.forEach(cartItem => {
-      //   cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
-      // });
-      // console.log(`Filtered Cart Items:`)
-      // console.log(filteredCartItems)
-      // console.log(`Saved For Later Cart Items:`)
-      // console.log(savedForLaterItems)
-      // setFilteredCart(filteredCartItems);
-      // setSavedForLater(savedForLaterItems);
-    } else {
-      // console.log('the user does not have a wishlist');
+      updateOurCart(newUpdatedCart); //Function call for updating cart in our database
     }
 
-    // if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === true){
-    // if(haveUpdatedQtysPrices.current === true){
-    //   console.log(`updated cart, not yet saved`)
-    //   console.log(newUpdatedCart)
-    //   // console.log(qtyMessageArray);
-    //   // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-    //   if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
-    //   if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-    // }
-
-    //Next, loop through the cart and separate cart items from saved for later items
-    if(haveUpdatedQtysPrices.current = true && haveSeparatedTheCart.current === false){
+    //============================================================================================================
+    //            Next, loop through the cart and separate cart items from saved for later items
+    //============================================================================================================
+    if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
       console.log('in separation part of cartScreen useEffect')
       //Seperate the cart items 
       const filteredCartItems = []; //will hold cart items not saved for later
       const savedForLaterItems = []; //will hold saved for later items
       cart.forEach(cartItem => {
+        console.log('cart item:')
+        console.log(cartItem)
         cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
       });
-      console.log(`Filtered Cart Items:`)
-      console.log(filteredCartItems)
-      console.log(`Saved For Later Cart Items:`)
+      console.log('savedForLaterItems:')
       console.log(savedForLaterItems)
       setFilteredCart(filteredCartItems);
       setSavedForLater(savedForLaterItems);
       haveSeparatedTheCart.current = true;
     }
 
-
-
-    return () => {
-      // haveUpdatedQtysPrices.current = false;
-      // haveFetchedCartData.current = false;
-    }
   }, [userInfo, dispatch, cart, cartProducts]);
 
   //This should clear our qty and moved messages and cart product details once users navigate away from the cart
@@ -293,7 +235,6 @@ const CartScreen = ({ history }) => {
         {cart.length === 0 && <Message variant='info'>Your cart is empty.</Message>}
         {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage} outOfStock={false}/>}
         {cartMovedMessage.length > 0 && <CartMessage variant='danger' itemsChanged={cartMovedMessage} outOfStock={true}/>}
-        {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
           <Row> {/* Cart Items */}
             <div id="cartQtyMessage"></div>
             <Col className='' md={8}> {/* Left Side of Screen */}
@@ -326,25 +267,22 @@ const CartScreen = ({ history }) => {
                 {/*===================*/}
                 {/* Items in Cart */}
                 {/*===================*/}
-                {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {/* {filteredCart.map((eachProduct, idx) => (
-                  <CartRow key={idx}
+                {/* productID, name, color, size, sizeCategory, price, qty, image, savedForLater */}
+                {filteredCart.map((eachProduct, idx) => (
+                  <CartRow2 key={idx}
                     productID={eachProduct.productID}
-                    productName={eachProduct.name}
+                    name={eachProduct.name}
                     color={eachProduct.color}
                     size={eachProduct.size}
                     sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
                     qty={eachProduct.quantity}
-                    dateAdded={eachProduct.createdAt}
-                    productImage={eachProduct.image}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
-                    // cartQtyMessage={cartQtyMessage}
-                    // setCartQtyMessage={setCartQtyMessage}
-                    cartMovedMessage={cartMovedMessage} 
-                    setCartMovedMessage={setCartMovedMessage}
                   />
-                ))} */}
+                ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* =================================================================================== */}
@@ -425,22 +363,21 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {/* {savedForLater.map((eachProduct, idx) => (
-                  <CartRow key={idx}
+                {savedForLater.map((eachProduct, idx) => (
+                  <CartRow2 key={idx}
                     productID={eachProduct.productID}
-                    productName={eachProduct.name}
+                    name={eachProduct.name}
                     color={eachProduct.color}
                     size={eachProduct.size}
                     sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
                     qty={eachProduct.quantity}
-                    dateAdded={eachProduct.createdAt}
-                    productImage={eachProduct.image}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
-                    // cartQtyMessage={cartQtyMessage}
-                    // setCartQtyMessage={setCartQtyMessage}
                   />
-                ))} */}
+                ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* Right Side of Screen */}

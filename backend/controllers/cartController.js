@@ -198,10 +198,6 @@ const updateWholeCart = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   // const user = await User.findById(req.body.userID);
   if(user) {
-    console.log('in the updateWholeCart controller function - Back end')
-    console.log(`req.body.cart:`)
-    console.log(req.body.cart)
-    // for(let eachItem of user.cart)
     user.cart = req.body.cart || user.cart;
     //Update the user's info
     const updatedUser = await user.save();
