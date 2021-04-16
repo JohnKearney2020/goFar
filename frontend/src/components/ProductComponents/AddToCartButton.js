@@ -10,7 +10,7 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import Message from '../Message';
 import './AddToCartButton.css';
 
-const AddToCartButton = ({ productID, productName, color, quantity, qtyInStock, size, sizeCategory, primaryImageForColor }) => {
+const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, size, sizeCategory, primaryImageForColor }) => {
   const dispatch = useDispatch();
   // Get the user's cart from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -105,10 +105,11 @@ const AddToCartButton = ({ productID, productName, color, quantity, qtyInStock, 
       const { data } = await axios.post('/api/users/cart/cartitem', {
         productID, 
         name: productName,
-        color,
         quantity: cartQty,
+        color,
         size,
-        sizeCategory, 
+        sizeCategory,
+        price: '',
         image: primaryImageForColor,
         savedForLater: false //user's can't save for later from the product page
       }, config);

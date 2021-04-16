@@ -335,8 +335,8 @@ const ProductScreen = ({ match }) => {
                       <AddToCartButton 
                         productID={product._id} 
                         productName={product.name} 
-                        color={selectedColor}
                         quantity={qtyForCart}
+                        color={selectedColor}
                         qtyInStock={qtyInStock}
                         size={selectedSize}
                         sizeCategory={selectedSizeCategory}
