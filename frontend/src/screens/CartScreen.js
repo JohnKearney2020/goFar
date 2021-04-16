@@ -3,8 +3,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
-import { getCartProductDetails, addCartQtyMessage } from '../actions/cartActions';
-import { CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
+import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
+import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -18,19 +18,24 @@ const CartScreen = ({ history }) => {
   const haveFetchedCartData = useRef(false);
   const haveUpdatedQtysPrices = useRef(false);
 
+  // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
-
-  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
-  const { cartQtyMessage } = cartQtyChanges;
 
   const productsFromCart = useSelector(state => state.cartProductDetails);
   const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
 
+  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
+  const { cartQtyMessage } = cartQtyChanges;
+
+  const cartMovedChanges = useSelector(state => state.cartMovedChanges);
+  const { cartMovedMessage } = cartMovedChanges;
+
+  // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
   // const [cartQtyMessage, setCartQtyMessage] = useState([]);
-  const [cartMovedMessage, setCartMovedMessage] = useState([]);
+  // const [cartMovedMessage, setCartMovedMessage] = useState([]);
 
   useEffect(() => {
     //============================================================================================================
@@ -85,7 +90,7 @@ const CartScreen = ({ history }) => {
                 if(defaultQty === 0){ //If the item is now out of stock
                   cartItem.quantity = defaultQty;
                   cartItem.savedForLater = true;
-                  movedMessageArray.push({ //Add to message about moved items
+                  movedMessageArray.push({ //Add to message for moved items
                     name: name1,
                     color: color1,
                     size: size1,
@@ -95,7 +100,7 @@ const CartScreen = ({ history }) => {
                   })
                 } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
                   cartItem.quantity = defaultQty;
-                  qtyMessageArray.push({ //Add to message about reduced quantities
+                  qtyMessageArray.push({ //Add to message for reduced quantities
                     name: name1,
                     color: color1,
                     size: size1,
@@ -138,9 +143,11 @@ const CartScreen = ({ history }) => {
           console.log(newUpdatedCart)
         } //End of the for loop thru cart and cart details
         haveUpdatedQtysPrices.current = true;
-        console.log(qtyMessageArray);
+        // console.log(qtyMessageArray);
         // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-        dispatch(addCartQtyMessage(qtyMessageArray));
+        if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+        if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
+        ;
       }
 
 
@@ -170,7 +177,8 @@ const CartScreen = ({ history }) => {
 
   //This should clear our qty and moved messages once users navigate away from the cart
   useLayoutEffect(() => () => {
-    dispatch({type: CART_QTY_MESSAGE_RESET})
+    dispatch({type: CART_QTY_MESSAGE_RESET});
+    dispatch({type: CART_MOVED_MESSAGE_RESET});
   }, [dispatch]);
 
   return (

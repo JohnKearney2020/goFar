@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL, CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
+import { CART_MOVED_MESSAGE_REQUEST, CART_MOVED_MESSAGE_SUCCESS, CART_MOVED_MESSAGE_FAIL, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 
 
@@ -50,6 +51,27 @@ export const addCartQtyMessage = (arrayOfChangedItems) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CART_QTY_MESSAGE_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+// The get state parameter is needed b/c we will need a JWT from the state for this
+export const addCartMovedMessage = (arrayOfMovedItems) => async (dispatch) => {
+  // const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
+  console.log('in moved message action')
+  console.log(arrayOfMovedItems)
+  try {
+    dispatch({
+      type: CART_MOVED_MESSAGE_REQUEST
+    });
+    dispatch({
+      type: CART_MOVED_MESSAGE_SUCCESS,
+      payload: arrayOfMovedItems
+    })
+  } catch (error) {
+    dispatch({
+      type: CART_MOVED_MESSAGE_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }
