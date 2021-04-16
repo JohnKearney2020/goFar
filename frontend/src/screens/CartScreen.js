@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
 import { getCartProductDetails, addCartQtyMessage } from '../actions/cartActions';
+import { CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -166,6 +167,11 @@ const CartScreen = ({ history }) => {
       // haveFetchedCartData.current = false;
     }
   }, [userInfo, dispatch, cart, cartProducts]);
+
+  //This should clear our qty and moved messages once users navigate away from the cart
+  useLayoutEffect(() => () => {
+    dispatch({type: CART_QTY_MESSAGE_RESET})
+  }, [dispatch]);
 
   return (
     <>
