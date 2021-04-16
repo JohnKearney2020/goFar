@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
+import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -17,6 +20,7 @@ const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
   const haveFetchedCartData = useRef(false);
   const haveUpdatedQtysPrices = useRef(false);
+  const haveSeparatedTheCart = useRef(false);
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -61,6 +65,13 @@ const CartScreen = ({ history }) => {
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
+      //Delete the updatedAt key from the cart so that when we update and save the whole cart the backend will automatically put in
+      //a new, updated key called updatedAt that contains the correct time/date the cart items were last updated
+      for(let eachItem of newUpdatedCart){
+        delete eachItem.updatedAt;
+      }
+      console.log('cart after deleting updatedAt key:')
+      console.log(newUpdatedCart);
       // let copyOfCartDetails = cloneDeep(cartProducts);
       let madeChanges = false; //Keep track of if we need to make changes to the cart or not
       // Loop through the user's cart
@@ -76,35 +87,35 @@ const CartScreen = ({ history }) => {
           savedForLater,
           createdAt
         } = cartItem;
+          console.log(`name1: ${name1}, quantity: ${userQuantity}, color1: ${color1}, size1: ${size1}, sizeCategory1: ${sizeCategory1} `)
           // Loop through the detailed cart items and find a match
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
             const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
-            // const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, hasSizes } = upToDateItem;
-            // let sizes = upToDateItem.sizes;
-            // console.log('sizes after object deconstruction:')
-            // console.log(sizes)
+
             // Drill down into the detailed product object to look for a match
-            //====================================================================================================================================================
-            //                                                  Find the current price and qty available
-            //====================================================================================================================================================
-            // Products without sizes - easiest case
-            if(hasSizes === false){
-              if(id1 === id2){ //If the product ID's match. Site does not have functionality for items with one size to have different prices for different colors.
+            if(id1 === id2){//If the product ID's match
+              //=====================================================================================================================
+              //                                                  Find the current price and qty available
+              //=====================================================================================================================
+              // Products without sizes - easiest case
+              if(hasSizes === false){
                 //Update the price
                 defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
                 //Update the qty if needed
                 if(defaultQty === 0){ //If the item is now out of stock
-                  cartItem.quantity = defaultQty;
+                  if(userQuantity !== 0){
+                    movedMessageArray.push({ //Add to message for moved items
+                      name: name1,
+                      color: color1,
+                      size: size1,
+                      sizeCategory: sizeCategory1,
+                      oldQty: userQuantity,
+                      newQty: defaultQty
+                    })
+                    cartItem.quantity = defaultQty;
+                  }
                   cartItem.savedForLater = true;
-                  movedMessageArray.push({ //Add to message for moved items
-                    name: name1,
-                    color: color1,
-                    size: size1,
-                    sizeCategory: sizeCategory1,
-                    oldQty: userQuantity,
-                    newQty: defaultQty
-                  })
                 } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
                   cartItem.quantity = defaultQty;
                   qtyMessageArray.push({ //Add to message for reduced quantities
@@ -117,48 +128,54 @@ const CartScreen = ({ history }) => {
                   })
                 }
               }
-            }
-            // Products with sizes - hardest case
-            if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
-              //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
-              let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
-               // Find that size category's default price.
-              let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
-              //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
-              let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
-              //See if that color is on sale
-              let colorSalePrice = levelTwo.colorSalePrice;
-              //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
-              let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
-              // console.log(levelThree);
-              let qtyInStock = levelThree.qty;
-              console.log(`qtyInStock: ${qtyInStock}`)
-              //Update the qty if needed
-              if(qtyInStock === 0){ //If the item is now out of stock
-                cartItem.quantity = qtyInStock;
-                cartItem.savedForLater = true;
-                movedMessageArray.push({ //Add to message for moved items
-                  name: name1,
-                  color: color1,
-                  size: size1,
-                  sizeCategory: sizeCategory1,
-                  oldQty: userQuantity,
-                  newQty: qtyInStock
-                })
-              } else if(userQuantity > qtyInStock) {  //
-                cartItem.quantity = qtyInStock;
-                qtyMessageArray.push({ //Add to message for qty changed items
-                  name: name1,
-                  color: color1,
-                  size: size1,
-                  sizeCategory: sizeCategory1,
-                  oldQty: userQuantity,
-                  newQty: qtyInStock
-                })
+              //=====================================================================================================================
+              // Products with sizes - hardest case
+              //=====================================================================================================================
+              if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
+                //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
+                let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
+                // Find that size category's default price.
+                let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
+                //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
+                console.log(`problematic color?: ${color1}`)
+                let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
+                console.log('levelTwo:')
+                console.log(levelTwo)
+                //See if that color is on sale
+                let colorSalePrice = levelTwo.colorSalePrice;
+                //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
+                let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
+                // console.log(levelThree);
+                let qtyInStock = levelThree.qty;
+                console.log(`qtyInStock: ${qtyInStock}`)
+                //Update the qty if needed
+                if(qtyInStock === 0){ //If the item is now out of stock
+                  if(userQuantity !== 0){
+                    movedMessageArray.push({ //Add to message for moved items
+                      name: name1,
+                      color: color1,
+                      size: size1,
+                      sizeCategory: sizeCategory1,
+                      oldQty: userQuantity,
+                      newQty: qtyInStock
+                    })
+                    cartItem.quantity = qtyInStock;
+                  }
+                  cartItem.savedForLater = true;
+                } else if(userQuantity > qtyInStock) {  //
+                  cartItem.quantity = qtyInStock;
+                  qtyMessageArray.push({ //Add to message for qty changed items
+                    name: name1,
+                    color: color1,
+                    size: size1,
+                    sizeCategory: sizeCategory1,
+                    oldQty: userQuantity,
+                    newQty: qtyInStock
+                  })
+                }
               }
-            }
-        } //End of the INNER for loop thru cart and cart details
-
+            } //End of the INNER for loop thru cart and cart details
+          }
         // haveUpdatedQtysPrices.current = true;
         // console.log(`updated cart, not yet saved`)
         // console.log(newUpdatedCart)
@@ -169,11 +186,44 @@ const CartScreen = ({ history }) => {
 
       } //End of the OUTER for loop thru cart and cart details
 
-      haveUpdatedQtysPrices.current = true;
-      // console.log(`updated cart, not yet saved`)
-      // console.log(newUpdatedCart)
+      console.log('original cart:')
+      console.log(cart)
+      console.log(`updated cart, not yet saved`)
+      console.log(newUpdatedCart)
       if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
       if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
+      //Update the cart in our Database
+      const updateOurCart = async (cart) => {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        }
+        try {
+          console.log('trying to update cart - Front End')
+          // dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
+          const { data } = await axios.put('/api/users/cart/updatewholecart', { cart }, config);
+          console.log(data)
+          dispatch({
+            type: USER_LOGIN_SUCCESS,
+            payload: data
+          });
+          localStorage.setItem('userInfo', JSON.stringify(data));
+          console.log('cart updated successfully')
+        } catch (error) {
+          console.log('there was an error updating the cart with up to date values')
+          console.log(error)
+          toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 3500 });
+        }
+      }
+
+      updateOurCart(newUpdatedCart);
+      haveUpdatedQtysPrices.current = true;
+
+
+      // /api/users/cart/updatewholecart
+      // const { data } = await axios.put('/api/users/cart/updatewholecart')
 
 
       //Seperate the cart items 
@@ -202,6 +252,23 @@ const CartScreen = ({ history }) => {
     //   if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
     // }
 
+    //Next, loop through the cart and separate cart items from saved for later items
+    if(haveUpdatedQtysPrices.current = true && haveSeparatedTheCart.current === false){
+      console.log('in separation part of cartScreen useEffect')
+      //Seperate the cart items 
+      const filteredCartItems = []; //will hold cart items not saved for later
+      const savedForLaterItems = []; //will hold saved for later items
+      cart.forEach(cartItem => {
+        cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
+      });
+      console.log(`Filtered Cart Items:`)
+      console.log(filteredCartItems)
+      console.log(`Saved For Later Cart Items:`)
+      console.log(savedForLaterItems)
+      setFilteredCart(filteredCartItems);
+      setSavedForLater(savedForLaterItems);
+      haveSeparatedTheCart.current = true;
+    }
 
 
 
