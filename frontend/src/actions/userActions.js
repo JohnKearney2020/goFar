@@ -6,6 +6,9 @@ import { USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from
 import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_LOGOUT } from '../constants/userConstants';
 import { USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL } from '../constants/userConstants';
 import { WISHLIST_PRODUCT_DETAILS_REQUEST, WISHLIST_PRODUCT_DETAILS_SUCCESS, WISHLIST_PRODUCT_DETAILS_FAIL, WISHLIST_PRODUCT_DETAILS_RESET} from '../constants/userConstants';
+import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
+
+
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -42,6 +45,9 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_LOGOUT });
   dispatch({ type: WISHLIST_PRODUCT_DETAILS_RESET });
+  dispatch({ type: CART_QTY_MESSAGE_RESET });
+  dispatch({ type: CART_MOVED_MESSAGE_RESET });
+  dispatch({ type: CART_PRODUCT_DETAILS_RESET });
   toast.info('Log Out Successful!', { position: 'top-right', autoClose: 3500 });
 }
 

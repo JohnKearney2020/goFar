@@ -3,8 +3,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
-import { getCartProductDetails, addCartQtyMessage } from '../actions/cartActions';
-import { CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
+import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
+import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -18,19 +18,24 @@ const CartScreen = ({ history }) => {
   const haveFetchedCartData = useRef(false);
   const haveUpdatedQtysPrices = useRef(false);
 
+  // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
-
-  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
-  const { cartQtyMessage } = cartQtyChanges;
 
   const productsFromCart = useSelector(state => state.cartProductDetails);
   const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
 
+  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
+  const { cartQtyMessage } = cartQtyChanges;
+
+  const cartMovedChanges = useSelector(state => state.cartMovedChanges);
+  const { cartMovedMessage } = cartMovedChanges;
+
+  // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
   // const [cartQtyMessage, setCartQtyMessage] = useState([]);
-  const [cartMovedMessage, setCartMovedMessage] = useState([]);
+  // const [cartMovedMessage, setCartMovedMessage] = useState([]);
 
   useEffect(() => {
     //============================================================================================================
@@ -51,9 +56,12 @@ const CartScreen = ({ history }) => {
     // if(haveUpdatedQtysPrices.current === false && haveFetchedCartData.current === true){
     if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
       console.log('in update qtys and prices part of cart screen useEffect')
+      console.log('cartProducts:')
+      console.log(cartProducts)
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
+      // let copyOfCartDetails = cloneDeep(cartProducts);
       let madeChanges = false; //Keep track of if we need to make changes to the cart or not
       // Loop through the user's cart
       for(let cartItem of newUpdatedCart){
@@ -72,6 +80,10 @@ const CartScreen = ({ history }) => {
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
             const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
+            // const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, hasSizes } = upToDateItem;
+            // let sizes = upToDateItem.sizes;
+            // console.log('sizes after object deconstruction:')
+            // console.log(sizes)
             // Drill down into the detailed product object to look for a match
             //====================================================================================================================================================
             //                                                  Find the current price and qty available
@@ -85,7 +97,7 @@ const CartScreen = ({ history }) => {
                 if(defaultQty === 0){ //If the item is now out of stock
                   cartItem.quantity = defaultQty;
                   cartItem.savedForLater = true;
-                  movedMessageArray.push({ //Add to message about moved items
+                  movedMessageArray.push({ //Add to message for moved items
                     name: name1,
                     color: color1,
                     size: size1,
@@ -95,7 +107,7 @@ const CartScreen = ({ history }) => {
                   })
                 } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
                   cartItem.quantity = defaultQty;
-                  qtyMessageArray.push({ //Add to message about reduced quantities
+                  qtyMessageArray.push({ //Add to message for reduced quantities
                     name: name1,
                     color: color1,
                     size: size1,
@@ -106,45 +118,62 @@ const CartScreen = ({ history }) => {
                 }
               }
             }
-            // Products with sizes - harder case
+            // Products with sizes - hardest case
+            if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
+              //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
+              let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
+               // Find that size category's default price.
+              let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
+              //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
+              let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
+              //See if that color is on sale
+              let colorSalePrice = levelTwo.colorSalePrice;
+              //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
+              let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
+              // console.log(levelThree);
+              let qtyInStock = levelThree.qty;
+              console.log(`qtyInStock: ${qtyInStock}`)
+              //Update the qty if needed
+              if(qtyInStock === 0){ //If the item is now out of stock
+                cartItem.quantity = qtyInStock;
+                cartItem.savedForLater = true;
+                movedMessageArray.push({ //Add to message for moved items
+                  name: name1,
+                  color: color1,
+                  size: size1,
+                  sizeCategory: sizeCategory1,
+                  oldQty: userQuantity,
+                  newQty: qtyInStock
+                })
+              } else if(userQuantity > qtyInStock) {  //
+                cartItem.quantity = qtyInStock;
+                qtyMessageArray.push({ //Add to message for qty changed items
+                  name: name1,
+                  color: color1,
+                  size: size1,
+                  sizeCategory: sizeCategory1,
+                  oldQty: userQuantity,
+                  newQty: qtyInStock
+                })
+              }
+            }
+        } //End of the INNER for loop thru cart and cart details
 
-            // if(hasSizes === false){
-            //   // defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
-            //   defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
-            //   if(defaultQty === 0){ // If none are in stock, disable the cart button and qty input and display an 'out of stock' message to the user
-            //     setDisableCart(true);
-            //     setQtyForTable(0);
-            //     setQtyForCart(0);
-            //   }
-            //   // It's in stock - Check to see how the qty the user wants compares to the qty available
-            //   if(qty < defaultQty){//The user wants less than are available
-            //     setQtyForTable(qty); 
-            //   } else { //If the user wants more than are available
-            //     setQtyForTable(defaultQty);
-            //     console.log(`user wanted ${qty} of ${name}, but we only have ${defaultQty} in stock`)
-            //     // setTheArray(oldArray => [...oldArray, newElement]);
-            //     setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
-            //       name,
-            //       color,
-            //       size,
-            //       sizeCategory,
-            //       originalQty: qty,
-            //       newQty: defaultQty
-            //     }])
-            //   }
-            // }
-          // }
-          console.log(`updated cart, not yet saved`)
-          console.log(newUpdatedCart)
-        } //End of the for loop thru cart and cart details
-        haveUpdatedQtysPrices.current = true;
-        console.log(qtyMessageArray);
-        // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-        dispatch(addCartQtyMessage(qtyMessageArray));
-      }
+        // haveUpdatedQtysPrices.current = true;
+        // console.log(`updated cart, not yet saved`)
+        // console.log(newUpdatedCart)
+        // // console.log(qtyMessageArray);
+        // // dispatch(getCartProductDetails({ arrayOfProductIDs }));
+        // if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+        // if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
 
+      } //End of the OUTER for loop thru cart and cart details
 
-
+      haveUpdatedQtysPrices.current = true;
+      // console.log(`updated cart, not yet saved`)
+      // console.log(newUpdatedCart)
+      if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+      if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
 
 
       //Seperate the cart items 
@@ -162,15 +191,31 @@ const CartScreen = ({ history }) => {
     } else {
       // console.log('the user does not have a wishlist');
     }
+
+    // if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === true){
+    // if(haveUpdatedQtysPrices.current === true){
+    //   console.log(`updated cart, not yet saved`)
+    //   console.log(newUpdatedCart)
+    //   // console.log(qtyMessageArray);
+    //   // dispatch(getCartProductDetails({ arrayOfProductIDs }));
+    //   if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+    //   if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
+    // }
+
+
+
+
     return () => {
       // haveUpdatedQtysPrices.current = false;
       // haveFetchedCartData.current = false;
     }
   }, [userInfo, dispatch, cart, cartProducts]);
 
-  //This should clear our qty and moved messages once users navigate away from the cart
+  //This should clear our qty and moved messages and cart product details once users navigate away from the cart
   useLayoutEffect(() => () => {
-    dispatch({type: CART_QTY_MESSAGE_RESET})
+    dispatch({type: CART_QTY_MESSAGE_RESET});
+    dispatch({type: CART_MOVED_MESSAGE_RESET});
+    dispatch({type: CART_PRODUCT_DETAILS_RESET});
   }, [dispatch]);
 
   return (
