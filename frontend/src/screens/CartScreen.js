@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
-import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
+import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -139,19 +139,24 @@ const CartScreen = ({ history }) => {
             //   }
             // }
           // }
-          console.log(`updated cart, not yet saved`)
-          console.log(newUpdatedCart)
-        } //End of the for loop thru cart and cart details
-        haveUpdatedQtysPrices.current = true;
-        // console.log(qtyMessageArray);
-        // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-        if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
-        if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-        ;
-      }
 
+        } //End of the INNER for loop thru cart and cart details
 
+        // haveUpdatedQtysPrices.current = true;
+        // console.log(`updated cart, not yet saved`)
+        // console.log(newUpdatedCart)
+        // // console.log(qtyMessageArray);
+        // // dispatch(getCartProductDetails({ arrayOfProductIDs }));
+        // if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+        // if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
 
+      } //End of the OUTER for loop thru cart and cart details
+
+      haveUpdatedQtysPrices.current = true;
+      console.log(`updated cart, not yet saved`)
+      console.log(newUpdatedCart)
+      if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+      if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
 
 
       //Seperate the cart items 
@@ -169,6 +174,20 @@ const CartScreen = ({ history }) => {
     } else {
       // console.log('the user does not have a wishlist');
     }
+
+    // if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === true){
+    // if(haveUpdatedQtysPrices.current === true){
+    //   console.log(`updated cart, not yet saved`)
+    //   console.log(newUpdatedCart)
+    //   // console.log(qtyMessageArray);
+    //   // dispatch(getCartProductDetails({ arrayOfProductIDs }));
+    //   if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
+    //   if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
+    // }
+
+
+
+
     return () => {
       // haveUpdatedQtysPrices.current = false;
       // haveFetchedCartData.current = false;
@@ -179,6 +198,7 @@ const CartScreen = ({ history }) => {
   useLayoutEffect(() => () => {
     dispatch({type: CART_QTY_MESSAGE_RESET});
     dispatch({type: CART_MOVED_MESSAGE_RESET});
+    dispatch({type: CART_PRODUCT_DETAILS_RESET});
   }, [dispatch]);
 
   return (

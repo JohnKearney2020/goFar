@@ -38,8 +38,8 @@ export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, get
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const addCartQtyMessage = (arrayOfChangedItems) => async (dispatch) => {
   // const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
-  console.log('in qty message action')
-  console.log(arrayOfChangedItems)
+  // console.log('in qty message action')
+  // console.log(arrayOfChangedItems)
   try {
     dispatch({
       type: CART_QTY_MESSAGE_REQUEST
@@ -59,8 +59,8 @@ export const addCartQtyMessage = (arrayOfChangedItems) => async (dispatch) => {
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const addCartMovedMessage = (arrayOfMovedItems) => async (dispatch) => {
   // const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
-  console.log('in moved message action')
-  console.log(arrayOfMovedItems)
+  // console.log('in moved message action')
+  // console.log(arrayOfMovedItems)
   try {
     dispatch({
       type: CART_MOVED_MESSAGE_REQUEST
