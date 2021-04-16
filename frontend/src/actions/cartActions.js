@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
+import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL, CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
+import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
@@ -27,6 +29,27 @@ export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, get
   } catch (error) {
     dispatch({
       type: CART_PRODUCT_DETAILS_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+// The get state parameter is needed b/c we will need a JWT from the state for this
+export const addCartQtyMessage = (arrayOfChangedItems) => async (dispatch) => {
+  // const {productID, productName, color, qty, size, sizeCategory, price, savedForLater} = arrayOfChangedItems;
+  console.log('in qty message action')
+  console.log(arrayOfChangedItems)
+  try {
+    dispatch({
+      type: CART_QTY_MESSAGE_REQUEST
+    });
+    dispatch({
+      type: CART_QTY_MESSAGE_SUCCESS,
+      payload: arrayOfChangedItems
+    })
+  } catch (error) {
+    dispatch({
+      type: CART_QTY_MESSAGE_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }

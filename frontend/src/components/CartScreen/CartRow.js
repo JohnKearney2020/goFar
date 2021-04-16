@@ -14,9 +14,12 @@ import Message from '../Message';
 
 import './CartRow.css';
 
-const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartQtyMessage, setCartQtyMessage, cartMovedMessage, setCartMovedMessage }) => {
-  console.log('type of setCartMovedMessage')
-  console.log(typeof setCartMovedMessage)
+const CartRow = ({ productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index, savedForLater, cartMovedMessage, setCartMovedMessage }) => {
+  // console.log('type of setCartMovedMessage')
+  // console.log(typeof setCartMovedMessage)
+
+  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
+  const { cartQtyMessage } = cartQtyChanges;
 
   const dispatch = useDispatch();
 
