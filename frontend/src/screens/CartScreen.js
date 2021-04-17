@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
+import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
 // import CartRow from '../components/CartScreen/CartRow';
+import CartRow2 from '../components/CartScreen/CartRow2';
 import CartMessage from '../components/CartScreen/CartMessage';
 
 const CartScreen = ({ history }) => {
@@ -17,6 +21,9 @@ const CartScreen = ({ history }) => {
   const dispatch = useDispatch();
   const haveFetchedCartData = useRef(false);
   const haveUpdatedQtysPrices = useRef(false);
+  const haveSeparatedTheCart = useRef(false);
+  const fullyLoadedScreenOnceAlready = useRef(false);
+  // const redoCartLogic = useRef(false);
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -34,35 +41,35 @@ const CartScreen = ({ history }) => {
   // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
-  // const [cartQtyMessage, setCartQtyMessage] = useState([]);
-  // const [cartMovedMessage, setCartMovedMessage] = useState([]);
+  const [redoCartLogic, setRedoCartLogic] = useState(false);
 
   useEffect(() => {
+    console.log('in cart screen useEffect')
     //============================================================================================================
     // First, get the detailed data with current prices and quantities for items in the cart
     //============================================================================================================
     if(cart.length > 0 && haveFetchedCartData.current === false){
+    // if(cart.length > 0 && cartProducts.length === 0){
+    // if(cart.length > 0 ){
       console.log('in fetch cart details part of cart screen useEffect')
       let arrayOfProductIDs = cart.map((eachItem) => {
         return eachItem.productID;
       })
       dispatch(getCartProductDetails({ arrayOfProductIDs }));
       haveFetchedCartData.current = true;
-    }
-
     //============================================================================================================
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
-    // if(haveUpdatedQtysPrices.current === false && haveFetchedCartData.current === true){
-    if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
+    } else if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
       console.log('in update qtys and prices part of cart screen useEffect')
-      console.log('cartProducts:')
-      console.log(cartProducts)
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
-      // let copyOfCartDetails = cloneDeep(cartProducts);
-      let madeChanges = false; //Keep track of if we need to make changes to the cart or not
+      //Delete the updatedAt key from the cart so that when we update and save the whole cart the backend will automatically put in
+      //a new, updated key called updatedAt that contains the correct time/date the cart items were last updated
+      for(let eachItem of newUpdatedCart){
+        delete eachItem.updatedAt;
+      }
       // Loop through the user's cart
       for(let cartItem of newUpdatedCart){
         let { productID: id1, //deconstruct the item object from the cart
@@ -80,31 +87,30 @@ const CartScreen = ({ history }) => {
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
             const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
-            // const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, hasSizes } = upToDateItem;
-            // let sizes = upToDateItem.sizes;
-            // console.log('sizes after object deconstruction:')
-            // console.log(sizes)
+
             // Drill down into the detailed product object to look for a match
-            //====================================================================================================================================================
-            //                                                  Find the current price and qty available
-            //====================================================================================================================================================
-            // Products without sizes - easiest case
-            if(hasSizes === false){
-              if(id1 === id2){ //If the product ID's match. Site does not have functionality for items with one size to have different prices for different colors.
+            if(id1 === id2){//If the product ID's match
+              //=====================================================================================================================
+              //                                                  Find the current price and qty available
+              //=====================================================================================================================
+              // Products without sizes - easiest case
+              if(hasSizes === false){
                 //Update the price
                 defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
                 //Update the qty if needed
                 if(defaultQty === 0){ //If the item is now out of stock
-                  cartItem.quantity = defaultQty;
+                  if(userQuantity !== 0){
+                    movedMessageArray.push({ //Add to message for moved items
+                      name: name1,
+                      color: color1,
+                      size: size1,
+                      sizeCategory: sizeCategory1,
+                      oldQty: userQuantity,
+                      newQty: defaultQty
+                    })
+                    cartItem.quantity = defaultQty;
+                  }
                   cartItem.savedForLater = true;
-                  movedMessageArray.push({ //Add to message for moved items
-                    name: name1,
-                    color: color1,
-                    size: size1,
-                    sizeCategory: sizeCategory1,
-                    oldQty: userQuantity,
-                    newQty: defaultQty
-                  })
                 } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
                   cartItem.quantity = defaultQty;
                   qtyMessageArray.push({ //Add to message for reduced quantities
@@ -117,99 +123,111 @@ const CartScreen = ({ history }) => {
                   })
                 }
               }
-            }
-            // Products with sizes - hardest case
-            if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
-              //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
-              let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
-               // Find that size category's default price.
-              let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
-              //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
-              let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
-              //See if that color is on sale
-              let colorSalePrice = levelTwo.colorSalePrice;
-              //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
-              let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
-              // console.log(levelThree);
-              let qtyInStock = levelThree.qty;
-              console.log(`qtyInStock: ${qtyInStock}`)
-              //Update the qty if needed
-              if(qtyInStock === 0){ //If the item is now out of stock
-                cartItem.quantity = qtyInStock;
-                cartItem.savedForLater = true;
-                movedMessageArray.push({ //Add to message for moved items
-                  name: name1,
-                  color: color1,
-                  size: size1,
-                  sizeCategory: sizeCategory1,
-                  oldQty: userQuantity,
-                  newQty: qtyInStock
-                })
-              } else if(userQuantity > qtyInStock) {  //
-                cartItem.quantity = qtyInStock;
-                qtyMessageArray.push({ //Add to message for qty changed items
-                  name: name1,
-                  color: color1,
-                  size: size1,
-                  sizeCategory: sizeCategory1,
-                  oldQty: userQuantity,
-                  newQty: qtyInStock
-                })
+              //=====================================================================================================================
+              // Products with sizes - hardest case
+              //=====================================================================================================================
+              if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
+                //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
+                let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
+                // Find that size category's default price.
+                let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
+                //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
+                let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
+                //See if that color is on sale
+                let colorSalePrice = levelTwo.colorSalePrice;
+                //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
+                let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
+                let qtyInStock = levelThree.qty;
+                // Update the price
+                colorSalePrice !== 0 ? cartItem.price = colorSalePrice : cartItem.price = sizeCatDefaultPrice;
+                //Update the qty if needed
+                if(qtyInStock === 0){ //If the item is now out of stock
+                  if(userQuantity !== 0){
+                    movedMessageArray.push({ //Add to message for moved items
+                      name: name1,
+                      color: color1,
+                      size: size1,
+                      sizeCategory: sizeCategory1,
+                      oldQty: userQuantity,
+                      newQty: qtyInStock
+                    })
+                    cartItem.quantity = qtyInStock;
+                  }
+                  cartItem.savedForLater = true;
+                } else if(userQuantity > qtyInStock) {  //
+                  cartItem.quantity = qtyInStock;
+                  qtyMessageArray.push({ //Add to message for qty changed items
+                    name: name1,
+                    color: color1,
+                    size: size1,
+                    sizeCategory: sizeCategory1,
+                    oldQty: userQuantity,
+                    newQty: qtyInStock
+                  })
+                }
               }
-            }
-        } //End of the INNER for loop thru cart and cart details
-
-        // haveUpdatedQtysPrices.current = true;
-        // console.log(`updated cart, not yet saved`)
-        // console.log(newUpdatedCart)
-        // // console.log(qtyMessageArray);
-        // // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-        // if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
-        // if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-
+            } //End of the INNER for loop thru cart and cart details
+          }
       } //End of the OUTER for loop thru cart and cart details
 
-      haveUpdatedQtysPrices.current = true;
-      // console.log(`updated cart, not yet saved`)
-      // console.log(newUpdatedCart)
       if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
       if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-
-
+      //Update the cart in our Database
+      const updateOurCart = async (cart) => {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.token}`
+          }
+        }
+        try {
+          console.log('trying to update cart - Front End')
+          // dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
+          const { data } = await axios.put('/api/users/cart/updatewholecart', { cart }, config);
+          console.log(data)
+          dispatch({
+            type: USER_LOGIN_SUCCESS,
+            payload: data
+          });
+          localStorage.setItem('userInfo', JSON.stringify(data));
+          console.log('cart updated successfully')
+          haveUpdatedQtysPrices.current = true;
+        } catch (error) {
+          console.log('there was an error updating the cart with up to date values')
+          console.log(error)
+          toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 3500 });
+        }
+      }
+      updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
+    //============================================================================================================
+    //            Next, loop through the cart and separate cart items from saved for later items
+    //============================================================================================================      
+    } else if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
+      console.log('in separation part of cartScreen useEffect')
       //Seperate the cart items 
-      // const filteredCartItems = []; //will hold cart items not saved for later
-      // const savedForLaterItems = []; //will hold saved for later items
-      // cart.forEach(cartItem => {
-      //   cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
-      // });
-      // console.log(`Filtered Cart Items:`)
-      // console.log(filteredCartItems)
-      // console.log(`Saved For Later Cart Items:`)
+      const filteredCartItems = []; //will hold cart items not saved for later
+      const savedForLaterItems = []; //will hold saved for later items
+      cart.forEach(cartItem => {
+        // console.log('cart item:')
+        // console.log(cartItem)
+        cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
+      });
+      // console.log('savedForLaterItems:')
       // console.log(savedForLaterItems)
-      // setFilteredCart(filteredCartItems);
-      // setSavedForLater(savedForLaterItems);
+      setFilteredCart(filteredCartItems);
+      setSavedForLater(savedForLaterItems);
+      haveSeparatedTheCart.current = true;
     } else {
-      // console.log('the user does not have a wishlist');
+      //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
+      //ComponentDidUpdate Logic
+      console.log('something updated, redoing cart logic')
+      haveFetchedCartData.current = false;
+      haveUpdatedQtysPrices.current = false;
+      haveSeparatedTheCart.current = false;
+      // redoCartLogic.current = !redoCartLogic.current;
+      setRedoCartLogic(!redoCartLogic);
     }
-
-    // if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === true){
-    // if(haveUpdatedQtysPrices.current === true){
-    //   console.log(`updated cart, not yet saved`)
-    //   console.log(newUpdatedCart)
-    //   // console.log(qtyMessageArray);
-    //   // dispatch(getCartProductDetails({ arrayOfProductIDs }));
-    //   if(qtyMessageArray.length > 0) { dispatch(addCartQtyMessage(qtyMessageArray)) };
-    //   if(movedMessageArray.length > 0) { dispatch(addCartMovedMessage(movedMessageArray)) };
-    // }
-
-
-
-
-    return () => {
-      // haveUpdatedQtysPrices.current = false;
-      // haveFetchedCartData.current = false;
-    }
-  }, [userInfo, dispatch, cart, cartProducts]);
+  }, [userInfo, dispatch, cart, cartProducts, redoCartLogic]);
 
   //This should clear our qty and moved messages and cart product details once users navigate away from the cart
   useLayoutEffect(() => () => {
@@ -226,7 +244,6 @@ const CartScreen = ({ history }) => {
         {cart.length === 0 && <Message variant='info'>Your cart is empty.</Message>}
         {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage} outOfStock={false}/>}
         {cartMovedMessage.length > 0 && <CartMessage variant='danger' itemsChanged={cartMovedMessage} outOfStock={true}/>}
-        {/* {cartQtyMessage && <Message variant='info' style={{ margin: '8rem'}}>{cartQtyMessage}</Message>} */}
           <Row> {/* Cart Items */}
             <div id="cartQtyMessage"></div>
             <Col className='' md={8}> {/* Left Side of Screen */}
@@ -259,25 +276,22 @@ const CartScreen = ({ history }) => {
                 {/*===================*/}
                 {/* Items in Cart */}
                 {/*===================*/}
-                {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {/* {filteredCart.map((eachProduct, idx) => (
-                  <CartRow key={idx}
+                {/* productID, name, color, size, sizeCategory, price, qty, image, savedForLater */}
+                {filteredCart.map((eachProduct, idx) => (
+                  <CartRow2 key={idx}
                     productID={eachProduct.productID}
-                    productName={eachProduct.name}
+                    name={eachProduct.name}
                     color={eachProduct.color}
                     size={eachProduct.size}
                     sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
                     qty={eachProduct.quantity}
-                    dateAdded={eachProduct.createdAt}
-                    productImage={eachProduct.image}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
-                    // cartQtyMessage={cartQtyMessage}
-                    // setCartQtyMessage={setCartQtyMessage}
-                    cartMovedMessage={cartMovedMessage} 
-                    setCartMovedMessage={setCartMovedMessage}
                   />
-                ))} */}
+                ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* =================================================================================== */}
@@ -358,22 +372,21 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {/* {savedForLater.map((eachProduct, idx) => (
-                  <CartRow key={idx}
+                {savedForLater.map((eachProduct, idx) => (
+                  <CartRow2 key={idx}
                     productID={eachProduct.productID}
-                    productName={eachProduct.name}
+                    name={eachProduct.name}
                     color={eachProduct.color}
                     size={eachProduct.size}
                     sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
                     qty={eachProduct.quantity}
-                    dateAdded={eachProduct.createdAt}
-                    productImage={eachProduct.image}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
                     index={idx}
-                    // cartQtyMessage={cartQtyMessage}
-                    // setCartQtyMessage={setCartQtyMessage}
                   />
-                ))} */}
+                ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* Right Side of Screen */}
