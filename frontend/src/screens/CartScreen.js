@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
@@ -44,7 +45,7 @@ const CartScreen = ({ history }) => {
   const [redoCartLogic, setRedoCartLogic] = useState(false);
 
   useEffect(() => {
-    console.log('in cart screen useEffect')
+    // console.log('in cart screen useEffect')
     //============================================================================================================
     // First, get the detailed data with current prices and quantities for items in the cart
     //============================================================================================================
@@ -61,7 +62,7 @@ const CartScreen = ({ history }) => {
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
     } else if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
-      console.log('in update qtys and prices part of cart screen useEffect')
+      // console.log('in update qtys and prices part of cart screen useEffect')
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
@@ -110,7 +111,10 @@ const CartScreen = ({ history }) => {
                     })
                     cartItem.quantity = defaultQty;
                   }
-                  cartItem.savedForLater = true;
+                  if(!cartItem.savedForLater){
+                    cartItem.savedForLater = true;
+                    toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
+                  }
                 } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
                   cartItem.quantity = defaultQty;
                   qtyMessageArray.push({ //Add to message for reduced quantities
@@ -121,6 +125,9 @@ const CartScreen = ({ history }) => {
                     oldQty: userQuantity,
                     newQty: defaultQty
                   })
+                  // if(!cartItem.savedForLater){
+                    // toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
+                  // }
                 }
               }
               //=====================================================================================================================
@@ -153,7 +160,10 @@ const CartScreen = ({ history }) => {
                     })
                     cartItem.quantity = qtyInStock;
                   }
-                  cartItem.savedForLater = true;
+                  if(!cartItem.savedForLater){
+                    cartItem.savedForLater = true;
+                    toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
+                  }
                 } else if(userQuantity > qtyInStock) {  //
                   cartItem.quantity = qtyInStock;
                   qtyMessageArray.push({ //Add to message for qty changed items
@@ -164,6 +174,7 @@ const CartScreen = ({ history }) => {
                     oldQty: userQuantity,
                     newQty: qtyInStock
                   })
+                  // toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
                 }
               }
             } //End of the INNER for loop thru cart and cart details
@@ -181,10 +192,10 @@ const CartScreen = ({ history }) => {
           }
         }
         try {
-          console.log('trying to update cart - Front End')
+          // console.log('trying to update cart - Front End')
           // dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
           const { data } = await axios.put('/api/users/cart/updatewholecart', { cart }, config);
-          console.log(data)
+          // console.log(data)
           dispatch({
             type: USER_LOGIN_SUCCESS,
             payload: data
@@ -195,7 +206,7 @@ const CartScreen = ({ history }) => {
         } catch (error) {
           console.log('there was an error updating the cart with up to date values')
           console.log(error)
-          toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 3500 });
+          toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 5000 });
         }
       }
       updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
@@ -203,7 +214,7 @@ const CartScreen = ({ history }) => {
     //            Next, loop through the cart and separate cart items from saved for later items
     //============================================================================================================      
     } else if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
-      console.log('in separation part of cartScreen useEffect')
+      // console.log('in separation part of cartScreen useEffect')
       //Seperate the cart items 
       const filteredCartItems = []; //will hold cart items not saved for later
       const savedForLaterItems = []; //will hold saved for later items
@@ -217,9 +228,11 @@ const CartScreen = ({ history }) => {
       setFilteredCart(filteredCartItems);
       setSavedForLater(savedForLaterItems);
       haveSeparatedTheCart.current = true;
+      fullyLoadedScreenOnceAlready.current = true;
     } else {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
-      //ComponentDidUpdate Logic
+      //Resetting the Refs below and then toggling the local state redoCartLogic wil force a fresh re-render with all the logic
+      //above in this useEffect executing again
       console.log('something updated, redoing cart logic')
       haveFetchedCartData.current = false;
       haveUpdatedQtysPrices.current = false;
@@ -239,7 +252,7 @@ const CartScreen = ({ history }) => {
   return (
     <>
       <OffsetPageHeader leftHeaderText='Your Cart' rightHeaderText='Your Cart' hrBoolean={false}/>
-      {loading ? <Loader /> :
+      {!fullyLoadedScreenOnceAlready.current ? <Loader /> :
         <>
         {cart.length === 0 && <Message variant='info'>Your cart is empty.</Message>}
         {cartQtyMessage.length > 0 && <CartMessage variant='info' itemsChanged={cartQtyMessage} outOfStock={false}/>}
@@ -277,21 +290,25 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, name, color, size, sizeCategory, price, qty, image, savedForLater */}
-                {filteredCart.map((eachProduct, idx) => (
-                  <CartRow2 key={idx}
-                    productID={eachProduct.productID}
-                    name={eachProduct.name}
-                    color={eachProduct.color}
-                    size={eachProduct.size}
-                    sizeCategory={eachProduct.sizeCategory}
-                    price={eachProduct.price}
-                    qty={eachProduct.quantity}
-                    // dateAdded={eachProduct.createdAt}
-                    image={eachProduct.image}
-                    savedForLater={eachProduct.savedForLater}
-                    index={idx}
-                  />
-                ))}
+                {loading ? <Loader /> :
+                <>
+                  {filteredCart.map((eachProduct, idx) => (
+                    <CartRow2 key={uuidv4()}
+                      productID={eachProduct.productID}
+                      name={eachProduct.name}
+                      color={eachProduct.color}
+                      size={eachProduct.size}
+                      sizeCategory={eachProduct.sizeCategory}
+                      price={eachProduct.price}
+                      qty={eachProduct.quantity}
+                      // dateAdded={eachProduct.createdAt}
+                      image={eachProduct.image}
+                      savedForLater={eachProduct.savedForLater}
+                      index={idx}
+                    />
+                  ))}
+                </>
+                }
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* =================================================================================== */}

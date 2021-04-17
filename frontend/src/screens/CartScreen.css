@@ -1,0 +1,10 @@
+.cartItemsLoader {
+  min-height: 400px;
+}
+
+.cartListLoading {
+  z-index: 1000;
+  /* background-colorgba(255, 0, 0, 0.918)18); */
+  background-color: red !important;
+  /* color: red; */
+}
