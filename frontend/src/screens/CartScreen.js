@@ -9,10 +9,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
+import { RESET_UPDATING_CART } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import './WishListScreen.css';
 // import CartRow from '../components/CartScreen/CartRow';
 import CartRow2 from '../components/CartScreen/CartRow2';
 import CartMessage from '../components/CartScreen/CartMessage';
@@ -24,7 +24,6 @@ const CartScreen = ({ history }) => {
   const haveUpdatedQtysPrices = useRef(false);
   const haveSeparatedTheCart = useRef(false);
   const fullyLoadedScreenOnceAlready = useRef(false);
-  // const redoCartLogic = useRef(false);
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -38,6 +37,9 @@ const CartScreen = ({ history }) => {
 
   const cartMovedChanges = useSelector(state => state.cartMovedChanges);
   const { cartMovedMessage } = cartMovedChanges;
+
+  const loadingCartFromCartStatus = useSelector(state => state.updateCartFromCart.loading);
+
 
   // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
@@ -125,9 +127,9 @@ const CartScreen = ({ history }) => {
                     oldQty: userQuantity,
                     newQty: defaultQty
                   })
-                  // if(!cartItem.savedForLater){
-                    // toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
-                  // }
+                  if(!cartItem.savedForLater){
+                    toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
+                  }
                 }
               }
               //=====================================================================================================================
@@ -207,6 +209,7 @@ const CartScreen = ({ history }) => {
           console.log('there was an error updating the cart with up to date values')
           console.log(error)
           toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 5000 });
+          if(loadingCartFromCartStatus) { dispatch({ type: RESET_UPDATING_CART }); }//Update the global state with the cart updating status b/c we have failed
         }
       }
       updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
@@ -229,6 +232,7 @@ const CartScreen = ({ history }) => {
       setSavedForLater(savedForLaterItems);
       haveSeparatedTheCart.current = true;
       fullyLoadedScreenOnceAlready.current = true;
+      if(loadingCartFromCartStatus) { dispatch({ type: RESET_UPDATING_CART }); }//Update the global state with the cart updating status b/c we are done
     } else {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
       //Resetting the Refs below and then toggling the local state redoCartLogic wil force a fresh re-render with all the logic
@@ -247,6 +251,7 @@ const CartScreen = ({ history }) => {
     dispatch({type: CART_QTY_MESSAGE_RESET});
     dispatch({type: CART_MOVED_MESSAGE_RESET});
     dispatch({type: CART_PRODUCT_DETAILS_RESET});
+    dispatch({ type: RESET_UPDATING_CART });
   }, [dispatch]);
 
   return (
@@ -290,25 +295,21 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, name, color, size, sizeCategory, price, qty, image, savedForLater */}
-                {loading ? <Loader /> :
-                <>
-                  {filteredCart.map((eachProduct, idx) => (
-                    <CartRow2 key={uuidv4()}
-                      productID={eachProduct.productID}
-                      name={eachProduct.name}
-                      color={eachProduct.color}
-                      size={eachProduct.size}
-                      sizeCategory={eachProduct.sizeCategory}
-                      price={eachProduct.price}
-                      qty={eachProduct.quantity}
-                      // dateAdded={eachProduct.createdAt}
-                      image={eachProduct.image}
-                      savedForLater={eachProduct.savedForLater}
-                      index={idx}
-                    />
-                  ))}
-                </>
-                }
+                {filteredCart.map((eachProduct, idx) => (
+                  <CartRow2 key={uuidv4()}
+                    productID={eachProduct.productID}
+                    name={eachProduct.name}
+                    color={eachProduct.color}
+                    size={eachProduct.size}
+                    sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
+                    qty={eachProduct.quantity}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
+                    savedForLater={eachProduct.savedForLater}
+                    index={idx}
+                  />
+                ))}
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* =================================================================================== */}
