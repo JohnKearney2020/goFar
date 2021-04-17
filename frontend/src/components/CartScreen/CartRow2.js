@@ -10,6 +10,7 @@ import { faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
+import { SET_UPDATING_CART, RESET_UPDATING_CART } from '../../constants/cartConstants';
 import Message from '../Message';
 
 import './CartRow.css';
@@ -29,7 +30,10 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
   const { _id:userID } = userInfo;
 
   const productsFromCart = useSelector(state => state.cartProductDetails);
-  const { loading } = productsFromCart; //might be able to get rid of cartProducts
+  // const { loading } = productsFromCart; //might be able to get rid of cartProducts
+
+  const loading = useSelector(state => state.updateCartFromCart.loading);
+  // const { loading } = productsFromCart; //might be able to get rid of cartProducts
 
   // Get our array of cart products from the global state.
   // const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
@@ -49,7 +53,8 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
   
 
   const deleteCartItemHandler = async () => {
-    setLoadingDeleteIcon(true);
+    // setLoadingDeleteIcon(true);
+    dispatch({ type: SET_UPDATING_CART }); //Update the global state with the cart updating status
     deleteButtonClicked.current = true;
     // deleteButtonClicked.current = true;
     console.log('delete from cart clicked')
@@ -60,8 +65,6 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
       }
     }
     try {
-      console.log('trying to delete an item from the cart')
-      // /api/users/cart/cartitem/:{userid}&:{productid}&:{color}&:{size}&:{sizecategory}
       const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
       console.log(data);
       dispatch({
@@ -69,23 +72,15 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      // setTimeout(() => {
-      //   setLoadingDeleteIcon(false);
-      // }, 1000);
-      // setLoadingDeleteIcon(false);
+      toast.success(`Successfully removed ${name} - ${color} / ${size} / ${sizeCategory} from your cart`, { position: "top-right", autoClose: 4000 });
     } catch (error) {
       console.log('there was an error trying to delete that item from the cart');
       console.log(error)
       toast.error(`Could not delete that item from your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
+      dispatch({ type: RESET_UPDATING_CART }); //If we fail to update the cart we need this here
       // setLoadingDeleteIcon(false);
     }
   }
-
-    //This should clear our qty and moved messages and cart product details once users navigate away from the cart
-    // useLayoutEffect(() => () => {
-    //   console.log('in useLayoutEffect function')
-    //   setLoadingDeleteIcon(false)
-    // }, []);
 
   return (
     <>
@@ -149,8 +144,8 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
           {qty}
         </Col> */}
         <Col md={1} className='d-flex justify-content-center'>
-          <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteCartItemHandler}>
-            <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
+          <Button size='sm' variant='danger' className='' disabled={loading} onClick={deleteCartItemHandler}>
+            <FontAwesomeIcon className='' icon={loading ? spinner : faTrashAlt} size="2x"/>
           </Button>
         </Col>
       </Row>
