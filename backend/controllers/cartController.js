@@ -97,7 +97,7 @@ const deleteCartItem = asyncHandler(async (req, res) => {
     }
     //Filter out the item we wish to delete. Find the item with a matching ProductID, size, color, and size category
     const filteredCart = cartToFilter.filter(filterOutThatCartItem);
-    if(foundMatchingProduct){ //If we did in fact find a product in the user's cart that had a matching ID, color, size, and size catergory 
+    if(foundMatchingProduct){ //If we did in fact find a product in the user's cart that had a matching ID, color, size, and size category 
       user.cart = filteredCart; //Update the user's wishlist
       const updatedUser = await user.save();//Save the updated user on the database
       res.json({

@@ -22,6 +22,8 @@ const CartScreen = ({ history }) => {
   const haveFetchedCartData = useRef(false);
   const haveUpdatedQtysPrices = useRef(false);
   const haveSeparatedTheCart = useRef(false);
+  const fullyLoadedScreenOnceAlready = useRef(false);
+  // const redoCartLogic = useRef(false);
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -39,24 +41,26 @@ const CartScreen = ({ history }) => {
   // Set up local state
   const [filteredCart, setFilteredCart] = useState([]);
   const [savedForLater, setSavedForLater] = useState([]);
+  const [redoCartLogic, setRedoCartLogic] = useState(false);
 
   useEffect(() => {
+    console.log('in cart screen useEffect')
     //============================================================================================================
     // First, get the detailed data with current prices and quantities for items in the cart
     //============================================================================================================
     if(cart.length > 0 && haveFetchedCartData.current === false){
+    // if(cart.length > 0 && cartProducts.length === 0){
+    // if(cart.length > 0 ){
       console.log('in fetch cart details part of cart screen useEffect')
       let arrayOfProductIDs = cart.map((eachItem) => {
         return eachItem.productID;
       })
       dispatch(getCartProductDetails({ arrayOfProductIDs }));
       haveFetchedCartData.current = true;
-    }
-
     //============================================================================================================
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
-    if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
+    } else if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
       console.log('in update qtys and prices part of cart screen useEffect')
       const qtyMessageArray = [];
       const movedMessageArray = [];
@@ -194,31 +198,36 @@ const CartScreen = ({ history }) => {
           toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 3500 });
         }
       }
-
-      updateOurCart(newUpdatedCart); //Function call for updating cart in our database
-    }
-
+      updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
     //============================================================================================================
     //            Next, loop through the cart and separate cart items from saved for later items
-    //============================================================================================================
-    if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
+    //============================================================================================================      
+    } else if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
       console.log('in separation part of cartScreen useEffect')
       //Seperate the cart items 
       const filteredCartItems = []; //will hold cart items not saved for later
       const savedForLaterItems = []; //will hold saved for later items
       cart.forEach(cartItem => {
-        console.log('cart item:')
-        console.log(cartItem)
+        // console.log('cart item:')
+        // console.log(cartItem)
         cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
       });
-      console.log('savedForLaterItems:')
-      console.log(savedForLaterItems)
+      // console.log('savedForLaterItems:')
+      // console.log(savedForLaterItems)
       setFilteredCart(filteredCartItems);
       setSavedForLater(savedForLaterItems);
       haveSeparatedTheCart.current = true;
+    } else {
+      //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
+      //ComponentDidUpdate Logic
+      console.log('something updated, redoing cart logic')
+      haveFetchedCartData.current = false;
+      haveUpdatedQtysPrices.current = false;
+      haveSeparatedTheCart.current = false;
+      // redoCartLogic.current = !redoCartLogic.current;
+      setRedoCartLogic(!redoCartLogic);
     }
-
-  }, [userInfo, dispatch, cart, cartProducts]);
+  }, [userInfo, dispatch, cart, cartProducts, redoCartLogic]);
 
   //This should clear our qty and moved messages and cart product details once users navigate away from the cart
   useLayoutEffect(() => () => {

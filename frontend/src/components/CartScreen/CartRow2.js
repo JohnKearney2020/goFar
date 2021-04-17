@@ -23,7 +23,7 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  // const { cart } = userInfo;
+  const { _id:userID } = userInfo;
 
   // Get our array of cart products from the global state.
   // const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
@@ -44,8 +44,32 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
 
   }, []);
 
-  const deleteWishListItemHandler = () => {
+  const deleteCartItemHandler = async () => {
+    setLoadingDeleteIcon(true);
     console.log('delete from cart clicked')
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    try {
+      console.log('trying to delete an item from the cart')
+      // /api/users/cart/cartitem/:{userid}&:{productid}&:{color}&:{size}&:{sizecategory}
+      const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
+      console.log(data);
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      setLoadingDeleteIcon(false);
+    } catch (error) {
+      console.log('there was an error trying to delete that item from the cart');
+      console.log(error)
+      toast.error(`Could not delete that item from your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
+      setLoadingDeleteIcon(false);
+    }
   }
 
   return (
@@ -110,7 +134,7 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
           {qty}
         </Col> */}
         <Col md={1} className='d-flex justify-content-center'>
-          <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
+          <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteCartItemHandler}>
             <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
           </Button>
         </Col>
