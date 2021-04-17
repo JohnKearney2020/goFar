@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import ReactDom from 'react-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -22,8 +22,14 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
+  //Format the price for two decimal places
+  price = addDecimals(price);
+
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID } = userInfo;
+
+  const productsFromCart = useSelector(state => state.cartProductDetails);
+  const { loading } = productsFromCart; //might be able to get rid of cartProducts
 
   // Get our array of cart products from the global state.
   // const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
@@ -32,6 +38,7 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
 
   //Set up local state
   const haveUpdatedQuantities = useRef(false);
+  const deleteButtonClicked = useRef(false);
   const [tablePrice, setTablePrice] = useState(0);
   const [qtyForTable, setQtyForTable] = useState(0);
   const [qtyForCart, setQtyForCart] = useState(1);
@@ -40,12 +47,11 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
   const [hasSizes, setHasSizes] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
   
-  useEffect(() => {
-
-  }, []);
 
   const deleteCartItemHandler = async () => {
     setLoadingDeleteIcon(true);
+    deleteButtonClicked.current = true;
+    // deleteButtonClicked.current = true;
     console.log('delete from cart clicked')
     const config = {
       headers: {
@@ -63,14 +69,23 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      setLoadingDeleteIcon(false);
+      // setTimeout(() => {
+      //   setLoadingDeleteIcon(false);
+      // }, 1000);
+      // setLoadingDeleteIcon(false);
     } catch (error) {
       console.log('there was an error trying to delete that item from the cart');
       console.log(error)
       toast.error(`Could not delete that item from your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
-      setLoadingDeleteIcon(false);
+      // setLoadingDeleteIcon(false);
     }
   }
+
+    //This should clear our qty and moved messages and cart product details once users navigate away from the cart
+    // useLayoutEffect(() => () => {
+    //   console.log('in useLayoutEffect function')
+    //   setLoadingDeleteIcon(false)
+    // }, []);
 
   return (
     <>
@@ -108,7 +123,7 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
         {/*         Price         */}
         {/* ===================== */}
         <Col md={2} className='text-center'>
-          {price}
+          ${price}
         </Col>
         {/* ===================== */}
         {/*    Add to Cart Form   */}
