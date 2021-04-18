@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import ReactDom from 'react-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -14,12 +14,7 @@ import Message from '../Message';
 
 import './CartRow.css';
 
-const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image, dateAdded, index, savedForLater, cartMovedMessage, setCartMovedMessage }) => {
-  // console.log('type of setCartMovedMessage')
-  // console.log(typeof setCartMovedMessage)
-
-  const cartQtyChanges = useSelector(state => state.cartQtyChanges);
-  const { cartQtyMessage } = cartQtyChanges;
+const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater }) => {
 
   const dispatch = useDispatch();
 
@@ -27,165 +22,42 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
-  const userInfo = useSelector(state => state.userLogin.userInfo);
-  // const { cart } = userInfo;
+  //Format the price for two decimal places
+  price = addDecimals(price);
 
-  // Get our array of cart products from the global state.
-  const cartProducts = useSelector(state => state.cartProductDetails.cartProducts);
-  // Find the product specific to this cart table row
-  const product = cartProducts[cartProducts.findIndex(i => i.name === productName)];
+  const userInfo = useSelector(state => state.userLogin.userInfo);
+  const { _id:userID } = userInfo;
 
   //Set up local state
-  const haveUpdatedQuantities = useRef(false);
-  const [tablePrice, setTablePrice] = useState(0);
-  const [qtyForTable, setQtyForTable] = useState(0);
-  const [qtyForCart, setQtyForCart] = useState(1);
-  const [disableCart, setDisableCart] = useState(false);
-  const [availableInOtherSizes, setAvailableInOtherSizes] = useState(false);
-  const [hasSizes, setHasSizes] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
   
-  // ===================================================================================================
-  //            Async Function for Updating an Item's Qty / Moving it to Saved For Later
-  // ===================================================================================================
-  // this is used in the useEffect() below
-  const updateCartQty = async (qty, savedForLater) => {
+
+  const deleteCartItemHandler = async () => {
+    setLoadingDeleteIcon(true);
+    // deleteButtonClicked.current = true;
+    console.log('delete from cart clicked')
     const config = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`
       }
     }
-
     try {
-      const { data } = await axios.put('/api/users/cart/cartitem', {
-        productID, 
-        name: productName,
-        color,
-        newQty: qty,
-        size,
-        sizeCategory, 
-        savedForLater: savedForLater
-      }, config);
-      // console.log(data)
+      const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
+      // setLoadingDeleteIcon(false);
+      console.log(data);
       dispatch({
         type: USER_LOGIN_SUCCESS,
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      haveUpdatedQuantities.current = true;
+      toast.success(`Successfully removed ${name} - ${color} / ${size} / ${sizeCategory} from your cart`, { position: "top-right", autoClose: 4000 });
     } catch (error) {
-      console.log('there was an error')
+      console.log('there was an error trying to delete that item from the cart');
       console.log(error)
-      toast.error(`We could not update your cart with accurate quantities based on what is in stock. Please try again later.`, { position: "top-right", autoClose: 3500 });
-      // setLoadingCartIcon(false);
+      toast.error(`Could not delete that item from your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
+      setLoadingDeleteIcon(false);
     }
-  }
-//=================================================================================================================================
-
-
-  useEffect(() => {
-    // console.log('in wishlist table row useEffect')
-    if(cartProducts.length > 0 && product && haveUpdatedQuantities.current === false){
-      // Destructure the product object. Doing this outside the useEffect was giving 'undefined' errors
-      const { name, defaultPrice, defaultQty, defaultSalePrice, sizes, hasSizes:productHasSizes } = product;
-      if(productHasSizes) { setHasSizes(true) }
-      console.log(`in wishlist table row useEffect for ${name} ${color} ${size} ${sizeCategory}`);
-
-      //=========================================
-      //Find the current price and qty available
-      //=========================================
-      // Products without sizes - easiest case
-      if(productHasSizes === false){
-        defaultSalePrice !== 0 ? setTablePrice(addDecimals(defaultSalePrice)) : setTablePrice(addDecimals(defaultPrice));
-        if(defaultQty === 0){ // If none are in stock, disable the cart button and qty input and display an 'out of stock' message to the user
-          setDisableCart(true);
-          setQtyForTable(0);
-          setQtyForCart(0);
-        }
-        // It's in stock - Check to see how the qty the user wants compares to the qty available
-        if(qty < defaultQty){//The user wants less than are available
-          setQtyForTable(qty); 
-        } else { //If the user wants more than are available
-          setQtyForTable(defaultQty);
-          console.log(`user wanted ${qty} of ${name}, but we only have ${defaultQty} in stock`)
-          // setTheArray(oldArray => [...oldArray, newElement]);
-          setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
-            name,
-            color,
-            size,
-            sizeCategory,
-            originalQty: qty,
-            newQty: defaultQty
-          }])
-        }
-      }
-      // Products with sizes - most challenging case
-      if(sizes.length > 0){ //Drill down into the product object based on the user's chosen size and color
-        // console.log(`${name} has sizes`)
-        //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
-        let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory)];
-        // console.log(levelOne)
-        let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice; // Find that size category's default price.
-        //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
-        let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color)]
-        //See if that color is on sale
-        let colorSalePrice = levelTwo.colorSalePrice;
-        //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
-        let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size)];
-        let qtyInStock = levelThree.qty;
-        //If there are zero in stock for that size, see if it's in stock in other sizes in that size category.
-        if(qtyInStock === 0){
-          setDisableCart(true);
-          //Start at level two, all sizes in that color and size category, and look through all sizes there
-          for(let eachSize of levelTwo.sizeCategorySizes){
-            if(eachSize.qty !== 0){
-              // console.log('available in other sizes')
-              setAvailableInOtherSizes(true);
-              break;
-            }
-          }
-        }
-        //Update our local state to reflect what we've found
-        //Compare the qty the user originally added to the cart to the quantity currently available
-        if(qty <= qtyInStock){ //If the qty the user wanted is LESS than the qty we have in stock
-          setQtyForTable(qty);
-        } else if(qty > qtyInStock && qtyInStock !== 0){ //If the qty the user wanted is MORE than the qty we have in stock
-          // console.log(`user wanted ${qty} of ${name}, but we only have ${qtyInStock} in stock`)
-          setQtyForTable(qtyInStock)
-          setCartQtyMessage(cartQtyMessage => [...cartQtyMessage, {
-            name,
-            color,
-            size,
-            sizeCategory,
-            originalQty: qty,
-            newQty: qtyInStock
-          }])
-          //attempt to update the qty of the item in the user's cart
-          updateCartQty(qtyInStock, false);
-        } else { //If the qtyInStock is zero
-          console.log(`Quantity in stock for ${name} ${color} size ${size} is ${qtyInStock}`)
-          console.log(`Original Quantity for ${name} ${color} size ${size} is ${qty}`)
-          setQtyForTable(0);
-          setCartMovedMessage(cartMovedMessage => [...cartMovedMessage, {
-            name,
-            color,
-            size,
-            sizeCategory,
-            originalQty: qty,
-            newQty: qtyInStock
-          }])
-          //attempt to update the qty of the item in the user's cart AND move it to Saved for Later
-          updateCartQty(qtyInStock, true);
-        }
-        // setQtyForTable(qtyInStock); // For the Qty Available column
-        colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
-      }
-    }
-  }, [cartProducts.length, color, product, qty, size, sizeCategory, setCartQtyMessage, setCartMovedMessage, productID, productName, userInfo.token, dispatch]);
-
-  const deleteWishListItemHandler = () => {
-    console.log('delete from cart clicked')
   }
 
   return (
@@ -197,14 +69,14 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image
         {/* ===================== */}
         <Col md={2}>
           <Link to={`/product/${productID}/${color}`}>
-            <Image src={productImage} alt={productName} fluid rounded />
+            <Image src={image} alt={name} fluid rounded />
           </Link>
         </Col>
         {/* ===================== */}
         {/*         Name          */}
         {/* ===================== */}
         <Col md={3} className='text-center'>
-          <Link to={`/product/${productID}/${color}`}>{productName}</Link>
+          <Link to={`/product/${productID}/${color}`}>{name}</Link>
         </Col>
         {/* ===================== */}
         {/*         Color         */}
@@ -218,13 +90,13 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image
         {/*          Qty          */}
         {/* ===================== */}
         <Col md={1} className='text-center'>
-          {qtyForTable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : qtyForTable }
+          {qty === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : qty }
         </Col>
         {/* ===================== */}
         {/*         Price         */}
         {/* ===================== */}
         <Col md={2} className='text-center'>
-          ${tablePrice}
+          ${price}
         </Col>
         {/* ===================== */}
         {/*    Add to Cart Form   */}
@@ -250,7 +122,7 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image
           {qty}
         </Col> */}
         <Col md={1} className='d-flex justify-content-center'>
-          <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
+          <Button size='sm' variant='danger' className='' disabled={loadingDeleteIcon} onClick={deleteCartItemHandler}>
             <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
           </Button>
         </Col>
@@ -265,3 +137,4 @@ const CartRow = ({ productID, productName, color, size, sizeCategory, qty, image
 }
 
 export default CartRow;
+

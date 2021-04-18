@@ -12,8 +12,7 @@ import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-// import CartRow from '../components/CartScreen/CartRow';
-import CartRow2 from '../components/CartScreen/CartRow2';
+import CartRow from '../components/CartScreen/CartRow';
 import CartMessage from '../components/CartScreen/CartMessage';
 
 const CartScreen = ({ history }) => {
@@ -279,7 +278,7 @@ const CartScreen = ({ history }) => {
                 {/*===================*/}
                 {cart.map((eachProduct) => (
                   eachProduct.savedForLater === false &&
-                  <CartRow2 key={`${eachProduct.productID}${eachProduct.name}${eachProduct.color}${eachProduct.size}${eachProduct.sizeCategory}`}
+                  <CartRow key={`${eachProduct.productID}${eachProduct.name}${eachProduct.color}${eachProduct.size}${eachProduct.sizeCategory}`}
                     productID={eachProduct.productID}
                     name={eachProduct.name}
                     color={eachProduct.color}
@@ -371,7 +370,7 @@ const CartScreen = ({ history }) => {
                 {/*=======================*/}
                 {cart.map((eachProduct) => (
                   eachProduct.savedForLater === true &&
-                  <CartRow2 key={`${eachProduct.productID}${eachProduct.name}${eachProduct.color}${eachProduct.size}${eachProduct.sizeCategory}`}
+                  <CartRow key={`${eachProduct.productID}${eachProduct.name}${eachProduct.color}${eachProduct.size}${eachProduct.sizeCategory}`}
                     productID={eachProduct.productID}
                     name={eachProduct.name}
                     color={eachProduct.color}
