@@ -9,7 +9,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
-import { RESET_UPDATING_CART } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -38,12 +37,8 @@ const CartScreen = ({ history }) => {
   const cartMovedChanges = useSelector(state => state.cartMovedChanges);
   const { cartMovedMessage } = cartMovedChanges;
 
-  const loadingCartFromCartStatus = useSelector(state => state.updateCartFromCart.loading);
-
-
   // Set up local state
-  const [filteredCart, setFilteredCart] = useState([]);
-  const [savedForLater, setSavedForLater] = useState([]);
+  const [noSavedForLaterItems, setNoSavedForLaterItems] = useState(false);
   const [redoCartLogic, setRedoCartLogic] = useState(false);
 
   useEffect(() => {
@@ -194,8 +189,6 @@ const CartScreen = ({ history }) => {
           }
         }
         try {
-          // console.log('trying to update cart - Front End')
-          // dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
           const { data } = await axios.put('/api/users/cart/updatewholecart', { cart }, config);
           // console.log(data)
           dispatch({
@@ -205,34 +198,14 @@ const CartScreen = ({ history }) => {
           localStorage.setItem('userInfo', JSON.stringify(data));
           console.log('cart updated successfully')
           haveUpdatedQtysPrices.current = true;
+          fullyLoadedScreenOnceAlready.current = true;
         } catch (error) {
           console.log('there was an error updating the cart with up to date values')
           console.log(error)
           toast.error(`Could not update your cart with accurate prices and quantities. Try again later.`, { position: "top-right", autoClose: 5000 });
-          if(loadingCartFromCartStatus) { dispatch({ type: RESET_UPDATING_CART }); }//Update the global state with the cart updating status b/c we have failed
         }
       }
       updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
-    //============================================================================================================
-    //            Next, loop through the cart and separate cart items from saved for later items
-    //============================================================================================================      
-    } else if(haveUpdatedQtysPrices.current === true && haveSeparatedTheCart.current === false){
-      // console.log('in separation part of cartScreen useEffect')
-      //Seperate the cart items 
-      const filteredCartItems = []; //will hold cart items not saved for later
-      const savedForLaterItems = []; //will hold saved for later items
-      cart.forEach(cartItem => {
-        // console.log('cart item:')
-        // console.log(cartItem)
-        cartItem.savedForLater ? savedForLaterItems.push(cartItem) : filteredCartItems.push(cartItem);
-      });
-      // console.log('savedForLaterItems:')
-      // console.log(savedForLaterItems)
-      setFilteredCart(filteredCartItems);
-      setSavedForLater(savedForLaterItems);
-      haveSeparatedTheCart.current = true;
-      fullyLoadedScreenOnceAlready.current = true;
-      if(loadingCartFromCartStatus) { dispatch({ type: RESET_UPDATING_CART }); }//Update the global state with the cart updating status b/c we are done
     } else {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
       //Resetting the Refs below and then toggling the local state redoCartLogic wil force a fresh re-render with all the logic
@@ -241,17 +214,15 @@ const CartScreen = ({ history }) => {
       haveFetchedCartData.current = false;
       haveUpdatedQtysPrices.current = false;
       haveSeparatedTheCart.current = false;
-      // redoCartLogic.current = !redoCartLogic.current;
       setRedoCartLogic(!redoCartLogic);
     }
-  }, [userInfo, dispatch, cart, cartProducts, redoCartLogic]);
+  }, [cart, cartProducts, dispatch]);
 
   //This should clear our qty and moved messages and cart product details once users navigate away from the cart
   useLayoutEffect(() => () => {
     dispatch({type: CART_QTY_MESSAGE_RESET});
     dispatch({type: CART_MOVED_MESSAGE_RESET});
     dispatch({type: CART_PRODUCT_DETAILS_RESET});
-    dispatch({ type: RESET_UPDATING_CART });
   }, [dispatch]);
 
   return (
@@ -295,8 +266,24 @@ const CartScreen = ({ history }) => {
                 {/* Items in Cart */}
                 {/*===================*/}
                 {/* productID, name, color, size, sizeCategory, price, qty, image, savedForLater */}
-                {filteredCart.map((eachProduct, idx) => (
+                {/* {filteredCart.map((eachProduct, idx) => (
                   <CartRow2 key={uuidv4()}
+                    productID={eachProduct.productID}
+                    name={eachProduct.name}
+                    color={eachProduct.color}
+                    size={eachProduct.size}
+                    sizeCategory={eachProduct.sizeCategory}
+                    price={eachProduct.price}
+                    qty={eachProduct.quantity}
+                    // dateAdded={eachProduct.createdAt}
+                    image={eachProduct.image}
+                    savedForLater={eachProduct.savedForLater}
+                    index={idx}
+                  />
+                ))} */}
+                {cart.map((eachProduct, idx) => (
+                  eachProduct.savedForLater === false &&
+                  <CartRow2 key={idx}
                     productID={eachProduct.productID}
                     name={eachProduct.name}
                     color={eachProduct.color}
@@ -348,15 +335,13 @@ const CartScreen = ({ history }) => {
           {/* ============================================================================================================== */}
           {/*                                             Saved for Later Items                                              */}
           {/* ============================================================================================================== */}
-          {/* <Card body>Saved for Later</Card> */}
-          {/* <h4 class=""></h4> */}
           <Card className='mt-5 mb-3' style={{"backgroundColor": "#343A40"}}>
             <Card.Body className='text-center'>
               <h5 className='m-0 text-white'>Saved for Later</h5>
             </Card.Body>
           </Card>
           {cart.length === 0 ? <Message variant='info'>Your cart is empty - no items saved for later</Message> :
-            (savedForLater.length === 0 && <Message variant='info'>You have no items saved for later.</Message>) 
+            (noSavedForLaterItems && <Message variant='info'>You have no items saved for later.</Message>) 
           }
           <Row>
             <Col md={8}> {/* Left Side of Screen */}
@@ -382,15 +367,15 @@ const CartScreen = ({ history }) => {
                       <span className='font-weight-bold'>Current Price</span>
                     </Col>
                     <Col md={1} className='text-center'>
-                      {/* <span className='font-weight-bold'>Delete</span>  */}
+                      {/* Offset for trashh delete icon */}
                     </Col>
                   </Row> 
                 </ListGroup.Item>
-                {/*===================*/}
-                {/* Items in Cart */}
-                {/*===================*/}
-                {/* productID, productName, color, size, sizeCategory, qty, productImage, dateAdded, index */}
-                {savedForLater.map((eachProduct, idx) => (
+                {/*=======================*/}
+                {/* Saved for Later Items */}
+                {/*=======================*/}
+                {cart.map((eachProduct, idx) => (
+                  eachProduct.savedForLater === true &&
                   <CartRow2 key={idx}
                     productID={eachProduct.productID}
                     name={eachProduct.name}
@@ -424,9 +409,3 @@ const CartScreen = ({ history }) => {
 }
 
 export default CartScreen;
-
-
-// { cartQtyMessage &&  ReactDom.createPortal(
-//   <Message variant='info'>{cartQtyMessage}</Message>,
-//   document.getElementById('cartQtyMessage')
-// )}

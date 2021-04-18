@@ -2,7 +2,6 @@ import axios from 'axios';
 import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL, CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
 import { CART_MOVED_MESSAGE_REQUEST, CART_MOVED_MESSAGE_SUCCESS, CART_MOVED_MESSAGE_FAIL, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
-import { RESET_UPDATING_CART } from '../constants/cartConstants';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 
 
@@ -33,7 +32,6 @@ export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, get
       type: CART_PRODUCT_DETAILS_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
-    dispatch({ type: RESET_UPDATING_CART });//Update the global state with the cart updating status b/c we failed
   }
 }
 

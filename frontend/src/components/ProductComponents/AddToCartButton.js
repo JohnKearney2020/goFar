@@ -113,7 +113,6 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
         image: primaryImageForColor,
         savedForLater: false //user's can't save for later from the product page
       }, config);
-      console.log(data)
       // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
       // dispatch the user login again to update the user's cart in the global state
       dispatch({

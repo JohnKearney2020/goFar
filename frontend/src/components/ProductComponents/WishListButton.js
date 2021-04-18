@@ -21,11 +21,9 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   const [wishListErrorMessage, setWishListErrorMessage] = useState(null);
 
   useEffect(() => {
-    console.log('size, color, or sizeCategory changed')
     if(wishList.length > 0){
       setInWishList(false); //reset this with each change of color, size, or size category
       //Loop thru the user's wishlist and see if this color, size, and size category combination are already in the wishlist
-      console.log('looping thru wishlist');
       for(let eachItem of wishList){
         if(eachItem.color === color && eachItem.size === size && eachItem.sizeCategory === sizeCategory){
           setInWishList(true);
