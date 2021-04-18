@@ -61,6 +61,7 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
     }
     try {
       const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
+      // setLoadingDeleteIcon(false);
       console.log(data);
       dispatch({
         type: USER_LOGIN_SUCCESS,
@@ -68,7 +69,6 @@ const CartRow2 = ({ productID, name, color, size, sizeCategory, price, qty, imag
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success(`Successfully removed ${name} - ${color} / ${size} / ${sizeCategory} from your cart`, { position: "top-right", autoClose: 4000 });
-      setLoadingDeleteIcon(false);
     } catch (error) {
       console.log('there was an error trying to delete that item from the cart');
       console.log(error)
