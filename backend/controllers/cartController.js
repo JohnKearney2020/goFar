@@ -216,10 +216,56 @@ const updateWholeCart = asyncHandler(async (req, res) => {
   }
 })
 
+
+// @desc     Moved a saved for later item back to the cart OR move a cart item to Saved for Later
+// @route    PUT /api/users/cart/savedforlater
+// @access   Private
+const toggleSavedForLater = asyncHandler(async (req, res) => {
+  //remember, req.user is passed here automatically by our authorization middleware
+  const user = await User.findById(req.user._id);
+  if(user) {
+    const { productID, name, color, size, sizeCategory, savedForLater } = req.body;
+    let oldCart = [...user.cart];
+    let foundItemToUpdate = false;
+    for(let eachItem of oldCart){
+      if(eachItem.productID.toString() === productID 
+        && eachItem.name.toString() === name 
+        && eachItem.color.toString() === color
+        && eachItem.size.toString() === size
+        && eachItem.sizeCategory.toString() === sizeCategory
+        ) {
+          eachItem.savedForLater = savedForLater;
+          foundItemToUpdate = true;
+          break;
+        }
+    }
+
+    if(foundItemToUpdate === false){
+      res.status(404); //not found
+      throw new Error('Could not find that item in the cart. Cannot save it for later');
+    }
+    // Update the user's cart info in the database
+    const updatedUser = await user.save();
+    res.status(201).json({ //201 status means something was created
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      cart: updatedUser.cart,
+      wishList: updatedUser.wishList,
+      token: generateToken(updatedUser._id) 
+    })
+  } else {
+    res.status(404); //not found
+    throw new Error('User not found. Cannot save the item for later.');
+  }
+})
+
 export { 
   getCart,
   addCartItem,
   deleteCartItem,
   updateCartQty,
-  updateWholeCart
+  updateWholeCart,
+  toggleSavedForLater
 };
