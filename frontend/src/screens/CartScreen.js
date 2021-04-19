@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useEffect, useRef, useLayoutEffect } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListGroup, Col, Row, Card, Button, Image } from 'react-bootstrap';
-import { v4 as uuidv4 } from 'uuid';
+import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
+// import { v4 as uuidv4 } from 'uuid';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
@@ -28,7 +28,7 @@ const CartScreen = ({ history }) => {
   const { cart } = userInfo;
 
   const productsFromCart = useSelector(state => state.cartProductDetails);
-  const { loading, cartProducts } = productsFromCart; //might be able to get rid of cartProducts
+  const { cartProducts } = productsFromCart; //might be able to get rid of cartProducts
 
   const cartQtyChanges = useSelector(state => state.cartQtyChanges);
   const { cartQtyMessage } = cartQtyChanges;
@@ -37,7 +37,7 @@ const CartScreen = ({ history }) => {
   const { cartMovedMessage } = cartMovedChanges;
 
   // Set up local state
-  const [noSavedForLaterItems, setNoSavedForLaterItems] = useState(true);
+  // const [noSavedForLaterItems, setNoSavedForLaterItems] = useState(true);
   // const [redoCartLogic, setRedoCartLogic] = useState(false);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const CartScreen = ({ history }) => {
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
     } else if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
-      // console.log('in update qtys and prices part of cart screen useEffect')
+      console.log('in update qtys and prices part of cart screen useEffect')
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
@@ -73,15 +73,15 @@ const CartScreen = ({ history }) => {
           color:color1,
           size:size1,
           sizeCategory:sizeCategory1,
-          price,
-          image,
-          savedForLater,
-          createdAt
+          // price,
+          // image,
+          // savedForLater,
+          // createdAt
         } = cartItem;
           // Loop through the detailed cart items and find a match
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
-            const { _id: id2, name:name2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
+            const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
 
             // Drill down into the detailed product object to look for a match
             if(id1 === id2){//If the product ID's match
@@ -191,18 +191,6 @@ const CartScreen = ({ history }) => {
           //properly execute, probably b/c the cart technically updates again, triggering the useEffect before they
           haveUpdatedQtysPrices.current = true;
           fullyLoadedScreenOnceAlready.current = true;
-          //Loop through each item in our cart and see if at least one is saved for later. If so, change the local state to reflect that
-          let foundSavedForLater = false;
-          for(let eachItem of cart){
-            if(eachItem.savedForLater === true){
-              setNoSavedForLaterItems(false);
-              foundSavedForLater = true;
-              break; //we don't need to loop through more items once we find one
-            }
-          }
-          //If noSavedForLaterItems === true, but we didn't find any save for later items when the cart updated, set it to false
-          if(foundSavedForLater === false ) { setNoSavedForLaterItems(true); }
-          // console.log(data)
           dispatch({
             type: USER_LOGIN_SUCCESS,
             payload: data
@@ -220,14 +208,8 @@ const CartScreen = ({ history }) => {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
       //Resetting the Refs below and then toggling the local state redoCartLogic wil force a fresh re-render with all the logic
       //above in this useEffect executing again
-      // console.log('something updated, redoing cart logic')
-      // haveFetchedCartData.current = false;
-      // haveUpdatedQtysPrices.current = false;
-      // fullyLoadedScreenOnceAlready.current = true;
-      // haveSeparatedTheCart.current = false;
-      // setRedoCartLogic(!redoCartLogic);
     }
-  }, [cart, cartProducts, dispatch, userInfo.token, noSavedForLaterItems]);
+  }, [cart, cartProducts, dispatch, userInfo.token]);
 
   //This should clear our qty and moved messages and cart product details once users navigate away from the cart
   useLayoutEffect(() => () => {
@@ -334,9 +316,7 @@ const CartScreen = ({ history }) => {
               <h5 className='m-0 text-white'>Saved for Later</h5>
             </Card.Body>
           </Card>
-          {cart.length === 0 ? <Message variant='info'>Your cart is empty - no items saved for later</Message> :
-            (noSavedForLaterItems && <Message variant='info'>You have no items saved for later.</Message>) 
-          }
+          { cart.length === 0 && <Message variant='info'>Your cart is empty - no items saved for later</Message> }
           <Row>
             <Col md={8}> {/* Left Side of Screen */}
               <ListGroup variant='flush'>
