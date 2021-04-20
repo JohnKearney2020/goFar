@@ -57,7 +57,8 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         }
       }
     }
-  }, [wishList.length])
+    // 'color', 'productID', 'size', 'sizeCategory', and 'wishList'
+  }, [wishList, color, productID, size, sizeCategory])
 
   //This moves items to saved for later or back to the cart
   const moveInCartHandler = async (e) => {

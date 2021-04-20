@@ -97,4 +97,3 @@ const WishListScreen = ({ history }) => {
 }
 
 export default WishListScreen;
-
