@@ -50,12 +50,12 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
 
   useEffect(() => {
-    console.log('in wishlist table row useEffect')
+    // console.log('in wishlist table row useEffect')
     if(wishListProducts.length > 0 && product){
       // Destructure the product object. Doing this outside the useEffect was giving 'undefined' errors
       const { name, defaultPrice, defaultQty, defaultSalePrice, sizes, hasSizes:productHasSizes } = product;
       if(productHasSizes) { setHasSizes(true) }
-      console.log(`in wishlist table row useEffect for ${name}`);
+      // console.log(`in wishlist table row useEffect for ${name}`);
 
       //=========================================
       //Find the current price and qty available
