@@ -15,8 +15,8 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
   
   const dispatch = useDispatch();
 
-  const userLogin = useSelector(state => state.userLogin);
-  const { userInfo } = userLogin;
+  const userInfo = useSelector(state => state.userLogin.userInfo);
+  const { cart, token } = userInfo;
 
   // Get our array of wishlist products from the global state.
   const wishListProducts = useSelector(state => state.wishListProductDetails.wishListProducts);
@@ -31,6 +31,15 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
   const [availableInOtherSizes, setAvailableInOtherSizes] = useState(false);
   const [hasSizes, setHasSizes] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
+  const [loadingCartIcon, setLoadingCartIcon] = useState(false);
+  const [updatingWishlistIcon, setUpdatingWishlistIcon] = useState(false);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }
 
   // Format the date for the Date column
   const dateObject = new Date(dateAdded);
@@ -90,28 +99,64 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
         setQtyForTable(qtyInStock); // For the Qty Available column
         colorSalePrice === 0 ? setTablePrice(addDecimals(sizeCatDefaultPrice)) : setTablePrice(addDecimals(colorSalePrice)); // For the price column
       }
+    };
+
+    //See if this item is already in the user's cart
+    for(let eachItem of cart){
+      let { productID:id2, color:color2, size:size2,sizeCategory:sizeCategory2 } = eachItem;
+      // productID, productName, color, size, sizeCategory, productImage, dateAdded, index
+      if(productID === id2 && color === color2 && size === size2 && sizeCategory === sizeCategory2){
+        setLoadingCartIcon(false);
+        setDisableCart(true);
+      }
     }
+  }, [wishListProducts.length, product, color, size, sizeCategory, hasSizes, cart, productID]);
 
-    // return () => {
-      
-    // }
-  }, [wishListProducts.length, product, color, size, sizeCategory, hasSizes]);
-
-  const addToCartHandler = (e) => {
+  const addToCartHandler = async (e) => {
     e.preventDefault();
     console.log('in cart handler')
     console.log(`qty for cart: ${qtyForCart}`)
+    setUpdatingWishlistIcon(true)
+    setLoadingCartIcon(true); //We set this to false again in the useEffect. Setting it to false in this function leaves a small
+    //window of time where the button is not disabled while we see if the item is in our cart or not
+    if(userInfo.name){
+      try {
+        // productID, productName, color, size, sizeCategory, productImage, dateAdded, index
+        //attempt to add the item to the user's cart
+        const { data } = await axios.post('/api/users/cart/cartitem', {
+          productID, 
+          name: productName,
+          quantity: qtyForCart,
+          color,
+          size,
+          sizeCategory,
+          price: tablePrice,
+          image: productImage,
+          savedForLater: false //user's can't save for later from the wishlist page
+        }, config);
+        toast.success(`Added ${productName} to your cart!`, { position: "bottom-center", autoClose: 4000 } );
+        // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
+        // dispatch the user login again to update the user's cart in the global state
+        dispatch({
+          type: USER_LOGIN_SUCCESS,
+          payload: data
+        });
+        localStorage.setItem('userInfo', JSON.stringify(data));
+        // setLoadingCartIcon(false);
+      } catch (error) {
+        console.log('there was an error')
+        console.log(error)
+        toast.error(`Could not add ${productName} to your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
+        setLoadingCartIcon(false);
+        setUpdatingWishlistIcon(false);
+      }  
+    }
   }
 
   const deleteWishListItemHandler = async () => {
     setLoadingDeleteIcon(true);
+    setUpdatingWishlistIcon(true);
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      }
       //attempt to remove the item from the user's wishlist
       // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
       const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
@@ -188,7 +233,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
                     as='select'
                     value={qtyForCart} 
                     onChange={(e) => setQtyForCart(e.target.value)} 
-                    disabled={disableCart}
+                    disabled={loadingCartIcon | disableCart}
                     className='px-2'
                   >
                     {[...Array(qtyForTable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
@@ -202,14 +247,14 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
                 </Form>
               </Col>
               <Col md={1} className='text-center my-1'>
-                <Button size='sm' disabled={disableCart} type='submit' className='w-100'>
-                  <FontAwesomeIcon className='' icon={faCartPlus} size='2x' />
+                <Button size='sm' disabled={loadingCartIcon | disableCart} type='submit' className='w-100' onClick={addToCartHandler}>
+                  {disableCart ? 'In Cart' : <FontAwesomeIcon className='' icon={loadingCartIcon ? spinner : faCartPlus} size='2x' />}
                 </Button>
               </Col>
             </>
           }
           <Col md={1} className='text-center'>
-            <Button size='sm' variant='danger' className='w-100' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
+            <Button size='sm' variant='danger' className='w-100' disabled={loadingDeleteIcon | loadingCartIcon} onClick={deleteWishListItemHandler}>
               <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
             </Button>
           </Col>

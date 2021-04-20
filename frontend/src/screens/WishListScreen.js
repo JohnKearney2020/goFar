@@ -13,31 +13,36 @@ const WishListScreen = ({ history }) => {
 
   const dispatch = useDispatch();
   const haveFetchedWishListProductData = useRef(false);
+  const haveUpdatedQtysPrices = useRef(false);
+  const fullyLoadedScreenOnceAlready = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { wishList } = userInfo;
 
-  const productsFromWishlist = useSelector(state => state.wishListProductDetails);
-  const { loading } = productsFromWishlist;
+  const wishListProductDetails = useSelector(state => state.wishListProductDetails);
+  const { loading, wishListProducts } = wishListProductDetails;
 
   useEffect(() => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
+    console.log('in WishListScreen.js useEffect')
+    console.log('productsFromWishlist:')
+    console.log(wishListProducts)
 
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
-      // console.log('we have a wishlist')
+      console.log('we have a wishlist')
       let tempArrayProductIDs = wishList.map((eachItem) => {
         return eachItem.productID;
       })
       dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
-      haveFetchedWishListProductData.current = false;
-    } else {
-      // console.log('the user does not have a wishlist');
+      haveFetchedWishListProductData.current = true;
+    } else if(wishListProducts.length > 0 && haveFetchedWishListProductData.current === true && haveUpdatedQtysPrices.current === false){
+      console.log('here is where we need to update the wishlist and then pass that down to the rows');
     }
     // return () => {
       
     // }
-  }, [history, userInfo, dispatch, wishList]);
+  }, [history, userInfo, dispatch, wishList, wishListProducts]);
 
   return (
     <>
@@ -97,4 +102,3 @@ const WishListScreen = ({ history }) => {
 }
 
 export default WishListScreen;
-

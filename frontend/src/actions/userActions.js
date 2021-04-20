@@ -221,7 +221,7 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const getWishListProductDetails = (arrayOfProductIDs) => async (dispatch, getState) => {
-  console.log('in wishlistproductdetails userAction, arrayOfProductIDs:')
+  // console.log('in wishlistproductdetails userAction, arrayOfProductIDs:')
   try {
     dispatch({
       type: WISHLIST_PRODUCT_DETAILS_REQUEST
