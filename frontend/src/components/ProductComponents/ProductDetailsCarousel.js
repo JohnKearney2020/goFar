@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, ImageWithZoom, Dot } from 'pure-react-carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import VideoModal from '../Modals/VideoModal';
 import 'pure-react-carousel/dist/react-carousel.es.css';
@@ -106,11 +108,12 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
               <Slider>
                 {/* If the product has a video, make it the first slide */}
                 {product.defaultVideo &&
-                  <Slide index={0} key={0}>
+                  <Slide index={0} key={0} id='videoSlide'>
+                    <FontAwesomeIcon className='carouselPlayIcon' icon={faPlay} size="3x" onClick={videoHandler}/>
                     <Dot slide={0} className='productDetailsCarouselDot' disabled={false} onClick={videoHandler}>
-                      <img src={product.videoThumbnail} alt={`Slide 0 - Product Video`} style={{width: '100%', height: 'auto'}} 
-                        className='productDetailsCarouselImage'
-                        id={`idForBorder0`}
+                      <img src={product.videoThumbnail} alt={`Slide 0 - Product Video`} 
+                          className='productDetailsCarouselImage'
+                          id={`idForBorder0`}
                       />
                     </Dot>                
                   </Slide>
@@ -119,7 +122,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                 {combinedImagesForCarousel.map((eachImage, idx) => (
                   <Slide index={idx + videoSlideOffset} key={idx + videoSlideOffset}>
                     <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={false}>
-                      <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} style={{width: '98%', height: 'auto'}} 
+                      <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} 
                       className='productDetailsCarouselImage'
                       id={`idForBorder${idx + videoSlideOffset}`}
                       onClick={carouselClickHandler}
