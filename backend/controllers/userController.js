@@ -155,8 +155,8 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
   const user = await User.findById(userID);
   if(user) {
     let oldWishList = [...user.wishList]
-    //See if the item is already 
-    // add the new item to the wishlist
+    let qtyInStock = null;
+    let currentPrict = null;
     oldWishList.push({ productID, name, color, size, sizeCategory, image });
     user.wishList = oldWishList;
     // Update the user's info

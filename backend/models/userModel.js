@@ -28,6 +28,16 @@ const wishListSchema = mongoose.Schema({
     image: {
       type: String,
       required: true
+    },
+    qtyAvailable: {
+      type: Number,
+      required: false,
+      default: null
+    },
+    currentPrice: {
+      type: Number,
+      required: false,
+      default: null
     }
 }, {
   timestamps: true

@@ -3,22 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row } from 'react-bootstrap';
 
 import { getWishListProductDetails } from '../actions/userActions';
-import { refreshWishList } from '../actions/wishListActions';
-
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import './WishListScreen.css';
 import WishListRow from '../components/WishListScreen/WishListRow';
 
-
-const WishListScreen = ({ history }) => {
+const WishListScreen2 = ({ history }) => {
 
   const dispatch = useDispatch();
   const haveFetchedWishListProductData = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
+  const { wishList } = userInfo;
 
   const productsFromWishlist = useSelector(state => state.wishListProductDetails);
   const { loading } = productsFromWishlist;
@@ -26,18 +23,21 @@ const WishListScreen = ({ history }) => {
   useEffect(() => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
-    console.log('in WishListScreen useEffect')
+
     if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
-      console.log('in first conditional')
-      dispatch(refreshWishList(userID));
+      // console.log('we have a wishlist')
+      let tempArrayProductIDs = wishList.map((eachItem) => {
+        return eachItem.productID;
+      })
+      dispatch(getWishListProductDetails({arrayOfProductIDs: tempArrayProductIDs}));
+      haveFetchedWishListProductData.current = false;
     } else {
       // console.log('the user does not have a wishlist');
     }
     // return () => {
       
     // }
-  // }, [history, userInfo, dispatch, wishList]);
-  }, [history, userID, wishList]);
+  }, [history, userInfo, dispatch, wishList]);
 
   return (
     <>
@@ -96,5 +96,5 @@ const WishListScreen = ({ history }) => {
   )
 }
 
-export default WishListScreen;
+export default WishListScreen2;
 
