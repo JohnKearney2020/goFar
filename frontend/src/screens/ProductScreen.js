@@ -59,14 +59,8 @@ const ProductScreen = ({ match }) => {
   useEffect(() => {
     if(loaded){ // If we've successfully loaded the product from the global state
       //Find the initialSizeCategory, ex: 'Regular', 'Tall', etc.
-      let initialSizeCategory = product.hasSizes ? product.sizes[0].sizeCategoryName : 'ONE SIZE';
+      let initialSizeCategory = product.sizes[0].sizeCategoryName;
       setSelectedSizeCategory(initialSizeCategory);
-      // If the product only has one size, set the selectedSize and qtyInStock state
-      if(initialSizeCategory === 'ONE SIZE') { 
-        setSelectedSize('ONE SIZE');
-        setQtyInStock(product.defaultQty)
-      };
-
       // Populate Product Colors
       let tempProductColors = [];
       let tempClearanceColors = [];
@@ -77,17 +71,12 @@ const ProductScreen = ({ match }) => {
       setClearanceColors(tempClearanceColors);
 
       // Prices
-      if(product.hasSizes){ //if the product has sizes
-        let sizeObjArray = [...product.sizes];
-        let sizesAndPricesObjArray = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryColorsAndSizes;
-        let initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorFromUrl)].colorSalePrice;
-        let initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryDefaultPrice;
-        setColorSalePrice(addDecimals(initialSalePrice));
-        setProductPrice(addDecimals(initialDefaultPrice));
-      } else { //if the product does not have sizes
-        setColorSalePrice(addDecimals(product.defaultSalePrice));
-        setProductPrice(addDecimals(product.defaultPrice));
-      }
+      let sizeObjArray = [...product.sizes];
+      let sizesAndPricesObjArray = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryColorsAndSizes;
+      let initialSalePrice = sizesAndPricesObjArray[sizesAndPricesObjArray.findIndex(index => index.color === colorFromUrl)].colorSalePrice;
+      let initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryDefaultPrice;
+      setColorSalePrice(addDecimals(initialSalePrice));
+      setProductPrice(addDecimals(initialDefaultPrice));
     }
   }, [product, colorFromUrl, loaded]);
 

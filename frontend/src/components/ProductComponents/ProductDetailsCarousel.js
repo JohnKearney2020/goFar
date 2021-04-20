@@ -107,10 +107,11 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                 {/* If the product has a video, make it the first slide */}
                 {product.defaultVideo &&
                   <Slide index={0} key={0}>
-                    <Dot slide={0} className='productDetailsCarouselDot' disabled={false}>
-                      <div className='carouselVideo' onClick={videoHandler} data-videosource={product.defaultVideo}>
-                      </div>
-                      <iframe width='100%' height='100%' src={product.defaultVideo} title={`${product.name} video`} frameBorder="0"></iframe>
+                    <Dot slide={0} className='productDetailsCarouselDot' disabled={false} onClick={videoHandler}>
+                      <img src={product.videoThumbnail} alt={`Slide 0 - Product Video`} style={{width: '100%', height: 'auto'}} 
+                        className='productDetailsCarouselImage'
+                        id={`idForBorder0`}
+                      />
                     </Dot>                
                   </Slide>
                 }
@@ -118,7 +119,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                 {combinedImagesForCarousel.map((eachImage, idx) => (
                   <Slide index={idx + videoSlideOffset} key={idx + videoSlideOffset}>
                     <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={false}>
-                      <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} style={{width: '100%', height: 'auto'}} 
+                      <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} style={{width: '98%', height: 'auto'}} 
                       className='productDetailsCarouselImage'
                       id={`idForBorder${idx + videoSlideOffset}`}
                       onClick={carouselClickHandler}

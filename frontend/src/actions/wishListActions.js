@@ -6,7 +6,7 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
   console.log('in refreshWishList action');
   // Get the current wishList and token from the global state
   const { userLogin: { userInfo } } = getState();
-  const { wishList, token } = userInfo;
+  const { cart, wishList, token } = userInfo;
 
   //Configure our headers for various axios requests
   const config = { // set headers to json
@@ -38,7 +38,7 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
     // console.log(updatedWishListItems)
     //Now compare the two and update the wishList as necessary
 
-    for(let eachItem of oldWishList){
+    for(let oldItem of oldWishList){
       let { productID: id1, //deconstruct the item object from the cart
         name:name1,
         quantity:userQuantity,
@@ -46,15 +46,29 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
         size:size1,
         sizeCategory:sizeCategory1,
         currentPrice,
-        qtyAvailable
+        qtyAvailable,
+        inCart
         // image,
         // savedForLater,
         // createdAt
-      } = eachItem;
-        // Loop through the detailed cart items and find a match
-        for(let upToDateItem of updatedWishListItems){
+      } = oldItem;
+        // Loop through the detailed wishListItemsand find a match
+        for(let upToDateWishListItem of updatedWishListItems){
           // Destructure the upToDateItem object
-          const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
+          const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateWishListItem;
+          //Drill down into the product object and find the color, size, and sizeCategory, all of which are needed to verify
+          //a match
+          let color;
+          let size;
+          let sizeCategory;
+          if(hasSizes === false){
+            
+          }
+
+          //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
+          // let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory)];;
+          // console.log(levelOne)
+
           if(id1 === id2){ //We've found the matching item from our wishlist in updatedWishListItems
             //=====================================================================================================================
             //                                                  Find the current price and qty available
@@ -62,10 +76,20 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
             // Products without sizes - easiest case
             if(hasSizes === false){
               //Update the price
-              defaultSalePrice !== 0 ? eachItem.currentPrice = defaultSalePrice : eachItem.currentPrice = defaultPrice;
+              defaultSalePrice !== 0 ? oldItem.currentPrice = defaultSalePrice : oldItem.currentPrice = defaultPrice;
               //Update the qty if needed
-              eachItem.qtyAvailable = defaultQty;
+              oldItem.qtyAvailable = defaultQty;
             }
+          }
+        }
+        //==============================================================
+        //Loop through the cart items and see if the item is in the cart
+        //==============================================================
+        for(let cartItem of cart){
+          const { productID:id3, color:color3, size:size3, sizeCategory:sizeCategory3 } = cartItem;
+          if(id1 === id3 && color1 === color3 & size1 === size3 && sizeCategory1 === sizeCategory3){
+            oldItem.inCart = true;
+            break;
           }
         }
 

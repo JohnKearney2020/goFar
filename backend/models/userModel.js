@@ -38,6 +38,11 @@ const wishListSchema = mongoose.Schema({
       type: Number,
       required: false,
       default: null
+    },
+    inCart: {
+      type: Boolean,
+      required: false,
+      default: false
     }
 }, {
   timestamps: true
