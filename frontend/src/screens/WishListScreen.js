@@ -20,8 +20,8 @@ const WishListScreen = ({ history }) => {
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, wishList } = userInfo;
 
-  const productsFromWishlist = useSelector(state => state.wishListProductDetails);
-  const { loading } = productsFromWishlist;
+  // const productsFromWishlist = useSelector(state => state.wishListProductDetails);
+  // const { loading } = productsFromWishlist;
 
   useEffect(() => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
@@ -43,7 +43,7 @@ const WishListScreen = ({ history }) => {
   return (
     <>
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
-      {loading ? <Loader /> :
+      {false ? <Loader /> :
         <>
         {wishList.length === 0 && <Message variant='info'>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
         <ListGroup variant='flush'>
@@ -87,6 +87,10 @@ const WishListScreen = ({ history }) => {
               sizeCategory={eachProduct.sizeCategory}
               dateAdded={eachProduct.createdAt}
               productImage={eachProduct.image}
+              qtyAvailable={eachProduct.qtyAvailable}
+              currentPrice={eachProduct.currentPrice}
+              inCart={eachProduct.inCart}
+              availableInOtherSizes={eachProduct.availableInOtherSizes}
               // index={idx}
             />
           ))}
