@@ -1,8 +1,11 @@
 const products = [
   {
+    //============================================================================================================================
+    //                                    First Product - Microtherm 2.0 Down Hooded Jacket
+    //============================================================================================================================
     // user: xxxx, //will be inserted with seeder script
     isRetired: false,
-    name: 'MicroTherm® 2.0 Down Hooded Jacket',
+    name: `Men's MicroTherm® 2.0 Down Hooded Jacket`,
     images: [
       {
         color: 'Seapine',
@@ -240,9 +243,6 @@ const products = [
     reviews: [], //come back to this
     rating: 4,
     numReviews: 1,
-    defaultPrice: 0,
-    defaultSalePrice: 0,
-    defaultQty: '',
     featureIcons: [
       {
         heading: 'First Ascent',
@@ -278,8 +278,12 @@ const products = [
       'https://i.imgur.com/TWCmNx9.jpg',
       'https://i.imgur.com/qxYfSCG.jpg'
     ],
-    defaultVideo: 'https://www.youtube.com/embed/t2MGytLDf4I'
+    defaultVideo: 'https://www.youtube.com/embed/t2MGytLDf4I',
+    videoThumbnail: 'https://i.imgur.com/ollJCiw.jpg'
   },
+  //============================================================================================================================
+  //                                                Next Product - Stargazer Tent
+  //============================================================================================================================
   {
     // user: xxxx, //will be inserted with seeder script
     isRetired: false,
@@ -340,7 +344,24 @@ const products = [
         tinyImage: '/images/TinyColorImages/AscentBlue_tiny.jpg'
       }
     ],
-    sizes: [],
+    sizes: [
+      {
+        sizeCategoryName: 'ONE SIZE',
+        sizeCategoryDefaultPrice: 399,
+        sizeCategoryColorsAndSizes: [
+          {
+            color: 'Ascent Blue',
+            colorSalePrice: 349,
+            sizeCategorySizes: [
+              {
+                size: 'ONE SIZE',
+                qty: 30,
+              }
+            ]
+          },
+        ],
+      }
+    ],
     descriptions: [
       `The new, enhanced version of our award-winning 2-person backpacking tent. With a slightly larger footprint and more interior space, the 2.0 adds to the Stargazer's reputation as a best-in-class 3-season tent. Designed by our First Ascent guides, it features superior materials for outstanding weather protection, steep-wall construction, easy setup, and a tub floor that keeps you dry even in the wettest conditions.`
     ],
@@ -359,9 +380,6 @@ const products = [
     reviews: [], //come back to this
     rating: 5,
     numReviews: 3,
-    defaultPrice: 399.00,
-    defaultSalePrice: 349.00,
-    defaultQty: 30,
     featureIcons: [
       {
         heading: 'First Ascent',
@@ -376,13 +394,16 @@ const products = [
         source: '/images/FeatureIcons/3Season.svg'
       }
     ],
-    defaultImages: [],
-    defaultVideo: 'https://www.youtube.com/embed/UbTsyJpWRNM'
+    defaultVideo: 'https://www.youtube.com/embed/UbTsyJpWRNM',
+    videoThumbnail: 'https://i.imgur.com/dzmEpmT.jpg'
   },
+  //============================================================================================================================
+  //                                              Next Product- Women's Guide Pro Pants
+  //============================================================================================================================
   {
     // user: xxxx, //will be inserted with seeder script
     isRetired: false,
-    name: 'Guide Pro Pants',
+    name: `Women's Guide Pro Pants`,
     images: [
       {
         color: 'Black',
@@ -1744,7 +1765,8 @@ const products = [
       'https://i.imgur.com/oIV3hL6.jpg',
       'https://i.imgur.com/29u90UO.jpg'
     ],
-    defaultVideo: 'https://www.youtube.com/embed/ObyTwHWmIy8'
+    defaultVideo: 'https://www.youtube.com/embed/ObyTwHWmIy8',
+    videoThumbnail: 'https://i.imgur.com/WUxjLKH.jpg'
   },
 ]
 

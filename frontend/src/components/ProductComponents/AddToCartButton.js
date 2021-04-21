@@ -52,7 +52,6 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
       let currentCart = [...cart]
       let alreadyInCart = false;
       let qtyAlreadyInCart = 0;
-      let qtyToAddToCart = quantity; //The default value is the qty value the user has chosen from the drop down. This can be changed. See code below:
       for(let eachProduct of currentCart){
         if(eachProduct.productID === productID && eachProduct.color === color  && eachProduct.size === size && eachProduct.sizeCategory === sizeCategory){
           alreadyInCart = true; //We now know this combination already exists in the cart

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Image, Button, Form, Col, Row, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -9,27 +9,31 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
-import { addDecimals } from '../../utilityFunctions/addDecimals';
 
-const WishListRow = ({ productID, productName, color, size, sizeCategory, productImage, dateAdded, index }) => {
-  
+const WishListRow = ({ 
+      productID, 
+      productName, 
+      color, 
+      size, 
+      sizeCategory, 
+      productImage, 
+      dateAdded, 
+      index, 
+      qtyAvailable,
+      currentPrice,
+      inCart,
+      availableInOtherSizes
+    }
+  ) => {
+
   const dispatch = useDispatch();
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart, token } = userInfo;
 
-  // Get our array of wishlist products from the global state.
-  const wishListProducts = useSelector(state => state.wishListProductDetails.wishListProducts);
-  // Find the product specific to this table row
-  const product = wishListProducts[wishListProducts.findIndex(i => i.name === productName)];
-
   //Set up local state
-  const [tablePrice, setTablePrice] = useState(0);
-  const [qtyForTable, setQtyForTable] = useState(0);
   const [qtyForCart, setQtyForCart] = useState(1);
   const [disableCart, setDisableCart] = useState(false);
-  const [availableInOtherSizes, setAvailableInOtherSizes] = useState(false);
-  const [hasSizes, setHasSizes] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
   const [loadingCartIcon, setLoadingCartIcon] = useState(false);
   const [updatingWishlistIcon, setUpdatingWishlistIcon] = useState(false);
@@ -41,13 +45,16 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
     }
   }
 
-  // Format the date for the Date column
-  const dateObject = new Date(dateAdded);
-  const dateForTable = `${(dateObject.getMonth() + 1).toString()}/${dateObject.getDate().toString()}/${dateObject.getFullYear().toString()}`;
-
   // Format the size for the Size column
   let sizeForTable = '';
   sizeCategory !== 'ONE SIZE' ? sizeForTable = `${size} - ${sizeCategory}` : sizeForTable = 'ONE SIZE';
+
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    console.log('in cart handler')
+    console.log(`qty for cart: ${qtyAvailable}`)
+  }
 
   useEffect(() => {
     // console.log('in wishlist table row useEffect')
@@ -159,7 +166,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
     try {
       //attempt to remove the item from the user's wishlist
       // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
-      const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
+      const { data } = await axios.delete(`/api/users/wishlist/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({
@@ -168,7 +175,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success(`Removed ${productName} from wishlist!`, { position: "top-right", autoClose: 3500 } );
-      setLoadingDeleteIcon(false);
+      // setLoadingDeleteIcon(false);
     } catch (error) {
       console.log('there was an error')
       console.log(error)
@@ -178,65 +185,67 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
   
   return (
     <>
+  {/* productID, productName, color, size, sizeCategory, productImage, dateAdded, index, productImage, qtyAvailable, currentPrice, 
+  inCart, availableInOtherSizes */}
       <ListGroup.Item>
         <Row className='align-items-center justify-content-center'>
           {/* ===================== */}
           {/*     Product Image     */}
           {/* ===================== */}
-          <Col md={2}>
+          <Col lg={2}>
             <Link to={`/product/${productID}/${color}`}>
-              <Image src={productImage} alt={productName} fluid rounded />
+              <Image src={productImage} alt={productName} fluid rounded className='shadow-sm' />
             </Link>
           </Col>
           {/* ===================== */}
           {/*         Name          */}
           {/* ===================== */}
-          <Col md={3} className='text-center'>
+          <Col lg={3} className='text-center'>
             <Link to={`/product/${productID}/${color}`}>{productName}</Link>
           </Col>
           {/* ===================== */}
           {/*         Color         */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>{color}</Col>
+          <Col lg={1} className='text-center'>{color}</Col>
           {/* ===================== */}
           {/*         Size          */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>{sizeForTable}</Col>
+          <Col lg={1} className='text-center'>{sizeForTable}</Col>
           {/* ===================== */}
           {/*      Qty Available    */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>
-            {qtyForTable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : ( qtyForTable > 10 ? '10+' : (qtyForTable <= 5 ? <span className='text-danger font-weight-bold'>{qtyForTable}</span> : qtyForTable ))}
+          <Col lg={1} className='text-center'>
+            {qtyAvailable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : ( qtyAvailable > 10 ? '10+' : (qtyAvailable <= 5 ? <span className='text-danger font-weight-bold'>{qtyAvailable}</span> : qtyAvailable ))}
           </Col>
           {/* ===================== */}
           {/*         Price         */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>${tablePrice}</Col>
+          <Col lg={1} className='text-center'>${currentPrice}</Col>
           {/* ===================== */}
           {/*    Add to Cart Form   */}
           {/* ===================== */}
-          {(qtyForCart === 0 && hasSizes === false) &&
-            <Col md={2} className='text-center'>
+          {(qtyAvailable === 0 && availableInOtherSizes === false) &&
+            <Col lg={2} className='text-center'>
               <span className='text-danger font-weight-bold'>Out of Stock</span> 
             </Col>
           } 
-          {(qtyForTable === 0 && hasSizes === true && availableInOtherSizes === true) &&
-            <Col md={2} className='text-center'>
+          {(qtyAvailable === 0 && availableInOtherSizes === true) &&
+            <Col lg={2} className='text-center'>
               <span className='text-danger font-weight-bold'>Available in Other Sizes</span> 
             </Col>
           } 
-          {qtyForTable !== 0 &&
+          {qtyAvailable !== 0 &&
             <>
-              <Col md={1}>
+              <Col lg={1}>
                 <Form type='submit' onSubmit={addToCartHandler}>
                   <Form.Control 
                     as='select'
-                    value={qtyForCart} 
+                    value={qtyAvailable === 0 ? 0 : 1} 
                     onChange={(e) => setQtyForCart(e.target.value)} 
-                    disabled={loadingCartIcon | disableCart}
-                    className='px-2'
+                    disabled={disableCart | inCart}
+                    className='px-2 shadow-sm'
                   >
-                    {[...Array(qtyForTable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
+                    {[...Array(qtyAvailable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
                       (x + 1 <= 10 &&
                         <option key={x+1} value={x + 1}>
                         {x + 1}
@@ -246,15 +255,19 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
                   </Form.Control>
                 </Form>
               </Col>
-              <Col md={1} className='text-center my-1'>
-                <Button size='sm' disabled={loadingCartIcon | disableCart} type='submit' className='w-100' onClick={addToCartHandler}>
-                  {disableCart ? 'In Cart' : <FontAwesomeIcon className='' icon={loadingCartIcon ? spinner : faCartPlus} size='2x' />}
+              <Col lg={1} className='text-center'>
+                <Button disabled={disableCart | inCart} type='submit' className='w-100 p-0 mt-1 d-flex justify-content-center align-items-center'
+                  style={{"height": "49px"}}
+                >
+                  {inCart ? 'In Cart' : <FontAwesomeIcon className='' icon={faCartPlus} size='2x' />}
                 </Button>
               </Col>
             </>
           }
-          <Col md={1} className='text-center'>
-            <Button size='sm' variant='danger' className='w-100' disabled={loadingDeleteIcon | loadingCartIcon} onClick={deleteWishListItemHandler}>
+          <Col lg={1} className='text-center'>
+            <Button size='sm' variant='danger' className='w-100 mt-1' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}
+            style={{"height": "49px"}}>
+
               <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
             </Button>
           </Col>

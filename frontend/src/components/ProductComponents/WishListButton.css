@@ -9,6 +9,7 @@
 .wishListIcon {
   color: #D9534F;
   transition: transform .3s ease;
+  cursor: pointer;
 }
 
 .wishListIcon:hover {

@@ -8,6 +8,7 @@ import connectDB from './config/db.js'; //remember, we need the .js extension in
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import wishListRoutes from './routes/wishListRoutes.js';
 
 dotenv.config(); //load our environmental variables
 connectDB(); // connect to our database!
@@ -43,8 +44,12 @@ app.use('/api/users', userRoutes);
 //========================================
 //Cart related routes
 //========================================
-// console.log('in server .js')
 app.use('/api/users/cart', cartRoutes);
+
+//========================================
+//WishList related routes
+//========================================
+app.use('/api/users/wishlist', wishListRoutes);
 
 //========================================
 //Error Handling Middleware

@@ -138,21 +138,6 @@ const productSchema = mongoose.Schema({
     required: true,
     default: 0
   },
-  defaultPrice: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  defaultSalePrice: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  defaultQty: {
-    type: Number,
-    required: false,
-    default: ''
-  },
   featureIcons: [{
     heading: {
       type: String,
@@ -168,6 +153,10 @@ const productSchema = mongoose.Schema({
     required: true
   }],
   defaultVideo: {
+    type: String,
+    required: false
+  },
+  videoThumbnail: {
     type: String,
     required: false
   }

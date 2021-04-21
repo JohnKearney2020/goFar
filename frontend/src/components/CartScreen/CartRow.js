@@ -58,7 +58,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       }
     }
     // 'color', 'productID', 'size', 'sizeCategory', and 'wishList'
-  }, [wishList, color, productID, size, sizeCategory])
+  }, [wishList.length, color, productID, size, sizeCategory, wishList ])
 
   //This moves items to saved for later or back to the cart
   const moveInCartHandler = async (e) => {
@@ -99,14 +99,27 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     setUpdatingCartIcon(true);
     try {
       //attempt to add the item to the user's wishlist
-      await axios.post('/api/users/wishlistitem', { 
-        userID,
+      await axios.post('/api/users/wishlist/wishlistitem', { 
+        // productID
+        // name
+        // color
+        // size
+        // sizeCategory
+        // image
+        // qtyAvailable
+        // currentPrice
+        // inCart
+        // availableInOtherSizes
         productID, 
-        name: name,
+        name,
         color,
         size,
         sizeCategory, 
-        image: image,
+        image,
+        qtyAvailable: qty,
+        currentPrice: price,
+        inCart: false,
+        availableInOtherSizes: null
       }, config);
       //Next, Delete the item from the user's cart
       const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
