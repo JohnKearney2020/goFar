@@ -54,8 +54,9 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
           Authorization: `Bearer ${userInfo.token}`
         }
       }
+      console.log('attempting to add to a users wishlist')
       //attempt to add the item to the user's wishlist
-      const { data } = await axios.post('/api/users/wishlistitem', { 
+      const { data } = await axios.post('/api/users/wishlist/wishlistitem', { 
         userID,
         productID, 
         name: productName,

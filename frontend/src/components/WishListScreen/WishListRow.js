@@ -114,7 +114,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       }
       //attempt to remove the item from the user's wishlist
       // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
-      const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
+      const { data } = await axios.delete(`/api/users/wishlist/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({
@@ -123,7 +123,7 @@ const WishListRow = ({ productID, productName, color, size, sizeCategory, produc
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success(`Removed ${productName} from wishlist!`, { position: "top-right", autoClose: 3500 } );
-      setLoadingDeleteIcon(false);
+      // setLoadingDeleteIcon(false);
     } catch (error) {
       console.log('there was an error')
       console.log(error)

@@ -15,7 +15,7 @@ import WishListRow from '../components/WishListScreen/WishListRow';
 const WishListScreen = ({ history }) => {
 
   const dispatch = useDispatch();
-  const haveFetchedWishListProductData = useRef(false);
+  const haveUpdatedWishList = useRef(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, wishList } = userInfo;
@@ -27,9 +27,10 @@ const WishListScreen = ({ history }) => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
     console.log('in WishListScreen useEffect')
-    if(wishList.length > 0 && haveFetchedWishListProductData.current === false){
+    if(wishList.length > 0 && haveUpdatedWishList.current === false){
       console.log('in first conditional')
       dispatch(refreshWishList(userID));
+      haveUpdatedWishList.current = true;
     } else {
       // console.log('the user does not have a wishlist');
     }
@@ -37,7 +38,7 @@ const WishListScreen = ({ history }) => {
       
     // }
   // }, [history, userInfo, dispatch, wishList]);
-  }, [history, userID, wishList]);
+  }, [history, userID, wishList, dispatch, userInfo.name]);
 
   return (
     <>
