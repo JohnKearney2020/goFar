@@ -84,7 +84,7 @@ export const userUpdateProfileReducer = ( state = { }, action ) => {
 export const wishListDetailsReducer = ( state = { wishListProducts: [] }, action ) => {
   switch(action.type) {
     case WISHLIST_PRODUCT_DETAILS_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case WISHLIST_PRODUCT_DETAILS_SUCCESS:
       return { loading: false, success: true, wishListProducts: action.payload };
     case WISHLIST_PRODUCT_DETAILS_FAIL:
