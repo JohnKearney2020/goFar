@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import cloneDeep from 'lodash/cloneDeep';
 import { addDecimals } from '../utilityFunctions/addDecimals';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
@@ -29,11 +28,11 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
     const { data:updatedWishListItems } = await axios.post(`/api/users/wishlist`, { arrayOfProductIDs }, config );
     //Now compare the two and update the wishList as necessary
     for(let oldItem of oldWishList){
-      let { productID: id1, name:name1, quantity:userQuantity, color:color1, size:size1, sizeCategory:sizeCategory1 } = oldItem;
+      let { productID: id1, color:color1, size:size1, sizeCategory:sizeCategory1 } = oldItem;
         // Loop through the detailed wishListItems and find the match
         for(let upToDateWishListItem of updatedWishListItems){
           // Destructure the upToDateItem object
-          const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateWishListItem;
+          const { _id: id2, sizes } = upToDateWishListItem;
           //Drill down into the product object and find the color, size, and sizeCategory, all of which are needed to verify a match
           if(id1 === id2){ //We won't dig further for color, size, sizeCategory unless the ID's match
             //=====================================================================================================================

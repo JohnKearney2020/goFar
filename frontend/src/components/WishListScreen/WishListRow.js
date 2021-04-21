@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Image, Button, Form, Col, Row, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,6 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
-import { addDecimals } from '../../utilityFunctions/addDecimals';
 
 const WishListRow = ({ 
       productID, 
@@ -84,58 +83,58 @@ const WishListRow = ({
           {/* ===================== */}
           {/*     Product Image     */}
           {/* ===================== */}
-          <Col md={2}>
+          <Col lg={2}>
             <Link to={`/product/${productID}/${color}`}>
-              <Image src={productImage} alt={productName} fluid rounded />
+              <Image src={productImage} alt={productName} fluid rounded className='shadow-sm' />
             </Link>
           </Col>
           {/* ===================== */}
           {/*         Name          */}
           {/* ===================== */}
-          <Col md={3} className='text-center'>
+          <Col lg={3} className='text-center'>
             <Link to={`/product/${productID}/${color}`}>{productName}</Link>
           </Col>
           {/* ===================== */}
           {/*         Color         */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>{color}</Col>
+          <Col lg={1} className='text-center'>{color}</Col>
           {/* ===================== */}
           {/*         Size          */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>{sizeForTable}</Col>
+          <Col lg={1} className='text-center'>{sizeForTable}</Col>
           {/* ===================== */}
           {/*      Qty Available    */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>
+          <Col lg={1} className='text-center'>
             {qtyAvailable === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : ( qtyAvailable > 10 ? '10+' : (qtyAvailable <= 5 ? <span className='text-danger font-weight-bold'>{qtyAvailable}</span> : qtyAvailable ))}
           </Col>
           {/* ===================== */}
           {/*         Price         */}
           {/* ===================== */}
-          <Col md={1} className='text-center'>${currentPrice}</Col>
+          <Col lg={1} className='text-center'>${currentPrice}</Col>
           {/* ===================== */}
           {/*    Add to Cart Form   */}
           {/* ===================== */}
           {(qtyAvailable === 0 && availableInOtherSizes === false) &&
-            <Col md={2} className='text-center'>
+            <Col lg={2} className='text-center'>
               <span className='text-danger font-weight-bold'>Out of Stock</span> 
             </Col>
           } 
           {(qtyAvailable === 0 && availableInOtherSizes === true) &&
-            <Col md={2} className='text-center'>
+            <Col lg={2} className='text-center'>
               <span className='text-danger font-weight-bold'>Available in Other Sizes</span> 
             </Col>
           } 
           {qtyAvailable !== 0 &&
             <>
-              <Col md={1}>
+              <Col lg={1}>
                 <Form type='submit' onSubmit={addToCartHandler}>
                   <Form.Control 
                     as='select'
                     value={qtyAvailable === 0 ? 0 : 1} 
                     onChange={(e) => setQtyForCart(e.target.value)} 
                     disabled={disableCart | inCart}
-                    className='px-2'
+                    className='px-2 shadow-sm'
                   >
                     {[...Array(qtyAvailable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
                       (x + 1 <= 10 &&
@@ -147,15 +146,18 @@ const WishListRow = ({
                   </Form.Control>
                 </Form>
               </Col>
-              <Col md={1} className='text-center my-1'>
-                <Button size='sm' disabled={disableCart | inCart} type='submit' className='w-100'>
+              <Col lg={1} className='text-center'>
+                <Button disabled={disableCart | inCart} type='submit' className='w-100 p-0 mt-1 d-flex justify-content-center align-items-center'
+                  style={{"height": "49px"}}
+                >
                   {inCart ? 'In Cart' : <FontAwesomeIcon className='' icon={faCartPlus} size='2x' />}
                 </Button>
               </Col>
             </>
           }
-          <Col md={1} className='text-center'>
-            <Button size='sm' variant='danger' className='w-100' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}>
+          <Col lg={1} className='text-center'>
+            <Button size='sm' variant='danger' className='w-100 mt-1' disabled={loadingDeleteIcon} onClick={deleteWishListItemHandler}
+            style={{"height": "49px"}}>
               <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x" />
             </Button>
           </Col>

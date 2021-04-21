@@ -29,8 +29,8 @@ const ProductReviews = () => {
   ]
 
   const firstReviewsArray = arrayOfReviews.slice(0,3); //first 3 elements. The original array is not modified w/ slice()
-  const remainingReviewsArray = arrayOfReviews.slice(3);
-  const numReviewsPerAccordion = 5;
+  // const remainingReviewsArray = arrayOfReviews.slice(3);
+  // const numReviewsPerAccordion = 5;
 
 
   // let numSetsOfReviews = Math.floor(remainingReviewsArray.length / numReviewsPerAccordion);

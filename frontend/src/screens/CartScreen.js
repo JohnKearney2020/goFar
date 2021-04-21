@@ -234,7 +234,7 @@ const CartScreen = ({ history }) => {
               {/*    Table Header   */}
               {/*===================*/}
                 <ListGroup.Item className='d-none d-md-block'>
-                  <Row className='align-items-center justify-content-center' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
+                  <Row className='align-items-center justify-content-center shadow mb-3' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
                     <Col md={5} className='text-center'>
                       <span className='font-weight-bold'>Product</span>
                     </Col>
@@ -299,7 +299,7 @@ const CartScreen = ({ history }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
-              <Card className='my-5'>
+              <Card className='my-5 shadow'>
                 <Card.Img src='https://i.imgur.com/09uggrQ.jpg' />
                 <Card.Header className='text-center'>
                   <h6 className='m-0'>Get excited about $49 free shipping</h6>
@@ -367,7 +367,7 @@ const CartScreen = ({ history }) => {
             </Col> {/* End of Left Side of Screen */}
             {/* Right Side of Screen */}
             <Col md={4} className='d-flex justify-content-center align-items-center'>
-              <Card className='mb-5'>
+              <Card className='mb-5 shadow'>
                 <Card.Img src='https://i.imgur.com/QBBE0Wc.jpg' />
                 <Card.Header className='text-center'>
                   <h6 className='m-0'>Start your adventure today</h6>

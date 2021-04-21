@@ -1,9 +1,7 @@
 import axios from 'axios';
-import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
-import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL, CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
-import { CART_MOVED_MESSAGE_REQUEST, CART_MOVED_MESSAGE_SUCCESS, CART_MOVED_MESSAGE_FAIL, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
-import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
-
+import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL } from '../constants/cartConstants';
+import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL } from '../constants/cartConstants';
+import { CART_MOVED_MESSAGE_REQUEST, CART_MOVED_MESSAGE_SUCCESS, CART_MOVED_MESSAGE_FAIL } from '../constants/cartConstants';
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const getCartProductDetails = (arrayOfProductIDs) => async (dispatch, getState) => {

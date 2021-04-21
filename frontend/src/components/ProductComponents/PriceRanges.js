@@ -1,6 +1,5 @@
 import React from 'react';
 import { findDefaultPriceRange, findSalePriceRange } from '../../utilityFunctions/priceRanges';
-import { addDecimals } from '../../utilityFunctions/addDecimals';
 import './PriceRanges.css';
 
 const PriceRanges = ({ product }) => {

@@ -39,12 +39,13 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
   // image: primaryImageForColor,
 
 
-  const { userID, productID, name, color, size, sizeCategory, image } = req.body;
-  const user = await User.findById(userID);
+  const { productID, name, color, size, sizeCategory, image } = req.body;
+  const user = await User.findById(req.user._id);
   if(user) {
+    console.log('found user')
     let oldWishList = [...user.wishList]
-    let qtyInStock = null;
-    let currentPrict = null;
+    // let qtyInStock = null;
+    // let currentPrict = null;
     oldWishList.push({ productID, name, color, size, sizeCategory, image });
     user.wishList = oldWishList;
     // Update the user's info
