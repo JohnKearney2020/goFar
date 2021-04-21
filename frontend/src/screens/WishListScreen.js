@@ -13,11 +13,13 @@ import WishListRow from '../components/WishListScreen/WishListRow';
 const WishListScreen = ({ history }) => {
 
   const dispatch = useDispatch();
+  
   const haveUpdatedWishList = useRef(false);
   const [noWishList, setNoWishList] = useState(false);
 
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, wishList } = userInfo;
+
 
   useEffect(() => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
@@ -97,4 +99,3 @@ const WishListScreen = ({ history }) => {
 }
 
 export default WishListScreen;
-
