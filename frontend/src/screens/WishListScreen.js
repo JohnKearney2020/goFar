@@ -51,25 +51,25 @@ const WishListScreen = ({ history }) => {
         {/*===================*/}
           <ListGroup.Item className='d-none d-md-block'>
             <Row className='align-items-center justify-content-center' style={{"backgroundColor":"rgba(0,0,0,.03)"}}>
-              <Col md={5} className='text-center'>
+              <Col lg={5} className='text-center'>
                 <span className='font-weight-bold'>Product</span>
               </Col>
-              <Col md={1} className='text-center'>
+              <Col lg={1} className='text-center'>
                 <span className='font-weight-bold'>Color</span>
               </Col>
-              <Col md={1} className='text-center'>
+              <Col lg={1} className='text-center'>
                 <span className='font-weight-bold'>Size</span>
               </Col>
-              <Col md={1} className='text-center'>
+              <Col lg={1} className='text-center'>
                 <span className='font-weight-bold'>Qty Available</span>              
               </Col>
-              <Col md={1} className='text-center'>
+              <Col lg={1} className='text-center'>
                 <span className='font-weight-bold'>Current Price</span>
               </Col>
-              <Col md={2} className='text-center'>
+              <Col lg={2} className='text-center'>
                 <span className='font-weight-bold'>Add to Cart</span> 
               </Col>
-              <Col md={1} className='text-center'>
+              <Col lg={1} className='text-center'>
                 <span className='font-weight-bold'>Delete</span> 
               </Col>
             </Row> 
