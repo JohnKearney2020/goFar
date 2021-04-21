@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row } from 'react-bootstrap';
-
-import { getWishListProductDetails } from '../actions/userActions';
 import { refreshWishList } from '../actions/wishListActions';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
@@ -43,7 +41,7 @@ const WishListScreen = ({ history }) => {
   return (
     <>
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
-      {false ? <Loader /> :
+      {!haveUpdatedWishList.current ? <Loader /> :
         <>
         {wishList.length === 0 && <Message variant='info'>Your wishlist is empty. Add items to your wishlist by clicking the heart icon on a product's page.</Message>}
         <ListGroup variant='flush'>
@@ -79,7 +77,7 @@ const WishListScreen = ({ history }) => {
           {/* Items in Wishlist */}
           {/*===================*/}
           {wishList.map((eachProduct, idx) => (
-            <WishListRow key={idx}
+            <WishListRow key={`${idx}${wishList[idx].color}${wishList[idx].size}${wishList[idx].sizeCategory}`}
               productID={eachProduct.productID}
               productName={eachProduct.name}
               color={eachProduct.color}
