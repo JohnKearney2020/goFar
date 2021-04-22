@@ -41,6 +41,10 @@ const CartScreen = ({ history }) => {
   // const [redoCartLogic, setRedoCartLogic] = useState(false);
   const [forceReRender, setForceReRender] = useState(false);
 
+  const checkoutHandler = async () => {
+    console.log('clicked cart checkout button')
+  }
+
   useEffect(() => {
     console.log('in cart screen useEffect')
     //============================================================================================================
@@ -211,7 +215,7 @@ const CartScreen = ({ history }) => {
       //above in this useEffect executing again
       console.log('in last part of useEffect')
       fullyLoadedScreenOnceAlready.current = true;
-      setForceReRender(!forceReRender);
+      setForceReRender(true);
     }
   }, [cart, cartProducts, dispatch, userInfo.token]);
 
@@ -288,17 +292,13 @@ const CartScreen = ({ history }) => {
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
-                    {/* <h2>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items</h2> */}
-                    <h2>Subtotal items</h2>
+                    <h4>Subtotal ({cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)} items):</h4>
+                    <p className='m-0 lead font-weight-bold'>${cart.reduce((acc,item) => acc + (item.savedForLater ? 0 : item.quantity) * item.price, 0).toFixed(2)}</p>
                     {/* .toFixed(2) gives us a 2 decimal number */}
-                    {/* ${cartItems.reduce((acc,item) => acc + item.qty * item.price, 0).toFixed(2)} */}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    {/* <Button type='button' className='btn-block' disabled={cartItems.length === 0} onClick={checkoutHandler}>
+                    <Button type='button' className='btn-block' disabled={cart.length === 0} onClick={checkoutHandler}>
                       Proceed to checkout
-                    </Button> */}
-                    <Button type='button' className='btn-block'>
-                      Test
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
