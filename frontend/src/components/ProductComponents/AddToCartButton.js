@@ -125,16 +125,16 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
       localStorage.setItem('userInfo', JSON.stringify(data));
       switch (messageType) {
         case 'success':
-          toast.success(`Added ${productName} to your cart!`, { position: "top-right", autoClose: 3500 } );
+          toast.info(`Added ${productName} - ${color} - Size ${size} ${sizeCategory} to your cart!`, { position: "bottom-center", autoClose: 4000 } );
           break;
         case 'warning':
-          toast.warning(`Added ${productName} to your cart with warnings...`, { position: "top-right", autoClose: 3500 } );
+          toast.warning(`Added ${productName} - ${color} - Size ${size} ${sizeCategory} to your cart with warnings...`, { position: "bottom-center", autoClose: 4000 } );
           break;
         case 'info':
-          toast.info(`Added ${productName} to your cart with warnings...`, { position: "top-right", autoClose: 3500 } );
+          toast.info(`Added ${productName} - ${color} - Size ${size} ${sizeCategory} to your cart with warnings...`, { position: "bottom-center", autoClose: 4000 } );
           break;
         case 'error':
-          toast.error(`Could not add ${productName} to your cart!`, { position: "top-right", autoClose: 3500 } );
+          toast.error(`Could not add ${productName} - ${color} - Size ${size} ${sizeCategory} to your cart!`, { position: "bottom-center", autoClose: 4000 } );
           break;
         default:
           break;
