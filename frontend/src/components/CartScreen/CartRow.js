@@ -77,7 +77,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         sizeCategory,
         savedForLater: savedForLaterBoolean
       }, config);
-      toast.info(`${name} - ${color} / ${size} / ${sizeCategory} was moved to ${savedForLaterBoolean.toString() === 'true' ? `Save for Later` : `your Cart`}`, { position: "bottom-center", autoClose: 4000 });
+      toast.info(`${name} - ${color} - Size ${size} ${sizeCategory} was moved to ${savedForLaterBoolean.toString() === 'true' ? `Save for Later` : `your Cart`}`, { position: "bottom-center", autoClose: 4000 });
       // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
       // dispatch the user login again to update the user's cart in the global state
       dispatch({
@@ -88,7 +88,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     } catch (error) {
       console.log('there was an error')
       console.log(error)
-      toast.error(`Could not add ${name} to your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
+      toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setUpdatingCartIcon(false);
       setMovingToCartIcon(false);
     } 
@@ -128,11 +128,11 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success(`Moved ${name} to your wishlist!`, { position: "bottom-center", autoClose: 4000 } );
+      toast.success(`Moved ${name} - ${color} - Size ${size} ${sizeCategory} to your wishlist!`, { position: "bottom-center", autoClose: 4000 } );
     } catch (error) {
       console.log('there was an error')
       console.log(error)
-      toast.error(`Could not add ${name} to your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 });
+      toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setMovingToWishlistIcon(false);
       setUpdatingCartIcon(false);
     }    
@@ -149,11 +149,11 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success(`Successfully removed ${name} - ${color} / ${size} / ${sizeCategory} from your cart`, { position: "bottom-center", autoClose: 4000 });
+      toast.info(`Successfully removed ${name} - ${color} - Size ${size} ${sizeCategory} from your cart`, { position: "bottom-center", autoClose: 4000 });
     } catch (error) {
       console.log('there was an error trying to delete that item from the cart');
       console.log(error)
-      toast.error(`Could not delete that item from your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
+      toast.error(`Could not delete ${name} - ${color} - Size ${size} ${sizeCategory} from your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setLoadingDeleteIcon(false);
       setUpdatingCartIcon(false);
     }

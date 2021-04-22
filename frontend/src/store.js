@@ -15,7 +15,7 @@ const reducer = combineReducers({
   wishListProductDetails: wishListDetailsReducer,
   cartProductDetails: cartDetailsReducer,
   cartQtyChanges: cartQtyMessageReducer,
-  cartMovedChanges: cartMovedMessageReducer,
+  cartMovedChanges: cartMovedMessageReducer
 });
 
 //See if user info has been stored in local storage
