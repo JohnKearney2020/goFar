@@ -261,16 +261,16 @@ const ProductScreen = ({ match }) => {
                     </ListGroup.Item>
                   </ListGroup>            
                 }
-                {/* Size Selected & Sizes */}
+                {/* Size Selected & Sizes Text */}
                 <ListGroup>
-                { selectedSizeCategory === 'ONE SIZE' ?
-                  <ListGroup.Item className='border-0 pb-1'>
-                    <span>Size: </span><span className='font-weight-bold'>ONE SIZE</span>
-                  </ListGroup.Item> :
-                  <ListGroup.Item className='border-0 pb-1'>
-                      <span>Size: </span><span className='font-weight-bold'>{selectedSize}</span>
-                  </ListGroup.Item>  
-                }
+                  { selectedSizeCategory === 'ONE SIZE' ?
+                    <ListGroup.Item className='border-0 pb-1'>
+                      <span>Size: </span><span className='font-weight-bold'>ONE SIZE</span>
+                    </ListGroup.Item> :
+                    <ListGroup.Item className='border-0 pb-1'>
+                        <span>Size: </span><span className='font-weight-bold'>{selectedSize}</span>
+                    </ListGroup.Item>  
+                  }
                 </ListGroup>
                 {/* Size Selector */}
                 <SizeSelector 
@@ -292,7 +292,12 @@ const ProductScreen = ({ match }) => {
                 }
                 <ListGroup horizontal className='align-items-center'>
                     <ListGroup.Item className='border-0'>
-                      <Form.Control as='select' value={qtyForCart} onChange={(e) => setQtyForCart(Number(e.target.value))} disabled={!(selectedSize !== '' && qtyInStock > 0)}>
+                      <Form.Control 
+                        as='select' 
+                        value={qtyForCart} 
+                        onChange={(e) => setQtyForCart(Number(e.target.value))} 
+                        disabled={!(selectedSize !== '' && qtyInStock > 0)}
+                      >
                         {[...Array(qtyInStock).keys()].map(x => (
                           // Limit the user to a max of 10 items added to the cart at once
                           (x + 1 <= 10 &&

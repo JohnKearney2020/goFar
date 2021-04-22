@@ -49,9 +49,12 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
       setWishListErrorMessage('Create an account to add items to your wishlist.');
       return;
     }
-    if(!size){
+    let sizeForWishListAdd = size;
+    if(!size && sizeCategory !== 'ONE SIZE'){
       setWishListErrorMessage('You must choose a size before adding an item to your wishlist.');
       return;
+    } else if(!size && sizeCategory === 'ONE SIZE'){
+      sizeForWishListAdd = 'ONE SIZE';
     }
     setLoadingWishListIcon(true);
     try {
@@ -62,7 +65,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         productID, 
         name: productName,
         color,
-        size,
+        size:sizeForWishListAdd,
         sizeCategory, 
         image: primaryImageForColor,
       }, config);
