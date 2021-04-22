@@ -14,11 +14,18 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   const dispatch = useDispatch();
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
-  const { _id:userID, wishList } = userInfo;
+  const { _id:userID, wishList, token } = userInfo;
 
   const [loadingWishListIcon, setLoadingWishListIcon] = useState(false);
   const [inWishList, setInWishList] = useState(false);
   const [wishListErrorMessage, setWishListErrorMessage] = useState(null);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }
 
   useEffect(() => {
     if(wishList.length > 0){
@@ -48,12 +55,6 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     }
     setLoadingWishListIcon(true);
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      }
       console.log('attempting to add to a users wishlist')
       //attempt to add the item to the user's wishlist
       const { data } = await axios.post('/api/users/wishlist/wishlistitem', { 
@@ -73,7 +74,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success(`Added ${productName} to your wishlist!`, { position: "top-right", autoClose: 3500 } );
+      toast.info(`Added ${productName} - ${color} - Size ${size} ${sizeCategory} to your wishlist!`, { position: "bottom-center", autoClose: 4000 } );
       setLoadingWishListIcon(false);
       setInWishList(true);
       // store user info in local storage
@@ -81,7 +82,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     } catch (error) {
       console.log('there was an error')
       console.log(error)
-      toast.error(`Could not add ${productName} to your wishlist. Try again later.`, { position: "top-right", autoClose: 3500 });
+      toast.error(`Could not add ${productName} - ${color} - Size ${size} ${sizeCategory} to your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 } );
       setLoadingWishListIcon(false);
     }    
   }
@@ -90,14 +91,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     console.log('clicked remove from wishlist')
     setLoadingWishListIcon(true);
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`
-        }
-      }
-
-      const { data } = await axios.delete(`/api/users/wishlistitem/${userID}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
+      const { data } = await axios.delete(`/api/users/wishlist/wishlistitem/${userID}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({
@@ -105,14 +99,15 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      toast.success(`Removed ${productName} from your wishlist!`, { position: "top-right", autoClose: 3500 } );
+      // toast.success(`Removed ${productName} from your wishlist!`, { position: "top-right", autoClose: 3500 } );
+      toast.info(`Removed ${productName} - ${color} - Size ${size} ${sizeCategory} from your wishlist!`, { position: "bottom-center", autoClose: 4000 } );
       setLoadingWishListIcon(false);
       setInWishList(false);
     } catch (error) {
       console.log('there was an error')
       console.log(error)
-      toast.error(`Could not remove ${productName} from your wishlist. Try again later.`, { position: "top-right", autoClose: 3500 } );
-      setWishListErrorMessage(`Could not remove ${productName} from your wishlist. Try again later.`)
+      setWishListErrorMessage(`Could not remove ${productName} - ${color} - Size ${size} ${sizeCategory} from your wishlist. Try again later.`)
+      toast.error(`Could not remove ${productName} - ${color} - Size ${size} ${sizeCategory} from your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 } );
       setLoadingWishListIcon(false);
     }
   }
