@@ -21,9 +21,13 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
   const [cartWarningMessage, setCartWarningMessage] = useState(null);
 
   useEffect(() => {
-    setCartErrorMessage(null);
-    setCartWarningMessage(null);
-  }, [color, size, sizeCategory]);
+    if(qtyInStock === 0 && sizeCategory === 'ONE SIZE'){
+      setCartErrorMessage('Currently out of stock.');
+    } else {
+      setCartErrorMessage(null);
+      setCartWarningMessage(null);
+    }
+  }, [color, size, sizeCategory, qtyInStock]);
 
   const addToCartHandler =  async () => {
     setCartErrorMessage(null); //reset any existing cart error messages
@@ -147,15 +151,16 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
   return (
     <>
       <Button 
-        className='btn-block addToCartButton' 
+        className='btn-block addToCartButton px-3' 
         type='button' 
-        variant="dark" 
+        // variant="dark" 
         onClick={addToCartHandler}
-        disabled={loadingCartIcon}
+        disabled={loadingCartIcon | qtyInStock === 0 | size === ''}
       >
         <div className='text-center'>
-          {loadingCartIcon ? <FontAwesomeIcon className='' icon={spinner} size="2x"/>: 
-              'Add to Cart'
+          {loadingCartIcon ? <FontAwesomeIcon className='' icon={spinner} size="2x"/>
+            : (qtyInStock === 0 && sizeCategory === 'ONE SIZE' ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
+            // : (size === '' ? 'Choose a Size' : (qtyInStock === 0 ? 'Out of Stock' : 'Add to Cart') )
           }
         </div>
       </Button>

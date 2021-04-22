@@ -1,3 +1,11 @@
+.sizeSelectorButton {
+  width: 80px;
+}
+
+.sizeSelectorButtonOneSize {
+  width: 120px;
+}
+
 .leftBorderFix {
   border-width: 1px!important
 }
@@ -14,16 +22,22 @@
 
 .ribbon {
   background-color: #919aa1;
-  /* color: white; */
-  /* font-size: .8rem; */
-  /* font-weight: 700; */
   height: 1.8rem;
   width: 1px; /* this keeps it from shrinking in width once we add absolute positioning to it */
-  /* padding-top: .4rem; This centers the text vertically - looks like we just winged it to get this number */
   position: absolute;
   transform: rotate(-45deg);
-  /* right: 1.5rem; */
-  /* top: 0.5rem; */
-  /* box-shadow: 0 0 .2rem rgba(0, 0, 0, .25); */
+  top: 0.5rem;
+  left: 2.4rem;
+  z-index: 1;
+}
+
+.oneSizeRibbon {
+  background-color: #919aa1;
+  height: 2.2rem;
+  width: 1px; /* this keeps it from shrinking in width once we add absolute positioning to it */
+  position: absolute;
+  transform: rotate(-45deg);
+  top: 0.3rem;
+  left: 3.7rem;
   z-index: 1;
 }

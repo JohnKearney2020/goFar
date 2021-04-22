@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 import { refreshWishList } from '../../actions/wishListActions';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
+import './WishListRow.css';
 
 const WishListRow = ({ 
       productID, 
@@ -38,10 +39,11 @@ const WishListRow = ({
   const [loadingCartIcon, setLoadingCartIcon] = useState(false);
   const [updatingWishList, setUpdatingWishList] = useState(false);
   useEffect(() => {
+    console.log('in WishListRow.js useEffect')
     // This useEffect is used to force a rerender after we add an item to the cart b/c otherwise we don't get an opportunity
     // to set updatingWishList to false after setting it to true when we add an item to the cart
     setUpdatingWishList(false);
-  }, [inCart])
+  }, [inCart]);
 
   const config = {
     headers: {
@@ -177,13 +179,13 @@ const WishListRow = ({
           {qtyAvailable !== 0 &&
             <>
               <Col lg={1}>
-                <Form type='submit' onSubmit={addToCartHandler}>
+                {/* <Form type='submit' onSubmit={addToCartHandler}> */}
                   <Form.Control 
                     as='select'
-                    value={qtyAvailable === 0 ? 0 : 1} 
+                    value={qtyAvailable === 0 ? 0 : qtyForCart} 
                     onChange={(e) => setQtyForCart(e.target.value)} 
                     disabled={updatingWishList | inCart}
-                    className='px-2 shadow-sm'
+                    className='px-2 shadow-sm qtyDropDown'
                   >
                     {[...Array(qtyAvailable).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
                       (x + 1 <= 10 &&
@@ -193,7 +195,7 @@ const WishListRow = ({
                       )
                     ))}
                   </Form.Control>
-                </Form>
+                {/* </Form> */}
               </Col>
               <Col lg={1} className='text-center'>
                 <Button disabled={updatingWishList | inCart} type='button' className='w-100 p-0 mt-1 d-flex justify-content-center align-items-center' style={{"height": "49px"}} onClick={addToCartHandler}
