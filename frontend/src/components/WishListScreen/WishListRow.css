@@ -1,0 +1,9 @@
+.qtyDropDown {
+  width: 55px;
+}
+
+@media screen and (max-width: 992px){
+  .qtyDropDown {
+    width: 100%;
+  }
+}

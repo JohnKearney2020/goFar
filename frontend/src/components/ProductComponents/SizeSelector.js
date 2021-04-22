@@ -15,30 +15,49 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
       let tempArrayOfSizes = levelTwo.map((eachSize,idx) => (
         eachSize
       ))
+      console.log('tempArrayOfSizes:')
+      console.log(tempArrayOfSizes)
       setArrayOfSizes(tempArrayOfSizes);
     }
   }, [loaded, product.sizes, selectedColor, selectedSizeCategory])
 
   return (
-    <ListGroup horizontal className='px-2 pb-3' activeKey={activeKey}>
+    <ListGroup horizontal className='px-2 pb-3 d-flex flex-wrap' activeKey={activeKey}>
       {arrayOfSizes.map((eachSizeObject,idx) => (
         eachSizeObject.qty === 0 ? //if the qty for that size is zero, in other words Out of Stock
           //'action' prop is passed even though these items are disabled b/c it has some effect on the size of the item
-          (<ListGroup.Item key={idx} action disabled className='mx-1 leftBorderFix d-flex align-items-center justify-content-center sizeButton'>
-            <div className='ribbon'></div>
+          (<ListGroup.Item key={idx} action disabled className={`text-center mr-1 mb-1 leftBorderFix ${eachSizeObject.size === 'ONE SIZE' ? 'sizeSelectorButtonOneSize' : 'sizeSelectorButton' }`}>
+            <div className={eachSizeObject.size === 'ONE SIZE'? 'oneSizeRibbon' : `ribbon`}></div>
             <span>{eachSizeObject.size}</span>
-          </ListGroup.Item>) : //if we do have some of that color in stock
-          (<ListGroup.Item 
-          key={idx} 
-          action 
-          eventKey={idx} 
-          className='mx-1 leftBorderFix d-flex align-items-center justify-content-center sizeButton' 
-          value={eachSizeObject.size} 
-          onClick={sizeSelectHandler}
-          data-keyforactivekey={idx}
-          >
-            {eachSizeObject.size}
-          </ListGroup.Item>)
+          </ListGroup.Item>) 
+          : //If the product is in stock
+          //If the product only has one size
+          (eachSizeObject.size === 'ONE SIZE' ?
+            <ListGroup.Item 
+              key={idx} 
+              action 
+              eventKey={idx} 
+              className='text-center ml-3 mr-1 mb-1 leftBorderFix sizeSelectorButtonOneSize' 
+              value={eachSizeObject.size} 
+              onClick={sizeSelectHandler}
+              data-keyforactivekey={idx}
+            >
+              {eachSizeObject.size}
+            </ListGroup.Item>
+          :
+            <ListGroup.Item 
+              key={idx} 
+              action 
+              eventKey={idx} 
+              // className='mx-1 leftBorderFix' 
+              className='text-center mr-1 mb-1 leftBorderFix sizeSelectorButton' 
+              value={eachSizeObject.size} 
+              onClick={sizeSelectHandler}
+              data-keyforactivekey={idx}
+            >
+              {eachSizeObject.size}
+            </ListGroup.Item>
+          )
       ))}
     </ListGroup>
   )

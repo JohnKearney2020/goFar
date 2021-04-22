@@ -60,6 +60,7 @@ const ProductScreen = ({ match }) => {
     if(loaded){ // If we've successfully loaded the product from the global state
       //Find the initialSizeCategory, ex: 'Regular', 'Tall', etc.
       let initialSizeCategory = product.sizes[0].sizeCategoryName;
+      console.log(`initialSizeCategory for ${product.sizes[0].name} is :${initialSizeCategory}`)
       setSelectedSizeCategory(initialSizeCategory);
       // Populate Product Colors
       let tempProductColors = [];
@@ -272,22 +273,14 @@ const ProductScreen = ({ match }) => {
                 }
                 </ListGroup>
                 {/* Size Selector */}
-                {selectedSizeCategory === 'ONE SIZE' ?
-                  // <ListGroup className='px-2 py-3'>
-                  <ListGroup className='px-2'>
-                    <ListGroup.Item className='border-0'>
-                      <Button disabled>ONE SIZE</Button>
-                    </ListGroup.Item>
-                  </ListGroup> :
-                  <SizeSelector 
-                    product={product} 
-                    selectedSizeCategory={selectedSizeCategory} 
-                    selectedColor={selectedColor} 
-                    sizeSelectHandler={sizeSelectHandler}
-                    activeKey={activeKey}
-                    loaded={loaded}
-                  />
-                }
+                <SizeSelector 
+                  product={product} 
+                  selectedSizeCategory={selectedSizeCategory} 
+                  selectedColor={selectedColor} 
+                  sizeSelectHandler={sizeSelectHandler}
+                  activeKey={activeKey}
+                  loaded={loaded}
+                />
                 {/* Quantity Alert */}
                 {qtyInStock <= 5 && qtyInStock !== 0 &&
                   <QuantityAlert qtyInStock={qtyInStock}/>
