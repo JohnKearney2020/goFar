@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useEffect, useRef, useLayoutEffect, useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -39,6 +39,7 @@ const CartScreen = ({ history }) => {
   // Set up local state
   // const [noSavedForLaterItems, setNoSavedForLaterItems] = useState(true);
   // const [redoCartLogic, setRedoCartLogic] = useState(false);
+  const [forceReRender, setForceReRender] = useState(false);
 
   useEffect(() => {
     console.log('in cart screen useEffect')
@@ -206,8 +207,11 @@ const CartScreen = ({ history }) => {
       updateOurCart(newUpdatedCart); //Function call for updating cart in our database  
     } else {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
-      //Resetting the Refs below and then toggling the local state redoCartLogic wil force a fresh re-render with all the logic
+      //Resetting the Refs below and then toggling the local state forceReRender wil force a fresh re-render with all the logic
       //above in this useEffect executing again
+      console.log('in last part of useEffect')
+      fullyLoadedScreenOnceAlready.current = true;
+      setForceReRender(!forceReRender);
     }
   }, [cart, cartProducts, dispatch, userInfo.token]);
 
