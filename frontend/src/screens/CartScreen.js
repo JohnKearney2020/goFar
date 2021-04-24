@@ -43,6 +43,7 @@ const CartScreen = ({ history }) => {
 
   const checkoutHandler = async () => {
     console.log('clicked cart checkout button')
+    history.push('/login?redirect=checkout');
   }
 
   useEffect(() => {
@@ -264,7 +265,7 @@ const CartScreen = ({ history }) => {
                   </Row> 
                 </ListGroup.Item>
                 {/*===================*/}
-                {/* Items in Cart */}
+                {/* Items in Cart     */}
                 {/*===================*/}
                 {cart.map((eachProduct) => (
                   eachProduct.savedForLater === false &&
