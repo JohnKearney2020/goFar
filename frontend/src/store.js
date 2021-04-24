@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, wishListDetailsReducer } from './reducers/userReducers';
 import { cartDetailsReducer, cartQtyMessageReducer, cartMovedMessageReducer } from './reducers/cartReducers';
+import { checkoutStepReducer } from './reducers/checkoutReducers';
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   wishListProductDetails: wishListDetailsReducer,
   cartProductDetails: cartDetailsReducer,
   cartQtyChanges: cartQtyMessageReducer,
-  cartMovedChanges: cartMovedMessageReducer
+  cartMovedChanges: cartMovedMessageReducer,
+  checkoutSteps: checkoutStepReducer
 });
 
 //See if user info has been stored in local storage

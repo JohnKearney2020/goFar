@@ -14,6 +14,12 @@ const CheckoutScreen = ({ history }) => {
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
 
+  const checkoutActiveKey = useSelector(state => state.checkoutSteps.checkoutActiveKey);
+  console.log(`checkoutActiveKey: ${checkoutActiveKey}`)
+  console.log('type of checkoutActiveKey:')
+  console.log(typeof checkoutActiveKey)
+  // const { cart } = userInfo;
+
   //Set up local state
 
 
@@ -23,10 +29,14 @@ const CheckoutScreen = ({ history }) => {
         history.push('/');
       }
     }
+    if(checkoutActiveKey){ //If we've loaded this from the global state
+      // useAccordionToggle(checkoutActiveKey);
+      console.log(`checkoutActiveKey: ${checkoutActiveKey}`)
+    }
     return () => {
       
     }
-  }, [userInfo, cart]);
+  }, [userInfo, cart, checkoutActiveKey]);
 
   useEffect(() => {
     console.log('in CheckoutScreen useEffect')
@@ -41,7 +51,7 @@ const CheckoutScreen = ({ history }) => {
     <>
       <OffsetPageHeader leftHeaderText='Checkout' rightHeaderText='Checkout' hrBoolean={false}/>
       {/* <h4 className='my-4'>Choose an Address</h4> */}
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey="0" activeKey={checkoutActiveKey}>
         {/* Billing Information */}
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">

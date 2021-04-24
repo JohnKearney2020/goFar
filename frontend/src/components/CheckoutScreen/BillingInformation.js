@@ -21,7 +21,7 @@ const BillingInformation = () => {
   //Set up local state
   const [addressesToDisplay, setAddressesToDisplay] = useState([]);
   const [showNewAddressModal, setShowNewAddressModal] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState('');
   const [showNoAddressMessage, setShowNoAddressMessage] = useState(false);
 
   const noAddressMessage = 'No addresses on file. Click "Add an Address" to create an address.';
