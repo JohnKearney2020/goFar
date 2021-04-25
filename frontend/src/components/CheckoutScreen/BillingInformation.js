@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Row, Form, Button, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import Message from '../Message';
-
-import './BillingInformation.css';
 import { compose } from 'redux';
 
+import Message from '../Message';
+import { changeCheckoutStep } from '../../actions/checkoutActions';
+import './BillingInformation.css';
+
 const BillingInformation = () => {
+
+  const dispatch = useDispatch();
 
   //Get user's address from the global state
   const haveArrangedAddresses = useRef(false);
@@ -34,6 +37,12 @@ const BillingInformation = () => {
   const closeNewAddressModalHandler = () => {
     console.log('close modal')
     setShowNewAddressModal(false);
+  }
+
+  const nextStepHandler = (e) => {
+    console.log(`e.target.value: ${e.target.value}`)
+    console.log('typeof e.target.value:', typeof e.target.value)
+    dispatch(changeCheckoutStep(e.target.value));
   }
 
   useEffect(() => {
@@ -70,7 +79,7 @@ const BillingInformation = () => {
           value={selectedAddress} 
           onChange={(e) => setSelectedAddress(e.target.value)} 
           disabled={addresses.length === 0}
-          className='px-2 shadow-sm mb-1'
+          className='shadow-sm mb-1'
           id='addressDropdown'
         >
           {addressesToDisplay.map(eachAdd => {
@@ -88,14 +97,19 @@ const BillingInformation = () => {
           })}
         </Form.Control>
         {showNoAddressMessage && <Message variant='info'>{noAddressMessage}</Message>}
-        <Button 
-          className='d-flex align-items-center mt-2' 
-          variant='primary' 
-          onClick={showNewAddressModalHandler} 
-          disabled={showNewAddressModal}
-        >
-          <FontAwesomeIcon className='mr-2' icon={faPlus} size="2x" /> Add an Address
-        </Button>
+        <Row className='d-flex justify-content-between w-100 m-0'>
+          <Button 
+            className='d-flex align-items-center mt-2' 
+            variant='primary' 
+            onClick={showNewAddressModalHandler} 
+            disabled={showNewAddressModal}
+          >
+            <FontAwesomeIcon className='mr-2' icon={faPlus} size="2x" /> Add an Address
+          </Button>
+          <Button variant='primary' className='mt-2' value="1" onClick={nextStepHandler}>
+            Continue
+          </Button>
+        </Row>
       </Col>
     </Row>
   )
