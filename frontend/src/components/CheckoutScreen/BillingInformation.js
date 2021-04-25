@@ -107,12 +107,6 @@ const BillingInformation = ({CustomToggle}) => {
           >
             <FontAwesomeIcon className='mr-2' icon={faPlus} size="2x" /> Add an Address
           </Button>
-          {/* <CustomToggle eventKey="0">
-            Continue
-          </CustomToggle> */}
-          {/* <Button variant='primary' className='mt-2' value="1" onClick={nextStepHandler}>
-            Continue
-          </Button> */}
         </Row>
       </Col>
     </Row>

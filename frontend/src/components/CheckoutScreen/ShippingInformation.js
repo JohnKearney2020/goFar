@@ -47,16 +47,7 @@ const ShippingInformation = () => {
 
   return (
     <Row className='d-flex justify-content-between w-100 m-0'>
-      <Button 
-        variant='primary' 
-        value="-1"
-        onClick={nextStepHandler} 
-      >
-        Go Back
-      </Button>
-      <Button variant='primary' className='mt-2' value="1" onClick={nextStepHandler}>
-        Continue
-      </Button>
+
     </Row>
   )
 }

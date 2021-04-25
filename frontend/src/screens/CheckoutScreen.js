@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Card, Accordion, Row, Col, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, Accordion, Row, Button } from 'react-bootstrap';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
-import { getUserDetails, updateUserProfile } from '../actions/userActions';
+import { getUserDetails } from '../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
@@ -18,14 +18,12 @@ const CheckoutScreen = ({ history }) => {
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
 
-  const checkoutActiveKey = useSelector(state => state.checkoutSteps.checkoutActiveKey);
-  console.log(`checkoutActiveKey: ${checkoutActiveKey}`)
-  console.log('type of checkoutActiveKey:')
-  console.log(typeof checkoutActiveKey)
-  // const { cart } = userInfo;
-
   //Set up local state
-
+  const [checkoutActiveKey, setCheckoutActiveKey] = useState("0");
+  const [disableBillingInformation, setDisableBillingInformation] = useState(false);
+  const [disableShippingInformation, setDisableShippingInformation] = useState(true);
+  const [disablePaymentInformation, setDisablePaymentInformation] = useState(true);
+  const [disableReviewAndSubmit, setDisableReviewAndSubmit] = useState(true);
 
   useEffect(() => {
     if(userInfo){
@@ -33,14 +31,7 @@ const CheckoutScreen = ({ history }) => {
         history.push('/');
       }
     }
-    if(checkoutActiveKey){ //If we've loaded this from the global state
-      // useAccordionToggle(checkoutActiveKey);
-      console.log(`checkoutActiveKey: ${checkoutActiveKey}`)
-    }
-    return () => {
-      
-    }
-  }, [userInfo, cart, checkoutActiveKey]);
+  }, [userInfo, cart, history]);
 
   useEffect(() => {
     console.log('in CheckoutScreen useEffect')
@@ -50,23 +41,50 @@ const CheckoutScreen = ({ history }) => {
     }
   }, [dispatch])
 
-  function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey, () =>
-      console.log('totally custom!'),
+  const submitCheckoutHandler = () => {
+    console.log('clicked submit!')
+  }
+
+  const CustomToggle = ({ children, nextActiveKey, disabledCheck, buttonPosition }) => {
+    const checkoutNextStepHandler = useAccordionToggle(nextActiveKey, () => {
+      setCheckoutActiveKey(nextActiveKey);
+      switch (nextActiveKey) {
+        case '0':
+          setDisableBillingInformation(false);
+          setDisableShippingInformation(true);
+          break;
+        case '1':
+          setDisableBillingInformation(true);
+          setDisableShippingInformation(false);
+          setDisablePaymentInformation(true);
+          break;
+        case '2':
+          setDisableShippingInformation(true);
+          setDisablePaymentInformation(false);
+          setDisableReviewAndSubmit(true);
+          break;
+        case '3':
+          setDisablePaymentInformation(true);
+          setDisableReviewAndSubmit(false);
+          break;
+        default:
+          break;
+        }
+      },
     );
   
     return (
       <>
-        {/* <BillingInformation /> */}
         <Button
           type="button"
-          // style={{ backgroundColor: 'pink' }}
-          onClick={decoratedOnClick}
+          variant='outline-primary'
+          onClick={checkoutNextStepHandler}
+          disabled={disabledCheck}
+          className={(buttonPosition === 'left') && 'mr-2'}
         >
           {children}
         </Button>
       </>
-
     );
   }
 
@@ -74,21 +92,20 @@ const CheckoutScreen = ({ history }) => {
   return (
     <>
       <OffsetPageHeader leftHeaderText='Checkout' rightHeaderText='Checkout' hrBoolean={false}/>
-      {/* <h4 className='my-4'>Choose an Address</h4> */}
-      {/* <Accordion defaultActiveKey="0" activeKey={checkoutActiveKey}> */}
-      <Accordion defaultActiveKey="0">
+      <Accordion activeKey={checkoutActiveKey}>
         {/* Billing Information */}
         <Card>
-          {/* <Accordion.Toggle as={Card.Header} eventKey="0"> */}
-            <Card.Header>
-              <Row className='justify-content-between align-items-center w-100 mx-0'>
-                <h5 className='m-0'>Billing Information</h5>
-                <CustomToggle eventKey="0">
+          <Card.Header>
+            <Row className='justify-content-end align-items-center w-100 mx-0'>
+              {/* <h5 className='mr-auto align-self-center w-100 h-100'>Billing Information</h5> */}
+              <h5 className='mb-0 mr-auto'>Billing Information</h5>
+              {!disableBillingInformation && 
+                <CustomToggle nextActiveKey="1" disabledCheck={disableBillingInformation} buttonPosition='right'>
                   Continue
                 </CustomToggle>
-              </Row>
-            </Card.Header>
-          {/* </Accordion.Toggle> */}
+              }
+            </Row>
+          </Card.Header>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <BillingInformation />
@@ -97,11 +114,21 @@ const CheckoutScreen = ({ history }) => {
         </Card>
         {/* Shipping Information */}
         <Card>
-          {/* <Accordion.Toggle as={Card.Header} eventKey="1"> */}
           <Card.Header>
-            <h5 className='m-0'>Shipping Information</h5>
+            <Row className='justify-content-end align-items-center w-100 mx-0'>
+              <h5 className='mb-0 mr-auto'>Shipping Information</h5>
+              {!disableShippingInformation &&
+                <>
+                  <CustomToggle nextActiveKey="0" disabledCheck={disableShippingInformation} buttonPosition='left'>
+                    Go Back
+                  </CustomToggle>
+                  <CustomToggle nextActiveKey="2" disabledCheck={disableShippingInformation} buttonPosition='right'>
+                    Continue
+                  </CustomToggle>
+                </>
+              }
+            </Row>
           </Card.Header>
-          {/* </Accordion.Toggle> */}
           <Accordion.Collapse eventKey="1">
             <Card.Body>
               <ShippingInformation />
@@ -109,27 +136,51 @@ const CheckoutScreen = ({ history }) => {
           </Accordion.Collapse>
         </Card>
         {/* Payment Information */}
-        {/* <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="2">
-            <h5 className='m-0'>Payment Information</h5>
-          </Accordion.Toggle>
+        <Card>
+          <Card.Header>
+            <Row className='justify-content-end align-items-center w-100 mx-0'>
+              <h5 className='mb-0 mr-auto'>Payment Information</h5>
+              {!disablePaymentInformation &&
+                <>
+                  <CustomToggle nextActiveKey="1" disabledCheck={disablePaymentInformation} buttonPosition='left'>
+                        Go Back
+                  </CustomToggle>
+                  <CustomToggle nextActiveKey="3" disabledCheck={disablePaymentInformation} buttonPosition='right'>
+                        Continue
+                  </CustomToggle>
+                </>
+              }
+            </Row>
+          </Card.Header>
           <Accordion.Collapse eventKey="2">
             <Card.Body>
               <PaymentInformation />
             </Card.Body>
           </Accordion.Collapse>
-        </Card> */}
+        </Card>
         {/* Review and submit order */}
-        {/* <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="3">
-            <h5 className='m-0'>Review and Submit order</h5>
-          </Accordion.Toggle>
+        <Card>
+            <Card.Header>
+              <Row className='justify-content-end align-items-center w-100 mx-0'>
+                <h5 className='mb-0 mr-auto'>Review and Submit order</h5>
+                {!disableReviewAndSubmit &&
+                <>
+                  <CustomToggle nextActiveKey="2" disabledCheck={disableReviewAndSubmit} buttonPosition='left'>
+                        Go Back
+                  </CustomToggle>
+                  <Button value="" disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
+                        Submit Order
+                  </Button>
+                </>
+              }
+              </Row>
+            </Card.Header>
           <Accordion.Collapse eventKey="3">
             <Card.Body>
               <ReviewAndSubmitOrder />
             </Card.Body>
           </Accordion.Collapse>
-        </Card> */}
+        </Card>
       </Accordion>
     </>
   )
