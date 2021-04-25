@@ -4,12 +4,13 @@ import { Card, Row, Form, Button, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { compose } from 'redux';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 import Message from '../Message';
 import { changeCheckoutStep } from '../../actions/checkoutActions';
 import './BillingInformation.css';
 
-const BillingInformation = () => {
+const BillingInformation = ({CustomToggle}) => {
 
   const dispatch = useDispatch();
 
@@ -39,11 +40,11 @@ const BillingInformation = () => {
     setShowNewAddressModal(false);
   }
 
-  const nextStepHandler = (e) => {
-    console.log(`e.target.value: ${e.target.value}`)
-    console.log('typeof e.target.value:', typeof e.target.value)
-    dispatch(changeCheckoutStep(e.target.value));
-  }
+  // const nextStepHandler = (e) => {
+  //   console.log(`e.target.value: ${e.target.value}`)
+  //   console.log('typeof e.target.value:', typeof e.target.value)
+  //   dispatch(changeCheckoutStep(e.target.value));
+  // }
 
   useEffect(() => {
     console.log('in addresses use effect')
@@ -106,9 +107,12 @@ const BillingInformation = () => {
           >
             <FontAwesomeIcon className='mr-2' icon={faPlus} size="2x" /> Add an Address
           </Button>
-          <Button variant='primary' className='mt-2' value="1" onClick={nextStepHandler}>
+          {/* <CustomToggle eventKey="0">
             Continue
-          </Button>
+          </CustomToggle> */}
+          {/* <Button variant='primary' className='mt-2' value="1" onClick={nextStepHandler}>
+            Continue
+          </Button> */}
         </Row>
       </Col>
     </Row>

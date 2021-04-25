@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Card, Accordion } from 'react-bootstrap';
+import { Card, Accordion, Row, Col, Button } from 'react-bootstrap';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,17 +50,45 @@ const CheckoutScreen = ({ history }) => {
     }
   }, [dispatch])
 
+  function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+      console.log('totally custom!'),
+    );
+  
+    return (
+      <>
+        {/* <BillingInformation /> */}
+        <Button
+          type="button"
+          // style={{ backgroundColor: 'pink' }}
+          onClick={decoratedOnClick}
+        >
+          {children}
+        </Button>
+      </>
+
+    );
+  }
+
   
   return (
     <>
       <OffsetPageHeader leftHeaderText='Checkout' rightHeaderText='Checkout' hrBoolean={false}/>
       {/* <h4 className='my-4'>Choose an Address</h4> */}
-      <Accordion defaultActiveKey="0" activeKey={checkoutActiveKey}>
+      {/* <Accordion defaultActiveKey="0" activeKey={checkoutActiveKey}> */}
+      <Accordion defaultActiveKey="0">
         {/* Billing Information */}
         <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="0">
-            <h5 className='m-0'>Billing Information</h5>
-          </Accordion.Toggle>
+          {/* <Accordion.Toggle as={Card.Header} eventKey="0"> */}
+            <Card.Header>
+              <Row className='justify-content-between align-items-center w-100 mx-0'>
+                <h5 className='m-0'>Billing Information</h5>
+                <CustomToggle eventKey="0">
+                  Continue
+                </CustomToggle>
+              </Row>
+            </Card.Header>
+          {/* </Accordion.Toggle> */}
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <BillingInformation />
@@ -69,9 +97,11 @@ const CheckoutScreen = ({ history }) => {
         </Card>
         {/* Shipping Information */}
         <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="1">
+          {/* <Accordion.Toggle as={Card.Header} eventKey="1"> */}
+          <Card.Header>
             <h5 className='m-0'>Shipping Information</h5>
-          </Accordion.Toggle>
+          </Card.Header>
+          {/* </Accordion.Toggle> */}
           <Accordion.Collapse eventKey="1">
             <Card.Body>
               <ShippingInformation />
@@ -79,7 +109,7 @@ const CheckoutScreen = ({ history }) => {
           </Accordion.Collapse>
         </Card>
         {/* Payment Information */}
-        <Card>
+        {/* <Card>
           <Accordion.Toggle as={Card.Header} eventKey="2">
             <h5 className='m-0'>Payment Information</h5>
           </Accordion.Toggle>
@@ -88,9 +118,9 @@ const CheckoutScreen = ({ history }) => {
               <PaymentInformation />
             </Card.Body>
           </Accordion.Collapse>
-        </Card>
+        </Card> */}
         {/* Review and submit order */}
-        <Card>
+        {/* <Card>
           <Accordion.Toggle as={Card.Header} eventKey="3">
             <h5 className='m-0'>Review and Submit order</h5>
           </Accordion.Toggle>
@@ -99,7 +129,7 @@ const CheckoutScreen = ({ history }) => {
               <ReviewAndSubmitOrder />
             </Card.Body>
           </Accordion.Collapse>
-        </Card>
+        </Card> */}
       </Accordion>
     </>
   )
