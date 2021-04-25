@@ -58,9 +58,11 @@ const CheckoutScreen = ({ history }) => {
       <Accordion defaultActiveKey="0" activeKey={checkoutActiveKey}>
         {/* Billing Information */}
         <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="0">
+          {/* <Accordion.Toggle as={Card.Header} eventKey="0"> */}
+          <Card.Header>
             <h5 className='m-0'>Billing Information</h5>
-          </Accordion.Toggle>
+          </Card.Header>
+          {/* </Accordion.Toggle> */}
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <BillingInformation />
@@ -69,9 +71,11 @@ const CheckoutScreen = ({ history }) => {
         </Card>
         {/* Shipping Information */}
         <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="1">
+          {/* <Accordion.Toggle as={Card.Header} eventKey="1"> */}
+          <Card.Header>
             <h5 className='m-0'>Shipping Information</h5>
-          </Accordion.Toggle>
+          </Card.Header>
+          {/* </Accordion.Toggle> */}
           <Accordion.Collapse eventKey="1">
             <Card.Body>
               <ShippingInformation />
@@ -79,7 +83,7 @@ const CheckoutScreen = ({ history }) => {
           </Accordion.Collapse>
         </Card>
         {/* Payment Information */}
-        <Card>
+        {/* <Card>
           <Accordion.Toggle as={Card.Header} eventKey="2">
             <h5 className='m-0'>Payment Information</h5>
           </Accordion.Toggle>
@@ -88,9 +92,9 @@ const CheckoutScreen = ({ history }) => {
               <PaymentInformation />
             </Card.Body>
           </Accordion.Collapse>
-        </Card>
+        </Card> */}
         {/* Review and submit order */}
-        <Card>
+        {/* <Card>
           <Accordion.Toggle as={Card.Header} eventKey="3">
             <h5 className='m-0'>Review and Submit order</h5>
           </Accordion.Toggle>
@@ -99,7 +103,7 @@ const CheckoutScreen = ({ history }) => {
               <ReviewAndSubmitOrder />
             </Card.Body>
           </Accordion.Collapse>
-        </Card>
+        </Card> */}
       </Accordion>
     </>
   )
