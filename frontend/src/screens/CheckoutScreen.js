@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import BillingInformation from '../components/CheckoutScreen/BillingInformation';
+import ShippingInformation from '../components/CheckoutScreen/ShippingInformation';
+import PaymentInformation from '../components/CheckoutScreen/PaymentInformation';
+import ReviewAndSubmitOrder from '../components/CheckoutScreen/PaymentInformation';
+
 
 const CheckoutScreen = ({ history }) => {
 
@@ -69,7 +73,9 @@ const CheckoutScreen = ({ history }) => {
             <h5 className='m-0'>Shipping Information</h5>
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="1">
-            <Card.Body>Hello! I'm another body</Card.Body>
+            <Card.Body>
+              <ShippingInformation />
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
         {/* Payment Information */}
@@ -78,7 +84,9 @@ const CheckoutScreen = ({ history }) => {
             <h5 className='m-0'>Payment Information</h5>
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="2">
-            <Card.Body>Hello! I'm another body</Card.Body>
+            <Card.Body>
+              <PaymentInformation />
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
         {/* Review and submit order */}
@@ -87,7 +95,9 @@ const CheckoutScreen = ({ history }) => {
             <h5 className='m-0'>Review and Submit order</h5>
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="3">
-            <Card.Body>Hello! I'm another body</Card.Body>
+            <Card.Body>
+              <ReviewAndSubmitOrder />
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
       </Accordion>
