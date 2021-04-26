@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Accordion, Row, Button } from 'react-bootstrap';
+import { Card, Accordion, Row, Col, Button } from 'react-bootstrap';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import { getUserDetails } from '../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import BillingInformation from '../components/CheckoutScreen/BillingInformation';
@@ -108,6 +110,11 @@ const CheckoutScreen = ({ history }) => {
     console.log('clicked submit!')
   }
 
+  const cartEditHandler = () => {
+    // console.log('clicked submit!')
+    history.push('/cart');
+  }
+
   const CustomToggle = ({ children, nextActiveKey, disabledCheck, buttonPosition }) => {
     const checkoutNextStepHandler = useAccordionToggle(nextActiveKey, () => {
       setCheckoutActiveKey(nextActiveKey);
@@ -143,7 +150,17 @@ const CheckoutScreen = ({ history }) => {
           variant='outline-primary'
           onClick={checkoutNextStepHandler}
           disabled={disabledCheck}
-          className={(buttonPosition === 'left') && 'mr-2'}
+          className={`${(buttonPosition === 'left') && 'mr-2'} d-none d-md-flex`}
+        >
+          {children}
+        </Button>
+        <Button
+          type="button"
+          variant='outline-primary'
+          onClick={checkoutNextStepHandler}
+          disabled={disabledCheck}
+          className={`${(buttonPosition === 'left') && 'mr-2'} d-xs-flex d-md-none`}
+          size='sm'
         >
           {children}
         </Button>
@@ -157,13 +174,13 @@ const CheckoutScreen = ({ history }) => {
       <OffsetPageHeader leftHeaderText='Checkout' rightHeaderText='Checkout' hrBoolean={false}/>
       {loading ? <Loader /> :
         <>
-          <Accordion activeKey={checkoutActiveKey} className='mb-5'>
+          <Accordion activeKey={checkoutActiveKey} className='mb-4'>
             {/* Billing Information */}
             <Card>
               <Card.Header>
                 <Row className='justify-content-end align-items-center w-100 mx-0'>
                   {/* <h5 className='mr-auto align-self-center w-100 h-100'>Billing Information</h5> */}
-                  <h5 className='mb-0 mr-auto'>Billing Information</h5>
+                  <h5 className='mb-2 mb-md-0 mr-auto'>Billing Information</h5>
                   {!disableBillingInformation && 
                     <CustomToggle nextActiveKey="1" disabledCheck={disableBillingInformation} buttonPosition='right'>
                       Continue
@@ -181,7 +198,7 @@ const CheckoutScreen = ({ history }) => {
             <Card>
               <Card.Header>
                 <Row className='justify-content-end align-items-center w-100 mx-0'>
-                  <h5 className='mb-0 mr-auto'>Shipping Information</h5>
+                  <h5 className='mb-2 mb-md-0 mr-auto'>Shipping Information</h5>
                   {!disableShippingInformation &&
                     <>
                       <CustomToggle nextActiveKey="0" disabledCheck={disableShippingInformation} buttonPosition='left'>
@@ -204,7 +221,7 @@ const CheckoutScreen = ({ history }) => {
             <Card>
               <Card.Header>
                 <Row className='justify-content-end align-items-center w-100 mx-0'>
-                  <h5 className='mb-0 mr-auto'>Payment Information</h5>
+                  <h5 className='mb-2 mb-md-0 mr-auto'>Payment Information</h5>
                   {!disablePaymentInformation &&
                     <>
                       <CustomToggle nextActiveKey="1" disabledCheck={disablePaymentInformation} buttonPosition='left'>
@@ -227,36 +244,39 @@ const CheckoutScreen = ({ history }) => {
             <Card>
               <Card.Header>
                 <Row className='justify-content-end align-items-center w-100 mx-0'>
-                  <h5 className='mb-0 mr-auto'>Review and Submit order</h5>
-                  {!disableReviewAndSubmit &&
-                  <>
-                    <CustomToggle nextActiveKey="2" disabledCheck={disableReviewAndSubmit} buttonPosition='left'>
-                          Go Back
-                    </CustomToggle>
-                    <Button value="" disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
-                          Submit Order
-                    </Button>
-                  </>
-                }
+                  <h5 className='mb-2 mb-md-0 mr-auto'>Review and Submit</h5>
+                    {!disableReviewAndSubmit &&
+                      <>
+                        <CustomToggle nextActiveKey="2" disabledCheck={disableReviewAndSubmit} buttonPosition='left'>
+                              Go Back
+                        </CustomToggle>
+                        <Button className='d-xs-flex d-md-none' size='sm' disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
+                              Submit Order
+                        </Button>                            
+                        <Button className='d-none d-md-flex' disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
+                              Submit Order
+                        </Button>                            
+                      </>
+                    }                  
                 </Row>
               </Card.Header>
               <Accordion.Collapse eventKey="3">
                 <Card.Body>
-                  <ReviewAndSubmitOrder cartSubTotal={cartSubTotal} shippingTotal={shippingTotal} cartItemTally={cartItemTally} cartTotal={cartTotal} billingAddress={billingAddress} shippingAddress={shippingAddress}/>
+                  <ReviewAndSubmitOrder cartSubTotal={cartSubTotal} shippingTotal={shippingTotal} cartItemTally={cartItemTally} cartTotal={cartTotal} billingAddress={billingAddress} shippingAddress={shippingAddress} history={history}/>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
+          <Row className='justify-content-end px-3 mb-5'>
+            <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center' onClick={cartEditHandler}>
+              <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
+            </Button>
+            <Button variant='danger' size='sm' className='d-flex d-md-none justify-content-center align-items-center' onClick={cartEditHandler}>
+              <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
+            </Button>
+          </Row>
         </>
       }
-      {/* <h4>billingAddress:</h4>
-      <h5>{billingAddress}</h5>
-      <h4>shippingAddress:</h4>
-      <h5>{shippingAddress}</h5>
-      <h4>paymentMethod:</h4>
-      <h5>{paymentMethod}</h5> */}
-      <h4>shipping total:</h4>
-      <h5>{shippingTotal}</h5>
     </>
   )
 }

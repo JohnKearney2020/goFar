@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Row, Form, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { compose } from 'redux';
 
 import CartRow from '../CartScreen/CartRow';
 import Message from '../Message';
 
-const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cartTotal, billingAddress, shippingAddress }) => {
+const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cartTotal, billingAddress, shippingAddress, history }) => {
 
   const dispatch = useDispatch();
   const haveFetchedCartData = useRef(false);
@@ -19,7 +19,11 @@ const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cart
 
   const submitOrderHandler = () => {
     console.log('clicked submit order!')
+  }
 
+  const cartEditHandler = () => {
+    // console.log('clicked submit!')
+    history.push('/cart');
   }
 
   return (
@@ -90,6 +94,15 @@ const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cart
           </Card>
         </Col>
       </Row>
+      {/* Edit Cart Button */}
+      <Row className='justify-content-end px-3 mb-3'>
+        <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center mr-1' onClick={cartEditHandler}>
+          <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
+        </Button>
+        <Button variant='danger' size='sm' className='d-flex d-md-none justify-content-center align-items-center' onClick={cartEditHandler}>
+          <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
+        </Button>
+      </Row>
       {/* Products in Cart */}
       <Row> {/* Cart Items */}
         <Col className='' md={12}> {/* Left Side of Screen */}
@@ -115,7 +128,7 @@ const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cart
                   <span className='font-weight-bold'>Current Price</span>
                 </Col>
                 <Col md={1} className='text-center'>
-                  {/* <span className='font-weight-bold'>Delete</span>  */}
+                  {/* placeholder for missing delete icon */}
                 </Col>
               </Row> 
             </ListGroup.Item>
