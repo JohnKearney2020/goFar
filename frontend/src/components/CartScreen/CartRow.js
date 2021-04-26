@@ -11,8 +11,9 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
 
 import './CartRow.css';
-
-const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater }) => {
+// the hideButtons prop disables the 'save for later', 'move to wishlist', and delete buttons. It is used
+// when we display the cart contents during the final step of checkout
+const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater, hideButtons }) => {
 
   const dispatch = useDispatch();
 
@@ -207,12 +208,15 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
           {qty}
         </Col> */}
         <Col md={1} className='d-flex justify-content-center'>
-          <Button size='sm' variant='danger' className='' disabled={updatingCartIcon} onClick={deleteCartItemHandler}>
-            <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
-          </Button>
+          { !hideButtons && 
+            <Button size='sm' variant='danger' className='' disabled={updatingCartIcon} onClick={deleteCartItemHandler}>
+              <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
+            </Button>
+          }
         </Col>
       </Row>
-      <Row className='justify-content-start mt-2 ml-1'>
+      { !hideButtons && 
+        <Row className='justify-content-start mt-2 ml-1'>
         {savedForLater === true ?
           // Move to cart button
           <Button className='p-0 px-2' variant="secondary" disabled={updatingCartIcon} onClick={moveInCartHandler} value={false}>
@@ -225,13 +229,18 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         }|
         {/* Move to wishlist button */}
         {/* <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={updatingCartIcon} onClick={moveToWishlistHandler}> */}
-        <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={updatingCartIcon | alreadyInWishlist} onClick={moveToWishlistHandler}>
-          {alreadyInWishlist ? 'Already In Your Wishlist' : (movingToWishlistIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Wishlist`)}
-        </Button>
-      </Row>
+          <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={updatingCartIcon | alreadyInWishlist} onClick={moveToWishlistHandler}>
+            {alreadyInWishlist ? 'Already In Your Wishlist' : (movingToWishlistIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Wishlist`)}
+          </Button>
+        </Row>
+      }
     </ListGroup.Item>
   </>
   )
+}
+
+CartRow.defaultProps = {
+  hideButtons: false
 }
 
 export default CartRow;
