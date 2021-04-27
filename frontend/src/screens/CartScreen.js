@@ -14,6 +14,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import CartRow from '../components/CartScreen/CartRow';
 import CartMessage from '../components/CartScreen/CartMessage';
+import './CartScreen.css';
 
 const CartScreen = ({ history }) => {
 
@@ -304,7 +305,7 @@ const CartScreen = ({ history }) => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
-              <Card className='my-5 shadow'>
+              <Card className='my-5 shadow cartStickyPic'>
                 <Card.Img src='https://i.imgur.com/09uggrQ.jpg' />
                 <Card.Header className='text-center'>
                   <h6 className='m-0'>Get excited about $49 free shipping</h6>
@@ -371,8 +372,9 @@ const CartScreen = ({ history }) => {
               </ListGroup>
             </Col> {/* End of Left Side of Screen */}
             {/* Right Side of Screen */}
-            <Col md={4} className='d-flex justify-content-center align-items-center'>
-              <Card className='mb-5 shadow'>
+            {/* <Col md={4} className='d-flex justify-content-center align-items-center'> */}
+            <Col md={4} className=''>
+              <Card className='mb-5 shadow cartStickyPic'>
                 <Card.Img src='https://i.imgur.com/QBBE0Wc.jpg' />
                 <Card.Header className='text-center'>
                   <h6 className='m-0'>Start your adventure today</h6>

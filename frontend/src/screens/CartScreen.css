@@ -1,0 +1,7 @@
+.cartStickyPic {
+  position: sticky;
+  top: 2.5rem;
+    /* opacity: 0; */
+    /* visibility: hidden; */
+  transition: .3s;
+}
