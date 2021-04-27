@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Form, Button, Col } from 'react-bootstrap';
+import { Row, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { checkoutBillingAddress } from '../../actions/checkoutActions';
-
 import Message from '../Message';
 import NewAddressModal from '../Modals/NewAddressModal';
 import Loader from '../../components/Loader';
-import AddressCard from '../../components/ProfileScreen/AddressCard';
 import './BillingInformation.css';
 
 // const BillingInformation = ({ addressesToDisplay, billingAddressString, setBillingAddress, showNoAddressMessage, noAddressMessage }) => {
@@ -22,18 +20,18 @@ const BillingInformation = () => {
   const { addresses } = user;
 
   const billingAddress = useSelector(state => state.checkoutData.billingAddress);
-  const { addressObject:billingAddressObj, addressString } = billingAddress;
+  const { addressObject:billingAddressObj } = billingAddress;
 
   const [showNewAddressModal, setShowNewAddressModal] = useState(false);
   const [showNoAddressMessage, setShowNoAddressMessage] = useState(false);
   const [addressesToDisplay, setAddressesToDisplay] = useState([]);
-  const [selectedAddressID, setSelectedAddressID] = useState('');
 
   const noAddressMessage = 'No addresses on file. Create an address to proceed with your order.'
 
   useEffect(() => {
     //If the user has addresses on file
     if(addresses.length > 0){
+      if(showNoAddressMessage) { setShowNoAddressMessage(false) };
       console.log('the user has addresses')
       //If the user has already chosen a billing address
       if(billingAddressObj.line1){
@@ -55,9 +53,11 @@ const BillingInformation = () => {
         //Set the primary address as the chosen address by default
         dispatch(checkoutBillingAddress(addresses[0], 'Test String'))
       }
+    } else if(addresses.length === 0){
+      setShowNoAddressMessage(true);
     };
 
-  }, [addresses, billingAddressObj])
+  }, [addresses, billingAddressObj, dispatch, showNoAddressMessage])
 
   const showNewAddressModalHandler = () => {
     console.log('show modal')
@@ -70,8 +70,11 @@ const BillingInformation = () => {
   }
 
   const addressSelectHandler = (e) => {
-    // let addressID = e.dataset.id;
-    console.log(e.target.options[e.target.selectedIndex].dataset.id)
+    let addressID = e.target.options[e.target.selectedIndex].dataset.id;
+    //Find the address in our global state that matches that id
+    let billingAddress = addresses[addresses.findIndex(i => i._id === addressID)];
+    //Update the global state with that address
+    dispatch(checkoutBillingAddress(billingAddress, 'Test String'))
   }
 
   return (

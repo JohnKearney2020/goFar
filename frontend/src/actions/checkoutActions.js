@@ -1,12 +1,11 @@
 import { CHECKOUT_BILLING_ADDRESS, CHECKOUT_SHIPPING_ADDRESS, CHECKOUT_PAYMENT_METHOD, CHECKOUT_RESET } from '../constants/checkoutConstants';
 
-export const checkoutBillingAddress = (object, string) => async (dispatch, getState) => {
+export const checkoutBillingAddress = (object) => async (dispatch) => {
   try {
     dispatch({
       type: CHECKOUT_BILLING_ADDRESS,
       payload: {
-        addressObject: object,
-        addressString: string
+        addressObject: object
       }
     });
   } catch (error) {
@@ -15,13 +14,12 @@ export const checkoutBillingAddress = (object, string) => async (dispatch, getSt
   }
 }
 
-export const checkoutShippingAddress = (object, string) => async (dispatch, getState) => {
+export const checkoutShippingAddress = (object) => async (dispatch) => {
   try {
     dispatch({
       type: CHECKOUT_SHIPPING_ADDRESS,
       payload: {
-        addressObject: object,
-        addressString: string
+        addressObject: object
       }
     });
   } catch (error) {

@@ -2,12 +2,10 @@ import { CHECKOUT_BILLING_ADDRESS, CHECKOUT_SHIPPING_ADDRESS, CHECKOUT_PAYMENT_M
 
 const defaultCheckoutData = {
   billingAddress: {
-    addressObject: {},
-    addressString: ''
+    addressObject: {}
   },
   shippingAddress: {
-    addressObject: {},
-    addressString: ''
+    addressObject: {}
   },
   paymentMethod: ''
 }
@@ -21,7 +19,15 @@ export const checkoutDataReducer = ( state = defaultCheckoutData, action ) => {
     case CHECKOUT_PAYMENT_METHOD:
       return { ...state, paymentMethod: action.payload };
     case CHECKOUT_RESET:
-      return { defaultCheckoutData };
+      return {
+        billingAddress: {
+          addressObject: {}
+        },
+        shippingAddress: {
+          addressObject: {}
+        },
+        paymentMethod: ''
+      };
     default: 
       return state;
   } 

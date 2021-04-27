@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Card, Accordion, Row, Col, Button } from 'react-bootstrap';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import { getUserDetails } from '../actions/userActions';
@@ -12,6 +12,7 @@ import ShippingInformation from '../components/CheckoutScreen/ShippingInformatio
 import PaymentInformation from '../components/CheckoutScreen/PaymentInformation';
 import ReviewAndSubmitOrder from '../components/CheckoutScreen/ReviewAndSubmitOrder.js';
 import { checkoutBillingAddress } from '../actions/checkoutActions';
+import { CHECKOUT_RESET } from '../constants/checkoutConstants';
 import Loader from '../components/Loader';
 
 
@@ -26,6 +27,9 @@ const CheckoutScreen = ({ history }) => {
   const userDetails = useSelector(state => state.userDetails);
   const { loading, error, user } = userDetails;
   const addresses = user.addresses;
+
+  const billingAddress = useSelector(state => state.checkoutData.billingAddress);
+  const { addressObject:billingAddressObj } = billingAddress;
 
   //Set up local state
   const [checkoutActiveKey, setCheckoutActiveKey] = useState("0");
@@ -83,32 +87,37 @@ const CheckoutScreen = ({ history }) => {
   useEffect(() => {
     console.log('in address useEffect of CheckoutScreen.js')
     if(addresses.length > 0){
-      setShowNoAddressMessage(false);
-      console.log('we have addresses')
-      console.log(addresses)
-      const primaryAddress = [addresses[addresses.findIndex(i => i.isPrimary === true)]];
-      setBillingAddressObject(primaryAddress);
-      // If we have a primary address, go ahead and set it as the billing address in local state
-      const primAddressAsString = `
-        ${primaryAddress[0].addressName && primaryAddress[0].addressName + ','} 
-        ${primaryAddress[0].line1},
-        ${primaryAddress[0].line2 && primaryAddress[0].line2 + ','}
-        ${primaryAddress[0].city},
-        ${primaryAddress[0].state},
-        ${primaryAddress[0].zipCode}
-        ${primaryAddress[0].isPrimary === true ? ('- ' + '( Primary )') : ''}`
-      setBillingAddressString(primAddressAsString);
-      const otherAddresses = addresses.filter(eachAddress => eachAddress.isPrimary === false);
-      setAddressesToDisplay(primaryAddress.concat(otherAddresses));
+      // setShowNoAddressMessage(false);
+      // console.log('we have addresses')
+      // console.log(addresses)
+      // const primaryAddress = [addresses[addresses.findIndex(i => i.isPrimary === true)]];
+      // setBillingAddressObject(primaryAddress);
+      // // If we have a primary address, go ahead and set it as the billing address in local state
+      // const primAddressAsString = `
+      //   ${primaryAddress[0].addressName && primaryAddress[0].addressName + ','} 
+      //   ${primaryAddress[0].line1},
+      //   ${primaryAddress[0].line2 && primaryAddress[0].line2 + ','}
+      //   ${primaryAddress[0].city},
+      //   ${primaryAddress[0].state},
+      //   ${primaryAddress[0].zipCode}
+      //   ${primaryAddress[0].isPrimary === true ? ('- ' + '( Primary )') : ''}`
+      // setBillingAddressString(primAddressAsString);
+      // const otherAddresses = addresses.filter(eachAddress => eachAddress.isPrimary === false);
+      // setAddressesToDisplay(primaryAddress.concat(otherAddresses));
       // haveArrangedAddresses.current = true;
     } else if(addresses.length === 0) { //if the user has no addresses
-      setAddressesToDisplay([]);
+      // setAddressesToDisplay([]);
       setShowNoAddressMessage(true);
     }
     return () => {
 
     }
   }, [user, addresses])
+
+  //This should clear our checkout data if the user navigates away from the checkout screen
+  useLayoutEffect(() => () => {
+    dispatch({type: CHECKOUT_RESET});
+  }, [dispatch]);
 
   const submitCheckoutHandler = () => {
     console.log('clicked submit!')
@@ -119,13 +128,12 @@ const CheckoutScreen = ({ history }) => {
     history.push('/cart');
   }
 
-  const billingAddressCheck = () => {
-    // Check to make sure an address was chosen. If it wasn't, don't let the user proceed
-    if(billingAddressString.length === 0){
+  const billingAddressCheck = () => {// Check to make sure an address was chosen. If it wasn't, don't let the user proceed
+    if(billingAddressObj.line1){
       console.log('no address chosen')
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   const addBillingAddress = () => {
@@ -216,14 +224,7 @@ const CheckoutScreen = ({ history }) => {
               </Card.Header>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <BillingInformation 
-                    setBillingAddressString={setBillingAddressString} 
-                    billingAddressString={billingAddressString} 
-                    addressesToDisplay={addressesToDisplay} 
-                    noAddressMessage={noAddressMessage} 
-                    showNoAddressMessage={showNoAddressMessage}
-                    setBillingAddressObject={setBillingAddressObject}
-                  />
+                  <BillingInformation />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -308,10 +309,6 @@ const CheckoutScreen = ({ history }) => {
               <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
             </Button>
           </Row>
-          <h4>Billing Address:</h4>
-          <h5>{billingAddressString}</h5>
-          <h4>Shipping Address:</h4>
-          <h5>{shippingAddress}</h5>
         </>
       }
     </>
