@@ -5,9 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import Message from '../Message';
+import NewAddressModal from '../Modals/NewAddressModal';
 
 
 const ShippingInformation = ({ addressesToDisplay, billingAddress, shippingAddress, setShippingAddress }) => {
+
+  const userDetails = useSelector(state => state.userDetails);
+  const { loading, error, user } = userDetails;
 
   const [showNewAddressModal, setShowNewAddressModal] = useState(false);
 
@@ -81,6 +85,12 @@ const ShippingInformation = ({ addressesToDisplay, billingAddress, shippingAddre
           </Button>
         </Row>
       </Col>
+      {showNewAddressModal && 
+        <NewAddressModal 
+          show={showNewAddressModal}
+          closeModalHandler={closeNewAddressModalHandler}
+        />
+      }
     </Row>
   )
 }

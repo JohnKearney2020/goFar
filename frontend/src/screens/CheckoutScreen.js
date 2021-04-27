@@ -11,6 +11,7 @@ import BillingInformation from '../components/CheckoutScreen/BillingInformation'
 import ShippingInformation from '../components/CheckoutScreen/ShippingInformation';
 import PaymentInformation from '../components/CheckoutScreen/PaymentInformation';
 import ReviewAndSubmitOrder from '../components/CheckoutScreen/ReviewAndSubmitOrder.js';
+import { checkoutBillingAddress } from '../actions/checkoutActions';
 import Loader from '../components/Loader';
 
 
@@ -35,7 +36,8 @@ const CheckoutScreen = ({ history }) => {
   const [addressesToDisplay, setAddressesToDisplay] = useState([]);
 
   //Local State holding data needed to complete order
-  const [billingAddress, setBillingAddress] = useState('');
+  const [billingAddressString, setBillingAddressString] = useState('');
+  const [billingAddressObject, setBillingAddressObject] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('PayPal');
   const [cartSubTotal, setCartSubTotal] = useState(0);
@@ -79,11 +81,13 @@ const CheckoutScreen = ({ history }) => {
   }, [dispatch])
 
   useEffect(() => {
+    console.log('in address useEffect of CheckoutScreen.js')
     if(addresses.length > 0){
       setShowNoAddressMessage(false);
       console.log('we have addresses')
       console.log(addresses)
       const primaryAddress = [addresses[addresses.findIndex(i => i.isPrimary === true)]];
+      setBillingAddressObject(primaryAddress);
       // If we have a primary address, go ahead and set it as the billing address in local state
       const primAddressAsString = `
         ${primaryAddress[0].addressName && primaryAddress[0].addressName + ','} 
@@ -93,7 +97,7 @@ const CheckoutScreen = ({ history }) => {
         ${primaryAddress[0].state},
         ${primaryAddress[0].zipCode}
         ${primaryAddress[0].isPrimary === true ? ('- ' + '( Primary )') : ''}`
-      setBillingAddress(primAddressAsString);
+      setBillingAddressString(primAddressAsString);
       const otherAddresses = addresses.filter(eachAddress => eachAddress.isPrimary === false);
       setAddressesToDisplay(primaryAddress.concat(otherAddresses));
       // haveArrangedAddresses.current = true;
@@ -104,7 +108,7 @@ const CheckoutScreen = ({ history }) => {
     return () => {
 
     }
-  }, [addresses])
+  }, [user, addresses])
 
   const submitCheckoutHandler = () => {
     console.log('clicked submit!')
@@ -115,8 +119,28 @@ const CheckoutScreen = ({ history }) => {
     history.push('/cart');
   }
 
-  const CustomToggle = ({ children, nextActiveKey, disabledCheck, buttonPosition }) => {
+  const billingAddressCheck = () => {
+    // Check to make sure an address was chosen. If it wasn't, don't let the user proceed
+    if(billingAddressString.length === 0){
+      console.log('no address chosen')
+      return false;
+    }
+    return true;
+  }
+
+  const addBillingAddress = () => {
+    console.log('test')
+    if(billingAddressString) { dispatch(checkoutBillingAddress(billingAddressObject, billingAddressString)); }
+  }
+
+  const CustomToggle = ({ children, nextActiveKey, disabledCheck, buttonPosition, verificationFunction, optionalOnClick }) => {
     const checkoutNextStepHandler = useAccordionToggle(nextActiveKey, () => {
+      // Verify we are good to move on to the next step in the checkout process
+      if(verificationFunction) { 
+        if(!verificationFunction()) {return}
+      };
+      // If we need to add anything to the global state do it here
+      if(optionalOnClick) { optionalOnClick() };
       setCheckoutActiveKey(nextActiveKey);
       switch (nextActiveKey) {
         case '0':
@@ -182,7 +206,9 @@ const CheckoutScreen = ({ history }) => {
                   {/* <h5 className='mr-auto align-self-center w-100 h-100'>Billing Information</h5> */}
                   <h5 className='mb-2 mb-md-0 mr-auto'>Billing Information</h5>
                   {!disableBillingInformation && 
-                    <CustomToggle nextActiveKey="1" disabledCheck={disableBillingInformation} buttonPosition='right'>
+                    <CustomToggle nextActiveKey="1" disabledCheck={disableBillingInformation} buttonPosition='right'
+                    verificationFunction={billingAddressCheck}
+                    optionalOnClick={addBillingAddress}>
                       Continue
                     </CustomToggle>
                   }
@@ -190,7 +216,14 @@ const CheckoutScreen = ({ history }) => {
               </Card.Header>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <BillingInformation setBillingAddress={setBillingAddress} billingAddress={billingAddress} addressesToDisplay={addressesToDisplay} noAddressMessage={noAddressMessage} showNoAddressMessage={showNoAddressMessage}/>
+                  <BillingInformation 
+                    setBillingAddressString={setBillingAddressString} 
+                    billingAddressString={billingAddressString} 
+                    addressesToDisplay={addressesToDisplay} 
+                    noAddressMessage={noAddressMessage} 
+                    showNoAddressMessage={showNoAddressMessage}
+                    setBillingAddressObject={setBillingAddressObject}
+                  />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -213,7 +246,7 @@ const CheckoutScreen = ({ history }) => {
               </Card.Header>
               <Accordion.Collapse eventKey="1">
                 <Card.Body>
-                  <ShippingInformation addressesToDisplay={addressesToDisplay} billingAddress={billingAddress} setShippingAddress={setShippingAddress} shippingAddress={shippingAddress}/>
+                  <ShippingInformation addressesToDisplay={addressesToDisplay} billingAddressString={billingAddressString} setShippingAddress={setShippingAddress} shippingAddress={shippingAddress}/>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -262,7 +295,7 @@ const CheckoutScreen = ({ history }) => {
               </Card.Header>
               <Accordion.Collapse eventKey="3">
                 <Card.Body>
-                  <ReviewAndSubmitOrder cartSubTotal={cartSubTotal} shippingTotal={shippingTotal} cartItemTally={cartItemTally} cartTotal={cartTotal} billingAddress={billingAddress} shippingAddress={shippingAddress} history={history}/>
+                  <ReviewAndSubmitOrder cartSubTotal={cartSubTotal} shippingTotal={shippingTotal} cartItemTally={cartItemTally} cartTotal={cartTotal} billingAddressString={billingAddressString} shippingAddress={shippingAddress} history={history}/>
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -275,6 +308,10 @@ const CheckoutScreen = ({ history }) => {
               <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
             </Button>
           </Row>
+          <h4>Billing Address:</h4>
+          <h5>{billingAddressString}</h5>
+          <h4>Shipping Address:</h4>
+          <h5>{shippingAddress}</h5>
         </>
       }
     </>

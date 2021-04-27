@@ -1,15 +1,27 @@
-import { CHECKOUT_STEP_CHANGE, CHECKOUT_STEP_RESET } from '../constants/checkoutConstants';
+import { CHECKOUT_BILLING_ADDRESS, CHECKOUT_SHIPPING_ADDRESS, CHECKOUT_PAYMENT_METHOD, CHECKOUT_RESET } from '../constants/checkoutConstants';
 
-// export const CHECKOUT_STEP_CHANGE = 'CHECKOUT_STEP_REQUEST';
-// export const CHECKOUT_STEP_RESET = 'CHECKOUT_STEP_REQUEST_RESET';
+const defaultCheckoutData = {
+  billingAddress: {
+    addressObject: {},
+    addressString: ''
+  },
+  shippingAddress: {
+    addressObject: {},
+    addressString: ''
+  },
+  paymentMethod: ''
+}
 
-
-export const checkoutStepReducer = ( state = { checkoutActiveKey: "0" }, action ) => {
+export const checkoutDataReducer = ( state = defaultCheckoutData, action ) => {
   switch(action.type) {
-    case CHECKOUT_STEP_CHANGE:
-      return { checkoutActiveKey: action.payload };
-    case CHECKOUT_STEP_RESET:
-      return { checkoutActiveKey: "0" };
+    case CHECKOUT_BILLING_ADDRESS:
+      return { ...state, billingAddress: action.payload };
+    case CHECKOUT_SHIPPING_ADDRESS:
+      return { ...state, shippingAddress: action.payload };
+    case CHECKOUT_PAYMENT_METHOD:
+      return { ...state, paymentMethod: action.payload };
+    case CHECKOUT_RESET:
+      return { defaultCheckoutData };
     default: 
       return state;
   } 
