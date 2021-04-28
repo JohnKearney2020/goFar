@@ -37,6 +37,16 @@ const CustomPayPalButton = () => {
                 postal_code: shippingAddressObj.zipCode,
                 country_code: "US"
               }
+            },
+            billing: {
+              address: {
+                address_line_1: shippingAddressObj.line1,
+                address_line_2: shippingAddressObj.line2,
+                admin_area_1: shippingAddressObj.state,
+                admin_area_2: shippingAddressObj.city,
+                postal_code: shippingAddressObj.zipCode,
+                country_code: "US"
+              }
             } 
           }]
           // application_context: {

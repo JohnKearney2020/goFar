@@ -9,6 +9,7 @@ import axios from 'axios';
 import CartRow from '../CartScreen/CartRow';
 import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
 import Loader from '../Loader';
+import Message from '../Message';
 import CustomPayPalButton from '../CheckoutScreen/CustomPayPalButton';
 
 
@@ -59,9 +60,13 @@ const ReviewAndSubmitOrder = ({ history }) => {
           console.log(clientID);
           const script = document.createElement('script');
           script.type = 'text/javascript';
-          script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`
+          // script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`
+          script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}&disable-funding=credit,card`
+          
           script.async = true;
-          if(!unmounted && !window.paypal){ //Only mount the script if this component is mounted and don't mount if the script is already there
+          if(!unmounted && window.paypal){ //Only mount the script if this component is mounted and don't mount the script if the script is already there
+            setSdkReady(true);
+          } else if(!unmounted && !window.paypal){
             console.log('mounting script')
             script.onload = () => {
               setSdkReady(true);
@@ -142,7 +147,7 @@ const ReviewAndSubmitOrder = ({ history }) => {
         </Col>
       </Row>
       {/* Payment Method and Cart Totals Row*/}
-      <Row>
+      <Row className='mt-3'>
         {/* Payment Method */}
         <Col md={6}>
           <Card border='light'>
@@ -179,17 +184,51 @@ const ReviewAndSubmitOrder = ({ history }) => {
         </Col>
       </Row>
       {/* Edit Cart and PayPal Buttons */}
-      <Row className='justify-content-end px-3 mb-3'>
-        {/* Edit Cart Button */}
+      <Row className='justify-content-end px-3 mb-3 mt-3'>
+        <Col md={6}>
+          <Card border='light'>
+            <ListGroup variant='flush'>
+              <ListGroup.Item className='border-0'>
+                <h4>Checkout Instructions:</h4>
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                <Message variant='success'>
+                  <p className='lead my-0'>You can conduct a mock transaction thanks to PayPal's sandbox mode! Don't worry - no real money is used.</p>
+                </Message>,
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                <Message variant='info'>
+                  <p className='mb-2'>Use this account info PayPal</p>
+                  <p className='my-0 ml-2'>Email: <span className='font-weight-bold'>gofar@example.com</span></p>
+                  <p className='my-0 ml-2'>Password: <span className='font-weight-bold'>gofarpass</span></p>
+                </Message>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+          {/* <Message variant='success'></Message>, */}
+        </Col>
+        {/* PayPal Button */}
+        <Col md={6}>
+          <Card border='light'>
+            <ListGroup variant='flush'>
+              <ListGroup.Item className='border-0'>
+                <h4>Checkout with PayPal:</h4>
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                {sdkReady && <CustomPayPalButton />}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+        </Col>
+      </Row>
+      {/* Edit Cart Button */}
+      <Row className='justify-content-end px-4 mb-3 mt-3 w-100'>
         <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center mr-1' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
         <Button variant='danger' size='sm' className='d-flex d-md-none justify-content-center align-items-center' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
-        {/* PayPal Button */}
-        {/* <PayPalButton amount={cartTotal} onSuccess={successPaymentHandler} /> */}
-        {sdkReady && <CustomPayPalButton />}
       </Row>
       {/* Products in Cart */}
       <Row> {/* Cart Items */}
