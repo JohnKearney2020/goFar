@@ -56,7 +56,7 @@ const Addresses = () => {
     <h4 className='my-4'>Your Addresses</h4>
       {addressesToDisplay.length === 0 && <Message variant='info'>{noAddressMessage}</Message>}
       <Button 
-        className='mb-4 ml-3 d-flex align-items-center' 
+        className='mb-4 ml-3 d-flex mt-3 align-items-center' 
         variant='primary' 
         onClick={showNewAddressModalHandler} 
         disabled={showNewAddressModal}

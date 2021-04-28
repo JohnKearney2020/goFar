@@ -3,8 +3,10 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { updateUserProfile } from '../../actions/userActions';
+import { getUserDetails } from '../../actions/userActions';
+import { checkoutBillingAddress } from '../../actions/checkoutActions';
 
-const NewAddressModal = ({ show, closeModalHandler}) => {
+const NewAddressModal = ({ show, closeModalHandler, billingAddress, shippingAddress}) => {
   
   const dispatch = useDispatch();
 
@@ -58,7 +60,7 @@ const NewAddressModal = ({ show, closeModalHandler}) => {
     if(anyErrors) { return } //stop here if the user did not fill out the form correctly
 
     const existingAddresses = [...addresses];
-    if(isPrimary){ //if the user wants the new address to be the primary address
+    if(isPrimary){ //if the user wants the new address to be the primary address, set all the existing addresses to primary = false
       existingAddresses.forEach((eachAddress) => {
         eachAddress.isPrimary = false;
       })
@@ -74,8 +76,19 @@ const NewAddressModal = ({ show, closeModalHandler}) => {
       zipCode: zipCode
     };
 
+    // let addressString = `${addressName && addressName + ','} 
+    // ${addressLine1},
+    // ${addressLine2 && addressLine2 + ','}
+    // ${city},
+    // ${state},
+    // ${zipCode}
+    // ${isPrimary === true ? ('- ' + '( Primary )') : ''}`;
+
     existingAddresses.push(newAddress);
     dispatch(updateUserProfile({ addresses: existingAddresses }, 'newAddress'));
+    //If we added a billing address from checkout:
+    // if(billingAddress) { dispatch(checkoutBillingAddress(newAddress, addressString)); }
+    dispatch(getUserDetails('profile'));
     closeModalHandler();
   }
 
@@ -206,6 +219,11 @@ const NewAddressModal = ({ show, closeModalHandler}) => {
         </Modal.Footer>
     </Modal>
   )
+}
+
+NewAddressModal.defaultProps = {
+  billingAddress: false,
+  shippingAddress: false
 }
 
 export default NewAddressModal;

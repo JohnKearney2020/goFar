@@ -1,15 +1,51 @@
-import { CHECKOUT_STEP_CHANGE, CHECKOUT_STEP_RESET } from '../constants/checkoutConstants';
+import { CHECKOUT_BILLING_ADDRESS, CHECKOUT_SHIPPING_ADDRESS, CHECKOUT_PAYMENT_METHOD, CHECKOUT_RESET } from '../constants/checkoutConstants';
+import { CHECKOUT_SUBTOTAL, CHECKOUT_SHIPPING_COST, CHECKOUT_ITEM_TALLY, CHECKOUT_CART_TOTAL } from '../constants/checkoutConstants';
 
-// export const CHECKOUT_STEP_CHANGE = 'CHECKOUT_STEP_REQUEST';
-// export const CHECKOUT_STEP_RESET = 'CHECKOUT_STEP_REQUEST_RESET';
+const defaultCheckoutData = {
+  billingAddress: {
+    addressObject: {}
+  },
+  shippingAddress: {
+    addressObject: {}
+  },
+  paymentMethod: '',
+  subTotal: 0,
+  shippingCost: '',
+  itemTally: 0,
+  cartTotal: 0
+}
 
-
-export const checkoutStepReducer = ( state = { checkoutActiveKey: "0" }, action ) => {
+// CHECKOUT_SUBTOTAL, CHECKOUT_SHIPPING_COST, CHECKOUT_ITEM_TALLY
+export const checkoutDataReducer = ( state = defaultCheckoutData, action ) => {
   switch(action.type) {
-    case CHECKOUT_STEP_CHANGE:
-      return { checkoutActiveKey: action.payload };
-    case CHECKOUT_STEP_RESET:
-      return { checkoutActiveKey: "0" };
+    case CHECKOUT_BILLING_ADDRESS:
+      return { ...state, billingAddress: action.payload };
+    case CHECKOUT_SHIPPING_ADDRESS:
+      return { ...state, shippingAddress: action.payload };
+    case CHECKOUT_PAYMENT_METHOD:
+      return { ...state, paymentMethod: action.payload };
+    case CHECKOUT_SUBTOTAL:
+      return { ...state, subTotal: action.payload };
+    case CHECKOUT_SHIPPING_COST:
+      return { ...state, shippingCost: action.payload };
+    case CHECKOUT_ITEM_TALLY:
+      return { ...state, itemTally: action.payload };
+    case CHECKOUT_CART_TOTAL:
+      return { ...state, cartTotal: action.payload };
+    case CHECKOUT_RESET:
+      return {
+        billingAddress: {
+          addressObject: {}
+        },
+        shippingAddress: {
+          addressObject: {}
+        },
+        paymentMethod: '',
+        subTotal: 0,
+        shippingCost: '',
+        itemTally: 0,
+        cartTotal: 0
+      };
     default: 
       return state;
   } 
