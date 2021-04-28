@@ -1,28 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Row, Form, Button, Col, ListGroup } from 'react-bootstrap';
+import { Card, Row, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { compose } from 'redux';
 
 import CartRow from '../CartScreen/CartRow';
-import Message from '../Message';
+import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions'
 
-const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cartTotal, billingAddress, shippingAddress, history }) => {
+
+const ReviewAndSubmitOrder = ({ history }) => {
 
   const dispatch = useDispatch();
-  const haveFetchedCartData = useRef(false);
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
 
-  const submitOrderHandler = () => {
-    console.log('clicked submit order!')
-  }
+  const billingAddress = useSelector(state => state.checkoutData.billingAddress);
+  const { addressObject:billingAddressObj } = billingAddress;
+
+  const shippingAddress = useSelector(state => state.checkoutData.shippingAddress);
+  const { addressObject:shippingAddressObj } = shippingAddress;
+
+  const checkoutData = useSelector(state => state.checkoutData);
+  const { subTotal, shippingCost, itemTally, cartTotal } = checkoutData;
+
+  const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
+
+
+  useEffect(() => {
+    if(userInfo){
+      if(cart.length > 0){
+        // Find how many items are in the cart
+        dispatch(checkoutItemTally(cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)))
+        // Find the subtotal of the cart
+        let tempCartSubTotal = Number(cart.reduce((acc,item) => acc + (item.savedForLater ? 0 : item.quantity) * item.price, 0).toFixed(2));
+        console.log('typeof tempCartSubTotal: ', typeof tempCartSubTotal)
+        dispatch(checkoutSubTotal(tempCartSubTotal));
+        // Figure out cost of shipping. Free shipping at $49 or more. otherwise $7.99 flat rate
+        let tempCartShipping = tempCartSubTotal > 49 ? 0 : 7.99;
+        dispatch(checkoutShippingCost(tempCartShipping))
+        // Calculate the total cost of the cart - items + shipping
+        let cartTotal = (Number(tempCartSubTotal) + Number(tempCartShipping));
+        dispatch(checkoutCartTotal(cartTotal))
+      }
+    }
+  }, [userInfo, cart, history, dispatch]);
 
   const cartEditHandler = () => {
-    // console.log('clicked submit!')
     history.push('/cart');
   }
 
@@ -32,32 +57,60 @@ const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cart
       <Row>
         <Col md={6}>
           <Card border='light'>
+            {/* Billilng Address */}
             <ListGroup variant='flush'>
               <ListGroup.Item className='border-0'>
                 <h4>Billing Address</h4>
               </ListGroup.Item>
-              <ListGroup.Item>
-                {/* <h6 className='ml-2'>{billingAddress}</h6> */}
-                {billingAddress}
+              {billingAddressObj.addressName &&
+                <ListGroup.Item className='border-0 py-0'>
+                  <h6 className='mb-1 ml-2'>{billingAddressObj.addressName}</h6>
+                </ListGroup.Item>
+              }
+              <ListGroup.Item className='border-0 py-0'>
+                <h6 className='mb-1 ml-2'>{billingAddressObj.line1}</h6>
+              </ListGroup.Item>
+              {billingAddressObj.line2 &&
+                <ListGroup.Item className='border-0 py-0'> 
+                <h6 className='mb-1 ml-2'>{billingAddressObj.line2}</h6>
+                </ListGroup.Item>
+              }
+              <ListGroup.Item className='border-0 py-0'>
+                <h6 className='mb-1 ml-2'>{billingAddressObj.city}, {billingAddressObj.state} {billingAddressObj.zipCode}</h6>
               </ListGroup.Item>
             </ListGroup>
           </Card>
         </Col>
         <Col md={6}>
           <Card border='light'>
+            {/* Shipping Address */}
             <ListGroup variant='flush'>
-              <ListGroup.Item className='border-0'>
-                <h4>Shipping Address</h4>
-              </ListGroup.Item>
-              <ListGroup.Item className='border-0'>
-                {shippingAddress}
-              </ListGroup.Item>
-            </ListGroup>
+                <ListGroup.Item className='border-0'>
+                  <h4>Shipping Address</h4>
+                </ListGroup.Item>
+                {shippingAddressObj.addressName &&
+                  <ListGroup.Item className='border-0 py-0'>
+                    <h6 className='mb-1 ml-2'>{shippingAddressObj.addressName}</h6>
+                  </ListGroup.Item>
+                }
+                <ListGroup.Item className='border-0 py-0'>
+                  <h6 className='mb-1 ml-2'>{shippingAddressObj.line1}</h6>
+                </ListGroup.Item>
+                {shippingAddressObj.line2 &&
+                  <ListGroup.Item className='border-0 py-0'> 
+                  <h6 className='mb-1 ml-2'>{shippingAddressObj.line2}</h6>
+                  </ListGroup.Item>
+                }
+                <ListGroup.Item className='border-0 py-0'>
+                  <h6 className='mb-1 ml-2'>{shippingAddressObj.city}, {shippingAddressObj.state} {shippingAddressObj.zipCode}</h6>
+                </ListGroup.Item>
+              </ListGroup>
           </Card>
         </Col>
       </Row>
-      {/* Payment Method */}
+      {/* Payment Method and Cart Totals Row*/}
       <Row>
+        {/* Payment Method */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
@@ -65,25 +118,23 @@ const ReviewAndSubmitOrder = ({ cartSubTotal, shippingTotal, cartItemTally, cart
                 <h4>Payment Method</h4>
               </ListGroup.Item>
               <ListGroup.Item className='border-0 py-0'>
-                {/* <span className='ml-2'>PayPal</span> */}
-                <h6 className='ml-2'>PayPal</h6>
+                <h6 className='mb-1 ml-2'>{paymentMethod}</h6>
               </ListGroup.Item>
             </ListGroup>
           </Card>
         </Col>
+        {/* Cart Totals */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
               <ListGroup.Item className='border-0'>
-              <h4>{`Subtotal (${cartItemTally} items):`}</h4>
+              <h4>{`Subtotal (${itemTally} items):`}</h4>
                 <ListGroup variant='flush'>
                   <ListGroup.Item className='border-0 py-0'>
-                    {/* <p className='m-0 lead font-weight-bold'>${cartSubTotal}</p> */}
-                    {/* <h6>Item Subtotal: ${cartSubTotal}</h6> */}
-                    Item Subtotal: <span className='font-weight-bold'>${cartSubTotal}</span>
+                    Item Subtotal: <span className='font-weight-bold'>${subTotal}</span>
                   </ListGroup.Item>
                   <ListGroup.Item className='pt-0 pb-1'>
-                    Shipping: <span className='font-weight-bold'>{shippingTotal === 0 ? 'FREE' : '$7.99'}</span>
+                    Shipping: <span className='font-weight-bold'>{shippingCost === 0 ? 'FREE' : '$7.99'}</span>
                   </ListGroup.Item>
                   <ListGroup.Item className='border-0'>
                     Total Before Tax: <span className='font-weight-bold'>${cartTotal}</span>
