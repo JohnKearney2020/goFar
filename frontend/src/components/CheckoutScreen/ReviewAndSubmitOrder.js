@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Row, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+// import { PayPalButton } from 'react-paypal-button-v2';
 
 import CartRow from '../CartScreen/CartRow';
-import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions'
+import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
+import Loader from '../Loader';
+import CustomPayPalButton from '../CheckoutScreen/CustomPayPalButton';
 
 
 const ReviewAndSubmitOrder = ({ history }) => {
@@ -27,28 +31,57 @@ const ReviewAndSubmitOrder = ({ history }) => {
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
 
+  //Set up local state
+  const [sdkReady, setSdkReady] = useState(false); //for paypal
 
   useEffect(() => {
+    let unmounted = false;
+    console.log('in top level useEffect')
     if(userInfo){
+      console.log('in level below that')
       if(cart.length > 0){
+        console.log('in final level')
         // Find how many items are in the cart
         dispatch(checkoutItemTally(cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)))
         // Find the subtotal of the cart
         let tempCartSubTotal = Number(cart.reduce((acc,item) => acc + (item.savedForLater ? 0 : item.quantity) * item.price, 0).toFixed(2));
-        console.log('typeof tempCartSubTotal: ', typeof tempCartSubTotal)
         dispatch(checkoutSubTotal(tempCartSubTotal));
         // Figure out cost of shipping. Free shipping at $49 or more. otherwise $7.99 flat rate
         let tempCartShipping = tempCartSubTotal > 49 ? 0 : 7.99;
         dispatch(checkoutShippingCost(tempCartShipping))
         // Calculate the total cost of the cart - items + shipping
         let cartTotal = (Number(tempCartSubTotal) + Number(tempCartShipping));
-        dispatch(checkoutCartTotal(cartTotal))
+        dispatch(checkoutCartTotal(cartTotal));
+
+        // PayPal
+        const addPayPalScript = async () => {
+          const { data: clientID } = await axios.get('/api/config/paypal');
+          console.log(clientID);
+          const script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`
+          script.async = true;
+          if(!unmounted && !window.paypal){ //Only mount the script if this component is mounted and don't mount if the script is already there
+            console.log('mounting script')
+            script.onload = () => {
+              setSdkReady(true);
+            }
+            document.body.appendChild(script);
+          }
+        }
+        addPayPalScript();
       }
     }
+    return () => { unmounted = true };
   }, [userInfo, cart, history, dispatch]);
 
   const cartEditHandler = () => {
     history.push('/cart');
+  }
+
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult);
+    console.log('Payment was successful!')
   }
 
   return (
@@ -145,14 +178,18 @@ const ReviewAndSubmitOrder = ({ history }) => {
           </Card>
         </Col>
       </Row>
-      {/* Edit Cart Button */}
+      {/* Edit Cart and PayPal Buttons */}
       <Row className='justify-content-end px-3 mb-3'>
+        {/* Edit Cart Button */}
         <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center mr-1' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
         <Button variant='danger' size='sm' className='d-flex d-md-none justify-content-center align-items-center' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
+        {/* PayPal Button */}
+        {/* <PayPalButton amount={cartTotal} onSuccess={successPaymentHandler} /> */}
+        {sdkReady && <CustomPayPalButton />}
       </Row>
       {/* Products in Cart */}
       <Row> {/* Cart Items */}
