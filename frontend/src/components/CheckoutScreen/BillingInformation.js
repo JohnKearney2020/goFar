@@ -31,7 +31,6 @@ const BillingInformation = () => {
     //If the user has addresses on file
     if(addresses.length > 0){
       if(showNoAddressMessage) { setShowNoAddressMessage(false) };
-      console.log('the user has addresses')
       //If the user has already chosen a billing address
       if(billingAddressObj.line1){
         const otherAddresses = [];
@@ -47,7 +46,6 @@ const BillingInformation = () => {
         setAddressesToDisplay(chosenBillingAddress.concat(otherAddresses));
       //If the user has not yet chosen a billing address, default to the primary address first (the primary address is already first)
       } else {
-        console.log('No billing address chosen by the user yet. Setting the primary address as the chosen address')
         setAddressesToDisplay(addresses);
         //Set the primary address as the chosen address by default
         dispatch(checkoutBillingAddress(addresses[0]))

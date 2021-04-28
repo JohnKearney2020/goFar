@@ -32,27 +32,32 @@ app.get('/', (req, res) => {
 })
 
 //========================================
-//Product related routes
+// Product related routes
 //========================================
 app.use('/api/products', productRoutes);
 
 //========================================
-//User related routes
+// User related routes
 //========================================
 app.use('/api/users', userRoutes);
 
 //========================================
-//Cart related routes
+// Cart related routes
 //========================================
 app.use('/api/users/cart', cartRoutes);
 
 //========================================
-//WishList related routes
+// WishList related routes
 //========================================
 app.use('/api/users/wishlist', wishListRoutes);
 
 //========================================
-//Error Handling Middleware
+// Paypal
+//========================================
+app.get('/api/config/paypal', (req,res) => res.send(process.env.PAYPAL_CLIENT_ID));
+
+//========================================
+// Error Handling Middleware
 //========================================
 // 404 fallback - for anything that is not found
 app.use(notFound);

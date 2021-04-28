@@ -218,13 +218,7 @@ const CheckoutScreen = ({ history }) => {
                       <>
                         <CustomToggle nextActiveKey="2" disabledCheck={disableReviewAndSubmit} buttonPosition='left'>
                               Go Back
-                        </CustomToggle>
-                        <Button className='d-xs-flex d-md-none' size='sm' disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
-                              Submit Order
-                        </Button>                            
-                        <Button className='d-none d-md-flex' disabled={disableReviewAndSubmit} onClick={submitCheckoutHandler}>
-                              Submit Order
-                        </Button>                            
+                        </CustomToggle>                          
                       </>
                     }                  
                 </Row>

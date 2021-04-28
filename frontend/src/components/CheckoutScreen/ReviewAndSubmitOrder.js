@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Row, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+// import { PayPalButton } from 'react-paypal-button-v2';
 
 import CartRow from '../CartScreen/CartRow';
-import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions'
+import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
+import Loader from '../Loader';
+import Message from '../Message';
+import CustomPayPalButton from '../CheckoutScreen/CustomPayPalButton';
 
 
 const ReviewAndSubmitOrder = ({ history }) => {
@@ -27,28 +32,61 @@ const ReviewAndSubmitOrder = ({ history }) => {
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
 
+  //Set up local state
+  const [sdkReady, setSdkReady] = useState(false); //for paypal
 
   useEffect(() => {
+    let unmounted = false;
+    console.log('in top level useEffect')
     if(userInfo){
+      console.log('in level below that')
       if(cart.length > 0){
+        console.log('in final level')
         // Find how many items are in the cart
         dispatch(checkoutItemTally(cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)))
         // Find the subtotal of the cart
         let tempCartSubTotal = Number(cart.reduce((acc,item) => acc + (item.savedForLater ? 0 : item.quantity) * item.price, 0).toFixed(2));
-        console.log('typeof tempCartSubTotal: ', typeof tempCartSubTotal)
         dispatch(checkoutSubTotal(tempCartSubTotal));
         // Figure out cost of shipping. Free shipping at $49 or more. otherwise $7.99 flat rate
         let tempCartShipping = tempCartSubTotal > 49 ? 0 : 7.99;
         dispatch(checkoutShippingCost(tempCartShipping))
         // Calculate the total cost of the cart - items + shipping
         let cartTotal = (Number(tempCartSubTotal) + Number(tempCartShipping));
-        dispatch(checkoutCartTotal(cartTotal))
+        dispatch(checkoutCartTotal(cartTotal));
+
+        // PayPal
+        const addPayPalScript = async () => {
+          const { data: clientID } = await axios.get('/api/config/paypal');
+          console.log(clientID);
+          const script = document.createElement('script');
+          script.type = 'text/javascript';
+          // script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`
+          script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}&disable-funding=credit,card`
+          
+          script.async = true;
+          if(!unmounted && window.paypal){ //Only mount the script if this component is mounted and don't mount the script if the script is already there
+            setSdkReady(true);
+          } else if(!unmounted && !window.paypal){
+            console.log('mounting script')
+            script.onload = () => {
+              setSdkReady(true);
+            }
+            document.body.appendChild(script);
+          }
+        }
+        addPayPalScript();
       }
     }
+    return () => { unmounted = true };
   }, [userInfo, cart, history, dispatch]);
 
   const cartEditHandler = () => {
     history.push('/cart');
+  }
+
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult);
+    console.log('Payment was successful!')
   }
 
   return (
@@ -109,7 +147,7 @@ const ReviewAndSubmitOrder = ({ history }) => {
         </Col>
       </Row>
       {/* Payment Method and Cart Totals Row*/}
-      <Row>
+      <Row className='mt-3'>
         {/* Payment Method */}
         <Col md={6}>
           <Card border='light'>
@@ -145,8 +183,46 @@ const ReviewAndSubmitOrder = ({ history }) => {
           </Card>
         </Col>
       </Row>
+      {/* Edit Cart and PayPal Buttons */}
+      <Row className='justify-content-end px-3 mb-3 mt-3'>
+        <Col md={6}>
+          <Card border='light'>
+            <ListGroup variant='flush'>
+              <ListGroup.Item className='border-0'>
+                <h4>Checkout Instructions:</h4>
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                <Message variant='success'>
+                  <p className='lead my-0'>You can conduct a mock transaction thanks to PayPal's sandbox mode! Don't worry - no real money is used.</p>
+                </Message>,
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                <Message variant='info'>
+                  <p className='mb-2'>Use this account info PayPal</p>
+                  <p className='my-0 ml-2'>Email: <span className='font-weight-bold'>gofar@example.com</span></p>
+                  <p className='my-0 ml-2'>Password: <span className='font-weight-bold'>gofarpass</span></p>
+                </Message>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+          {/* <Message variant='success'></Message>, */}
+        </Col>
+        {/* PayPal Button */}
+        <Col md={6}>
+          <Card border='light'>
+            <ListGroup variant='flush'>
+              <ListGroup.Item className='border-0'>
+                <h4>Checkout with PayPal:</h4>
+              </ListGroup.Item>
+              <ListGroup.Item className='border-0 py-0 mx-2'>
+                {sdkReady && <CustomPayPalButton />}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+        </Col>
+      </Row>
       {/* Edit Cart Button */}
-      <Row className='justify-content-end px-3 mb-3'>
+      <Row className='justify-content-end px-4 mb-3 mt-3 w-100'>
         <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center mr-1' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
