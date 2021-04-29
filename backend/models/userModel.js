@@ -187,8 +187,6 @@ const wishListSchema = mongoose.Schema({
 timestamps: true
 });
 
-
-
 const reviewSchema = mongoose.Schema({
 name: { type: String, required: true },
 rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
@@ -233,7 +231,7 @@ const userSchema = mongoose.Schema({
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
   cart: [cartSchema],
   orders: [orderSchema]
-  // orders: []
+
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true

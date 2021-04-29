@@ -72,14 +72,9 @@ const CustomPayPalButton = () => {
                   Authorization: `Bearer ${token}`
                 }
               }
-              console.log('config');
-              console.log(config)
               // Create the order object we will send to the backend
               //Pull the items from our cart that are not 'saved for later'
               let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
-              console.log('data.orderID', data.orderID)
-              console.log('typeof data.orderID: ',typeof data.orderID)
-              // order
               let order = {
                 user: userID,
                 paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
@@ -93,8 +88,6 @@ const CustomPayPalButton = () => {
                 shippingAddress: shippingAddressObj,
                 shipped: false
               }
-              console.log('order before sending to backend:')
-              console.log(order)
               const { data:data2 } = await axios.post('/api/users/orders', {
                 order
               }, config);
@@ -133,48 +126,3 @@ const CustomPayPalButton = () => {
 }
 
 export default CustomPayPalButton;
-
-
-// user: {
-//   type: mongoose.Schema.Types.ObjectId,
-//   required: true,
-//   ref: 'User'
-// },
-// paymentMethodID: {
-//   type: String,
-//   required: true
-// },
-// items: [],
-// subTotal: {
-//   type: Number,
-//   required: true
-// },
-// shippingCost: {
-//   type: Number,
-//   required: true
-// },
-// cartTotal: {
-//   type: Number,
-//   required: true
-// },
-// itemTally: {
-//   type: Number,
-//   required: true
-// },
-// paymentMethod: {
-//   type: String,
-//   required: true
-// },
-// billingAddress: {
-//   type: Object,
-//   required: true
-// },
-// shippingAddress: {
-//   type: Object,
-//   required: true
-// },
-// shipped: {
-//   type: Boolean,
-//   required: true,
-//   default: false
-// }

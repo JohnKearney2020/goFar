@@ -4,7 +4,6 @@ import { Card, Row, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-// import { PayPalButton } from 'react-paypal-button-v2';
 
 import CartRow from '../CartScreen/CartRow';
 import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
@@ -60,7 +59,6 @@ const ReviewAndSubmitOrder = ({ history }) => {
           console.log(clientID);
           const script = document.createElement('script');
           script.type = 'text/javascript';
-          // script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}`
           script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}&disable-funding=credit,card`
           
           script.async = true;
@@ -93,9 +91,11 @@ const ReviewAndSubmitOrder = ({ history }) => {
     <>
       {/* Addresses */}
       <Row>
+        {/* ============================================== */}
+        {/*               Billing Address                  */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
-            {/* Billilng Address */}
             <ListGroup variant='flush'>
               <ListGroup.Item className='border-0'>
                 <h4>Billing Address</h4>
@@ -119,9 +119,11 @@ const ReviewAndSubmitOrder = ({ history }) => {
             </ListGroup>
           </Card>
         </Col>
+        {/* ============================================== */}
+        {/*               Shipping Address                 */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
-            {/* Shipping Address */}
             <ListGroup variant='flush'>
                 <ListGroup.Item className='border-0'>
                   <h4>Shipping Address</h4>
@@ -146,9 +148,13 @@ const ReviewAndSubmitOrder = ({ history }) => {
           </Card>
         </Col>
       </Row>
-      {/* Payment Method and Cart Totals Row*/}
+      {/* ============================================== */}
+      {/*       Payment Method and Cart Totals Row       */}
+      {/* ============================================== */}
       <Row className='mt-3'>
-        {/* Payment Method */}
+        {/* ============================================== */}
+        {/*                Payment Method                  */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
@@ -161,7 +167,9 @@ const ReviewAndSubmitOrder = ({ history }) => {
             </ListGroup>
           </Card>
         </Col>
-        {/* Cart Totals */}
+        {/* ============================================== */}
+        {/*                Cart Totals                     */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
@@ -183,8 +191,13 @@ const ReviewAndSubmitOrder = ({ history }) => {
           </Card>
         </Col>
       </Row>
-      {/* Edit Cart and PayPal Buttons */}
+      {/* ============================================== */}
+      {/*          Edit Cart and PayPal Buttons          */}
+      {/* ============================================== */}
       <Row className='justify-content-end px-3 mb-3 mt-3'>
+        {/* ============================================== */}
+        {/*              Checkout Instructions             */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
@@ -205,9 +218,10 @@ const ReviewAndSubmitOrder = ({ history }) => {
               </ListGroup.Item>
             </ListGroup>
           </Card>
-          {/* <Message variant='success'></Message>, */}
         </Col>
-        {/* PayPal Button */}
+        {/* ============================================== */}
+        {/*                PayPal Button                   */}
+        {/* ============================================== */}
         <Col md={6}>
           <Card border='light'>
             <ListGroup variant='flush'>
@@ -221,7 +235,9 @@ const ReviewAndSubmitOrder = ({ history }) => {
           </Card>
         </Col>
       </Row>
-      {/* Edit Cart Button */}
+      {/* ============================================== */}
+      {/*                Edit Cart Button                */}
+      {/* ============================================== */}
       <Row className='justify-content-end px-4 mb-3 mt-3 w-100'>
         <Button variant='danger' className='d-none d-md-flex justify-content-center align-items-center mr-1' onClick={cartEditHandler}>
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
@@ -230,7 +246,9 @@ const ReviewAndSubmitOrder = ({ history }) => {
           <FontAwesomeIcon icon={faPen} size="2x" fixedWidth /> <span className='ml-1'>Edit Cart</span>
         </Button>
       </Row>
-      {/* Products in Cart */}
+      {/* ============================================== */}
+      {/*                Products in Cart                */}
+      {/* ============================================== */}
       <Row> {/* Cart Items */}
         <Col className='' md={12}> {/* Left Side of Screen */}
           <ListGroup variant='flush'>
@@ -272,7 +290,6 @@ const ReviewAndSubmitOrder = ({ history }) => {
                 sizeCategory={eachProduct.sizeCategory}
                 price={eachProduct.price}
                 qty={eachProduct.quantity}
-                // dateAdded={eachProduct.createdAt}
                 image={eachProduct.image}
                 savedForLater={eachProduct.savedForLater}
                 hideButtons={true}
