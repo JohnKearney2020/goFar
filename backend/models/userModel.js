@@ -1,58 +1,17 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-//User Wishlist - this contains the product id's of all the products the user has put on their wishlist
-//See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
-const wishListSchema = mongoose.Schema({
-    productID: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
-      ref: 'Product'
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    color: {
-      type: String,
-      required: false
-    },
-    size: {
-      type: String,
-      required: false
-    },
-    sizeCategory: {
-      type: String,
-      required: false
-    },
-    image: {
-      type: String,
-      required: true
-    },
-    qtyAvailable: {
-      type: Number,
-      required: false,
-      default: null
-    },
-    currentPrice: {
-      type: Number,
-      required: false,
-      default: null
-    },
-    inCart: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    availableInOtherSizes: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-}, {
-  timestamps: true
-});
+// const reviewSchema = mongoose.Schema({
+//   name: { type: String, required: true },
+//   rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
+//   comment: { type: String, required: true },
+// }, {
+//   timestamps: true
+// });
 
+// =====================================================================================================
+//                                      Schema's Used in User Schema
+// =====================================================================================================
 const cartSchema = mongoose.Schema({
   productID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -95,28 +54,152 @@ const cartSchema = mongoose.Schema({
     type: Date,
     immutable: true
   }
-}, {
+  }, {
+  timestamps: true
+  });
+
+const addressSchema = mongoose.Schema({
+  isPrimary: {
+    type: Boolean,
+    required: true
+  },
+  addressName: {
+    type: String,
+    required: false
+  },
+  line1: {
+    type: String,
+    required: true
+  },
+  line2: {
+    type: String,
+    required: false
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  zipCode: {
+    type: String,
+    required: true
+  }
+}, 
+{ 
+  timestamps: true 
+});
+
+const orderSchema = mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  paymentMethodID: {
+    type: String,
+    required: true
+  },
+  items: [cartSchema],
+  subTotal: {
+    type: Number,
+    required: true
+  },
+  shippingCost: {
+    type: Number,
+    required: true
+  },
+  cartTotal: {
+    type: Number,
+    required: true
+  },
+  itemTally: {
+    type: Number,
+    required: true
+  },
+  paymentMethod: {
+    type: String,
+    required: true
+  },
+  billingAddress: addressSchema,
+  shippingAddress: addressSchema,
+  shipped: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+}, 
+{
   timestamps: true
 });
+
+//User Wishlist - this contains the product id's of all the products the user has put on their wishlist
+//See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
+const wishListSchema = mongoose.Schema({
+  productID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
+    ref: 'Product'
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  color: {
+    type: String,
+    required: false
+  },
+  size: {
+    type: String,
+    required: false
+  },
+  sizeCategory: {
+    type: String,
+    required: false
+  },
+  image: {
+    type: String,
+    required: true
+  },
+  qtyAvailable: {
+    type: Number,
+    required: false,
+    default: null
+  },
+  currentPrice: {
+    type: Number,
+    required: false,
+    default: null
+  },
+  inCart: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  availableInOtherSizes: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+}, {
+timestamps: true
+});
+
+
 
 const reviewSchema = mongoose.Schema({
-  name: { type: String, required: true },
-  rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
-  comment: { type: String, required: true },
+name: { type: String, required: true },
+rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
+comment: { type: String, required: true },
 }, {
-  timestamps: true
+timestamps: true
 });
 
-
-
-
-// const reviewSchema = mongoose.Schema({
-//   name: { type: String, required: true },
-//   rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
-//   comment: { type: String, required: true },
-// }, {
-//   timestamps: true
-// });
+// =====================================================================================================
+//                                                  UserSchema
+// =====================================================================================================
 
 const userSchema = mongoose.Schema({
   name: {
@@ -141,43 +224,16 @@ const userSchema = mongoose.Schema({
   // on less information, like name, email and password. MongoDB seems to only enforce the required part if we were to actually try
   // to populate addresses, cart, or wishlist. If we create a user with just name, email, and address, the addresses, cart, and wishlist
   // arrays are created, but left blank
-  addresses: [{
-    isPrimary: {
-      type: Boolean,
-      required: true
-    },
-    addressName: {
-      type: String,
-      required: false
-    },
-    line1: {
-      type: String,
-      required: true
-    },
-    line2: {
-      type: String,
-      required: false
-    },
-    city: {
-      type: String,
-      required: true
-    },
-    state: {
-      type: String,
-      required: true
-    },
-    zipCode: {
-      type: String,
-      required: true
-    }
-  }],
+  addresses: [addressSchema],
   phoneNumber: {
     type: String,
     required: false,
     default: ''
   },
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
-  cart: [cartSchema]
+  cart: [cartSchema],
+  orders: [orderSchema]
+  // orders: []
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true
