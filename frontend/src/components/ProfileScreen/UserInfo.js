@@ -44,14 +44,15 @@ const UserInfo = () => {
 
   useEffect(() => {
       if(haveFetchedUserData.current === false){ //if we haven't gotten the user details yet, go ahead and get them
+        console.log('in first part of UserInfo useEffect fetching user details')
         dispatch(getUserDetails('profile'));
         haveFetchedUserData.current = true;
-      } else if(success){ //if we have completed fetching the user details from the backend
-        // setTimeout(() => {
-          console.log('in set timeout');
-          dispatch({ type: USER_UPDATE_PROFILE_RESET});
-          dispatch(getUserDetails('profile'));          
-        // }, 1500);
+      } else if(success){ //if we have completed fetching the user details from the backend once already
+        //This triggers when a user update's their profile information
+        console.log('in 2nd part of UserInfo useEffect')
+        console.log('in set timeout');
+        dispatch({ type: USER_UPDATE_PROFILE_RESET});
+        dispatch(getUserDetails('profile')); //This is needed to pull the updated information from the global state and display it          
       } else {
         setName(user.name);
         setEmail(user.email);

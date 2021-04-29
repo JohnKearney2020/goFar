@@ -86,6 +86,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       phoneNumber: user.phoneNumber,
       cart: user.cart,
       wishList: user.wishList,
+      orders: user.orders
     })
   } else {
     res.status(404); //not found

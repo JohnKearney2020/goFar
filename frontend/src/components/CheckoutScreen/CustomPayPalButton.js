@@ -2,8 +2,11 @@ import React from 'react';
 import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from 'react-redux';
+import { getUserDetails } from '../../actions/userActions';
 
 const CustomPayPalButton = () => {
+  
+  const dispatch = useDispatch();
 
   // Get data from the Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -19,6 +22,13 @@ const CustomPayPalButton = () => {
   const { subTotal, shippingCost, itemTally, cartTotal } = checkoutData;
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }
 
   return (
     <PayPalButton 
@@ -63,15 +73,10 @@ const CustomPayPalButton = () => {
           // alert("Transaction completed by " + details.payer.name.given_name);
 
           // OPTIONAL: Call your server to save the transaction
+          // addOrderToUser(data);
+          // Create an order and add it to the User's data in our database
           const addOrderToUser = async () => {
             try {
-              // Set up our config for our backend
-              const config = {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
-                }
-              }
               // Create the order object we will send to the backend
               //Pull the items from our cart that are not 'saved for later'
               let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
@@ -91,8 +96,10 @@ const CustomPayPalButton = () => {
               const { data:data2 } = await axios.post('/api/users/orders', {
                 order
               }, config);
-              console.log('data2:')
-              console.log(data2)
+              // console.log('data2:')
+              // console.log(data2)
+              // Update the user details global state with the new order information
+              dispatch(getUserDetails('profile'));
               // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
               // dispatch the user login again to update the user's info in the global state
               // dispatch({
@@ -110,8 +117,7 @@ const CustomPayPalButton = () => {
               // toast.error(`Could not add ${productName} to your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
             } 
           }
-          addOrderToUser();
-
+          addOrderToUser(data);
           // return fetch("/paypal-transaction-complete", {
           //   method: "post",
           //   body: JSON.stringify({

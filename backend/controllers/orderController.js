@@ -6,8 +6,8 @@ import User from '../models/userModel.js';
 // @desc     Add an order to a User
 // @route    POST /api/users/orders
 // @access   Private
-const updateUserOrders = asyncHandler(async (req, res) => {
-  console.log('in updateUserOrders action')
+const createUserOrder = asyncHandler(async (req, res) => {
+  console.log('in createUserOrder action')
   console.log('req.body.order:')
   console.log(req.body.order)
   //remember, req.user is passed here automatically by our authorization middleware
@@ -31,11 +31,22 @@ const updateUserOrders = asyncHandler(async (req, res) => {
   }
 })
 
+// orderUpdateCart
+
+
+
+
+
+
+
+
+
+
 
 // @desc     Get user profile
 // @route    GET /api/users/profile
 // @access   Private
-// const updateUserOrders = asyncHandler(async (req, res) => {
+// const createUserOrder = asyncHandler(async (req, res) => {
 //   const user = await User.findById(req.user._id);
 //   if(user) {
 //     res.json({
@@ -58,5 +69,5 @@ const updateUserOrders = asyncHandler(async (req, res) => {
 // getUserOrders
 
 export { 
-  updateUserOrders
+  createUserOrder
 };
