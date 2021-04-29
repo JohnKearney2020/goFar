@@ -3,6 +3,9 @@ import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from '../../actions/userActions';
+import { toast } from 'react-toastify';
+
+import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 
 const CustomPayPalButton = () => {
   
@@ -28,6 +31,61 @@ const CustomPayPalButton = () => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
     }
+  }
+
+  const addOrderToUser = async (data) => {
+    try {
+      // Create the order object we will send to the backend
+      //Pull the items from our cart that are not 'saved for later'
+      let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
+      let order = {
+        user: userID,
+        paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
+        items: orderItems,
+        subTotal,
+        shippingCost,
+        cartTotal,
+        itemTally,
+        paymentMethod,
+        billingAddress: billingAddressObj,
+        shippingAddress: shippingAddressObj,
+        shipped: false
+      }
+      const { data:data2 } = await axios.post('/api/users/orders', {
+        order
+      }, config);
+    } catch (error) {
+      console.log('there was an error')
+      console.log(error)
+      console.log(error.message)
+      console.log(error.response.data.message)
+      // error.response.data.message : error.message
+      // toast.error(`Could not add ${productName} to your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
+    } 
+  }
+
+  const updateUserCart = async () => {
+    // Filter our the 'Saved For Later' items from the cart. Those will be saved. Everything else in the cart will be removed
+    const cartAfterOrder = cart.filter(eachItem => eachItem.savedForLater === true);
+    console.log('cartAfterOrder:')
+    console.log(cartAfterOrder)
+    try {
+      const { data } = await axios.put('/api/users/cart/updatewholecart', { cart:cartAfterOrder }, config);
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      console.log('cart updated successfully')
+    } catch (error) {
+      console.log('there was an error updating the cart with up to date values')
+      console.log(error)
+      toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "top-right", autoClose: 5000 });
+    }
+  }
+
+  const payPalButtonClickHandler = () => {
+    console.log('user clicked the PayPal button!')
   }
 
   return (
@@ -70,54 +128,12 @@ const CustomPayPalButton = () => {
         // Capture the funds from the transaction
         return actions.order.capture().then(function(details) {
           // Show a success message to your buyer
-          // alert("Transaction completed by " + details.payer.name.given_name);
 
-          // OPTIONAL: Call your server to save the transaction
-          // addOrderToUser(data);
           // Create an order and add it to the User's data in our database
-          const addOrderToUser = async () => {
-            try {
-              // Create the order object we will send to the backend
-              //Pull the items from our cart that are not 'saved for later'
-              let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
-              let order = {
-                user: userID,
-                paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
-                items: orderItems,
-                subTotal,
-                shippingCost,
-                cartTotal,
-                itemTally,
-                paymentMethod,
-                billingAddress: billingAddressObj,
-                shippingAddress: shippingAddressObj,
-                shipped: false
-              }
-              const { data:data2 } = await axios.post('/api/users/orders', {
-                order
-              }, config);
-              // console.log('data2:')
-              // console.log(data2)
-              // Update the user details global state with the new order information
-              dispatch(getUserDetails('profile'));
-              // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
-              // dispatch the user login again to update the user's info in the global state
-              // dispatch({
-              //   type: USER_LOGIN_SUCCESS,
-              //   payload: data2
-              // });
-              // localStorage.setItem('userInfo', JSON.stringify(data));
-            } catch (error) {
-              console.log('there was an error')
-              console.log(error)
-              console.log(error.message)
-              console.log(error.response.data.message)
-
-              // error.response.data.message : error.message
-              // toast.error(`Could not add ${productName} to your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
-            } 
-          }
           addOrderToUser(data);
+          // Update the User's Cart - Remove everything that was just sold
+          updateUserCart();
+          dispatch(getUserDetails('profile'));
           // return fetch("/paypal-transaction-complete", {
           //   method: "post",
           //   body: JSON.stringify({
@@ -126,6 +142,7 @@ const CustomPayPalButton = () => {
           // });
         });
       }}
+      onClick={payPalButtonClickHandler}
     />
       
   )
