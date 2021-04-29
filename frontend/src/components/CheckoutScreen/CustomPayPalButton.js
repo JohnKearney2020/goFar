@@ -84,18 +84,13 @@ const CustomPayPalButton = () => {
                 user: userID,
                 paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
                 items: orderItems,
-                // subTotal: subTotal,
                 subTotal,
-                // shippingCost: shippingCost,
                 shippingCost,
-                // cartTotal: cartTotal
                 cartTotal,
                 itemTally,
                 paymentMethod,
                 billingAddress: billingAddressObj,
-                // billingAddress: '',
                 shippingAddress: shippingAddressObj,
-                // shippingAddress: '',
                 shipped: false
               }
               console.log('order before sending to backend:')
@@ -106,7 +101,7 @@ const CustomPayPalButton = () => {
               console.log('data2:')
               console.log(data2)
               // We've set up the backend to send us back the updated user information once the user's cart is updated. We need to 
-              // dispatch the user login again to update the user's cart in the global state
+              // dispatch the user login again to update the user's info in the global state
               // dispatch({
               //   type: USER_LOGIN_SUCCESS,
               //   payload: data2
