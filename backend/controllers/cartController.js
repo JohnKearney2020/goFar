@@ -197,6 +197,7 @@ const updateWholeCart = asyncHandler(async (req, res) => {
   //remember, req.user is passed here automatically by our authorization middleware
   const user = await User.findById(req.user._id);
   // const user = await User.findById(req.body.userID);
+  console.log('typeof req.body.cart:', typeof req.body.cart)
   if(user) {
     user.cart = req.body.cart || user.cart;
     //Update the user's info
