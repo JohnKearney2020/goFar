@@ -58,11 +58,10 @@ const CustomPayPalButton = () => {
     }
   }
 
-  const addOrderToUser = async (data) => {
+  const updateUserData = async (data) => {
     // This is the second of our functions to run after the user completes the PayPal transaction
-
     try {
-      console.log('in addOrderToUser')
+      console.log('in updateUserData')
       // Create the order object we will send to the backend
       //Pull the items from our cart that are not 'saved for later'
       let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
@@ -79,49 +78,22 @@ const CustomPayPalButton = () => {
         shippingAddress: shippingAddressObj,
         shipped: false
       }
-      const { data:data2 } = await axios.post('/api/users/orders', {
-        order
+      const { data:data2 } = await axios.put('/api/users/orders', {
+        order, cart
       }, config);
+      // Update the global state with the new user info
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data2
+      });
     } catch (error) {
       console.log('there was an error')
       console.log(error)
       console.log(error.message)
       console.log(error.response.data.message)
       dispatch({ type: ORDER_LOADING_FALSE });
-      // error.response.data.message : error.message
-      // toast.error(`Could not add ${productName} to your cart. Try again later.`, { position: "top-right", autoClose: 3500 });
     } 
   }
-
-  const updateUserCart = async () => {
-    // This is the third of our functions to run after the user completes the PayPal transaction
-    // Filter our the 'Saved For Later' items from the cart. Those will be saved. Everything else in the cart will be removed
-    let cartAfterOrder = cart.filter(eachItem => eachItem.savedForLater === true);
-    if(cartAfterOrder.length === 0) { cartAfterOrder = {} }
-    // cartAfterOrder.length === 0 ? cartAfterOrder = {}
-    console.log('cartAfterOrder:')
-    console.log(cartAfterOrder)
-    try {
-      console.log('in updateUserCart')
-      const { data } = await axios.put('/api/users/orders/cartupdate', { cart:cartAfterOrder }, config);
-      dispatch({
-        type: USER_LOGIN_SUCCESS,
-        payload: data
-      });
-      dispatch({ type: ORDER_LOADING_FALSE });
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      console.log('cart updated successfully')
-    } catch (error) {
-      console.log('there was an error updating the cart with up to date values')
-      console.log(error)
-      console.log(error.message)
-      // console.log(error.response.data.message)
-      toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "top-right", autoClose: 5000 });
-      dispatch({ type: ORDER_LOADING_FALSE });
-    }
-  }
-
-
 
   const payPalButtonClickHandler = () => {
     console.log('user clicked the PayPal button!');
@@ -172,16 +144,8 @@ const CustomPayPalButton = () => {
           //Update the inventory in our database:
           updateInventory();
           // Update the User's Cart - Remove everything that was just sold
-          updateUserCart();
           // Create an order and add it to the User's data in our database
-          // addOrderToUser(data);
-          // dispatch(getUserDetails('profile'));
-          // return fetch("/paypal-transaction-complete", {
-          //   method: "post",
-          //   body: JSON.stringify({
-          //     orderID: data.orderID
-          //   })
-          // });
+          updateUserData(data);
         });
       }}
       onClick={payPalButtonClickHandler}
