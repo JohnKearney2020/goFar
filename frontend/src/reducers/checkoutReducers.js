@@ -1,5 +1,18 @@
 import { CHECKOUT_BILLING_ADDRESS, CHECKOUT_SHIPPING_ADDRESS, CHECKOUT_PAYMENT_METHOD, CHECKOUT_RESET } from '../constants/checkoutConstants';
 import { CHECKOUT_SUBTOTAL, CHECKOUT_SHIPPING_COST, CHECKOUT_ITEM_TALLY, CHECKOUT_CART_TOTAL } from '../constants/checkoutConstants';
+import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../constants/checkoutConstants';
+
+// CHECKOUT_SUBTOTAL, CHECKOUT_SHIPPING_COST, CHECKOUT_ITEM_TALLY
+export const orderLoadingReducer = ( state = {loading: false}, action ) => {
+  switch(action.type) {
+    case ORDER_LOADING_TRUE:
+      return { loading: true };
+    case ORDER_LOADING_TRUE:
+      return { loading: false };
+    default: 
+      return state;
+  } 
+}
 
 const defaultCheckoutData = {
   billingAddress: {
