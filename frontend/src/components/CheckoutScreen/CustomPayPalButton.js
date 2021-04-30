@@ -84,6 +84,30 @@ const CustomPayPalButton = () => {
     }
   }
 
+  const updateInventory = async () => {
+    // Filter our the 'Saved For Later' items from the cart. Those will be saved. Everything else in the cart will be removed
+    // const cartAfterOrder = cart.filter(eachItem => eachItem.savedForLater === true);
+    // console.log('cartAfterOrder:')
+    // console.log(cartAfterOrder)
+    try {
+      const { data:data2 } = await axios.put('/api/users/orders/inventoryupdate', { cart }, config);
+      console.log('Got feedback from backend!')
+      console.log(data2)
+      // dispatch({
+      //   type: USER_LOGIN_SUCCESS,
+      //   payload: data
+      // });
+      // localStorage.setItem('userInfo', JSON.stringify(data));
+      // console.log('cart updated successfully')
+    } catch (error) {
+      console.log('there was an error updating the item inventory')
+      console.log(error)
+      // toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "top-right", autoClose: 5000 });
+      console.log(error.message)
+      console.log(error.response.data.message)
+    }
+  }
+
   const payPalButtonClickHandler = () => {
     console.log('user clicked the PayPal button!')
   }
@@ -129,11 +153,14 @@ const CustomPayPalButton = () => {
         return actions.order.capture().then(function(details) {
           // Show a success message to your buyer
 
+          //Update the inventory in our database:
+          updateInventory();
           // Create an order and add it to the User's data in our database
-          addOrderToUser(data);
+          // addOrderToUser(data);
+
           // Update the User's Cart - Remove everything that was just sold
-          updateUserCart();
-          dispatch(getUserDetails('profile'));
+          // updateUserCart();
+          // dispatch(getUserDetails('profile'));
           // return fetch("/paypal-transaction-complete", {
           //   method: "post",
           //   body: JSON.stringify({
