@@ -50,7 +50,7 @@ const updateInventory = asyncHandler(async (req, res) => {
     const orderProducts = await Product.find({ '_id': { $in: arrayOfIDs }});
     // Loop through the cart items and find their match in orderProducts. Update quantities as needed
     for(let cartItem of filteredCart){
-    const { color:color1, size:size1, sizeCategory:sizeCategory1, quantity:cartQty } = cartItem;
+      const { color:color1, size:size1, sizeCategory:sizeCategory1, quantity:cartQty } = cartItem;
       // console.log('color: ', color1)
       // console.log('size: ', size1)
       // console.log('sizeCategory: ', sizeCategory1)
@@ -69,8 +69,14 @@ const updateInventory = asyncHandler(async (req, res) => {
         console.log('after qty adjustment:')
         console.log(levelThree);
         // const updatedProduct = await orderProduct.save();
-        await product.save();
+        // await product.save();
       }
+    }
+    // We save the product's here to limit the total number of times they need to be saved.
+    // Ex: we have 3 different size/color combos of a pair of pants. We update their quantities in the loops above.
+    // we save them here so that overall product (the pants) only gets saved one time instead of 3 times
+    for(let product of orderProducts){
+      await product.save();
     }
 
     // Loop thru and update each item in th database individually
