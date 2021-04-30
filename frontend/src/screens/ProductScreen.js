@@ -144,10 +144,11 @@ const ProductScreen = ({ match }) => {
         let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
         let levelTwo = levelOne[levelOne.findIndex(i => i.color === colorClicked)].sizeCategorySizes;
         let levelThree = levelTwo[levelTwo.findIndex(i => i.size === selectedSize)];
-        if(levelThree.qty !== 0) {
-          sizeFound = true;
+        levelThree.qty > 0 ? setQtyInStock(levelThree.qty) : setQtyInStock(0);
+        if(levelThree.qty > 0) {
           setQtyInStock(levelThree.qty);
-        }
+          sizeFound = true;
+        } else { setQtyInStock(0) };
       }
       if(sizeFound === false) { //If the size is not found in the new color, reset the selectedSize and qtyInStock local state
         setSelectedSize('');
@@ -171,9 +172,10 @@ const ProductScreen = ({ match }) => {
       let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
       let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
       let levelThree = levelTwo[levelTwo.findIndex(i => i.size === userSelectedSize)];
-      if(levelThree.qty !== 0) {
-        setQtyInStock(levelThree.qty);
-      }
+      levelThree.qty > 0 ? setQtyInStock(levelThree.qty) : setQtyInStock(0);
+      // if(levelThree.qty !== 0) {
+      //   setQtyInStock(levelThree.qty);
+      // }
     }
   }
   

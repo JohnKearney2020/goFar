@@ -50,10 +50,10 @@ const cartSchema = mongoose.Schema({
     type: Boolean,
     required: false
   },
-  createdAt: {
-    type: Date,
-    immutable: true
-  }
+  // createdAt: {
+  //   type: Date,
+  //   immutable: true
+  // }
   }, {
   timestamps: true
   });
