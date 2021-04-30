@@ -4,5 +4,11 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.35);
   /* z-index is sent as a style prop */
-  z-index: 1;
+  z-index: 1000;
+}
+
+#orderLoadingMessage {
+  color: white;
+  position: absolute;
+  top: 60%;
 }
