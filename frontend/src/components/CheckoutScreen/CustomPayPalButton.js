@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../../constants/checkoutConstants';
+import Backdrop from '../../components/Modals/Backdrop';
 
 const CustomPayPalButton = () => {
   
@@ -26,6 +27,10 @@ const CustomPayPalButton = () => {
   const { subTotal, shippingCost, itemTally, cartTotal } = checkoutData;
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
+
+  const orderLoading = useSelector(state => state.orderLoading.loading);
+
+
 
   const config = {
     headers: {
@@ -81,11 +86,13 @@ const CustomPayPalButton = () => {
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
+      dispatch({ type: ORDER_LOADING_FALSE });
       // Update the global state with the new user info
       dispatch({
         type: USER_LOGIN_SUCCESS,
         payload: data2
       });
+      localStorage.setItem('userInfo', JSON.stringify(data2));
     } catch (error) {
       console.log('there was an error')
       console.log(error)
@@ -101,56 +108,58 @@ const CustomPayPalButton = () => {
   }
 
   return (
-    <PayPalButton 
-      createOrder={(data, actions) => {
-        return actions.order.create({
-          application_context: {
-            shipping_preference: 'SET_PROVIDED_ADDRESS',
-          },
-          purchase_units: [{
-            amount: {
-              currency_code: "USD",
-              value: cartTotal
+    <>
+      <PayPalButton 
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            application_context: {
+              shipping_preference: 'SET_PROVIDED_ADDRESS',
             },
-            shipping: {
-              address: {
-                address_line_1: shippingAddressObj.line1,
-                address_line_2: shippingAddressObj.line2,
-                admin_area_1: shippingAddressObj.state,
-                admin_area_2: shippingAddressObj.city,
-                postal_code: shippingAddressObj.zipCode,
-                country_code: "US"
-              }
-            },
-            billing: {
-              address: {
-                address_line_1: shippingAddressObj.line1,
-                address_line_2: shippingAddressObj.line2,
-                admin_area_1: shippingAddressObj.state,
-                admin_area_2: shippingAddressObj.city,
-                postal_code: shippingAddressObj.zipCode,
-                country_code: "US"
-              }
-            } 
-          }]
-        });
-      }}
-      // If the paypal transaction goes well
-      onApprove={(data, actions) => {
-        // Capture the funds from the transaction
-        return actions.order.capture().then(function(details) {
-          // Show a success message to your buyer
+            purchase_units: [{
+              amount: {
+                currency_code: "USD",
+                value: cartTotal
+              },
+              shipping: {
+                address: {
+                  address_line_1: shippingAddressObj.line1,
+                  address_line_2: shippingAddressObj.line2,
+                  admin_area_1: shippingAddressObj.state,
+                  admin_area_2: shippingAddressObj.city,
+                  postal_code: shippingAddressObj.zipCode,
+                  country_code: "US"
+                }
+              },
+              billing: {
+                address: {
+                  address_line_1: shippingAddressObj.line1,
+                  address_line_2: shippingAddressObj.line2,
+                  admin_area_1: shippingAddressObj.state,
+                  admin_area_2: shippingAddressObj.city,
+                  postal_code: shippingAddressObj.zipCode,
+                  country_code: "US"
+                }
+              } 
+            }]
+          });
+        }}
+        // If the paypal transaction goes well
+        onApprove={(data, actions) => {
+          // Capture the funds from the transaction
+          return actions.order.capture().then(function(details) {
+            // Show a success message to your buyer
 
-          //Update the inventory in our database:
-          updateInventory();
-          // Update the User's Cart - Remove everything that was just sold
-          // Create an order and add it to the User's data in our database
-          updateUserData(data);
-        });
-      }}
-      onClick={payPalButtonClickHandler}
-    />
-      
+            //Update the inventory in our database:
+            updateInventory();
+            // Update the User's Cart - Remove everything that was just sold
+            // Create an order and add it to the User's data in our database
+            updateUserData(data);
+          });
+        }}
+        onClick={payPalButtonClickHandler}
+      />
+      { orderLoading && <Backdrop />}
+    </>
   )
 }
 
