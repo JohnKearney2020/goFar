@@ -7,7 +7,7 @@ export const orderLoadingReducer = ( state = {loading: false}, action ) => {
   switch(action.type) {
     case ORDER_LOADING_TRUE:
       return { loading: true };
-    case ORDER_LOADING_TRUE:
+    case ORDER_LOADING_FALSE:
       return { loading: false };
     default: 
       return state;
