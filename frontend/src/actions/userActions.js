@@ -29,7 +29,7 @@ export const login = (email, password) => async (dispatch) => {
     })
     // store user info in local storage
     localStorage.setItem('userInfo', JSON.stringify(data));
-    toast.info('Log in Successful!', { position: "top-right", autoClose: 3500 }
+    toast.info('Log in Successful!', { position: "bottom-center", autoClose: 4000 }
   );
   } catch (error) {
     dispatch({

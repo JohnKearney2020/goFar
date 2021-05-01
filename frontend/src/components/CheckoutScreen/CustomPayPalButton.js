@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserDetails } from '../../actions/userActions';
 import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
@@ -30,8 +29,6 @@ const CustomPayPalButton = ({ history }) => {
 
   const orderLoading = useSelector(state => state.orderLoading.loading);
 
-
-
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -39,37 +36,15 @@ const CustomPayPalButton = ({ history }) => {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('in paypal button useEffect')
-  //   console.log('history:')
-  //   console.log(history)
-  //   console.log('this.props:')
-  //   console.log(props)
-  //   return () => {
-      
-  //   }
-  // }, [])
-
   const updateInventory = async () => {
     // This is the first of our functions to run after the user completes the PayPal transaction
-    // dispatch({ type: ORDER_LOADING_TRUE });
     try {
-      console.log('in updateInventory')
       const { data:data2 } = await axios.put('/api/users/orders/inventoryupdate', { cart }, config);
-      console.log('Got feedback from backend!')
-      console.log(data2)
-      // dispatch({
-      //   type: USER_LOGIN_SUCCESS,
-      //   payload: data
-      // });
-      // localStorage.setItem('userInfo', JSON.stringify(data));
-      // console.log('cart updated successfully')
     } catch (error) {
       console.log('there was an error updating the item inventory')
       console.log(error)
-      // toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "top-right", autoClose: 5000 });
       console.log(error.message)
-      console.log(error.response.data.message)
+      console.log(error.response.data.message && error.response.data.message)
       dispatch({ type: ORDER_LOADING_FALSE });
     }
   }
@@ -97,31 +72,26 @@ const CustomPayPalButton = ({ history }) => {
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
-      // dispatch({ type: ORDER_LOADING_FALSE });
-      // Update the global state with the new user info
-      // console.log('just before USER_LOGIN_SUCCESS')
       dispatch({
         type: USER_LOGIN_SUCCESS,
         payload: data2
       });
-      console.log('just before local storage')
       localStorage.setItem('userInfo', JSON.stringify(data2));
-      console.log('just before redirect')
+      toast.success(`Oder Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+      // redirect users to the orders page
       history.push('/profile/orders')
     } catch (error) {
       console.log('there was an error')
       console.log(error)
       console.log(error.message)
-      // console.log(error.response.data.message)
+      console.log(error.response.data.message && error.response.data.message)
+      toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "bottom-center", autoClose: 5000 });
       dispatch({ type: ORDER_LOADING_FALSE });
     } 
   }
 
   const payPalButtonClickHandler = () => {
-    console.log('user clicked the PayPal button!');
     dispatch({ type: ORDER_LOADING_TRUE });
-    console.log('history:')
-    console.log(history)
   }
 
   return (
@@ -164,14 +134,19 @@ const CustomPayPalButton = ({ history }) => {
         onApprove={(data, actions) => {
           // Capture the funds from the transaction
           return actions.order.capture().then(function(details) {
-            // Show a success message to your buyer
-
             //Update the inventory in our database:
             updateInventory();
             // Update the User's Cart - Remove everything that was just sold
             // Create an order and add it to the User's data in our database
             updateUserData(data);
           });
+        }}
+        onError={(err) => {
+          dispatch({ type: ORDER_LOADING_FALSE });
+          toast.error(`We could not complete your transaction through PayPal. Try again later.`, { position: "bottom-center", autoClose: 4000 });
+        }}
+        onCancel={() => {
+          dispatch({ type: ORDER_LOADING_FALSE });
         }}
         onClick={payPalButtonClickHandler}
       />
