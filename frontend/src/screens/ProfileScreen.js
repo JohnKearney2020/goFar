@@ -13,7 +13,7 @@ import Addresses from '../components/ProfileScreen/Addresses';
 // import { getUserDetails } from '../actions/userActions';
 import './ProfileScreen.css';
 
-const ProfileScreen = ({ history }) => {
+const ProfileScreen = ({ history, match }) => {
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -22,10 +22,19 @@ const ProfileScreen = ({ history }) => {
     if(!userInfo.name){ history.push('/login') };
   }, [ history, userInfo ]);
 
+  const acceptableParams = {
+    userInfo: 1,
+    addresses: 1,
+    orders: 1
+  }
+
   return (
     <>
       <OffsetPageHeader leftHeaderText='User Profile' rightHeaderText='User Profile' hrBoolean={false}/>
-      <Tabs defaultActiveKey='userInfo' id='uncontrolled-tab-example' className='mt-5'>
+      <Tabs defaultActiveKey={
+          acceptableParams[match.params.tab] ? match.params.tab : 'userInfo'
+        } 
+        id='uncontrolled-tab-example' className='mt-5'>
         <Tab eventKey='userInfo' title='User Profile Information'>
           <UserInfo />
         </Tab>

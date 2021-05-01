@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../../constants/checkoutConstants';
 import Backdrop from '../../components/Modals/Backdrop';
 
-const CustomPayPalButton = () => {
+const CustomPayPalButton = ({ history }) => {
   
   const dispatch = useDispatch();
 
@@ -38,6 +38,17 @@ const CustomPayPalButton = () => {
       Authorization: `Bearer ${token}`
     }
   }
+
+  // useEffect(() => {
+  //   console.log('in paypal button useEffect')
+  //   console.log('history:')
+  //   console.log(history)
+  //   console.log('this.props:')
+  //   console.log(props)
+  //   return () => {
+      
+  //   }
+  // }, [])
 
   const updateInventory = async () => {
     // This is the first of our functions to run after the user completes the PayPal transaction
@@ -86,18 +97,22 @@ const CustomPayPalButton = () => {
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
-      dispatch({ type: ORDER_LOADING_FALSE });
+      // dispatch({ type: ORDER_LOADING_FALSE });
       // Update the global state with the new user info
+      // console.log('just before USER_LOGIN_SUCCESS')
       dispatch({
         type: USER_LOGIN_SUCCESS,
         payload: data2
       });
+      console.log('just before local storage')
       localStorage.setItem('userInfo', JSON.stringify(data2));
+      console.log('just before redirect')
+      history.push('/profile/orders')
     } catch (error) {
       console.log('there was an error')
       console.log(error)
       console.log(error.message)
-      console.log(error.response.data.message)
+      // console.log(error.response.data.message)
       dispatch({ type: ORDER_LOADING_FALSE });
     } 
   }
@@ -105,6 +120,8 @@ const CustomPayPalButton = () => {
   const payPalButtonClickHandler = () => {
     console.log('user clicked the PayPal button!');
     dispatch({ type: ORDER_LOADING_TRUE });
+    console.log('history:')
+    console.log(history)
   }
 
   return (
