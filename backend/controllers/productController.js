@@ -6,10 +6,26 @@ import Product from '../models/productModel.js';
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
   const keyword = req.query.keyword ? {
-    name: {
-      $regex: req.query.keyword,
-      $options: 'i' // 'i' is for case insensitive
-    }
+    $or: [
+      {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i' // 'i' is for case insensitive
+        }
+      },
+      {
+        categories: {
+          $regex: req.query.keyword,
+          $options: 'i' // 'i' is for case insensitive
+        }
+      },
+      {
+        subBrand: {
+          $regex: req.query.keyword,
+          $options: 'i' // 'i' is for case insensitive
+        }
+      }
+    ]
   } : {};
 
   const products = await Product.find({ ...keyword }); //passing a blank object will return all products
