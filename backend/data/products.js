@@ -1729,9 +1729,6 @@ const products = [
     reviews: [], //come back to this
     rating: 5,
     numReviews: 12,
-    defaultPrice: 0,
-    defaultSalePrice: 0,
-    defaultQty: '',
     featureIcons: [
       {
         heading: 'First Ascent',
