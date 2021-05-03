@@ -225,7 +225,7 @@ const CheckoutScreen = ({ history }) => {
               </Card.Header>
               <Accordion.Collapse eventKey="3">
                 <Card.Body>
-                  <ReviewAndSubmitOrder history={history}/>
+                  <ReviewAndSubmitOrder />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
