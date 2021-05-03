@@ -8,7 +8,12 @@ export const findDefaultPriceRange = (arrayOfPrices) => {
     prices.push(addDecimals(eachSizeCategory.sizeCategoryDefaultPrice));
   }
   prices.sort(sortLowToHigh);
-  return prices;
+  // If all the items have the same base price
+  if(prices[0] === prices[prices.length - 1]){
+    return [prices[0]]; //Needs to be sent back as an array of length 1
+  } else {
+    return prices;
+  }
 }
 // product.sizes.sizeCategories.sizeCategoryColorsAndSizes
 export const findSalePriceRange = (arrayOfPrices) => {
