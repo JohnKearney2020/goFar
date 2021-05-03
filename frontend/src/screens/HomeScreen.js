@@ -15,6 +15,8 @@ const HomeScreen = ({ match }) => {
   const productList = useSelector(state => state.productList);
   const { loading, error, products } = productList;
   
+  const noResultsMessage = `No results. We couldn't find any products that matched what you were looking for. Try another search and we will do our best to find them. Pinky promise :)
+  `
   useEffect(() => {
     dispatch(listProducts(keyword));
   }, [dispatch, keyword]);
@@ -22,7 +24,8 @@ const HomeScreen = ({ match }) => {
   return (
     <>
     <h1>Latest Products</h1>
-      {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) :
+      {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 
+        : products.length === 0 ? ( <Message variant='info'>{noResultsMessage}</Message> ) :
         (<Row>
           {products.map(product => (
             <Col className='d-flex align-items-stretch' key={product._id} sm={12} md={6} lg={4} xl={3}>
