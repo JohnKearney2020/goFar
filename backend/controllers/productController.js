@@ -5,6 +5,9 @@ import Product from '../models/productModel.js';
 // @route    GET /api/products?keyword=keyword
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
+  const pageSize = 1;
+  const page = Number(req.query.pageNumber) || 1;
+
   const keyword = req.query.keyword ? {
     $or: [
       {
@@ -27,12 +30,22 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     ]
   } : {};
+  //Get the total count for pagination purposes
+  const count = await Product.countDocuments({ ...keyword });
 
-  const products = await Product.find({ ...keyword }); //passing a blank object will return all products
+  // .limit() limits our results to the number we've specified in pageSize
+  // .skip() will skip the first x results and start returning results after that. Here, for page 1 we skip 0
+  // for page 2 we skip the first 10 results that would have already been displayed on page 1
+  // for page 3 we skip the first 20 results that would have already been displayed on page 1 and page 2
+  const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1)); 
+  
+  //passing a blank object will return all products
   //intentionally throw an error
   // res.status(401);
   // throw new Error('not authorized')
-  res.json(products);
+
+  // We return what the current page is, and how many pages total their are rounded up
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 })
 
 // @desc     Fetch single product
