@@ -19,5 +19,10 @@ export const findSalePriceRange = (arrayOfPrices) => {
     }
   }
   prices.sort(sortLowToHigh);
-  return prices;
+  // If all the items are on sale for the exact same sale price
+  if(prices[0] === prices[prices.length - 1]){
+    return [prices[0]]; //Needs to be sent back as an array of length 1
+  } else {
+    return prices;
+  }
 }

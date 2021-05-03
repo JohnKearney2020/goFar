@@ -15,8 +15,10 @@ const PriceRanges = ({ product }) => {
   defaultPriceString = `$${defaultPriceRange[0]}`;
 
   // Find the string to represent the range of sale prices, ex: '$59.99 - $69.99'
-  salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
-  salePriceString = `$${salePriceRange[0]}`;
+  // salePriceRange.length > 1 ? salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}` :
+  // salePriceString = `$${salePriceRange[0]}`;
+
+  salePriceRange.length === 1 ? salePriceString = `$${salePriceRange[0]}` : salePriceString = `$${salePriceRange[0]} - $${salePriceRange[salePriceRange.length - 1]}`;
 
   return (
     <>
