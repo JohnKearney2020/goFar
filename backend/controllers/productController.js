@@ -2,10 +2,17 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
 // @desc     Fetch all Products
-// @route    GET /api/products
+// @route    GET /api/products?keyword=keyword
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}); //passing a blank object will return all products
+  const keyword = req.query.keyword ? {
+    name: {
+      $regex: req.query.keyword,
+      $options: 'i' // 'i' is for case insensitive
+    }
+  } : {};
+
+  const products = await Product.find({ ...keyword }); //passing a blank object will return all products
   //intentionally throw an error
   // res.status(401);
   // throw new Error('not authorized')

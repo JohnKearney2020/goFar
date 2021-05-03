@@ -7,6 +7,7 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 
 // import SearchBox from './SearchBox';
 import { logout } from '../../actions/userActions';
+import SearchBox from '../SearchBox/SearchBox';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            {/* <SearchBox /> */}
+            <SearchBox />
             <Nav className='ml-auto'>
               {/* WishList Link */}
               <LinkContainer to='/wishlist'>

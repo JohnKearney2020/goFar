@@ -4,6 +4,7 @@ import { Card, Row, Button, Col, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom'; //Since this component does not have access to the history prop
 
 import CartRow from '../CartScreen/CartRow';
 import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
@@ -302,4 +303,5 @@ const ReviewAndSubmitOrder = ({ history }) => {
   )
 }
 
-export default ReviewAndSubmitOrder;
+// export default ReviewAndSubmitOrder;
+export default withRouter(ReviewAndSubmitOrder);
