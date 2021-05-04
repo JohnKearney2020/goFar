@@ -38,6 +38,8 @@ const ReviewAndSubmitOrder = ({ history }) => {
   useEffect(() => {
     let unmounted = false;
     console.log('in top level useEffect')
+    console.log('history in Review and submit order:')
+    console.log(history)
     if(userInfo){
       console.log('in level below that')
       if(cart.length > 0){
@@ -230,7 +232,7 @@ const ReviewAndSubmitOrder = ({ history }) => {
                 <h4>Checkout with PayPal:</h4>
               </ListGroup.Item>
               <ListGroup.Item className='border-0 py-0 mx-2'>
-                {sdkReady && <CustomPayPalButton />}
+                {sdkReady && <CustomPayPalButton history={history}/>}
               </ListGroup.Item>
             </ListGroup>
           </Card>

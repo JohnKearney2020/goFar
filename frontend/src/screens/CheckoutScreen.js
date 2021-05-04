@@ -34,6 +34,8 @@ const CheckoutScreen = ({ history }) => {
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
 
+  const orderLoading = useSelector(state => state.orderLoading.loading);
+
   //Set up local state
   const [checkoutActiveKey, setCheckoutActiveKey] = useState("0");
   const [disableBillingInformation, setDisableBillingInformation] = useState(false);
@@ -43,7 +45,7 @@ const CheckoutScreen = ({ history }) => {
 
   useEffect(() => {
     if(userInfo){
-      if(cart.length === 0){ history.push('/') };
+      if(cart.length === 0 && !orderLoading){ history.push('/') };
     }
   }, [userInfo, cart, history]);
 
