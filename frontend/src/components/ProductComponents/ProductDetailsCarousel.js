@@ -39,12 +39,16 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
         productColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === selectedColor)].colorImages.map(i => i.source);
       }
       // let productColorImages = imageObjArray[imageObjArray.findIndex(index => index.color === colorFromUrl)].colorImages.map(i => i.source);
+      console.log(`for ${product.name}`)
+      console.log('productColorImages:')
+      console.log(productColorImages)
+      console.log('defaultImages:')
+      console.log(product.defaultImages)
       setCombinedImagesForCarousel(productColorImages.concat(product.defaultImages))
       // if the product has a default video, we make it the first slide in our carousel below
       // if we do this, we need to offset the index of the other slides by +1 to account for that
       // if we don't have a video, there is no offset, and life continues as normal.
       if(product.defaultVideo){
-        // videoSlideOffset = 1;
         setVideoSlideOffset(1);
     }
 
@@ -97,7 +101,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
           <CarouselProvider
             naturalSlideWidth={100}
             naturalSlideHeight={100}
-            totalSlides={combinedImagesForCarousel.length + 1}
+            totalSlides={product.defaultVideo ? combinedImagesForCarousel.length + 1 : combinedImagesForCarousel.length}
             visibleSlides={3}
             // touchEnabled={false}
             dragEnabled={false}

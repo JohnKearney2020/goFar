@@ -20,7 +20,7 @@ const SearchBox = ({ history }) => {
         type='text'
         name='q'
         onChange={(e) => setKeyword(e.target.value)}
-        placeHolder='Search Our Products...'
+        placeholder='Search Our Products...'
         className='mr-sm-2 ml-sm-5'
       >
       </Form.Control>
