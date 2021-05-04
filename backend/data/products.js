@@ -1,3 +1,24 @@
+import {
+  ascentBlueTinyImg,
+  blackTinyImg,
+  dkLodenTinyImg,
+  dkSmokeTinyImg,
+  duskNavyTinyImg,
+  dustySageTinyImg,
+  graphiteTinyImg,
+  htrGrayTinyImg,
+  lodenTinyImg,
+  medIndigoTinyImg,
+  mulberryTinyImg,
+  pumiceTinyImg,
+  rustTinyImg,
+  seapineTinyImg,
+  slateGreenTinyImg,
+  sprigTinyImg,
+  stormTinyImg
+} from './tinyImageConstants.js';
+
+
 const products = [
   {
     //============================================================================================================================
@@ -69,19 +90,19 @@ const products = [
         colorName: 'Med Indigo',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/MedIndigo_tiny.jpg'
+        tinyImage: medIndigoTinyImg
       },
       {
         colorName: 'Seapine',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Seapine_tiny.jpg'
+        tinyImage: seapineTinyImg
       },
       {
         colorName: 'Storm',
         colorHexCode: '',
         clearance: true,
-        tinyImage: '/images/TinyColorImages/Storm_tiny.jpg'
+        tinyImage: stormTinyImg
       }
     ],
     sizes: [
@@ -341,7 +362,7 @@ const products = [
         colorName: 'Ascent Blue',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/AscentBlue_tiny.jpg'
+        tinyImage: ascentBlueTinyImg
       }
     ],
     sizes: [
@@ -573,55 +594,56 @@ const products = [
         colorName: 'Black',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Black_tiny.jpg'
+        tinyImage: blackTinyImg
       },
       {
         colorName: 'Dk Smoke',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/DkSmoke_tiny.jpg'
+        tinyImage: dkSmokeTinyImg
       },
       {
         colorName: 'Dusty Sage',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/DustySage_tiny.jpg'
+        tinyImage: dustySageTinyImg
       },
       {
         colorName: 'Graphite',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Graphite_tiny.jpg'
+        tinyImage: graphiteTinyImg
       },
       {
         colorName: 'Med Indigo',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/MedIndigo_tiny.jpg'
-      },
+        tinyImage: medIndigoTinyImg
+      }
+,
       {
         colorName: 'Mulberry',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Mulberry_tiny.jpg'
+        tinyImage: mulberryTinyImg
       },
       {
         colorName: 'Pumice',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Pumice_tiny.jpg'
+        tinyImage: pumiceTinyImg
       },
       {
         colorName: 'Rust',
         colorHexCode: '',
         clearance: true,
-        tinyImage: '/images/TinyColorImages/Rust_tiny.jpg'
+        tinyImage: rustTinyImg
       },
       {
         colorName: 'Slate Green',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/SlateGreen_tiny.jpg'
+        tinyImage: slateGreenTinyImg
       }
     ],
     sizes: [
@@ -1806,6 +1828,112 @@ const products = [
           }
         ]
       },
+      {
+        color: 'Dusk Navy',
+        colorImages: [
+          {
+            source: 'https://imgur.com/OXgr0CC.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/QpHIsO0.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/FaKNL3i.jpg',
+            isPrimaryImage: false,
+          }
+        ]
+      },
+      {
+        color: 'Htr Gray',
+        colorImages: [
+          {
+            source: 'https://imgur.com/AVqtN6O.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/Du5Ra5V.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/Gvr60PT.jpg',
+            isPrimaryImage: false,
+          }
+        ]
+      },
+      {
+        color: 'Loden',
+        colorImages: [
+          {
+            source: 'https://imgur.com/CD3nRO6.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/zEqFPsx.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/9IUSvd9.jpg',
+            isPrimaryImage: false,
+          }
+        ]
+      },
+      {
+        color: 'Med Indigo',
+        colorImages: [
+          {
+            source: 'https://imgur.com/F7do88O.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/McSx2wy.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/5YjDqeo.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/LwR0vO1.jpg',
+            isPrimaryImage: false,
+          }
+        ]
+      },
+      {
+        color: 'Mulberry',
+        colorImages: [
+          {
+            source: 'https://imgur.com/giT4ufA.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/6tifr3f.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/Vh9dnxW.jpg',
+            isPrimaryImage: false,
+          },
+        ]
+      },
+      {
+        color: 'Sprig',
+        colorImages: [
+          {
+            source: 'https://imgur.com/wbaA1ly.jpg',
+            isPrimaryImage: true,
+          },
+          {
+            source: 'https://imgur.com/WM3kaAI.jpg',
+            isPrimaryImage: false,
+          },
+          {
+            source: 'https://imgur.com/J8eDNfq.jpg',
+            isPrimaryImage: false,
+          },
+        ]
+      },
     ],
     brand: 'Eddie Bauer',
     subBrand: '',
@@ -1817,13 +1945,49 @@ const products = [
         colorName: 'Black',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/Black_tiny.jpg'
+        tinyImage: blackTinyImg
       },
       {
         colorName: 'Dk Loden',
         colorHexCode: '',
         clearance: false,
-        tinyImage: '/images/TinyColorImages/DkLoden_tiny.jpg'
+        tinyImage: dkLodenTinyImg
+      },
+      {
+        colorName: 'Dusk Navy',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: duskNavyTinyImg
+      },
+      {
+        colorName: 'Htr Gray',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: htrGrayTinyImg
+      },
+      {
+        colorName: 'Loden',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: lodenTinyImg
+      },
+      {
+        colorName: 'Med Indigo',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: medIndigoTinyImg
+      },
+      {
+        colorName: 'Mulberry',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: mulberryTinyImg
+      },
+      {
+        colorName: 'Sprig',
+        colorHexCode: '',
+        clearance: false,
+        tinyImage: sprigTinyImg
       },
     ],
     sizes: [
@@ -1858,6 +2022,156 @@ const products = [
           },
           {
             color: 'Dk Loden',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Dusk Navy',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Htr Gray',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Loden',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Med Indigo',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Mulberry',
+            colorSalePrice: 63.00,
+            sizeCategorySizes: [
+              {
+                size: 'XS',
+                qty: 50,
+              }, {
+                size: 'S',
+                qty: 50
+              }, {
+                size: 'M',
+                qty: 50
+              }, {
+                size: 'L',
+                qty: 50
+              }, {
+                size: 'XL',
+                qty: 50
+              }, {
+                size: 'XXL',
+                qty: 50
+              },
+            ]
+          },
+          {
+            color: 'Sprig',
             colorSalePrice: 63.00,
             sizeCategorySizes: [
               {
