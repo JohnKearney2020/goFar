@@ -420,6 +420,408 @@ export const trailTightLeggings =
         },
       ] //End of sizeCategoryColorsAndSizes
     },
+    { 
+      sizeCategoryName: 'Petite',
+      sizeCategoryDefaultPrice: 90.00,
+      sizeCategoryColorsAndSizes: [
+        {
+          color: 'Black',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Dk Loden',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 0
+            }, {
+              size: 'M',
+              qty: 0
+            }, {
+              size: 'L',
+              qty: 0
+            }
+          ]
+        },
+        {
+          color: 'Dusk Navy',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Htr Gray',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Loden',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Med Indigo',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 0
+            }, {
+              size: 'M',
+              qty: 0
+            }, {
+              size: 'L',
+              qty: 0
+            }
+          ]
+        },
+        {
+          color: 'Mulberry',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Sprig',
+          colorSalePrice: 63.00,
+          sizeCategorySizes: [
+            {
+              size: 'S',
+              qty: 50
+            }, {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }
+          ]
+        },
+      ] //End of sizeCategoryColorsAndSizes
+    },
+    { 
+      sizeCategoryName: 'Tall',
+      sizeCategoryDefaultPrice: 99.00,
+      sizeCategoryColorsAndSizes: [
+        {
+          color: 'Black',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+        {
+          color: 'Dk Loden',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 0
+            }, {
+              size: 'L',
+              qty: 0
+            }, {
+              size: 'XL',
+              qty: 0
+            }, {
+              size: 'XXL',
+              qty: 0
+            },
+          ]
+        },
+        {
+          color: 'Dusk Navy',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+        {
+          color: 'Htr Gray',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+        {
+          color: 'Loden',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+        {
+          color: 'Med Indigo',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 0
+            }, {
+              size: 'L',
+              qty: 0
+            }, {
+              size: 'XL',
+              qty: 0
+            }, {
+              size: 'XXL',
+              qty: 0
+            },
+          ]
+        },
+        {
+          color: 'Mulberry',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+        {
+          color: 'Sprig',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: 'M',
+              qty: 50
+            }, {
+              size: 'L',
+              qty: 50
+            }, {
+              size: 'XL',
+              qty: 50
+            }, {
+              size: 'XXL',
+              qty: 50
+            },
+          ]
+        },
+      ] //End of sizeCategoryColorsAndSizes
+    },
+    { 
+      sizeCategoryName: 'Plus',
+      sizeCategoryDefaultPrice: 99.00,
+      sizeCategoryColorsAndSizes: [
+        {
+          color: 'Black',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Dk Loden',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Dusk Navy',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Htr Gray',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Loden',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Med Indigo',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Mulberry',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+        {
+          color: 'Sprig',
+          colorSalePrice: 69.30,
+          sizeCategorySizes: [
+            {
+              size: '2X',
+              qty: 50,
+            }, {
+              size: '3X',
+              qty: 50
+            }
+          ]
+        },
+      ] //End of sizeCategoryColorsAndSizes
+    },
   ], //End of Sizes
   descriptions: [
     `The high-rise version of the best trail tights ever made—created specifically for hiking and scrambling, and perfectly adapted to any active or leisure pursuit. The moisture-wicking polyester/spandex stretch fabric features UPF sun protection and odor control technologies. Mesh piecing on legs enhance ventilation.`,
