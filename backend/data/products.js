@@ -23,6 +23,8 @@ import { trailTightLeggings }  from './Products/Women/trailTightLeggings.js';
 import { guideProPants }  from './Products/Women/guideProPants.js';
 import { microtherm20 }  from './Products/Men/microtherm20.js';
 import { stargazerTent }  from './Products/NoGender/stargazerTent.js';
+import { karaKoram20, karaKoramNeg30 }  from './Products/NoGender/karaKoramSleepingBag.js';
+import { katabaticTent2Person }  from './Products/NoGender/katabatic2Tent.js';
 
 
 const products = [
@@ -30,6 +32,9 @@ const products = [
   stargazerTent,
   guideProPants,
   trailTightLeggings,
+  karaKoram20,
+  karaKoramNeg30,
+  katabaticTent2Person
 ]
 
 export default products; //this is the ES modules way of exporting
