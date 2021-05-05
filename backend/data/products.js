@@ -23,23 +23,29 @@
 import { trailTightLeggings }  from './Products/Women/Pants/trailTightLeggings.js';
 import { guideProPants }  from './Products/Women/Pants/guideProPants.js';
 import { microtherm20 }  from './Products/Men/Jackets/microtherm20.js';
-import { stargazerTent }  from './Products/NoGender/Tents/stargazerTent.js';
-import { karaKoram20, karaKoramNeg30 }  from './Products/NoGender/Sleeping Bags/karaKoramSleepingBag.js';
-import { katabaticTent2Person }  from './Products/NoGender/Tents/katabatic2Tent.js';
-import { katabaticTent3Person }  from './Products/NoGender/Tents/katabatic3Tent.js';
-import { stargazer2Footprint }  from './Products/NoGender/Tents/Footprints/stargazer2Footprint.js';
+import { stargazer2Tent, stargazer3Tent }  from './Products/NoGender/Tents/stargazerTents.js';
+import { stargazer2Footprint, stargazer3Footprint }  from './Products/NoGender/Tents/Footprints/Stargazer/stargazerFootprints.js';
+import { karaKoram20, karaKoramNeg30 }  from './Products/NoGender/SleepingBags/karaKoramSleepingBags.js';
+import { igniter20 }  from './Products/NoGender/SleepingBags/igniterSleepingBags.js';
+import { katabaticTent2Person, katabaticTent3Person }  from './Products/NoGender/Tents/katabaticTents.js';
+import { katabatic2Footprint, katabatic3Footprint }  from './Products/NoGender/Tents/Footprints/Katabatic/katabaticFootprints.js';
 
 
 const products = [
   microtherm20,
-  stargazerTent,
   guideProPants,
   trailTightLeggings,
+  stargazer2Tent,
+  stargazer2Footprint,
+  stargazer3Tent,
+  stargazer3Footprint,
   karaKoram20,
   karaKoramNeg30,
   katabaticTent2Person,
+  katabatic2Footprint,
   katabaticTent3Person,
-  stargazer2Footprint
+  katabatic3Footprint,
+  igniter20
 ]
 
 export default products; //this is the ES modules way of exporting
