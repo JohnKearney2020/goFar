@@ -321,6 +321,7 @@ const ProductScreen = ({ match }) => {
                         size={selectedSize}
                         sizeCategory={selectedSizeCategory}
                         primaryImageForColor={primaryImageForColor}
+                        outOfStock={outOfStock}
                       />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>

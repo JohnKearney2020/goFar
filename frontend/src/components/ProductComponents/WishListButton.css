@@ -1,7 +1,3 @@
-/* .disabledWishListIcon {
-  color: rgba(0,0,0,.125)
-} */
-
 .fa-spinner {
   animation: fa-spin 2s linear infinite;
 }
@@ -16,3 +12,6 @@
   transform: scale(1.2);
 }
 
+.wishListIconDisabled {
+  color: #cbcfd1;
+}

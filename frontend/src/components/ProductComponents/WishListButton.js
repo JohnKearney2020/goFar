@@ -10,7 +10,7 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import Message from '../Message';
 import './WishListButton.css';
 
-const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor }) => {
+const WishListButton = ({ productID, productName, color, size, sizeCategory, primaryImageForColor, outOfStock }) => {
   const dispatch = useDispatch();
   // Get the user's wishlist from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
@@ -41,7 +41,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     return () => {
       
     }
-  }, [color, size, sizeCategory, wishList])
+  }, [color, size, sizeCategory, wishList, outOfStock])
 
   const addToWishListHandler =  async () => {
     setWishListErrorMessage('');
@@ -118,12 +118,12 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   return (
     <>
       {loadingWishListIcon ? <FontAwesomeIcon className='wishListIcon' icon={spinner} size="3x" /> : 
-        ( inWishList ? <FontAwesomeIcon className='wishListIcon' icon={solidHeart} size="3x" onClick={removeFromWishListHandler} /> : 
+        ( inWishList ? <FontAwesomeIcon className='wishListIcon' icon={solidHeart} size="3x" onClick={removeFromWishListHandler} /> :
+        (outOfStock ? <FontAwesomeIcon className='wishListIconDisabled' icon={outlineHeart} size="3x"/> : 
         <FontAwesomeIcon 
           className='wishListIcon' 
           icon={outlineHeart} size="3x" onClick={addToWishListHandler}
-          // disabled={outOfStock}
-        /> )
+        />))
       }
       { wishListErrorMessage &&  ReactDom.createPortal(
         <Message variant='danger'>{wishListErrorMessage}</Message>,
