@@ -131,8 +131,8 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                   </Slide>
                 ))}
               </Slider>
-              {combinedImagesForCarousel.length !== 1 && <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>}
-              {combinedImagesForCarousel.length !== 1 && <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>}
+              {combinedImagesForCarousel.length > 3 && <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>}
+              {combinedImagesForCarousel.length > 3 && <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>}
             </div>
           </CarouselProvider>
           {/* If the user clicks the video slide*/}
