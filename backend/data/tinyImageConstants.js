@@ -1,5 +1,6 @@
 export const ascentBlueTinyImg = 'https://imgur.com/Nqehz4l.jpg'
 export const blackTinyImg = 'https://imgur.com/p3d5ty7.jpg'
+export const blueTinyImg = 'https://imgur.com/gy2WKv1.jpg'
 export const dkLavaTinyImg = 'https://imgur.com/N7sL7WC.jpg'
 export const dkLodenTinyImg = 'https://imgur.com/9rreAuN.jpg'
 export const dkSmokeTinyImg = 'https://imgur.com/wIVVPvW.jpg'

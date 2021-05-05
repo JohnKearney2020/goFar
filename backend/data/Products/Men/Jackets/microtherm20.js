@@ -2,7 +2,7 @@ import {
   medIndigoTinyImg,
   seapineTinyImg,
   stormTinyImg
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 // ============================================================================================================================
 //                                    First Product - Men's Microtherm 2.0 Down Hooded Jacket

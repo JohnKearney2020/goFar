@@ -15,8 +15,6 @@ const SizeSelector = ({ product, selectedColor, selectedSizeCategory, sizeSelect
       let tempArrayOfSizes = levelTwo.map((eachSize,idx) => (
         eachSize
       ))
-      console.log('tempArrayOfSizes:')
-      console.log(tempArrayOfSizes)
       setArrayOfSizes(tempArrayOfSizes);
     }
   }, [loaded, product.sizes, selectedColor, selectedSizeCategory])

@@ -119,7 +119,11 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     <>
       {loadingWishListIcon ? <FontAwesomeIcon className='wishListIcon' icon={spinner} size="3x" /> : 
         ( inWishList ? <FontAwesomeIcon className='wishListIcon' icon={solidHeart} size="3x" onClick={removeFromWishListHandler} /> : 
-        <FontAwesomeIcon className='wishListIcon' icon={outlineHeart} size="3x" onClick={addToWishListHandler}/> )
+        <FontAwesomeIcon 
+          className='wishListIcon' 
+          icon={outlineHeart} size="3x" onClick={addToWishListHandler}
+          // disabled={outOfStock}
+        /> )
       }
       { wishListErrorMessage &&  ReactDom.createPortal(
         <Message variant='danger'>{wishListErrorMessage}</Message>,

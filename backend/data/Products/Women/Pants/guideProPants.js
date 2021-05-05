@@ -8,7 +8,7 @@ import {
   pumiceTinyImg,
   rustTinyImg,
   slateGreenTinyImg,
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 //============================================================================================================================
 //                                              Next Product- Women's Guide Pro Pants

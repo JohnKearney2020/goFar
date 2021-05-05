@@ -1,6 +1,6 @@
 import {
   dkLavaTinyImg
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 export const karaKoram20 = 
 {

@@ -1,6 +1,8 @@
 import {
   limeadeTinyImg,
-} from '../../tinyImageConstants.js';
+// } from '../../../tinyImageConstants.js';
+// } from '../../../tinyImageConstants';
+} from '../../../tinyImageConstants.js';
 
 export const katabaticTent2Person =
 //============================================================================================================================
@@ -68,7 +70,7 @@ export const katabaticTent2Person =
   ],
   sizes: [
     {
-      sizeCategoryName: 'ONE SIZE',
+      sizeCategoryName: 'Regular',
       sizeCategoryDefaultPrice: 699.00,
       sizeCategoryColorsAndSizes: [
         {

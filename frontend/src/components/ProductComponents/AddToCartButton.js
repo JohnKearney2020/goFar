@@ -10,24 +10,29 @@ import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import Message from '../Message';
 import './AddToCartButton.css';
 
-const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, size, sizeCategory, primaryImageForColor }) => {
+const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, outOfStock, size, sizeCategory, primaryImageForColor }) => {
   const dispatch = useDispatch();
   // Get the user's cart from Global State
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { cart } = userInfo;
+
+  const productDetails = useSelector(state => state.productDetails);
+  const { loaded } = productDetails;
 
   const [loadingCartIcon, setLoadingCartIcon] = useState(false);
   const [cartErrorMessage, setCartErrorMessage] = useState(null);
   const [cartWarningMessage, setCartWarningMessage] = useState(null);
 
   useEffect(() => {
-    if(qtyInStock === 0 && sizeCategory === 'ONE SIZE'){
-      setCartErrorMessage('Currently out of stock.');
-    } else {
-      setCartErrorMessage(null);
-      setCartWarningMessage(null);
+    if(loaded){ // If we've successfully loaded the product from the global state
+      if(outOfStock === true){
+        setCartErrorMessage('Currently out of stock.');
+      } else {
+        setCartErrorMessage(null);
+        setCartWarningMessage(null);
+      }
     }
-  }, [color, size, sizeCategory, qtyInStock]);
+  }, [loaded, color, size, sizeCategory, qtyInStock, outOfStock]);
 
   const addToCartHandler =  async () => {
     setCartErrorMessage(null); //reset any existing cart error messages
@@ -159,7 +164,8 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
       >
         <div className='text-center'>
           {loadingCartIcon ? <FontAwesomeIcon className='' icon={spinner} size="2x"/>
-            : (qtyInStock === 0 && sizeCategory === 'ONE SIZE' ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
+            // : (qtyInStock === 0 && sizeCategory === 'ONE SIZE' ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
+            : (outOfStock ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
             // : (size === '' ? 'Choose a Size' : (qtyInStock === 0 ? 'Out of Stock' : 'Add to Cart') )
           }
         </div>

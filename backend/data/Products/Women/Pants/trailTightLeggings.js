@@ -7,7 +7,7 @@ import {
   medIndigoTinyImg,
   mulberryTinyImg,
   sprigTinyImg,
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 //============================================================================================================================
 //                                          Next Product - Women's Trail Tight Leggings - High Rise

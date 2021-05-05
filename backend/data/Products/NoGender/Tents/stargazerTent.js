@@ -1,6 +1,6 @@
 import {
   ascentBlueTinyImg,
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 export const stargazerTent =
   //============================================================================================================================
@@ -68,7 +68,7 @@ export const stargazerTent =
     ],
     sizes: [
       {
-        sizeCategoryName: 'ONE SIZE',
+        sizeCategoryName: 'Regular',
         sizeCategoryDefaultPrice: 399.00,
         sizeCategoryColorsAndSizes: [
           {
