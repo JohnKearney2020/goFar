@@ -1,6 +1,6 @@
 import {
   ascentBlueTinyImg,
-} from '../../tinyImageConstants.js';
+} from '../../../tinyImageConstants.js';
 
 export const stargazerTent =
   //============================================================================================================================
@@ -68,12 +68,12 @@ export const stargazerTent =
     ],
     sizes: [
       {
-        sizeCategoryName: 'ONE SIZE',
-        sizeCategoryDefaultPrice: 399,
+        sizeCategoryName: 'Regular',
+        sizeCategoryDefaultPrice: 399.00,
         sizeCategoryColorsAndSizes: [
           {
             color: 'Ascent Blue',
-            colorSalePrice: 349,
+            colorSalePrice: 349.00,
             sizeCategorySizes: [
               {
                 size: 'ONE SIZE',
@@ -100,8 +100,8 @@ export const stargazerTent =
     care: [`To clean your tent, set it up, wipe with a damp sponge and rinse it with fresh water. Dry completely before storage. Never machine wash.`],
     materials: [ `15D nylon mesh | 15D nylon canopy | 15D nylon flysheet | 5000mm coated 30D ripstop nylon floor`, `Imported` ],
     reviews: [], //come back to this
-    rating: 5,
-    numReviews: 3,
+    rating: 0,
+    numReviews: 0,
     featureIcons: [
       {
         heading: 'First Ascent',

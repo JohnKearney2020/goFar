@@ -4,7 +4,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
-// import { v4 as uuidv4 } from 'uuid';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
@@ -38,17 +37,13 @@ const CartScreen = ({ history }) => {
   const { cartMovedMessage } = cartMovedChanges;
 
   // Set up local state
-  // const [noSavedForLaterItems, setNoSavedForLaterItems] = useState(true);
-  // const [redoCartLogic, setRedoCartLogic] = useState(false);
   const [forceReRender, setForceReRender] = useState(false);
 
   const checkoutHandler = async () => {
-    console.log('clicked cart checkout button')
     history.push('/login?redirect=checkout');
   }
 
   useEffect(() => {
-    console.log('in cart screen useEffect')
     //============================================================================================================
     // First, get the detailed data with current prices and quantities for items in the cart
     //============================================================================================================
@@ -88,7 +83,8 @@ const CartScreen = ({ history }) => {
           // Loop through the detailed cart items and find a match
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
-            const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
+            // const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
+            const { _id: id2, sizes, hasSizes } = upToDateItem;
 
             // Drill down into the detailed product object to look for a match
             if(id1 === id2){//If the product ID's match
@@ -96,45 +92,46 @@ const CartScreen = ({ history }) => {
               //                                                  Find the current price and qty available
               //=====================================================================================================================
               // Products without sizes - easiest case
-              if(hasSizes === false){
-                //Update the price
-                defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
-                //Update the qty if needed
-                if(defaultQty === 0){ //If the item is now out of stock
-                  if(userQuantity !== 0){
-                    movedMessageArray.push({ //Add to message for moved items
-                      name: name1,
-                      color: color1,
-                      size: size1,
-                      sizeCategory: sizeCategory1,
-                      oldQty: userQuantity,
-                      newQty: defaultQty
-                    })
-                    cartItem.quantity = defaultQty;
-                  }
-                  if(!cartItem.savedForLater){
-                    cartItem.savedForLater = true;
-                    toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
-                  }
-                } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
-                  cartItem.quantity = defaultQty;
-                  qtyMessageArray.push({ //Add to message for reduced quantities
-                    name: name1,
-                    color: color1,
-                    size: size1,
-                    sizeCategory: sizeCategory1,
-                    oldQty: userQuantity,
-                    newQty: defaultQty
-                  })
-                  if(!cartItem.savedForLater){
-                    toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
-                  }
-                }
-              }
+              // if(hasSizes === false){
+              //   //Update the price
+              //   defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
+              //   //Update the qty if needed
+              //   if(defaultQty === 0){ //If the item is now out of stock
+              //     if(userQuantity !== 0){
+              //       movedMessageArray.push({ //Add to message for moved items
+              //         name: name1,
+              //         color: color1,
+              //         size: size1,
+              //         sizeCategory: sizeCategory1,
+              //         oldQty: userQuantity,
+              //         newQty: defaultQty
+              //       })
+              //       cartItem.quantity = defaultQty;
+              //     }
+              //     if(!cartItem.savedForLater){
+              //       cartItem.savedForLater = true;
+              //       toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
+              //     }
+              //   } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
+              //     cartItem.quantity = defaultQty;
+              //     qtyMessageArray.push({ //Add to message for reduced quantities
+              //       name: name1,
+              //       color: color1,
+              //       size: size1,
+              //       sizeCategory: sizeCategory1,
+              //       oldQty: userQuantity,
+              //       newQty: defaultQty
+              //     })
+              //     if(!cartItem.savedForLater){
+              //       toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
+              //     }
+              //   }
+              // }
               //=====================================================================================================================
               // Products with sizes - hardest case
               //=====================================================================================================================
-              if(hasSizes === true && size1 !== 'ONE SIZE'){ //Drill down into the product object based on the user's chosen size and color
+              // if(hasSizes === true && size1 !== 'ONE SIZE'){ 
+                //Drill down into the product object based on the user's chosen size and color
                 //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
                 let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
                 // Find that size category's default price.
@@ -175,9 +172,8 @@ const CartScreen = ({ history }) => {
                     oldQty: userQuantity,
                     newQty: qtyInStock
                   })
-                  // toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
                 }
-              }
+              
             } //End of the INNER for loop thru cart and cart details
           }
       } //End of the OUTER for loop thru cart and cart details

@@ -40,6 +40,8 @@ const ProductScreen = ({ match }) => {
   const [qtyForCart, setQtyForCart] = useState(1);
   const [addToCartSizeMessage, setAddToCartSizeMessage] = useState(false);
   const [primaryImageForColor, setPrimaryImageForColor] = useState('');
+  const [outOfStock, setOutOfStock] = useState(true);
+  // let outOfStock = true;
 
   // ==============================================================
   //               Pull Product data from global state
@@ -60,7 +62,6 @@ const ProductScreen = ({ match }) => {
     if(loaded){ // If we've successfully loaded the product from the global state
       //Find the initialSizeCategory, ex: 'Regular', 'Tall', etc.
       let initialSizeCategory = product.sizes[0].sizeCategoryName;
-      console.log(`initialSizeCategory for ${product.sizes[0].name} is :${initialSizeCategory}`)
       setSelectedSizeCategory(initialSizeCategory);
       // Populate Product Colors
       let tempProductColors = [];
@@ -78,20 +79,22 @@ const ProductScreen = ({ match }) => {
       let initialDefaultPrice = sizeObjArray[sizeObjArray.findIndex(index => index.sizeCategoryName === initialSizeCategory)].sizeCategoryDefaultPrice;
       setColorSalePrice(addDecimals(initialSalePrice));
       setProductPrice(addDecimals(initialDefaultPrice));
+      //==========================================
+      // Check to see if the product is sold out
+      //==========================================
+      for(let sizeCategory of sizeObjArray){ //Loop through all the size categories, i.e. 'Regular', 'Petite', etc.
+        for(let eachColor of sizeCategory.sizeCategoryColorsAndSizes){ //Loop through each color in that size category, i.e. 'Black', 'Ascent Blue', etc.
+          for(let eachSize of eachColor.sizeCategorySizes){ //Loop through each size of that color, ie. 'XS', 'S', 'M', etc.
+            if(eachSize.qty !== 0){
+              setOutOfStock(false); //We have some in stock
+              break; //exit out of all these for of loops
+            }
+          }
+        }
+      }
     }
-  }, [product, colorFromUrl, loaded]);
+  }, [product, colorFromUrl, loaded ]);
 
-  // useEffect(() => {
-  //   let sizeObjArray = [...product.sizes];
-  //   let levelOne = sizeObjArray[sizeObjArray.findIndex(i => i.sizeCategoryName === selectedSizeCategory)].sizeCategoryColorsAndSizes;
-  //   let levelTwo = levelOne[levelOne.findIndex(i => i.color === selectedColor)].sizeCategorySizes;
-  //   let levelThree = levelTwo[levelTwo.findIndex(i => i.size === selectedSize)];
-
-  //   // let primaryImageForColor = 
-  //   // return () => {
-  //   //   cleanup
-  //   // }
-  // }, [selectedColor]);
 
   const sizeCategoryHandler = (e) => {
     //If we are changing size categories we need to clear the selectedSize state entirely to reset it, i.e. from 'Regular' to 'Tall', or vice versa
@@ -317,7 +320,7 @@ const ProductScreen = ({ match }) => {
                         color={selectedColor}
                         size={selectedSize}
                         sizeCategory={selectedSizeCategory}
-                        primaryImageForColor={primaryImageForColor} 
+                        primaryImageForColor={primaryImageForColor}
                       />
                     </ListGroup.Item>
                     <ListGroup.Item className='border-0'>
@@ -327,6 +330,7 @@ const ProductScreen = ({ match }) => {
                         quantity={qtyForCart}
                         color={selectedColor}
                         qtyInStock={qtyInStock}
+                        outOfStock={outOfStock}
                         size={selectedSize}
                         sizeCategory={selectedSizeCategory}
                         primaryImageForColor={primaryImageForColor}                       
