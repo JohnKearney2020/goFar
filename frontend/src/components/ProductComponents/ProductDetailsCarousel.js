@@ -121,7 +121,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                 {/* The rest of the product image slides */}
                 {combinedImagesForCarousel.map((eachImage, idx) => (
                   <Slide index={idx + videoSlideOffset} key={idx + videoSlideOffset}>
-                    <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={combinedImagesForCarousel.length === 1 ? true : false}>
+                    <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={combinedImagesForCarousel.length < 4 ? true : false}>
                       <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} 
                       className='productDetailsCarouselImage'
                       id={`idForBorder${idx + videoSlideOffset}`}

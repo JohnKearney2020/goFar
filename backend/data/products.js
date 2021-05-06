@@ -30,6 +30,9 @@ import { igniter20 }  from './Products/NoGender/SleepingBags/igniterSleepingBags
 import { katabaticTent2Person, katabaticTent3Person }  from './Products/NoGender/Tents/katabaticTents.js';
 import { katabatic2Footprint, katabatic3Footprint }  from './Products/NoGender/Tents/Footprints/Katabatic/katabaticFootprints.js';
 import { squatchTee }  from './Products/Men/Tees/squatchTee.js';
+import { bigHikeTee }  from './Products/Men/Tees/bigHikeTee.js';
+import { elkHorizonTee }  from './Products/Men/Tees/elkHorizonTee.js';
+import { ventaTrexLongSleeveCrew }  from './Products/Men/Shirts/ventaTrexLongSleeveCrew.js';
 
 
 const products = [
@@ -47,7 +50,10 @@ const products = [
   katabaticTent3Person,
   katabatic3Footprint,
   igniter20,
-  squatchTee
+  squatchTee,
+  bigHikeTee,
+  elkHorizonTee,
+  ventaTrexLongSleeveCrew
 ]
 
 export default products; //this is the ES modules way of exporting

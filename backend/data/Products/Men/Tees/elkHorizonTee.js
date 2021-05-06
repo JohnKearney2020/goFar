@@ -1,30 +1,26 @@
 import {
-  grayHtrTinyImg
+  blackTinyImg
 } from '../../../tinyImageConstants.js';
 
 // ============================================================================================================================
 //                                    First Product - Men's Microtherm 2.0 Down Hooded Jacket
 //============================================================================================================================
-export const squatchTee = 
+export const elkHorizonTee = 
 {
 
   // user: xxxx, //will be inserted with seeder script
   isRetired: false,
-  name: `Graphic T-Shirt - Red, White & Blue Squatch`,
+  name: `Graphic T-Shirt - Elk Horizon`,
   images: [
     {
-      color: 'Gray Htr',
+      color: 'Black',
       colorImages: [
         {
-          source: '/images/ProductImages/Tees/squatchTee/1.jpg',
+          source: '/images/ProductImages/Tees/elkHorizonTee/1.jpg',
           isPrimaryImage: true,
         },
         {
-          source: '/images/ProductImages/Tees/squatchTee/2.jpg',
-          isPrimaryImage: false,
-        },
-        {
-          source: '/images/ProductImages/Tees/squatchTee/3.jpg',
+          source: '/images/ProductImages/Tees/elkHorizonTee/2.jpg',
           isPrimaryImage: false,
         }
       ]
@@ -37,10 +33,10 @@ export const squatchTee =
   hasSizes: true,
   colors: [
     {
-      colorName: 'Gray Htr',
+      colorName: 'Black',
       colorHexCode: '',
       clearance: false,
-      tinyImage: grayHtrTinyImg
+      tinyImage: blackTinyImg
     },
   ],
   sizes: [
@@ -49,21 +45,18 @@ export const squatchTee =
       sizeCategoryDefaultPrice: 25.00,
       sizeCategoryColorsAndSizes: [
         {
-          color: 'Gray Htr',
+          color: 'Black',
           colorSalePrice: 0,
           sizeCategorySizes: [
             {
               size: 'S',
-              qty: 5,
+              qty: 3,
             }, {
               size: 'M',
-              qty: 8
+              qty: 5
             }, {
               size: 'L',
-              qty: 10
-            }, {
-              size: 'XL',
-              qty: 0
+              qty: 5
             }, {
               size: 'XXL',
               qty: 10
@@ -71,25 +64,6 @@ export const squatchTee =
           ]
         },
       ] //End of sizeCategoryColorsAndSizes
-    },
-    { 
-      sizeCategoryName: 'Tall',
-      sizeCategoryDefaultPrice: 28.00,
-      sizeCategoryColorsAndSizes: [
-        {
-          color: 'Gray Htr',
-          colorSalePrice: 0,
-          sizeCategorySizes: [
-            {
-              size: 'L',
-              qty: 20
-            }, {
-              size: 'XL',
-              qty: 4
-            }
-          ]
-        },              
-      ]
     },
   ],
   descriptions: [
@@ -99,7 +73,7 @@ export const squatchTee =
   features: [
     `Classic. A universal fit. Not too slim, not too relaxed on body.`,
   ],
-  care: [`Turn garment inside out. Machine wash cold with like colors. Do not bleach. Tumble dry medium. Remove promptly. Warm iron as desired.`],
+  care: [`Turn garment inside out. Machine wash cold with like colors. Only non-chlorine bleach when needed. Tumble dry medium. Remove promptly. Warm iron as desired. Do not iron on print.`],
   materials: [ '60% cotton/40% polyester', 'Imported' ],
   reviews: [], //come back to this
   rating: 0,

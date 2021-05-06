@@ -161,7 +161,7 @@ export const trailTightLeggings =
   brand: 'Eddie Bauer',
   subBrand: '',
   categories: ['Pants', 'Leggings'],
-  gender: 'Women',
+  gender: 'women',
   hasSizes: true,
   colors: [
     {
