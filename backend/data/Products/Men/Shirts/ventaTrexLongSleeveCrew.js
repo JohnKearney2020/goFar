@@ -4,9 +4,6 @@ import {
   salsaTinyImg
 } from '../../../tinyImageConstants.js';
 
-// ============================================================================================================================
-//                                    First Product - Men's Microtherm 2.0 Down Hooded Jacket
-//============================================================================================================================
 export const ventaTrexLongSleeveCrew = 
 {
 
@@ -247,7 +244,20 @@ export const ventaTrexLongSleeveCrew =
   reviews: [], //come back to this
   rating: 0,
   numReviews: 0,
-  featureIcons: [],
+  featureIcons: [
+    {
+      heading: 'Moisture Wicking',
+      source: '/images/FeatureIcons/moistureWicking.svg'
+    },
+    {
+      heading: 'Odor Control',
+      source: '/images/FeatureIcons/odorControl.svg'
+    },
+    {
+      heading: 'Lightweight',
+      source: '/images/FeatureIcons/lightWeight.svg'
+    }
+  ],
   defaultImages: [],
   defaultVideo: '',
   videoThumbnail: ''

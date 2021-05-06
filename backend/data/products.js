@@ -33,6 +33,7 @@ import { squatchTee }  from './Products/Men/Tees/squatchTee.js';
 import { bigHikeTee }  from './Products/Men/Tees/bigHikeTee.js';
 import { elkHorizonTee }  from './Products/Men/Tees/elkHorizonTee.js';
 import { ventaTrexLongSleeveCrew }  from './Products/Men/Shirts/ventaTrexLongSleeveCrew.js';
+import { legendWashVNeck }  from './Products/Men/Tees/legendWashVNeck.js';
 
 
 const products = [
@@ -43,6 +44,7 @@ const products = [
   stargazer2Footprint,
   stargazer3Tent,
   stargazer3Footprint,
+  legendWashVNeck,
   karaKoram20,
   karaKoramNeg30,
   katabaticTent2Person,
