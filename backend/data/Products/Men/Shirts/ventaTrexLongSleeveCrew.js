@@ -1,111 +1,96 @@
 import {
-  medIndigoTinyImg,
-  seapineTinyImg,
-  stormTinyImg
+  dkLodenTinyImg,
+  dkTealTinyImg,
+  salsaTinyImg
 } from '../../../tinyImageConstants.js';
 
-// ============================================================================================================================
-//                                    First Product - Men's Microtherm 2.0 Down Hooded Jacket
-//============================================================================================================================
-export const microtherm20 = 
+export const ventaTrexLongSleeveCrew = 
 {
 
   // user: xxxx, //will be inserted with seeder script
   isRetired: false,
-  name: `Men's MicroTherm® 2.0 Down Hooded Jacket`,
+  name: `Ventatrex Long-Sleeve Crew`,
   images: [
     {
-      color: 'Seapine',
+      color: 'Dk Loden',
       colorImages: [
         {
-          source: 'https://i.imgur.com/T7pSpXB.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/dkLoden1.jpg',
           isPrimaryImage: true,
         },
         {
-          source: 'https://i.imgur.com/udaTRbn.jpg',
-          isPrimaryImage: false,
-        },
-        {
-          source: 'https://i.imgur.com/ILPYxGF.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/dkLoden2.jpg',
           isPrimaryImage: false,
         }
       ]
     },
     {
-      color: 'Med Indigo',
+      color: 'Dk Teal',
       colorImages: [
         {
-          source: 'https://i.imgur.com/9xoTDVf.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/dkTeal1.jpg',
           isPrimaryImage: true,
         },
         {
-          source: 'https://i.imgur.com/M9yFrev.jpg',
-          isPrimaryImage: false,
-        },
-        {
-          source: 'https://i.imgur.com/DKeuDFh.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/dkTeal2.jpg',
           isPrimaryImage: false,
         }
       ]
     },
     {
-      color: 'Storm',
+      color: 'Salsa',
       colorImages: [
         {
-          source: 'https://i.imgur.com/RZoZpvz.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/salsa1.jpg',
           isPrimaryImage: true,
         },
         {
-          source: 'https://i.imgur.com/bsPrUMV.jpg',
-          isPrimaryImage: false,
-        },
-        {
-          source: 'https://i.imgur.com/CHFh1pw.jpg',
+          source: '/images/ProductImages/Shirts/ventatrexLongSleeve/salsa2.jpg',
           isPrimaryImage: false,
         }
       ]
     }
   ],
   brand: 'Eddie Bauer',
-  subBrand: 'First Ascent',
-  categories: ['Jackets', 'Winter'],
+  subBrand: '',
+  categories: ['Shirts', 'Long Sleeve Shirts'],
   gender: 'men',
   hasSizes: true,
   colors: [
     {
-      colorName: 'Med Indigo',
+      colorName: 'Dk Loden',
       colorHexCode: '',
       clearance: false,
-      tinyImage: medIndigoTinyImg
+      tinyImage: dkLodenTinyImg
     },
     {
-      colorName: 'Seapine',
+      colorName: 'Dk Teal',
       colorHexCode: '',
       clearance: false,
-      tinyImage: seapineTinyImg
+      tinyImage: dkTealTinyImg
     },
     {
-      colorName: 'Storm',
+      colorName: 'Salsa',
       colorHexCode: '',
       clearance: true,
-      tinyImage: stormTinyImg
+      tinyImage: salsaTinyImg
     }
   ],
   sizes: [
     { 
       sizeCategoryName: 'Regular',
-      sizeCategoryDefaultPrice: 99.99,
+      sizeCategoryDefaultPrice: 50.00,
       sizeCategoryColorsAndSizes: [
         {
-          color: 'Seapine',
-          colorSalePrice: 89.99,
+          color: 'Dk Loden',
+          colorSalePrice: 35.00,
           sizeCategorySizes: [
             {
               size: 'S',
-              qty: 3,
+              qty: 20,
             }, {
               size: 'M',
-              qty: 8
+              qty: 20
             }, {
               size: 'L',
               qty: 10
@@ -119,8 +104,8 @@ export const microtherm20 =
           ]
         },
         {
-          color: 'Med Indigo',
-          colorSalePrice: 79.99,
+          color: 'Dk Teal',
+          colorSalePrice: 37.50,
           sizeCategorySizes: [
             {
               size: 'S',
@@ -141,8 +126,8 @@ export const microtherm20 =
           ]
         },              
         {
-          color: 'Storm',
-          colorSalePrice: 59.99,
+          color: 'Salsa',
+          colorSalePrice: 32.50,
           sizeCategorySizes: [
             {
               size: 'S',
@@ -155,10 +140,10 @@ export const microtherm20 =
               qty: 7
             }, {
               size: 'XL',
-              qty: 9
+              qty: 20
             }, {
               size: 'XXL',
-              qty: 0
+              qty: 20
             }
           ]
         },              
@@ -166,11 +151,11 @@ export const microtherm20 =
     },
     { 
       sizeCategoryName: 'Tall',
-      sizeCategoryDefaultPrice: 109.99,
+      sizeCategoryDefaultPrice: 55.00,
       sizeCategoryColorsAndSizes: [
         {
-          color: 'Seapine',
-          colorSalePrice: 99.99,
+          color: 'Dk Loden',
+          colorSalePrice: 38.50,
           sizeCategorySizes: [
             {
               size: 'M',
@@ -180,35 +165,41 @@ export const microtherm20 =
               qty: 20
             }, {
               size: 'XL',
-              qty: 0
+              qty: 5
             }, {
               size: 'XXL',
-              qty: 0
+              qty: 5
+            }, {
+              size: 'XXXL',
+              qty: 11
             }
           ]
         },
         {
-          color: 'Med Indigo',
-          colorSalePrice: 0,
+          color: 'Dk Teal',
+          colorSalePrice: 38.50,
           sizeCategorySizes: [
             {
               size: 'M',
-              qty: 2
+              qty: 4
             }, {
               size: 'L',
-              qty: 3
+              qty: 4
             }, {
               size: 'XL',
               qty: 8
             }, {
               size: 'XXL',
-              qty: 7
+              qty: 12
+            }, {
+              size: 'XXXL',
+              qty: 0
             }
           ]
         },              
         {
-          color: 'Storm',
-          colorSalePrice: 69.99,
+          color: 'Salsa',
+          colorSalePrice: 36.00,
           sizeCategorySizes: [
             {
               size: 'M',
@@ -221,6 +212,9 @@ export const microtherm20 =
               qty: 8
             }, {
               size: 'XXL',
+              qty: 0
+            }, {
+              size: 'XXXL',
               qty: 0
             }
           ]
@@ -236,7 +230,7 @@ export const microtherm20 =
   ],
   features: [
     `1.2 oz 20D recycled ripstop polyester shell—perfect balance of light weight and strength`,
-    `StormRepel® Super DWR—our longest lasting moisture-shedding finish`,
+    `SalsaRepel® Super DWR—our longest lasting moisture-shedding finish`,
     `800 fill Responsible Down Standard (RDS) down, certified by Control Union More About RDS`,
     `Trackmydown supply information on garment—learn where your down comes from and what makes premium down premium`,
     `Insulated hood—elastic binding provides secure fit`,
@@ -248,43 +242,23 @@ export const microtherm20 =
   care: [`Secure all garment closures before laundering. Machine wash cold delicate, separately, using mild detergent only. Do not bleach or use fabric softeners. Rinse thoroughly and remove promptly. Tumble dry low. Do not hang to dry. Do not iron or steam. Do not dry clean. For best results, dry with clean tennis ball.`],
   materials: [ '100% polyester', 'Imported' ],
   reviews: [], //come back to this
-  rating: 4,
-  numReviews: 1,
+  rating: 0,
+  numReviews: 0,
   featureIcons: [
     {
-      heading: 'First Ascent',
-      source: '/images/FeatureIcons/firstAscent.svg'
+      heading: 'Moisture Wicking',
+      source: '/images/FeatureIcons/moistureWicking.svg'
     },
     {
-      heading: 'Temp Rating (Moderate Activity)',
-      source: '/images/FeatureIcons/tempRatingMinus10.svg'
+      heading: 'Odor Control',
+      source: '/images/FeatureIcons/odorControl.svg'
     },
     {
-      heading: 'Fill Power',
-      source: '/images/FeatureIcons/fillPower800.svg'
-    },
-    {
-      heading: 'StormRepel Super DWR',
-      source: '/images/FeatureIcons/stormRepelDWR.svg'
-    },
-    {
-      heading: 'Windproof',
-      source: '/images/FeatureIcons/windproof.svg'
-    },
-    {
-      heading: 'Recycled Materials',
-      source: '/images/FeatureIcons/recycledMaterials.svg'
+      heading: 'Lightweight',
+      source: '/images/FeatureIcons/lightWeight.svg'
     }
   ],
-  defaultImages: [
-    'https://i.imgur.com/VQBuiSz.jpg',
-    'https://i.imgur.com/ojDjEst.jpg',
-    'https://i.imgur.com/vriRA6i.jpg',
-    'https://i.imgur.com/NCqQUk1.jpg',
-    'https://i.imgur.com/Jvmk2f4.jpg',
-    'https://i.imgur.com/TWCmNx9.jpg',
-    'https://i.imgur.com/qxYfSCG.jpg'
-  ],
-  defaultVideo: 'https://www.youtube.com/embed/t2MGytLDf4I',
-  videoThumbnail: 'https://i.imgur.com/ollJCiw.jpg'
+  defaultImages: [],
+  defaultVideo: '',
+  videoThumbnail: ''
 }

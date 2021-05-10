@@ -98,6 +98,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
             naturalSlideHeight={100}
             totalSlides={product.defaultVideo ? combinedImagesForCarousel.length + 1 : combinedImagesForCarousel.length}
             visibleSlides={3}
+            // visibleSlides={combinedImagesForCarousel.length < 3 ? combinedImagesForCarousel.length : 3}
             // touchEnabled={false}
             dragEnabled={false}
             infinite={true}
@@ -120,7 +121,7 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                 {/* The rest of the product image slides */}
                 {combinedImagesForCarousel.map((eachImage, idx) => (
                   <Slide index={idx + videoSlideOffset} key={idx + videoSlideOffset}>
-                    <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={false}>
+                    <Dot slide={idx + videoSlideOffset} className='productDetailsCarouselDot' disabled={combinedImagesForCarousel.length < 4 ? true : false}>
                       <img src={eachImage} alt={`Slide ${idx + videoSlideOffset}`} 
                       className='productDetailsCarouselImage'
                       id={`idForBorder${idx + videoSlideOffset}`}
@@ -130,8 +131,8 @@ const ProductDetailsCarousel = ({ colorFromUrl, product, loaded, selectedColor, 
                   </Slide>
                 ))}
               </Slider>
-              <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>
-              <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>
+              {combinedImagesForCarousel.length > 3 && <ButtonBack id='backButton'><i className="fas fa-chevron-left"></i></ButtonBack>}
+              {combinedImagesForCarousel.length > 3 && <ButtonNext id='nextButton'><i className="fas fa-chevron-right"></i></ButtonNext>}
             </div>
           </CarouselProvider>
           {/* If the user clicks the video slide*/}

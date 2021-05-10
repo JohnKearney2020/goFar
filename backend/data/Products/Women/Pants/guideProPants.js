@@ -180,7 +180,7 @@ export const guideProPants =
   brand: 'Eddie Bauer',
   subBrand: 'First Ascent',
   categories: ['Pants', 'First Ascent'],
-  gender: 'Women',
+  gender: 'women',
   hasSizes: true,
   colors: [
     {
