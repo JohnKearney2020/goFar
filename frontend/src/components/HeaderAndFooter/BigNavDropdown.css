@@ -1,0 +1,7 @@
+#bigNavDropDown {
+  width: 100%;
+  min-height: 300px;
+  background-color: #919AA1;
+  position: absolute;
+  z-index: 10;
+}
