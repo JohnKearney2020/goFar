@@ -23,7 +23,7 @@ const HomeScreen = ({ match }) => {
   `
   useEffect(() => {
     dispatch(listProducts(keyword, gender, pageNumber));
-  }, [dispatch, keyword, pageNumber]);
+  }, [dispatch, keyword, gender, pageNumber]);
 
   return (
     <>
