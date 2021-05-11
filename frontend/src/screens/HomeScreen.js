@@ -14,11 +14,7 @@ const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
   const gender = match.params.gender;
   const pageNumber = match.params.pageNumber || 1;
-  // const keyword = match.params.keyword;
-  // const keyword = match.params.keyword;
 
-
-  // const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const productList = useSelector(state => state.productList);
   const { loading, error, products, page, pages } = productList;
@@ -26,12 +22,12 @@ const HomeScreen = ({ match }) => {
   const noResultsMessage = `No results. We couldn't find any products that matched what you were looking for. Try another search and we will do our best to find them. Pinky promise :)
   `
   useEffect(() => {
-    dispatch(listProducts(keyword, pageNumber));
+    dispatch(listProducts(keyword, gender, pageNumber));
   }, [dispatch, keyword, pageNumber]);
 
   return (
     <>
-    {keyword ? <h1>Search Results for "{keyword}"...</h1> : <h1>Latest Products</h1>}
+    {gender ? <h1>{gender}'s {keyword}</h1> : keyword ? <h1>Search Results for "{keyword}"...</h1> : <h1>Latest Products</h1>}
       {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 
         : products.length === 0 ? ( <Message variant='info'>{noResultsMessage}</Message> ) :
         <>
@@ -42,7 +38,7 @@ const HomeScreen = ({ match }) => {
               </Col>
             ))}
           </Row>
-          <Paginate page={page} pages={pages} keyword={keyword ? keyword : ''} />
+          <Paginate page={page} pages={pages} keyword={keyword ? keyword : ''} gender={gender ? gender : ''} />
         </>
       }
     </>

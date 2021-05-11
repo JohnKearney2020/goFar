@@ -32,6 +32,7 @@ import { katabatic2Footprint, katabatic3Footprint }  from './Products/NoGender/T
 import { squatchTee }  from './Products/Men/Tees/squatchTee.js';
 import { bigHikeTee }  from './Products/Men/Tees/bigHikeTee.js';
 import { elkHorizonTee }  from './Products/Men/Tees/elkHorizonTee.js';
+import { usaGraphicTee }  from './Products/Women/Tees/usaGraphicTee.js';
 import { ventaTrexLongSleeveCrew }  from './Products/Men/Shirts/ventaTrexLongSleeveCrew.js';
 import { legendWashVNeck }  from './Products/Men/Tees/legendWashVNeck.js';
 
@@ -55,7 +56,8 @@ const products = [
   squatchTee,
   bigHikeTee,
   elkHorizonTee,
-  ventaTrexLongSleeveCrew
+  ventaTrexLongSleeveCrew,
+  usaGraphicTee
 ]
 
 export default products; //this is the ES modules way of exporting

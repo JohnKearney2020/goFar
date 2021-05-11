@@ -23,7 +23,7 @@ export const katabatic2Footprint =
   ],
   brand: 'Eddie Bauer',
   subBrand: 'First Ascent',
-  categories: ['Tents', 'Camping', 'First Ascent', 'Footprint'],
+  categories: ['Tents', 'Camping', 'First Ascent', 'Footprints'],
   gender: 'none',
   hasSizes: false,
   colors: [
@@ -95,7 +95,7 @@ export const katabatic3Footprint =
   ],
   brand: 'Eddie Bauer',
   subBrand: 'First Ascent',
-  categories: ['Tents', 'Camping', 'First Ascent', 'Footprint'],
+  categories: ['Tents', 'Camping', 'First Ascent', 'Footprints'],
   gender: 'none',
   hasSizes: false,
   colors: [

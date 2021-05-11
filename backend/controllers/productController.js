@@ -7,41 +7,7 @@ import Product from '../models/productModel.js';
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
-
-  // let keyword = {}; //By default, a blank object will return all
-
-  //===================================================
-  //                Format our Keyword
-  //===================================================
-  // If we do NOT have a gender, but do have a keyword
-  // if(!req.query.gender && req.query.keyword){
-  //   keyword = {
-  //     $or: [
-  //       {
-  //         name: {
-  //           $regex: req.query.keyword,
-  //           $options: 'i' // 'i' is for case insensitive
-  //         }
-  //       },
-  //       {
-  //         categories: {
-  //           $regex: req.query.keyword,
-  //           $options: 'i' // 'i' is for case insensitive
-  //         }
-  //       },
-  //       {
-  //         subBrand: {
-  //           $regex: req.query.keyword,
-  //           $options: 'i' // 'i' is for case insensitive
-  //         }
-  //       }
-  //     ]
-  //   };
-  // };
-
   const gender = req.query.gender ? req.query.gender : '';
-  console.log(`GENDER sent to backend: ${gender}`)
-  console.log(`KEYWORD sent to backend: ${req.query.keyword}`)
 
   const keyword = req.query.keyword ? {
     $or: [
@@ -70,11 +36,11 @@ const getProducts = asyncHandler(async (req, res) => {
   // const count = await Product.countDocuments({ ...keyword });
   let count;
   if(gender){
-    testCount = await Product.countDocuments({ gender: gender, ...keyword });
-    console.log(`Gender testCount: ${testCount}`)
+    count = await Product.countDocuments({ gender: gender, ...keyword });
+    console.log(`Gender testCount: ${count}`)
   } else {
-    testCount = await Product.countDocuments({ ...keyword });
-    console.log(`no gender testCount: ${testCount}`)
+    count = await Product.countDocuments({ ...keyword });
+    console.log(`no gender testCount: ${count}`)
   }
 
   // .limit() limits our results to the number we've specified in pageSize
@@ -87,8 +53,7 @@ const getProducts = asyncHandler(async (req, res) => {
   } else { //If we do not have a gender sent from the front end
     products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
   }
-  // const products = await Product.find({ gender: gender, ...keyword }).limit(pageSize).skip(pageSize * (page - 1)); 
-  
+
   //passing a blank object will return all products
   //intentionally throw an error
   // res.status(401);
