@@ -12,6 +12,7 @@ import './HomeScreen.css';
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
+  const gender = match.params.gender;
   const pageNumber = match.params.pageNumber || 1;
   // const keyword = match.params.keyword;
   // const keyword = match.params.keyword;
@@ -30,7 +31,7 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
-    <h1>Latest Products</h1>
+    {keyword ? <h1>Search Results for "{keyword}"...</h1> : <h1>Latest Products</h1>}
       {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 
         : products.length === 0 ? ( <Message variant='info'>{noResultsMessage}</Message> ) :
         <>

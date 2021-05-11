@@ -2,11 +2,46 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
 // @desc     Fetch all Products
-// @route    GET /api/products?keyword=keyword
+// @route    GET /api/products?keyword=keyword&gender=gender
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
+
+  // let keyword = {}; //By default, a blank object will return all
+
+  //===================================================
+  //                Format our Keyword
+  //===================================================
+  // If we do NOT have a gender, but do have a keyword
+  // if(!req.query.gender && req.query.keyword){
+  //   keyword = {
+  //     $or: [
+  //       {
+  //         name: {
+  //           $regex: req.query.keyword,
+  //           $options: 'i' // 'i' is for case insensitive
+  //         }
+  //       },
+  //       {
+  //         categories: {
+  //           $regex: req.query.keyword,
+  //           $options: 'i' // 'i' is for case insensitive
+  //         }
+  //       },
+  //       {
+  //         subBrand: {
+  //           $regex: req.query.keyword,
+  //           $options: 'i' // 'i' is for case insensitive
+  //         }
+  //       }
+  //     ]
+  //   };
+  // };
+
+  const gender = req.query.gender ? req.query.gender : '';
+  console.log(`GENDER sent to backend: ${gender}`)
+  console.log(`KEYWORD sent to backend: ${req.query.keyword}`)
 
   const keyword = req.query.keyword ? {
     $or: [
@@ -30,14 +65,29 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     ]
   } : {};
+
   //Get the total count for pagination purposes
-  const count = await Product.countDocuments({ ...keyword });
+  // const count = await Product.countDocuments({ ...keyword });
+  let count;
+  if(gender){
+    testCount = await Product.countDocuments({ gender: gender, ...keyword });
+    console.log(`Gender testCount: ${testCount}`)
+  } else {
+    testCount = await Product.countDocuments({ ...keyword });
+    console.log(`no gender testCount: ${testCount}`)
+  }
 
   // .limit() limits our results to the number we've specified in pageSize
   // .skip() will skip the first x results and start returning results after that. Here, for page 1 we skip 0
   // for page 2 we skip the first 10 results that would have already been displayed on page 1
   // for page 3 we skip the first 20 results that would have already been displayed on page 1 and page 2
-  const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1)); 
+  let products;
+  if(gender){ //If we have a gender sent from the front end
+    products = await Product.find({ gender: gender, ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+  } else { //If we do not have a gender sent from the front end
+    products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+  }
+  // const products = await Product.find({ gender: gender, ...keyword }).limit(pageSize).skip(pageSize * (page - 1)); 
   
   //passing a blank object will return all products
   //intentionally throw an error
