@@ -33,7 +33,7 @@ const ProductNavDropdown = ({ show, productsClickHandler }) => {
   
   return (
     <div ref={node} id='bigNavDropDown' className={`p-2 ${show && 'productNavFadeIn'}`}>
-      <hr />
+      <hr id='productNavHR' className='mb-4'/>
       <Container>
         <Row>
           <Col md={6} lg={3}>

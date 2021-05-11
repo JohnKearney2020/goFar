@@ -1,6 +1,6 @@
 #bigNavDropDown {
   width: 100%;
-  min-height: 300px;
+  min-height: 100px;
   /* background-color: #919AA1; */
   /* background-color: #b2bac1; */
   /* background-color: #c8cdd2; */
@@ -10,6 +10,11 @@
   background-color: #57616b;
   position: absolute;
   z-index: 10;
+}
+
+#productNavHR {
+  border-top: 1px solid #ffffff;
+  width: 95%;
 }
 
 .productNavFadeIn {
