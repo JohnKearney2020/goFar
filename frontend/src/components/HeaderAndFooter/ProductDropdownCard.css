@@ -1,0 +1,20 @@
+.productDropdownCard {
+  background-color: #57616b;
+  border: 0;
+}
+.productDropdownCard h6 {
+  /* background-color: #57616b; */
+  /* border: 0; */
+  color: #ffffff;
+}
+
+.productDropdownTitle {
+  /* background-color: #57616b; */
+  /* border: 0; */
+  color: #ffffff;
+}
+
+.productDropdownCard hr {
+  /* color: pink; */
+  border-top: 1px solid #ffffff;
+}
