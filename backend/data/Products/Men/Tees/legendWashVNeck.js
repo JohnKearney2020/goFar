@@ -123,7 +123,7 @@ export const legendWashVNeck =
   ],
   brand: 'Eddie Bauer',
   subBrand: '',
-  categories: ['Tees', 'Long Sleeve Tees'],
+  categories: ['Tees', 'Shirts'],
   gender: 'men',
   hasSizes: true,
   colors: [

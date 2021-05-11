@@ -1,0 +1,43 @@
+#bigNavDropDown {
+  width: 100%;
+  min-height: 300px;
+  /* background-color: #919AA1; */
+  /* background-color: #b2bac1; */
+  /* background-color: #c8cdd2; */
+  /* background-color: #e8ebed; */
+  /* background-color: #464e56; */
+  /* background-color: #4e5760; */
+  background-color: #57616b;
+  position: absolute;
+  z-index: 10;
+}
+
+.productNavFadeIn {
+  animation: fadeInAnimation ease 0.3s; 
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards;
+}
+
+/* .productNavFadeOut {
+  animation: fadeOutAnimation ease 0.4s; 
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards;
+} */
+
+@keyframes fadeInAnimation { 
+  0% { 
+      opacity: 0; 
+  } 
+  100% { 
+      opacity: 1; 
+  } 
+}
+
+/* @keyframes fadeOutAnimation { 
+  0% { 
+      opacity: 1; 
+  } 
+  100% { 
+      opacity: 0; 
+  } 
+} */

@@ -28,7 +28,7 @@ export const bigHikeTee =
   ],
   brand: 'Eddie Bauer',
   subBrand: '',
-  categories: ['Tees', 'T-shirts', 'Shirts', 'Graphic Tee'],
+  categories: ['Tees', 'T-shirts', 'Shirts', 'Graphic Tees'],
   gender: 'men',
   hasSizes: true,
   colors: [

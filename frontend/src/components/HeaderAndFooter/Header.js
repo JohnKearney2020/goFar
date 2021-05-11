@@ -8,7 +8,7 @@ import { faHeart as solidHeart, faCaretDown, faCaretUp } from '@fortawesome/free
 // import SearchBox from './SearchBox';
 import { logout } from '../../actions/userActions';
 import SearchBox from '../SearchBox/SearchBox';
-import BigNavDropdown from './BigNavDropdown';
+import BigNavDropdown from './ProductNavDropdown';
 import './Header.css';
 
 const Header = () => {
@@ -17,15 +17,28 @@ const Header = () => {
   const { userInfo } = userLogin;
 
   const[showNav, setShowNav] = useState(false);
+  const[disableProductNav, setDisableProductNav] = useState(false);
 
   const logoutHandler = () => {
     dispatch(logout());
   }
 
-  const productsClickHandler = () => {
-    console.log('clicked products');
-    setShowNav(!showNav)
+  const showProductsNavHandler = () => {
+    console.log('showProductsNavHandler');
+    setShowNav(true);
   }
+
+  const productsClickHandler = () => {
+    setDisableProductNav(true); //Explained Below
+    console.log('productsClickHandler');
+    setShowNav(false)
+    // This setTimeout prevents the products dropdown onClick and the 'click outside' handler of the BigNavDropdown from interfering with each other. 
+    // Without this, when the product dropdown is showing, clicking the product dropdown again will simply quickly close the dropdown and immediately reopen it
+    setTimeout(() => {
+      setDisableProductNav(false);
+    }, 240);
+  }
+
   return (
     <>
       <header>
@@ -39,21 +52,9 @@ const Header = () => {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto'>
-                <Nav.Link onClick={productsClickHandler}>
+                <Nav.Link onClick={disableProductNav ? '' : showProductsNavHandler}>
                   Products {showNav ? <FontAwesomeIcon icon={faCaretUp} /> : <FontAwesomeIcon icon={faCaretDown} />}
                 </Nav.Link>
-                {/* <NavDropdown title='Products' id='productsDropDown'> */}
-                  {/* <LinkContainer to='/profile/userInfo'>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <NavDropdown title='Camping' id='campingDropDown' style={{'color': 'red'}}>
-                      <NavDropdown.Item>Tents</NavDropdown.Item>
-                      <NavDropdown.Item>Footprints</NavDropdown.Item>
-                    </NavDropdown>
-                  </NavDropdown.Item> */}
-                {/* </NavDropdown> */}
               </Nav>
               <SearchBox />
               <Nav className='ml-auto'>
@@ -101,7 +102,8 @@ const Header = () => {
           </Container>
         </Navbar>
       </header>
-      {showNav && <BigNavDropdown />}
+      {/* Product Nav */}
+      {showNav && <BigNavDropdown show={showNav} productsClickHandler={productsClickHandler}/>}
     </>
   )
 }
