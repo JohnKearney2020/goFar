@@ -37,13 +37,30 @@ const ProductNavDropdown = ({ show, productsClickHandler }) => {
       <Container>
         <Row>
           <Col md={6} lg={3}>
-            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Camping' navCategories={['Tents', 'Footprints', 'Sleeping Bags']}/>
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Camping' navCategories={
+              [
+                {catName: 'Tents', gender: ''}, 
+                {catName: 'Footprints', gender: ''}, 
+                {catName: 'Sleeping Bags', gender: ''}
+              ]}
+            />
           </Col>
           <Col md={6} lg={3}>
-            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Women' navCategories={['Leggings', 'Pants']}/>
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Women' navCategories={[
+              {catName: 'Leggings', gender: 'women'}, 
+              {catName: 'Pants', gender: 'women'},
+              {catName: 'Shirts', gender: 'women'},
+              {catName: 'Tees', gender: 'women'},
+              {catName: 'Graphic Tees', gender: 'women'},
+              ]}
+            />
           </Col>
           <Col md={6} lg={3}>
-            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Men' navCategories={['Jackets', 'Shirts', 'Tees', 'Graphic Tees']}/>
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Men' navCategories={[
+              {catName: 'Jackets', gender: 'men'}, 
+              {catName: 'Shirts', gender: 'men'}, 
+              {catName: 'Tees', gender: 'men'}, 
+              {catName: 'Graphic Tees', gender: 'men'}]}/>
           </Col>
           <Col md={6} lg={3}>
           </Col>

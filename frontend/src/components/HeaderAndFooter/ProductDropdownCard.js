@@ -13,10 +13,11 @@ const ProductDropdownCard = ({ title, navCategories, productsClickHandler }) => 
         </Link>
         <hr className='my-2 navDropdownHr'/>
         {navCategories.map((eachCat,idx) => {
+          let {catName:name, gender} = eachCat;
           return (
-            <Link key={`${idx}${eachCat}`} to={`/search/${eachCat}`} onClick={productsClickHandler} >
+            <Link key={`${idx}${name}`} to={gender ? `/search/${gender}/${name}`:`/search/${name}`} onClick={productsClickHandler} >
               <Card.Text as='h6' className='my-1'>
-                {eachCat}
+                {name}
               </Card.Text>
             </Link>
           )})

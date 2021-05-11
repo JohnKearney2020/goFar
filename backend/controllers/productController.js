@@ -2,11 +2,12 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
 // @desc     Fetch all Products
-// @route    GET /api/products?keyword=keyword
+// @route    GET /api/products?keyword=keyword&gender=gender
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
+  const gender = req.query.gender ? req.query.gender : '';
 
   const keyword = req.query.keyword ? {
     $or: [
@@ -30,15 +31,29 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     ]
   } : {};
+
   //Get the total count for pagination purposes
-  const count = await Product.countDocuments({ ...keyword });
+  // const count = await Product.countDocuments({ ...keyword });
+  let count;
+  if(gender){
+    count = await Product.countDocuments({ gender: gender, ...keyword });
+    console.log(`Gender testCount: ${count}`)
+  } else {
+    count = await Product.countDocuments({ ...keyword });
+    console.log(`no gender testCount: ${count}`)
+  }
 
   // .limit() limits our results to the number we've specified in pageSize
   // .skip() will skip the first x results and start returning results after that. Here, for page 1 we skip 0
   // for page 2 we skip the first 10 results that would have already been displayed on page 1
   // for page 3 we skip the first 20 results that would have already been displayed on page 1 and page 2
-  const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1)); 
-  
+  let products;
+  if(gender){ //If we have a gender sent from the front end
+    products = await Product.find({ gender: gender, ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+  } else { //If we do not have a gender sent from the front end
+    products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+  }
+
   //passing a blank object will return all products
   //intentionally throw an error
   // res.status(401);
