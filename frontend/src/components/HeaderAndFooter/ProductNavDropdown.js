@@ -39,30 +39,31 @@ const ProductNavDropdown = ({ show, productsClickHandler }) => {
           <Col md={6} lg={3}>
             <ProductDropdownCard productsClickHandler={productsClickHandler} title='Camping' navCategories={
               [
-                {catName: 'Tents', gender: ''}, 
-                {catName: 'Footprints', gender: ''}, 
-                {catName: 'Sleeping Bags', gender: ''}
+                'Tents', 'Footprints', 
+                'Sleeping Bags',
               ]}
             />
           </Col>
           <Col md={6} lg={3}>
-            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Women' navCategories={[
-              {catName: 'Leggings', gender: 'women'}, 
-              {catName: 'Pants', gender: 'women'},
-              {catName: 'Shirts', gender: 'women'},
-              {catName: 'Tees', gender: 'women'},
-              {catName: 'Graphic Tees', gender: 'women'},
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Women' gender='women' navCategories={[
+              'Leggings', 'Pants',
+              'Shirts', 'Tees', 
+              'Graphic Tees'
               ]}
             />
           </Col>
           <Col md={6} lg={3}>
-            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Men' navCategories={[
-              {catName: 'Jackets', gender: 'men'}, 
-              {catName: 'Shirts', gender: 'men'}, 
-              {catName: 'Tees', gender: 'men'}, 
-              {catName: 'Graphic Tees', gender: 'men'}]}/>
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Men' gender='men' navCategories={[
+              'Jackets', 'Shirts', 
+              'Tees', 'Graphic Tees'
+              ]}
+            />
           </Col>
           <Col md={6} lg={3}>
+            <ProductDropdownCard productsClickHandler={productsClickHandler} title='Gear' navCategories={[
+              'Technical Backpacks', 
+              ]}
+            />
           </Col>
         </Row>
       </Container>

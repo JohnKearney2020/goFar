@@ -4,20 +4,21 @@ import { Card } from 'react-bootstrap';
 
 import './ProductDropdownCard.css';
 
-const ProductDropdownCard = ({ title, navCategories, productsClickHandler }) => {
+const ProductDropdownCard = ({ title, navCategories, gender='', productsClickHandler }) => {
+
+  let titleString = title === 'Men' ? `/search/men/all` : title === 'Women' ? `/search/women/all` : `/search/${title}`;
   return (
     <Card border='light' className='productDropdownCard'>
       <Card.Body className='p-2'>
-        <Link to={`/search/camping`} onClick={productsClickHandler} >
+        <Link to={titleString} onClick={productsClickHandler} >
           <Card.Title as='h4' className='text-center m-0 productDropdownTitle'>{title}</Card.Title>
         </Link>
         <hr className='my-2 navDropdownHr'/>
         {navCategories.map((eachCat,idx) => {
-          let {catName:name, gender} = eachCat;
           return (
-            <Link key={`${idx}${name}`} to={gender ? `/search/${gender}/${name}`:`/search/${name}`} onClick={productsClickHandler} >
+            <Link key={`${idx}${eachCat}`} to={gender ? `/search/${gender}/${eachCat}`:`/search/${eachCat}`} onClick={productsClickHandler} >
               <Card.Text as='h6' className='my-1'>
-                {name}
+                {eachCat}
               </Card.Text>
             </Link>
           )})

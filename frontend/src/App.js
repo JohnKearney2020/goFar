@@ -33,7 +33,6 @@ const App = () => {
           <Route path='/cart' component={CartScreen} />
           <Route path='/product/:id/:color' component={ProductScreen} />
           <Route path='/search/:gender/:keyword' component={HomeScreen} exact/>
-          {/* Below route not yet tested */}
           <Route path='/search/:gender/:keyword/page/:pageNumber' component={HomeScreen} />
           <Route path='/search/:keyword' component={HomeScreen} exact/>
           <Route path='/page/:pageNumber' component={HomeScreen} />

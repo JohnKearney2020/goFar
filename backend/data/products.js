@@ -35,6 +35,8 @@ import { elkHorizonTee }  from './Products/Men/Tees/elkHorizonTee.js';
 import { usaGraphicTee }  from './Products/Women/Tees/usaGraphicTee.js';
 import { ventaTrexLongSleeveCrew }  from './Products/Men/Shirts/ventaTrexLongSleeveCrew.js';
 import { legendWashVNeck }  from './Products/Men/Tees/legendWashVNeck.js';
+import { alpineSisu }  from './Products/NoGender/Backpacks/alpineSisu.js';
+import { alchemist }  from './Products/NoGender/Backpacks/alchemist.js';
 
 
 const products = [
@@ -57,7 +59,9 @@ const products = [
   bigHikeTee,
   elkHorizonTee,
   ventaTrexLongSleeveCrew,
-  usaGraphicTee
+  usaGraphicTee,
+  alpineSisu,
+  alchemist
 ]
 
 export default products; //this is the ES modules way of exporting
