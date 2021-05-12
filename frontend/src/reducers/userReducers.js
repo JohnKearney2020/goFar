@@ -48,7 +48,8 @@ export const userRegisterReducer = (state = { }, action) => {
 }
 
 const userDetailsPlaceHolderObj = {
-  addresses: []
+  addresses: [],
+  orders: []
 }
 
 export const userDetailsReducer = (state = { user: userDetailsPlaceHolderObj }, action) => {

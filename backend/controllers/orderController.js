@@ -9,8 +9,9 @@ import generateToken from '../utils/generateToken.js';
 const updateUserData = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if(user) {
-    //Add the order to the user data
-    user.orders.push(req.body.order);
+    //Add the order to the user data - we add it to the beginning of the array not the end here for ease of use when we work with
+    //the orders on the front end
+    user.orders.unshift(req.body.order);
     //Update the user's cart - remove all items checked out during the order
     let oldCart = [...user.cart];
     let newCart = oldCart.filter(eachItem => eachItem.savedForLater === true);

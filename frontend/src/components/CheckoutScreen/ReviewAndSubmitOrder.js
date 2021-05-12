@@ -11,6 +11,7 @@ import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCart
 import Loader from '../Loader';
 import Message from '../Message';
 import CustomPayPalButton from '../CheckoutScreen/CustomPayPalButton';
+import { addDecimals } from '../../utilityFunctions/addDecimals';
 
 
 const ReviewAndSubmitOrder = ({ history }) => {
@@ -48,12 +49,13 @@ const ReviewAndSubmitOrder = ({ history }) => {
         dispatch(checkoutItemTally(cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)))
         // Find the subtotal of the cart
         let tempCartSubTotal = Number(cart.reduce((acc,item) => acc + (item.savedForLater ? 0 : item.quantity) * item.price, 0).toFixed(2));
+        tempCartSubTotal = addDecimals(tempCartSubTotal);
         dispatch(checkoutSubTotal(tempCartSubTotal));
         // Figure out cost of shipping. Free shipping at $49 or more. otherwise $7.99 flat rate
         let tempCartShipping = tempCartSubTotal > 49 ? 0 : 7.99;
         dispatch(checkoutShippingCost(tempCartShipping))
         // Calculate the total cost of the cart - items + shipping
-        let cartTotal = (Number(tempCartSubTotal) + Number(tempCartShipping));
+        let cartTotal = addDecimals((Number(tempCartSubTotal) + Number(tempCartShipping)));
         dispatch(checkoutCartTotal(cartTotal));
 
         // PayPal

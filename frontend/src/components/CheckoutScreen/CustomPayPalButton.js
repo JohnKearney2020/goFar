@@ -72,12 +72,13 @@ const CustomPayPalButton = ({ history }) => {
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
-      dispatch({
-        type: USER_LOGIN_SUCCESS,
-        payload: data2
-      });
-      localStorage.setItem('userInfo', JSON.stringify(data2));
-      toast.success(`Oder Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+      // dispatch({
+      //   type: USER_LOGIN_SUCCESS,
+      //   payload: data2
+      // });
+      // localStorage.setItem('userInfo', JSON.stringify(data2));
+      toast.success(`Order Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+      dispatch({ type: ORDER_LOADING_FALSE });
       // redirect users to the orders page
       history.push('/profile/orders')
     } catch (error) {

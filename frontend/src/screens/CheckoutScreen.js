@@ -59,9 +59,9 @@ const CheckoutScreen = ({ history }) => {
     dispatch({type: CHECKOUT_RESET});
   }, [dispatch]);
 
-  const submitCheckoutHandler = () => {
-    console.log('clicked submit!')
-  }
+  // const submitCheckoutHandler = () => {
+  //   console.log('clicked submit!')
+  // }
 
   const cartEditHandler = () => {
     history.push('/cart');
