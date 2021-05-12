@@ -1,11 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 
+const pageSize = 8;
+
 // @desc     Fetch all Products
-// @route    GET /api/products?keyword=keyword&gender=gender
+// @route    GET /api/products?keyword=keyword&gender=gender&pageNumber=pageNumber
 // @access   Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
   const gender = req.query.gender ? req.query.gender : '';
 
@@ -37,10 +38,8 @@ const getProducts = asyncHandler(async (req, res) => {
   let count;
   if(gender){
     count = await Product.countDocuments({ gender: gender, ...keyword });
-    console.log(`Gender testCount: ${count}`)
   } else {
     count = await Product.countDocuments({ ...keyword });
-    console.log(`no gender testCount: ${count}`)
   }
 
   // .limit() limits our results to the number we've specified in pageSize
@@ -63,6 +62,20 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 })
 
+
+// @desc     Fetch all Products for a specific Gender 
+// @route    GET /api/products/gender/all?pageNumber=pageNumber
+// @access   Public
+const getGenderProducts = asyncHandler(async (req, res) => {
+  const page = Number(req.query.pageNumber) || 1;
+  const gender = req.params.gender;
+  //Get the total count for pagination purposes
+  let count = await Product.countDocuments({ gender: gender });
+  let products = await Product.find({ gender: gender }).limit(pageSize).skip(pageSize * (page - 1));
+  // We return what the current page is, and how many pages total their are rounded up
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+})
+
 // @desc     Fetch single product
 // @route    GET /api/products/:id
 // @access   Public
@@ -79,4 +92,4 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 })
 
-export { getProducts, getProductById };
+export { getProducts, getGenderProducts, getProductById };

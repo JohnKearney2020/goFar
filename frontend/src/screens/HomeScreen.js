@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 
-import { listProducts } from '../actions/productActions';
+import { listProducts, listGenderProducts } from '../actions/productActions';
 import ProductCard from '../components/ProductComponents/ProductCard';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -22,12 +22,16 @@ const HomeScreen = ({ match }) => {
   const noResultsMessage = `No results. We couldn't find any products that matched what you were looking for. Try another search and we will do our best to find them. Pinky promise :)
   `
   useEffect(() => {
-    dispatch(listProducts(keyword, gender, pageNumber));
+    if(keyword === 'all'){
+      dispatch(listGenderProducts(gender, pageNumber));
+    } else {
+      dispatch(listProducts(keyword, gender, pageNumber));
+    }
   }, [dispatch, keyword, gender, pageNumber]);
 
   return (
     <>
-    {gender ? <h1>{gender}'s {keyword}</h1> : keyword ? <h1>Search Results for "{keyword}"...</h1> : <h1>Latest Products</h1>}
+    {gender && keyword !== 'all' ? <h1>{gender}'s {keyword}</h1> : keyword && keyword !== 'all' ? <h1>Search Results for "{keyword}"...</h1> : keyword === 'all' ? <h1>{gender}'s Clothing</h1> : <h1>Latest Products</h1>}
       {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 
         : products.length === 0 ? ( <Message variant='info'>{noResultsMessage}</Message> ) :
         <>
