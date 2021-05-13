@@ -1,0 +1,9 @@
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.mapRow {
+  height: 300px;
+  /* padding: 0px 50px; */
+}

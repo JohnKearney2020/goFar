@@ -63,6 +63,11 @@ app.use('/api/users/orders', orderRoutes);
 app.get('/api/config/paypal', (req,res) => res.send(process.env.PAYPAL_CLIENT_ID));
 
 //========================================
+// Google Maps
+//========================================
+app.get('/api/config/googlemaps', (req,res) => res.send(process.env.GOOGLE_MAPS_API_KEY));
+
+//========================================
 // Error Handling Middleware
 //========================================
 // 404 fallback - for anything that is not found

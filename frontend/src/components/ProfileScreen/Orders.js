@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Accordion, Col, Row } from 'react-bootstrap';
+import axios from 'axios';
 
 import OrderContainer from './OrderContainer';
 import OrderPagination from './OrderPagination';
+import Message from '../Message';
 import './Orders.css';
 
 const Orders = () => {
@@ -20,6 +22,7 @@ const Orders = () => {
   }
 
   useEffect(() => {
+    let unmounted = false;
     if(orders.length > 0 && orders.length <= 10){ //If there are less than 11 orders we won't show pagination
       setOrdersToDisplay(orders);
     } else if(orders.length > 0){ //if the user has more than 10 orders
@@ -33,10 +36,33 @@ const Orders = () => {
       }
       setOrdersToDisplay(tempOrders);
     }
+
+    // Google Maps Mounting Script Function
+    const addGoogleMapsScript = async () => {
+      try {
+        const { data: mapsAPIKey } = await axios.get('/api/config/googlemaps');
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${mapsAPIKey}`;
+        script.async = true;
+        if(!unmounted && !window.google){
+          console.log('MOUNTING GOOGLE MAPS SCRIPT')
+          document.body.appendChild(script);
+        }
+      } catch (error) {
+        console.log('Error fetching Google Maps API Key...')
+      }
+    }
+    // If this component is still mounted and we haven't mounted the script to the body yet
+    if(!unmounted && !window.google){
+      addGoogleMapsScript();
+    }
+    return () => { unmounted = true };
   }, [orders, page])
 
   return (
     <>
+    {orders.length === 0 && <Message variant='info'>{`No orders on file. Treat yourself and buy something :)`}</Message>}
       {ordersToDisplay &&
         <>
           <Row className='justify-content-between align-items-center w-100 mx-0 mt-3'>
