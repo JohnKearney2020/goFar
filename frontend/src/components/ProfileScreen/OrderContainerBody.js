@@ -1,11 +1,13 @@
 import React from 'react';
 import { Card, Row, Col, ListGroup } from 'react-bootstrap';
+
 import OrdersItemsRows from './OrdersItemsRows';
+import OrderMap from './OrderMap';
+import Message from '../Message';
 
 const OrderContainerBody = ({ order }) => {
   //Destructure the order
-  const { billingAddress:billingAddressObj, shippingAddress:shippingAddressObj, paymentMethod, itemTally, subTotal, cartTotal,
-    shippingCost, items } = order;
+  const { billingAddress:billingAddressObj, shippingAddress:shippingAddressObj, paymentMethod, itemTally, subTotal, cartTotal, shippingCost, items, shipped } = order;
 
   return (
     <>
@@ -70,21 +72,38 @@ const OrderContainerBody = ({ order }) => {
       {/* ============================================== */}
       {/*       Payment Method and Cart Totals Row       */}
       {/* ============================================== */}
-      <Row className='mt-3'>
+      <Row className='my-3'>
         {/* ============================================== */}
-        {/*                Payment Method                  */}
+        {/*          Payment Method & Shipping             */}
         {/* ============================================== */}
         <Col md={6}>
-          <Card border='light'>
-            <ListGroup variant='flush'>
-              <ListGroup.Item className='border-0'>
-                <h4>Payment Method</h4>
-              </ListGroup.Item>
-              <ListGroup.Item className='border-0 py-0'>
-                <h6 className='mb-1 ml-2'>{paymentMethod}</h6>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
+          <Row>
+            <Col sm={12}>
+              <Card border='light'>
+                <ListGroup variant='flush'>
+                  <ListGroup.Item className='border-0'>
+                    <h4>Payment Method</h4>
+                  </ListGroup.Item>
+                  <ListGroup.Item className='border-0 py-0'>
+                    <h6 className='mb-1 ml-2'>{paymentMethod}</h6>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
+            <Col>
+              <Card border='light'>
+                <ListGroup variant='flush'>
+                  <ListGroup.Item className='border-0'>
+                    <h4>Shipping Status</h4>
+                  </ListGroup.Item>
+                  <ListGroup.Item className='border-0 py-0'>
+                    {/* <h6 className='mb-1 ml-2'>{paymentMethod}</h6> */}
+                    {shipped ? <Message variant='success'>Shipped!</Message> : <Message variant='danger'>Not Yet Shipped - Order In Process</Message>}
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
         </Col>
         {/* ============================================== */}
         {/*                Cart Totals                     */}
@@ -110,6 +129,13 @@ const OrderContainerBody = ({ order }) => {
           </Card>
         </Col>
       </Row>
+      {/* ============================================== */}
+      {/*                     Map                        */}
+      {/* ============================================== */}
+      <Row className='mapRow mx-0 mb-5 px-5'>
+        <OrderMap address={shippingAddressObj} zoom={8}/>
+      </Row>
+      {/* <hr className='my-4'/> */}
       {/* ============================================== */}
       {/*                  Item Rows                     */}
       {/* ============================================== */}
