@@ -1,3 +1,9 @@
+#orderAccordion {
+  /* Each row is 44px tall. Multiply the rows desired by 44px */
+  min-height: 220px;
+  /* width: 100; */
+}
+
 @media screen and (max-width: 576px) {
   .order-h5-responsive{
       font-size:12px;
