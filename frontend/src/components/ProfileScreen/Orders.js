@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Accordion, Col, Row } from 'react-bootstrap';
-// import axios from 'axios';
+import axios from 'axios';
 
 import OrderContainer from './OrderContainer';
 import OrderPagination from './OrderPagination';
@@ -37,13 +37,15 @@ const Orders = () => {
       }
       setOrdersToDisplay(tempOrders);
     }
+
     // If this component is still mounted and we haven't mounted the Google Maps script to the body yet and orders exist
     // The script can also be mounted if the user places an order. We use the geocoding service during the order
-    if(!unmounted && !window.google && orders.length > 0){
+    // if(!unmounted && !window.google && ordersToDisplay.length > 0){
+    if(!unmounted && !window.google && orders){
       addGoogleMapsScript();
     }
     return () => { unmounted = true };
-  }, [orders, page])
+  }, [orders, ordersToDisplay, page])
 
   return (
     <>

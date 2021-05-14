@@ -68,7 +68,7 @@ const CustomPayPalButton = ({ history }) => {
         billingAddress: billingAddressObj,
         shippingAddress: shippingAddressObj,
         shipped: false
-      }
+      };
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
