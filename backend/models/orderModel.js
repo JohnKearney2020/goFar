@@ -40,6 +40,10 @@ const orderSchema = mongoose.Schema({
       type: Boolean,
       required: true,
       default: false
+    },
+    latLng: {
+      type: String,
+      required: false
     }
   }],
   paymentMethod: {

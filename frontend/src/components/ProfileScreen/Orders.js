@@ -37,8 +37,9 @@ const Orders = () => {
       }
       setOrdersToDisplay(tempOrders);
     }
-    // If this component is still mounted and we haven't mounted the Google Maps script to the body yet
-    if(!unmounted && !window.google){
+    // If this component is still mounted and we haven't mounted the Google Maps script to the body yet and orders exist
+    // The script can also be mounted if the user places an order. We use the geocoding service during the order
+    if(!unmounted && !window.google && orders.length > 0){
       addGoogleMapsScript();
     }
     return () => { unmounted = true };
@@ -46,8 +47,8 @@ const Orders = () => {
 
   return (
     <>
-    {orders.length === 0 && <Message variant='info'>{`No orders on file. Treat yourself and buy something :)`}</Message>}
-      {ordersToDisplay &&
+    {orders.length === 0 && <Message variant='info' mtop={3}>{`No orders on file. Treat yourself and buy something :)`}</Message>}
+      {ordersToDisplay && orders.length > 0 &&
         <>
           <Row className='justify-content-between align-items-center w-100 mx-0 mt-3'>
             <Col md={4} className='text-center'>
