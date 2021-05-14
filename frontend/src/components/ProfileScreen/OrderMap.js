@@ -9,7 +9,7 @@ const OrderMap = ({ address, zoom }) => {
   const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
 
   useEffect(() => {
-    if(window.google){
+    if(window.google){ //If the Google Maps Script has already been loaded and added to the body
       const geocoder = new window.google.maps.Geocoder();
 
       const map = new window.google.maps.Map(mapRef.current, {
