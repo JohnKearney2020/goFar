@@ -6,7 +6,7 @@ import products from './data/products.js';
 
 //Models
 import Product from './models/productModel.js';
-import User from './models/userModel.js';
+import { User } from './models/userModel.js';
 import Order from './models/orderModel.js'; //we aren't seeding oders here, but by importing it we can gain the ability to destroy all Orders if we want
 
 import connectDB from './config/db.js';

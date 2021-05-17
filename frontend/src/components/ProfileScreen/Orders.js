@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Accordion, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import OrderContainer from './OrderContainer';
 import OrderPagination from './OrderPagination';
 import Message from '../Message';
+import { addGoogleMapsScript } from '../../utilityFunctions/googleMapsScript';
+import { MAP_LOADED_SCRIPT_TRUE, MAP_LOADED_SCRIPT_FALSE } from '../../constants/mapConstants';
 import './Orders.css';
 
 const Orders = () => {
+  const dispatch = useDispatch();
+
+  const mountedGoogleScript = useRef(false);
   //Pull in the order information from the global state
   const userDetails = useSelector(state => state.userDetails.user);
   const { orders } = userDetails;
@@ -37,33 +42,21 @@ const Orders = () => {
       setOrdersToDisplay(tempOrders);
     }
 
-    // Google Maps Mounting Script Function
-    const addGoogleMapsScript = async () => {
-      try {
-        const { data: mapsAPIKey } = await axios.get('/api/config/googlemaps');
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${mapsAPIKey}`;
-        script.async = true;
-        if(!unmounted && !window.google){
-          console.log('MOUNTING GOOGLE MAPS SCRIPT')
-          document.body.appendChild(script);
-        }
-      } catch (error) {
-        console.log('Error fetching Google Maps API Key...')
-      }
-    }
-    // If this component is still mounted and we haven't mounted the script to the body yet
-    if(!unmounted && !window.google){
-      addGoogleMapsScript();
+    // If this component is still mounted and we haven't mounted the Google Maps script to the body yet and orders exist
+    // The script can also be mounted if the user places an order. We use the geocoding service during the order
+    if(!unmounted && !window.google && orders.length > 0 && mountedGoogleScript.current === false){
+      mountedGoogleScript.current = true;
+      console.log('orders.length: ', orders.length);
+      // dispatch({type: MAP_LOADED_SCRIPT_TRUE});
+      addGoogleMapsScript('calling from Orders.js useEffect', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
     }
     return () => { unmounted = true };
-  }, [orders, page])
+  }, [orders, ordersToDisplay, page, dispatch])
 
   return (
     <>
-    {orders.length === 0 && <Message variant='info'>{`No orders on file. Treat yourself and buy something :)`}</Message>}
-      {ordersToDisplay &&
+    {orders.length === 0 && <Message variant='info' mtop={3}>{`No orders on file. Treat yourself and buy something :)`}</Message>}
+      {ordersToDisplay && orders.length > 0 &&
         <>
           <Row className='justify-content-between align-items-center w-100 mx-0 mt-3'>
             <Col md={4} className='text-center'>

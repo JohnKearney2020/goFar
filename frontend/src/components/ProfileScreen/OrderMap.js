@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-
+import {  useSelector } from 'react-redux';
 import './OrderMap.css';
 
 const OrderMap = ({ address, zoom }) => {
@@ -8,8 +8,13 @@ const OrderMap = ({ address, zoom }) => {
 
   const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
 
+  // Get the mapLoadedScript status from the global state
+  const mapScriptLoaded = useSelector(state => state.mapLoadedScript.loaded);
+  // const { cart } = userInfo;
+
   useEffect(() => {
-    if(window.google){
+    // if(window.google){ //If the Google Maps Script has already been loaded and added to the body
+    if(mapScriptLoaded && window.google){ //If the Google Maps Script has already been loaded and added to the body
       const geocoder = new window.google.maps.Geocoder();
 
       const map = new window.google.maps.Map(mapRef.current, {
@@ -17,7 +22,7 @@ const OrderMap = ({ address, zoom }) => {
       });
     
       geocoder.geocode( { 'address': addressForMap}, function(results, status) {
-        if (status == 'OK') {
+        if (status === 'OK') {
           map.setCenter(results[0].geometry.location);
           var marker = new window.google.maps.Marker({
               map: map,
@@ -31,7 +36,7 @@ const OrderMap = ({ address, zoom }) => {
     return () => {
       
     }
-  }, [zoom]);
+  }, [zoom, addressForMap, mapScriptLoaded]);
 
   return (
     <div ref={mapRef} className='map'>

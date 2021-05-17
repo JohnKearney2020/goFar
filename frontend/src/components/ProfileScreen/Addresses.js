@@ -15,7 +15,7 @@ const Addresses = () => {
   const haveArrangedAddresses = useRef(false);
   const userDetails = useSelector(state => state.userDetails);
   const { loading, error, user } = userDetails;
-  const addresses = user.addresses;
+  const { addresses } = user;
 
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
   const { error: updateAddressError  } = userUpdateProfile;

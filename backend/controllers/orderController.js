@@ -12,6 +12,9 @@ const updateUserData = asyncHandler(async (req, res) => {
     //Add the order to the user data - we add it to the beginning of the array not the end here for ease of use when we work with
     //the orders on the front end
     user.orders.unshift(req.body.order);
+    //Per jsbench.me, .push(...arrayToPush) is by far the fastest way of adding the new order to the beginning of the orders array
+    // const newOrdersArray = req.body.order.push(...user.orders);
+    // user.orders = newOrdersArray;
     //Update the user's cart - remove all items checked out during the order
     let oldCart = [...user.cart];
     let newCart = oldCart.filter(eachItem => eachItem.savedForLater === true);

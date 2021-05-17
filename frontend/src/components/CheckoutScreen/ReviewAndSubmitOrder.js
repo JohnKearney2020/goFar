@@ -38,13 +38,8 @@ const ReviewAndSubmitOrder = ({ history }) => {
 
   useEffect(() => {
     let unmounted = false;
-    console.log('in top level useEffect')
-    console.log('history in Review and submit order:')
-    console.log(history)
     if(userInfo){
-      console.log('in level below that')
       if(cart.length > 0){
-        console.log('in final level')
         // Find how many items are in the cart
         dispatch(checkoutItemTally(cart.reduce((acc, item) => acc + (item.savedForLater ? 0 : item.quantity), 0)))
         // Find the subtotal of the cart
@@ -61,7 +56,6 @@ const ReviewAndSubmitOrder = ({ history }) => {
         // PayPal
         const addPayPalScript = async () => {
           const { data: clientID } = await axios.get('/api/config/paypal');
-          console.log(clientID);
           const script = document.createElement('script');
           script.type = 'text/javascript';
           script.src = `https://www.paypal.com/sdk/js?client-id=${clientID}&disable-funding=credit,card`
@@ -87,10 +81,10 @@ const ReviewAndSubmitOrder = ({ history }) => {
     history.push('/cart');
   }
 
-  const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult);
-    console.log('Payment was successful!')
-  }
+  // const successPaymentHandler = (paymentResult) => {
+  //   console.log(paymentResult);
+  //   console.log('Payment was successful!')
+  // }
 
   return (
     <>

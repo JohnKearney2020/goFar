@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../../constants/checkoutConstants';
+import { addGoogleMapsScript } from '../../utilityFunctions/googleMapsScript';
+import { MAP_LOADED_SCRIPT_TRUE, MAP_LOADED_SCRIPT_FALSE } from '../../constants/mapConstants';
 import Backdrop from '../../components/Modals/Backdrop';
 
 const CustomPayPalButton = ({ history }) => {
@@ -53,9 +55,42 @@ const CustomPayPalButton = ({ history }) => {
     // This is the second of our functions to run after the user completes the PayPal transaction
     try {
       console.log('in updateUserData')
-      // Create the order object we will send to the backend
+      //============================================================================================
+      //            Get the latLng coordinates for the user's shipping address
+      //============================================================================================
+      // //Mount the Google Maps script if it isn't already
+      // if(!window.google){
+      //   await addGoogleMapsScript();
+      // };
+      if(window.google){ //If the Google Maps Script has already been loaded and added to the body
+        console.log('TRYING TO GEOCODE!!!')
+        const geocoder = new window.google.maps.Geocoder();
+        //Deconstruct the shipping address object
+        const { line1, line2, city, state, zipCode } = shippingAddressObj;
+        // Create the address string we will feed to Google Maps, which will turn it into lat long coordinates
+        const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
+        //
+        geocoder.geocode( { 'address': addressForMap}, function(results, status) {
+          if (status === 'OK') {
+            console.log('Lat Lng for that address:')
+            console.log(results[0].geometry.location)
+            // map.setCenter(results[0].geometry.location);
+            // var marker = new window.google.maps.Marker({
+            //     map: map,
+            //     position: results[0].geometry.location
+            // });
+          } else {
+            // alert('Geocode was not successful for the following reason: ' + status);
+            // alert('Geocode was not successful for the following reason: ' + status);
+            console.log('Failed to geocode the given address...')
+          }
+        });
+      }
+
       //Pull the items from our cart that are not 'saved for later'
       let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
+
+      // Create the order object we will send to the backend
       let order = {
         user: userID,
         paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
@@ -68,7 +103,7 @@ const CustomPayPalButton = ({ history }) => {
         billingAddress: billingAddressObj,
         shippingAddress: shippingAddressObj,
         shipped: false
-      }
+      };
       const { data:data2 } = await axios.put('/api/users/orders', {
         order, cart
       }, config);
@@ -92,8 +127,25 @@ const CustomPayPalButton = ({ history }) => {
   }
 
   const payPalButtonClickHandler = () => {
+    if(!window.google){ //If we haven't loaded the Google Maps API script yet
+      // addGoogleMapsScript('From payPalButtonClickHandler');
+      addGoogleMapsScript('From payPalButtonClickHandler', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
+    };
     dispatch({ type: ORDER_LOADING_TRUE });
   }
+
+  // const removeMapScript = () => {
+  //   console.log('removing the google maps script from the body')
+  //   // Remove the Google Maps Script from the body if a user cancels out of a transaction or it fails
+  //   // Get all scripts currently on the body
+  //   const scriptList = document.querySelectorAll("script[type='text/javascript']")
+  //   // Convert that to an array so we can loop thru it
+  //   const convertedNodeList = Array.from(scriptList);
+  //   // Find the Google Maps API script
+  //   const ourMapsScript = convertedNodeList.find(script => script.id === "mapsScript");
+  //   // Remove the Google Maps script
+  //   ourMapsScript.parentNode.removeChild(ourMapsScript);
+  // }
 
   return (
     <>
@@ -132,9 +184,31 @@ const CustomPayPalButton = ({ history }) => {
           });
         }}
         // If the paypal transaction goes well
+        // onApprove={(data, actions) => {
+        //   // Capture the funds from the transaction
+        //   return actions.order.capture().then(function(details) {
+        //     //Mount the Google Maps script if it isn't already
+        //     if(!window.google){
+        //       addGoogleMapsScript();
+        //     };
+        //   }).then(function(details) {
+        //     //Update the inventory in our database:
+        //     updateInventory();
+        //     // Update the User's Cart - Remove everything that was just sold
+        //     // Create an order and add it to the User's data in our database
+        //     updateUserData(data);
+        //   });
+        // }}
         onApprove={(data, actions) => {
           // Capture the funds from the transaction
-          return actions.order.capture().then(function(details) {
+          return actions.order.capture().then( async function(details) {
+            //Mount the Google Maps script if it isn't already
+            // if(!window.google){
+            //   console.log('AWAIT TEST 1')
+            //   await addGoogleMapsScript();
+            // };
+          }).then(function(details) {
+            // console.log('AWAIT TEST 2')
             //Update the inventory in our database:
             updateInventory();
             // Update the User's Cart - Remove everything that was just sold

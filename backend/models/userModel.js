@@ -92,49 +92,6 @@ const addressSchema = mongoose.Schema({
   timestamps: true 
 });
 
-const orderSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  paymentMethodID: {
-    type: String,
-    required: true
-  },
-  items: [cartSchema],
-  subTotal: {
-    type: Number,
-    required: true
-  },
-  shippingCost: {
-    type: Number,
-    required: true
-  },
-  cartTotal: {
-    type: Number,
-    required: true
-  },
-  itemTally: {
-    type: Number,
-    required: true
-  },
-  paymentMethod: {
-    type: String,
-    required: true
-  },
-  billingAddress: addressSchema,
-  shippingAddress: addressSchema,
-  shipped: {
-    type: Boolean,
-    required: true,
-    default: false
-  }
-}, 
-{
-  timestamps: true
-});
-
 //User Wishlist - this contains the product id's of all the products the user has put on their wishlist
 //See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
 const wishListSchema = mongoose.Schema({
@@ -230,8 +187,7 @@ const userSchema = mongoose.Schema({
   },
   wishList: [wishListSchema], //an array of wishList objects. See schema above.
   cart: [cartSchema],
-  orders: [orderSchema]
-
+  // orders: [orderSchema]
 }, {
   //this automatically makes 'CreatedAt' and 'UpdatedAt' fields for us
   timestamps: true
@@ -253,4 +209,10 @@ userSchema.pre('save', async function (next) {
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+// export default User;
+
+export { 
+  User,
+  addressSchema,
+  cartSchema
+};
