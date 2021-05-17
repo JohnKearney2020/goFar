@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../../constants/checkoutConstants';
 import { addGoogleMapsScript } from '../../utilityFunctions/googleMapsScript';
+import { MAP_LOADED_SCRIPT_TRUE, MAP_LOADED_SCRIPT_FALSE } from '../../constants/mapConstants';
 import Backdrop from '../../components/Modals/Backdrop';
 
 const CustomPayPalButton = ({ history }) => {
@@ -127,7 +128,8 @@ const CustomPayPalButton = ({ history }) => {
 
   const payPalButtonClickHandler = () => {
     if(!window.google){ //If we haven't loaded the Google Maps API script yet
-      addGoogleMapsScript('From payPalButtonClickHandler');
+      // addGoogleMapsScript('From payPalButtonClickHandler');
+      addGoogleMapsScript('From payPalButtonClickHandler', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
     };
     dispatch({ type: ORDER_LOADING_TRUE });
   }

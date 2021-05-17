@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Accordion, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 
@@ -7,11 +7,13 @@ import OrderContainer from './OrderContainer';
 import OrderPagination from './OrderPagination';
 import Message from '../Message';
 import { addGoogleMapsScript } from '../../utilityFunctions/googleMapsScript';
+import { MAP_LOADED_SCRIPT_TRUE, MAP_LOADED_SCRIPT_FALSE } from '../../constants/mapConstants';
 import './Orders.css';
 
 const Orders = () => {
+  const dispatch = useDispatch();
 
-  // const mountedGoogleScript = useRef(false);
+  const mountedGoogleScript = useRef(false);
   //Pull in the order information from the global state
   const userDetails = useSelector(state => state.userDetails.user);
   const { orders } = userDetails;
@@ -42,13 +44,14 @@ const Orders = () => {
 
     // If this component is still mounted and we haven't mounted the Google Maps script to the body yet and orders exist
     // The script can also be mounted if the user places an order. We use the geocoding service during the order
-    if(!unmounted && !window.google && orders){
-      // mountedGoogleScript.current = true;
-      console.log('orders.length: ', orders.length)
-      addGoogleMapsScript('calling from Orders.js useEffect');
+    if(!unmounted && !window.google && orders.length > 0 && mountedGoogleScript.current === false){
+      mountedGoogleScript.current = true;
+      console.log('orders.length: ', orders.length);
+      // dispatch({type: MAP_LOADED_SCRIPT_TRUE});
+      addGoogleMapsScript('calling from Orders.js useEffect', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
     }
     return () => { unmounted = true };
-  }, [orders, ordersToDisplay, page])
+  }, [orders, ordersToDisplay, page, dispatch])
 
   return (
     <>
