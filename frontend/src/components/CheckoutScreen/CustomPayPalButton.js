@@ -134,6 +134,19 @@ const CustomPayPalButton = ({ history }) => {
     dispatch({ type: ORDER_LOADING_TRUE });
   }
 
+  // const removeMapScript = () => {
+  //   console.log('removing the google maps script from the body')
+  //   // Remove the Google Maps Script from the body if a user cancels out of a transaction or it fails
+  //   // Get all scripts currently on the body
+  //   const scriptList = document.querySelectorAll("script[type='text/javascript']")
+  //   // Convert that to an array so we can loop thru it
+  //   const convertedNodeList = Array.from(scriptList);
+  //   // Find the Google Maps API script
+  //   const ourMapsScript = convertedNodeList.find(script => script.id === "mapsScript");
+  //   // Remove the Google Maps script
+  //   ourMapsScript.parentNode.removeChild(ourMapsScript);
+  // }
+
   return (
     <>
       <PayPalButton 
