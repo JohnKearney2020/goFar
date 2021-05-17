@@ -11,6 +11,14 @@ const orderNotesSchema = mongoose.Schema({
   timestamps: true
 });
 
+const latLngSchema = mongoose.Schema({
+  latLng: { 
+    type: mongoose.Schema.Types.Mixed, 
+    required: false,
+    default: null
+  }, 
+});
+
 const orderSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -40,10 +48,6 @@ const orderSchema = mongoose.Schema({
       type: Boolean,
       required: true,
       default: false
-    },
-    latLng: {
-      type: String,
-      required: false
     }
   }],
   paymentMethod: {

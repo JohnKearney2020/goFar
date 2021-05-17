@@ -17,7 +17,7 @@ const OrderMap = ({ address, zoom }) => {
       });
     
       geocoder.geocode( { 'address': addressForMap}, function(results, status) {
-        if (status == 'OK') {
+        if (status === 'OK') {
           map.setCenter(results[0].geometry.location);
           var marker = new window.google.maps.Marker({
               map: map,
@@ -31,7 +31,7 @@ const OrderMap = ({ address, zoom }) => {
     return () => {
       
     }
-  }, [zoom]);
+  }, [zoom, addressForMap]);
 
   return (
     <div ref={mapRef} className='map'>
