@@ -63,6 +63,10 @@ const orderSchema = mongoose.Schema({
       default: null
     }
   },
+  shippingAddressString: {
+    type: String,
+    required: true
+  },
   shipped: {
     type: Boolean,
     required: true,

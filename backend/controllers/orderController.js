@@ -1,13 +1,43 @@
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
+import dotenv from 'dotenv';
+import {Client} from "@googlemaps/google-maps-services-js";
+
+
+dotenv.config(); //load environmental variables
 
 // @desc     Add an order to a User and update that user's cart at the same time - remove items that they just purchased
 // @route    PUT /api/users/orders
 // @access   Private
 const createOrder = asyncHandler(async (req, res) => {
+  let frontEndOrder = req.body.order;
+  // const { shippingAddress:shippingAddresObj } = frontEndOrder;
+
+  // process.env.GOOGLE_MAPS_API_KEY
+  const client = new Client({}); //instantiate the client to make a call to the Google Maps API
+  client
+  .geocode({
+    params: {
+      // address: '3 Hermann Museum Circle Dr Apt 1112, Houston TX 77004',
+      address: frontEndOrder.shippingAddressString,
+      key: process.env.GOOGLE_MAPS_API_KEY,
+    },
+    timeout: 2500, // milliseconds
+  })
+  .then((r) => {
+    // results[0].geometry.location
+    // console.log(r.data.results[0].elevation);
+    console.log('Geocoded Address: ')
+    console.log(r.data.results[0].geometry.location);
+    frontEndOrder.shippingAddressLatLng.latLng = r.data.results[0].geometry.location;
+  })
+  .catch((e) => {
+    console.log(e.response.data.error_message);
+  });
+
   // const user = await User.findById(req.user._id);
-  const order = await Order.create(req.body.order);
+  const order = await Order.create(frontEndOrder);
   if(order){
     res.status(201).json({ //201 status means something was created
       message: "Order Created"
