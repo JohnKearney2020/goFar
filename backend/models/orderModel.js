@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { addressSchema, cartSchema } from './userModel.js';
+import { addressSchema, cartSchema } from './sharedSchemas.js';
 
 const orderNotesSchema = mongoose.Schema({
   comment: { type: String, required: true },
@@ -19,87 +19,6 @@ const latLngSchema = mongoose.Schema({
     default: null
   }, 
 });
-
-// const addressSchema = mongoose.Schema({
-//   isPrimary: {
-//     type: Boolean,
-//     required: true
-//   },
-//   addressName: {
-//     type: String,
-//     required: false
-//   },
-//   line1: {
-//     type: String,
-//     required: true
-//   },
-//   line2: {
-//     type: String,
-//     required: false
-//   },
-//   city: {
-//     type: String,
-//     required: true
-//   },
-//   state: {
-//     type: String,
-//     required: true
-//   },
-//   zipCode: {
-//     type: String,
-//     required: true
-//   }
-// }, 
-// { 
-//   timestamps: true 
-// });
-
-// const cartSchema = mongoose.Schema({
-//   productID: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
-//     ref: 'Product'
-//   },
-//   name: {
-//     type: String,
-//     required: true
-//   },
-//   quantity: {
-//     type: Number,
-//     required: true
-//   },
-//   color: {
-//     type: String,
-//     required: false
-//   },
-//   size: {
-//     type: String,
-//     required: false
-//   },
-//   sizeCategory: {
-//     type: String,
-//     required: false
-//   },
-//   price: {
-//     type: Number,
-//     required: false
-//   },
-//   image: {
-//     type: String,
-//     required: true
-//   },
-//   savedForLater: {
-//     type: Boolean,
-//     required: false
-//   },
-//   // createdAt: {
-//   //   type: Date,
-//   //   immutable: true
-//   // }
-//   }, {
-//   timestamps: true
-//   });
-
 
 // ===============================================================================================================
 //                                                      The Order Schema
@@ -137,7 +56,13 @@ const orderSchema = mongoose.Schema({
   },
   billingAddress: addressSchema,
   shippingAddress: addressSchema,
-  shippingAddressLatLng: latLngSchema,
+  shippingAddressLatLng: {
+    latLng: { 
+      type: mongoose.Schema.Types.Mixed, 
+      required: false,
+      default: null
+    }
+  },
   shipped: {
     type: Boolean,
     required: true,
@@ -162,7 +87,8 @@ const orderSchema = mongoose.Schema({
     default: false
   },
   refundedAt: {
-    type: Date
+    type: Date,
+    required: false
   },
 }, 
 {

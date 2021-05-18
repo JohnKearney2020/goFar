@@ -55,7 +55,7 @@ app.use('/api/users/wishlist', wishListRoutes);
 //========================================
 // Order related routes - Update User
 //========================================
-app.use('/api/users/orders', orderRoutes);
+app.use('/api/orders', orderRoutes);
 
 //========================================
 // Paypal

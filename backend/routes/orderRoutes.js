@@ -1,14 +1,14 @@
 import express from 'express';
 const router = express.Router();
-import { updateUserData, updateInventory } from '../controllers/orderController.js';
+import { createOrder, updateInventory } from '../controllers/orderController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
-// Root url: /api/users/orders
+// Root url: /api/orders
 
 //=====================
 //  Protected Routes
 //=====================
-router.route('/').put(protect, updateUserData);
+router.route('/').post(protect, createOrder);
 router.route('/inventoryupdate').put(protect, updateInventory);
 
 

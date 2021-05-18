@@ -24,11 +24,15 @@ export const addGoogleMapsScript = async (string, dispatchFunction, type) => {
         // loaded. This setTimeout seems to give enough time /// for the script to be added to the body before the global state gets 
         // updated. This is important b/c our OrderMap component useEffect doesn't create the map until the map script is loaded - it /// looks for 'window.google' before proceeding
         setTimeout(() => {
-          dispatchFunction(type);          
+          dispatchFunction(type);
+          
+          // return Promise.resolve("success");          
         }, 350);
       }
     } catch (error) {
       console.log('Error fetching Google Maps API Key...')
     }
+  } else {
+    return "fail";
   }
 }

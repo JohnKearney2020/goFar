@@ -56,6 +56,7 @@ const Orders = () => {
   return (
     <>
     {orders.length === 0 && <Message variant='info' mtop={3}>{`No orders on file. Treat yourself and buy something :)`}</Message>}
+    {/* {ordersToDisplay.length === 0 && <Message variant='info' mtop={3}>{`No orders on file. Treat yourself and buy something :)`}</Message>} */}
       {ordersToDisplay && orders.length > 0 &&
         <>
           <Row className='justify-content-between align-items-center w-100 mx-0 mt-3'>

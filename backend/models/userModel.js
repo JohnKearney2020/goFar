@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { addressSchema, cartSchema } from './sharedSchemas.js';
 
 // const reviewSchema = mongoose.Schema({
 //   name: { type: String, required: true },
@@ -9,88 +10,6 @@ import bcrypt from 'bcryptjs';
 //   timestamps: true
 // });
 
-// =====================================================================================================
-//                                      Schema's Used in User Schema
-// =====================================================================================================
-const cartSchema = mongoose.Schema({
-  productID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true, //a user's wishlist can be empty, not sure if this should be true or false atm
-    ref: 'Product'
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true
-  },
-  color: {
-    type: String,
-    required: false
-  },
-  size: {
-    type: String,
-    required: false
-  },
-  sizeCategory: {
-    type: String,
-    required: false
-  },
-  price: {
-    type: Number,
-    required: false
-  },
-  image: {
-    type: String,
-    required: true
-  },
-  savedForLater: {
-    type: Boolean,
-    required: false
-  },
-  // createdAt: {
-  //   type: Date,
-  //   immutable: true
-  // }
-  }, {
-  timestamps: true
-  });
-
-const addressSchema = mongoose.Schema({
-  isPrimary: {
-    type: Boolean,
-    required: true
-  },
-  addressName: {
-    type: String,
-    required: false
-  },
-  line1: {
-    type: String,
-    required: true
-  },
-  line2: {
-    type: String,
-    required: false
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  state: {
-    type: String,
-    required: true
-  },
-  zipCode: {
-    type: String,
-    required: true
-  }
-}, 
-{ 
-  timestamps: true 
-});
 
 //User Wishlist - this contains the product id's of all the products the user has put on their wishlist
 //See my notes in 'productModel.js' as to why we are creating a separate schema for the wishlist as opposed to creating an array of objects
@@ -209,10 +128,4 @@ userSchema.pre('save', async function (next) {
 
 const User = mongoose.model('User', userSchema);
 
-// export default User;
-
-export { 
-  User,
-  addressSchema,
-  cartSchema
-};
+export default User;

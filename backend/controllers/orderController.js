@@ -1,43 +1,25 @@
 import asyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
+import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
-import generateToken from '../utils/generateToken.js';
 
 // @desc     Add an order to a User and update that user's cart at the same time - remove items that they just purchased
 // @route    PUT /api/users/orders
 // @access   Private
-const updateUserData = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  if(user) {
-    //Add the order to the user data - we add it to the beginning of the array not the end here for ease of use when we work with
-    //the orders on the front end
-    user.orders.unshift(req.body.order);
-    //Per jsbench.me, .push(...arrayToPush) is by far the fastest way of adding the new order to the beginning of the orders array
-    // const newOrdersArray = req.body.order.push(...user.orders);
-    // user.orders = newOrdersArray;
-    //Update the user's cart - remove all items checked out during the order
-    let oldCart = [...user.cart];
-    let newCart = oldCart.filter(eachItem => eachItem.savedForLater === true);
-    user.cart = newCart;
-    //Update the user's data
-    const updatedUser = await user.save();
+const createOrder = asyncHandler(async (req, res) => {
+  // const user = await User.findById(req.user._id);
+  const order = await Order.create(req.body.order);
+  if(order){
     res.status(201).json({ //201 status means something was created
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      cart: updatedUser.cart,
-      wishList: updatedUser.wishList,
-      token: generateToken(updatedUser._id) 
+      message: "Order Created"
     })
   } else {
-    res.status(404); //not found
-    throw new Error('User not found. Cannot Update the cart.');
+    res.status(400);
+    throw new Error('Could not create the order.');
   }
 })
 
 // @desc     Adjust the inventory based on the qty's the user checked out
-// @route    PUT /api/users/orders/inventoryupdate
+// @route    PUT /api/orders/inventoryupdate
 // @access   Private
 const updateInventory = asyncHandler(async (req, res) => {
   const { cart } = req.body;
@@ -89,6 +71,6 @@ const updateInventory = asyncHandler(async (req, res) => {
 })
 
 export { 
-  updateUserData,
+  createOrder,
   updateInventory
 };
