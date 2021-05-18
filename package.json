@@ -25,25 +25,16 @@
   },
   "homepage": "https://github.com/JohnKearney2020/goFar#readme",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-regular-svg-icons": "^5.15.3",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@googlemaps/google-maps-services-js": "^3.1.16",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
-    "lodash.clonedeep": "^4.5.0",
     "mongoose": "^5.11.13",
     "morgan": "^1.10.0",
-    "multer": "^1.4.2",
-    "pure-react-carousel": "^1.27.6",
-    "react-html-parser": "^2.0.2",
-    "react-onclickoutside": "^6.10.0",
-    "react-paypal-button-v2": "^2.6.3",
-    "react-toastify": "^7.0.3"
+    "multer": "^1.4.2"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
