@@ -56,6 +56,7 @@ const getUserOrders = asyncHandler(async (req, res) => {
   //Get the total count for pagination purposes
   // Remember, req.user._id is passed here automatically by our authorization middleware
   const count = await Order.countDocuments({ user: req.user._id });
+  console.log(`Count: ${count}` .red.bold)
   // '-1' is descending order from newest to oldest. '1' is ascending order from oldest to newest
   const orders = await Order.find({ user: req.user._id }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
   if(orders){

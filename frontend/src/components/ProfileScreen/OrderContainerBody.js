@@ -7,7 +7,7 @@ import Message from '../Message';
 
 const OrderContainerBody = ({ order }) => {
   //Destructure the order
-  const { billingAddress:billingAddressObj, shippingAddress:shippingAddressObj, paymentMethod, itemTally, subTotal, cartTotal, shippingCost, items, shipped } = order;
+  const { billingAddress:billingAddressObj, shippingAddress:shippingAddressObj, shippingAddressString, shippingAddressLatLng, paymentMethod, itemTally, subTotal, cartTotal, shippingCost, items, shipped } = order;
 
   return (
     <>
@@ -133,7 +133,7 @@ const OrderContainerBody = ({ order }) => {
       {/*                     Map                        */}
       {/* ============================================== */}
       <Row className='mapRow mx-0 mb-5 px-5'>
-        {/* <OrderMap address={shippingAddressObj} zoom={8}/> */}
+        <OrderMap shippingAddressString={shippingAddressString} zoom={8} latLng={shippingAddressLatLng}/>
       </Row>
       {/* <hr className='my-4'/> */}
       {/* ============================================== */}
