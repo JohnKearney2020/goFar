@@ -23,7 +23,7 @@ const createOrder = asyncHandler(async (req, res) => {
 // @access   Private
 const getUserOrders = asyncHandler(async (req, res) => {
   const pageSize = 5;
-  const page = Number(req.params.pageNumber) || 1;
+  const page = Number(req.query.pageNumber) || 1;
   //Get the total count for pagination purposes
   // Remember, req.user._id is passed here automatically by our authorization middleware
   const count = await Order.countDocuments({ user: req.user._id });
@@ -31,8 +31,6 @@ const getUserOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
   if(orders){
     // We return what the current page is, and how many pages total their are rounded up
-    // console.log(`# of orders: ${count}`);
-    // console.log(`Pages: ${Math.ceil(count / pageSize)}`);
     res.json({ orders, page, pages: Math.ceil(count / pageSize) });
   } else {
     res.status(400);

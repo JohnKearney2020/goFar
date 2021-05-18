@@ -1,7 +1,14 @@
+#orderAccordionDiv {
+  /* Each row is 44px tall. Multiply the rows desired by 44px */
+  min-height: 220px;
+}
 #orderAccordion {
   /* Each row is 44px tall. Multiply the rows desired by 44px */
   min-height: 220px;
-  /* width: 100; */
+}
+
+#orderLoader {
+  margin-top: 100px !important;
 }
 
 @media screen and (max-width: 576px) {
