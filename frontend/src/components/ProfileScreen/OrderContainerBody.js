@@ -133,7 +133,7 @@ const OrderContainerBody = ({ order }) => {
       {/*                     Map                        */}
       {/* ============================================== */}
       <Row className='mapRow mx-0 mb-5 px-5'>
-        <OrderMap address={shippingAddressObj} zoom={8}/>
+        {/* <OrderMap address={shippingAddressObj} zoom={8}/> */}
       </Row>
       {/* <hr className='my-4'/> */}
       {/* ============================================== */}
