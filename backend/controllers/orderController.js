@@ -1,8 +1,6 @@
 import asyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
-import generateToken from '../utils/generateToken.js';
 
 // @desc     Add an order to a User and update that user's cart at the same time - remove items that they just purchased
 // @route    PUT /api/users/orders
@@ -18,11 +16,10 @@ const createOrder = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Could not create the order.');
   }
-
 })
 
 // @desc     Adjust the inventory based on the qty's the user checked out
-// @route    PUT /api/users/orders/inventoryupdate
+// @route    PUT /api/orders/inventoryupdate
 // @access   Private
 const updateInventory = asyncHandler(async (req, res) => {
   const { cart } = req.body;

@@ -190,7 +190,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc     Update item in user's cart
+// @desc     Update a user's entire cart
 // @route    PUT /api/users/cart/updatewholecart
 // @access   Private
 const updateWholeCart = asyncHandler(async (req, res) => {

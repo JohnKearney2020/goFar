@@ -45,7 +45,7 @@ const CustomPayPalButton = ({ history }) => {
   const updateInventory = async () => {
     // This is the first of our functions to run after the user completes the PayPal transaction
     try {
-      const { data:data2 } = await axios.put('/api/users/orders/inventoryupdate', { cart }, config);
+      const { data:data2 } = await axios.put('/api/orders/inventoryupdate', { cart }, config);
     } catch (error) {
       console.log('there was an error updating the item inventory')
       console.log(error)
@@ -55,17 +55,33 @@ const CustomPayPalButton = ({ history }) => {
     }
   }
 
-  const updateUserData = async (data) => {
+  const updateUserCart = async () => {
+    // Filter our the 'Saved For Later' items from the cart. Those will be saved. Everything else in the cart will be removed
+    const cartAfterOrder = cart.filter(eachItem => eachItem.savedForLater === true);
+    console.log('cartAfterOrder:')
+    console.log(cartAfterOrder)
+    try {
+      const { data } = await axios.put('/api/users/cart/updatewholecart', { cart:cartAfterOrder }, config);
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      console.log('cart updated successfully')
+    } catch (error) {
+      console.log('there was an error updating the cart with up to date values')
+      console.log(error)
+      toast.error(`Could not update your cart after placing the order. You can manually remove leftover items in it.`, { position: "bottom-center", autoClose: 5000 });
+    }
+  }
+
+  const createOrder = async (data) => {
     // This is the second of our functions to run after the user completes the PayPal transaction
     try {
-      console.log('in updateUserData')
+      console.log('in createOrder')
       //============================================================================================
       //            Get the latLng coordinates for the user's shipping address
       //============================================================================================
-      // //Mount the Google Maps script if it isn't already
-      // if(!window.google){
-      //   await addGoogleMapsScript();
-      // };
       //Pull the items from our cart that are not 'saved for later'
       let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
       let order = {
@@ -153,19 +169,6 @@ const CustomPayPalButton = ({ history }) => {
     dispatch({ type: ORDER_LOADING_TRUE });
   }
 
-  // const removeMapScript = () => {
-  //   console.log('removing the google maps script from the body')
-  //   // Remove the Google Maps Script from the body if a user cancels out of a transaction or it fails
-  //   // Get all scripts currently on the body
-  //   const scriptList = document.querySelectorAll("script[type='text/javascript']")
-  //   // Convert that to an array so we can loop thru it
-  //   const convertedNodeList = Array.from(scriptList);
-  //   // Find the Google Maps API script
-  //   const ourMapsScript = convertedNodeList.find(script => script.id === "mapsScript");
-  //   // Remove the Google Maps script
-  //   ourMapsScript.parentNode.removeChild(ourMapsScript);
-  // }
-
   return (
     <>
       <PayPalButton 
@@ -202,37 +205,15 @@ const CustomPayPalButton = ({ history }) => {
             }]
           });
         }}
-        // If the paypal transaction goes well
-        // onApprove={(data, actions) => {
-        //   // Capture the funds from the transaction
-        //   return actions.order.capture().then(function(details) {
-        //     //Mount the Google Maps script if it isn't already
-        //     if(!window.google){
-        //       addGoogleMapsScript();
-        //     };
-        //   }).then(function(details) {
-        //     //Update the inventory in our database:
-        //     updateInventory();
-        //     // Update the User's Cart - Remove everything that was just sold
-        //     // Create an order and add it to the User's data in our database
-        //     updateUserData(data);
-        //   });
-        // }}
         onApprove={(data, actions) => {
           // Capture the funds from the transaction
           return actions.order.capture().then( async function(details) {
-            //Mount the Google Maps script if it isn't already
-            // if(!window.google){
-            //   console.log('AWAIT TEST 1')
-            //   await addGoogleMapsScript();
-            // };
-          }).then(function(details) {
-            // console.log('AWAIT TEST 2')
             //Update the inventory in our database:
-            // updateInventory();
+            updateInventory();
             // Update the User's Cart - Remove everything that was just sold
+            updateUserCart();
             // Create an order and add it to the User's data in our database
-            updateUserData(data);
+            createOrder(data);
           });
         }}
         onError={(err) => {
