@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import colors from 'colors';
+import path from 'path';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js'; //remember, we need the .js extension in the backend since we are using the ESmodules way of importing
@@ -27,10 +28,6 @@ if(process.env.NODE_ENV === 'development') {
 //         Parse JSON from Body
 //===============================================
 app.use(express.json()); //this will allow us to accept JSON data in the body
-
-app.get('/', (req, res) => {
-  res.send('API is running...');
-})
 
 //========================================
 // Product related routes
@@ -67,6 +64,19 @@ app.get('/api/config/paypal', (req,res) => res.send(process.env.PAYPAL_CLIENT_ID
 //========================================
 app.get('/api/config/googlemaps', (req,res) => res.send(process.env.GOOGLE_MAPS_API_KEY));
 
+//========================================
+// Production
+//======================================== 
+if(process.env.NODE_ENV === 'production'){
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+  // Any route that is not outlined above will point to the index.html that is in the static folder
+  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')))
+} else { // If we aren't in production
+  app.get('/', (req, res) => {
+    res.send('API is running...');
+  })
+}
 //========================================
 // Error Handling Middleware
 //========================================

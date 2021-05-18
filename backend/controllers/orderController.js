@@ -3,7 +3,6 @@ import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import dotenv from 'dotenv';
 import { Client } from "@googlemaps/google-maps-services-js";
-import cloneDeep from 'lodash/cloneDeep.js';
 
 dotenv.config(); //load environmental variables
 
@@ -11,7 +10,7 @@ dotenv.config(); //load environmental variables
 // @route    PUT /api/users/orders
 // @access   Private
 const createOrder = asyncHandler(async (req, res) => {
-  let frontEndOrder = cloneDeep(req.body.order);
+  let frontEndOrder = req.body.order;
   console.log('frontEndOrder.shippingAddressLatLng:' .cyan.underline)
   console.log(frontEndOrder.shippingAddressLatLng)
   const client = new Client({}); //instantiate the client to make a call to the Google Maps API
