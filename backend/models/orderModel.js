@@ -57,11 +57,9 @@ const orderSchema = mongoose.Schema({
   billingAddress: addressSchema,
   shippingAddress: addressSchema,
   shippingAddressLatLng: {
-    latLng: { 
-      type: mongoose.Schema.Types.Mixed, 
-      required: false,
-      default: null
-    }
+    type: mongoose.Schema.Types.Mixed, 
+    required: false,
+    default: null
   },
   shippingAddressString: {
     type: String,

@@ -97,9 +97,7 @@ const CustomPayPalButton = ({ history }) => {
         paymentMethod,
         billingAddress: billingAddressObj,
         shippingAddress: shippingAddressObj,
-        shippingAddressLatLng: {
-          latLng: null
-        },
+        shippingAddressLatLng: '',
         shippingAddressString: addressForMap,
         shipped: false,
       };
