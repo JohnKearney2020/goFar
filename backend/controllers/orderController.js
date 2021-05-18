@@ -2,8 +2,8 @@ import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import dotenv from 'dotenv';
-import {Client} from "@googlemaps/google-maps-services-js";
-
+import { Client } from "@googlemaps/google-maps-services-js";
+import cloneDeep from 'lodash/cloneDeep.js';
 
 dotenv.config(); //load environmental variables
 
@@ -11,10 +11,9 @@ dotenv.config(); //load environmental variables
 // @route    PUT /api/users/orders
 // @access   Private
 const createOrder = asyncHandler(async (req, res) => {
-  let frontEndOrder = req.body.order;
-  // const { shippingAddress:shippingAddresObj } = frontEndOrder;
-
-  // process.env.GOOGLE_MAPS_API_KEY
+  let frontEndOrder = cloneDeep(req.body.order);
+  console.log('frontEndOrder.shippingAddressLatLng:' .cyan.underline)
+  console.log(frontEndOrder.shippingAddressLatLng)
   const client = new Client({}); //instantiate the client to make a call to the Google Maps API
   client
   .geocode({
@@ -26,26 +25,26 @@ const createOrder = asyncHandler(async (req, res) => {
     timeout: 2500, // milliseconds
   })
   .then((r) => {
-    // results[0].geometry.location
-    // console.log(r.data.results[0].elevation);
-    console.log('Geocoded Address: ')
+    console.log('Geocoded Address: ' .red.underline.bold)
     console.log(r.data.results[0].geometry.location);
-    frontEndOrder.shippingAddressLatLng.latLng = r.data.results[0].geometry.location;
+    // frontEndOrder.shippingAddressLatLng = "TEST";
+    frontEndOrder.shippingAddressLatLng = r.data.results[0].geometry.location;
+    const order = Order.create(frontEndOrder);
+    // const order = Order.create(frontEndOrder);
+    if(order){
+      res.status(201).json({ //201 status means something was created
+        message: "Order Created"
+      })
+    } else { //This might be redundant as the clg in the .catch() below triggers on failure
+      res.status(400);
+      throw new Error('Could not create the order.');
+    }
   })
-  .catch((e) => {
-    console.log(e.response.data.error_message);
-  });
-
-  // const user = await User.findById(req.user._id);
-  const order = await Order.create(frontEndOrder);
-  if(order){
-    res.status(201).json({ //201 status means something was created
-      message: "Order Created"
-    })
-  } else {
+  .catch(() => {
+    console.log('Could not create the order...')
     res.status(400);
-    throw new Error('Could not create the order.');
-  }
+    res.send('Could not create the order...')
+  })
 })
 
 // @desc     Get all orders tied to a specific user
@@ -125,3 +124,15 @@ export {
   updateInventory,
   getUserOrders
 };
+
+
+// const orderCreationPromise = (order) => {
+//   return new Promise((resolve, reject) => {
+//     const order = Order.create(frontEndOrder);
+//     if(order){
+//       resolve();
+//     } else {
+//       reject();
+//     }
+//   })
+// }
