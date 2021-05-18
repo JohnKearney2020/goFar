@@ -114,8 +114,8 @@ const CustomPayPalButton = ({ history }) => {
           console.log('Google Maps Geocode Status: ')
           console.log(status)
           if (status === 'OK') {
-            console.log('Lat Lng for that address:')
-            console.log(results[0].geometry.location)
+            // console.log('Lat Lng for that address:')
+            // console.log(results[0].geometry.location)
             // map.setCenter(results[0].geometry.location);
             // var marker = new window.google.maps.Marker({
             //     map: map,
@@ -130,8 +130,6 @@ const CustomPayPalButton = ({ history }) => {
             // redirect users to the orders page
             history.push('/profile/orders')
           } else {
-            // alert('Geocode was not successful for the following reason: ' + status);
-            // alert('Geocode was not successful for the following reason: ' + status);
             const { data:data2 } = await axios.post('/api/orders', {
               order
             }, config);
@@ -163,7 +161,6 @@ const CustomPayPalButton = ({ history }) => {
 
   const payPalButtonClickHandler = () => {
     if(!window.google){ //If we haven't loaded the Google Maps API script yet
-      // addGoogleMapsScript('From payPalButtonClickHandler');
       addGoogleMapsScript('From payPalButtonClickHandler', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
     };
     dispatch({ type: ORDER_LOADING_TRUE });
@@ -212,7 +209,7 @@ const CustomPayPalButton = ({ history }) => {
             updateInventory();
             // Update the User's Cart - Remove everything that was just sold
             updateUserCart();
-            // Create an order and add it to the User's data in our database
+            // Create an order and add it to our database
             createOrder(data);
           });
         }}
