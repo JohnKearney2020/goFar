@@ -1,3 +1,7 @@
+//============================================================================================================
+// If i choose to abandon lat/lng on the from end, revert to 03d30e5 on main branch for this file
+//============================================================================================================
+
 import React from 'react';
 import axios from 'axios';
 import { PayPalButton } from "react-paypal-button-v2";
@@ -62,35 +66,8 @@ const CustomPayPalButton = ({ history }) => {
       // if(!window.google){
       //   await addGoogleMapsScript();
       // };
-      if(window.google){ //If the Google Maps Script has already been loaded and added to the body
-        console.log('TRYING TO GEOCODE!!!')
-        const geocoder = new window.google.maps.Geocoder();
-        //Deconstruct the shipping address object
-        const { line1, line2, city, state, zipCode } = shippingAddressObj;
-        // Create the address string we will feed to Google Maps, which will turn it into lat long coordinates
-        const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
-        //
-        geocoder.geocode( { 'address': addressForMap}, function(results, status) {
-          if (status === 'OK') {
-            console.log('Lat Lng for that address:')
-            console.log(results[0].geometry.location)
-            // map.setCenter(results[0].geometry.location);
-            // var marker = new window.google.maps.Marker({
-            //     map: map,
-            //     position: results[0].geometry.location
-            // });
-          } else {
-            // alert('Geocode was not successful for the following reason: ' + status);
-            // alert('Geocode was not successful for the following reason: ' + status);
-            console.log('Failed to geocode the given address...')
-          }
-        });
-      }
-
       //Pull the items from our cart that are not 'saved for later'
       let orderItems = cart.filter(eachItem => eachItem.savedForLater === false);
-
-      // Create the order object we will send to the backend
       let order = {
         user: userID,
         paymentMethodID: data.orderID, //this comes from PayPal, or another method if we add it
@@ -102,20 +79,62 @@ const CustomPayPalButton = ({ history }) => {
         paymentMethod,
         billingAddress: billingAddressObj,
         shippingAddress: shippingAddressObj,
-        shipped: false
+        shippingAddressLatLng: {
+          latLng: null
+        },
+        shipped: false,
       };
-      const { data:data2 } = await axios.put('/api/users/orders', {
-        order, cart
-      }, config);
-      // dispatch({
-      //   type: USER_LOGIN_SUCCESS,
-      //   payload: data2
-      // });
-      // localStorage.setItem('userInfo', JSON.stringify(data2));
-      toast.success(`Order Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
-      dispatch({ type: ORDER_LOADING_FALSE });
-      // redirect users to the orders page
-      history.push('/profile/orders')
+
+      if(window.google){ //If the Google Maps Script has already been loaded and added to the body
+        console.log('TRYING TO GEOCODE!!!')
+        const geocoder = new window.google.maps.Geocoder();
+        //Deconstruct the shipping address object
+        const { line1, line2, city, state, zipCode } = shippingAddressObj;
+        // Create the address string we will feed to Google Maps, which will turn it into lat long coordinates
+        const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
+        // const addressForMap = "1";
+        //
+        geocoder.geocode( { 'address': addressForMap}, async function(results, status) {
+          console.log('Google Maps Geocode Status: ')
+          console.log(status)
+          if (status === 'OK') {
+            console.log('Lat Lng for that address:')
+            console.log(results[0].geometry.location)
+            // map.setCenter(results[0].geometry.location);
+            // var marker = new window.google.maps.Marker({
+            //     map: map,
+            //     position: results[0].geometry.location
+            // });
+            order.shippingAddressLatLng.latLng = results[0].geometry.location;
+            await axios.post('/api/orders', {
+              order
+            }, config);
+            toast.success(`Order Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+            dispatch({ type: ORDER_LOADING_FALSE });
+            // redirect users to the orders page
+            history.push('/profile/orders')
+          } else {
+            // alert('Geocode was not successful for the following reason: ' + status);
+            // alert('Geocode was not successful for the following reason: ' + status);
+            const { data:data2 } = await axios.post('/api/orders', {
+              order
+            }, config);
+            toast.success(`Order Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+            dispatch({ type: ORDER_LOADING_FALSE });
+            // redirect users to the orders page
+            history.push('/profile/orders')
+            console.log('Failed to geocode the given address...')
+          }
+        });
+      } else { //If, for some reason the google maps API didn't load we can try to place an order still
+        await axios.post('/api/orders', {
+          order
+        }, config);
+        toast.success(`Order Placed Successfully!`, { position: "bottom-center", autoClose: 4000 });
+        dispatch({ type: ORDER_LOADING_FALSE });
+        // redirect users to the orders page
+        history.push('/profile/orders')
+      }
     } catch (error) {
       console.log('there was an error')
       console.log(error)
@@ -210,7 +229,7 @@ const CustomPayPalButton = ({ history }) => {
           }).then(function(details) {
             // console.log('AWAIT TEST 2')
             //Update the inventory in our database:
-            updateInventory();
+            // updateInventory();
             // Update the User's Cart - Remove everything that was just sold
             // Create an order and add it to the User's data in our database
             updateUserData(data);
