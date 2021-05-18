@@ -344,6 +344,8 @@ const ProductScreen = ({ match }) => {
                 <div id="cartErrorMessage"></div>
                 {/* This is a React Portal defined in the AddToCartButton component */}
                 <div id="cartWarningMessage"></div>
+                {/* This is a React Portal defined in the AddToCartButton component */}
+                <div id="cartLoginMessage"></div>
               </Card>
             </Col> {/* End of Product Name / Sizes / Colors */}
           </Row> {/* End of Top Row */}

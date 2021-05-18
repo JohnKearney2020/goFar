@@ -22,6 +22,7 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
   const [loadingCartIcon, setLoadingCartIcon] = useState(false);
   const [cartErrorMessage, setCartErrorMessage] = useState(null);
   const [cartWarningMessage, setCartWarningMessage] = useState(null);
+  const [cartLoginMessage, setCartLoginMessage] = useState(null);
 
   useEffect(() => {
     if(loaded){ // If we've successfully loaded the product from the global state
@@ -31,7 +32,11 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
         setCartErrorMessage(null);
         setCartWarningMessage(null);
       }
+      if(!userInfo.name){
+        setCartLoginMessage('You need to sign in to add products to your cart or wishlist. You can sign in as a guest or create an account and sign in.')
+      }
     }
+    
   }, [loaded, color, size, sizeCategory, qtyInStock, outOfStock]);
 
   const addToCartHandler =  async () => {
@@ -160,12 +165,12 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
         type='button' 
         // variant="dark" 
         onClick={addToCartHandler}
-        disabled={loadingCartIcon | qtyInStock === 0 | size === ''}
+        disabled={loadingCartIcon | qtyInStock === 0 | size === '' | !userInfo.name}
       >
         <div className='text-center'>
           {loadingCartIcon ? <FontAwesomeIcon className='' icon={spinner} size="2x"/>
             // : (qtyInStock === 0 && sizeCategory === 'ONE SIZE' ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
-            : (outOfStock ? 'Out Of Stock' : (size === '' ? 'Choose a Size' : 'Add to Cart'))
+            : (outOfStock ? 'Out Of Stock' : (!userInfo.name ? 'Add to Cart' : (size === '' ? 'Choose a Size' : 'Add to Cart')))
             // : (size === '' ? 'Choose a Size' : (qtyInStock === 0 ? 'Out of Stock' : 'Add to Cart') )
           }
         </div>
@@ -177,6 +182,10 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
       { cartWarningMessage &&  ReactDom.createPortal(
         <Message variant='info'>{cartWarningMessage}</Message>,
         document.getElementById('cartWarningMessage')
+      )}
+      { cartLoginMessage &&  ReactDom.createPortal(
+        <Message variant='info'>{cartLoginMessage}</Message>,
+        document.getElementById('cartLoginMessage')
       )}
     </>
   )
