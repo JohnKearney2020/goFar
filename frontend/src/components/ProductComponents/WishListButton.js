@@ -46,7 +46,7 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   const addToWishListHandler =  async () => {
     setWishListErrorMessage('');
     if(!userInfo.name) { //If users are not logged in show them a message about the wishlist feature and exit the function
-      setWishListErrorMessage('Create an account to add items to your wishlist.');
+      setWishListErrorMessage('Create an account and sign in to add items to your wishlist.');
       return;
     }
     let sizeForWishListAdd = size;

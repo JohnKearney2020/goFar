@@ -89,7 +89,7 @@ const LoginScreen = ({ location, history }) => {
         <Button type='submit' variant='outline-primary' disabled={loading}>
           {loading ? 'Signing in...' : 'Sign In'}
         </Button>
-        <Button type='button' variant='outline-secondary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
+        <Button type='button' variant='outline-primary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
           {loading ? 'Signing in...' : 'Sign In As Guest'}
         </Button>
       </Form>

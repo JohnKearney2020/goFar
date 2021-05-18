@@ -31,7 +31,7 @@ const RegisterScreen = ({ location, history }) => {
 
   useEffect(() => {
     // if a user is already logged in, redirect them
-    if(userInfo){
+    if(userInfo.name){
         history.push(redirect);
     }
   }, [ history, userInfo, redirect]);
