@@ -18,6 +18,28 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc     Get all orders tied to a specific user
+// @route    GET /api/orders
+// @access   Private
+const getUserOrders = asyncHandler(async (req, res) => {
+  const pageSize = 5;
+  const page = Number(req.params.pageNumber) || 1;
+  //Get the total count for pagination purposes
+  // Remember, req.user._id is passed here automatically by our authorization middleware
+  const count = await Order.countDocuments({ user: req.user._id });
+  // '-1' is descending order from newest to oldest. '1' is ascending order from oldest to newest
+  const orders = await Order.find({ user: req.user._id }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
+  if(orders){
+    // We return what the current page is, and how many pages total their are rounded up
+    // console.log(`# of orders: ${count}`);
+    // console.log(`Pages: ${Math.ceil(count / pageSize)}`);
+    res.json({ orders, page, pages: Math.ceil(count / pageSize) });
+  } else {
+    res.status(400);
+    throw new Error('Could not find orders based on that user ID...');
+  }
+})
+
 // @desc     Adjust the inventory based on the qty's the user checked out
 // @route    PUT /api/orders/inventoryupdate
 // @access   Private
@@ -72,5 +94,6 @@ const updateInventory = asyncHandler(async (req, res) => {
 
 export { 
   createOrder,
-  updateInventory
+  updateInventory,
+  getUserOrders
 };

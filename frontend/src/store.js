@@ -6,6 +6,7 @@ import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdatePr
 import { cartDetailsReducer, cartQtyMessageReducer, cartMovedMessageReducer } from './reducers/cartReducers';
 import { checkoutDataReducer, orderLoadingReducer } from './reducers/checkoutReducers';
 import { mapReducer } from './reducers/mapReducers';
+import { userOrderListReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -20,7 +21,8 @@ const reducer = combineReducers({
   cartMovedChanges: cartMovedMessageReducer,
   checkoutData: checkoutDataReducer,
   orderLoading: orderLoadingReducer,
-  mapLoadedScript: mapReducer
+  mapLoadedScript: mapReducer,
+  userOrders: userOrderListReducer
 });
 
 //See if user info has been stored in local storage
