@@ -22,10 +22,9 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      // addresses: user.addresses,
-      // phoneNumber: user.phoneNumber,
       cart: user.cart,
       wishList: user.wishList,
+      loggedIn: true,
       token: generateToken(user._id)
     })
   } else {
@@ -59,10 +58,9 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      // addresses: user.addresses,
-      // phoneNumber: user.phoneNumber,
       cart: user.cart,
       wishList: user.wishList,
+      loggedIn: true,
       token: generateToken(user._id) 
     })
   } else {

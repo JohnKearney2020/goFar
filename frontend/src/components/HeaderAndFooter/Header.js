@@ -70,7 +70,7 @@ const Header = () => {
                     <i className='fas fa-shopping-cart'></i> Cart
                   </Nav.Link>
                 </LinkContainer>
-                {userInfo.name ? (
+                {userInfo.loggedIn ? (
                   <NavDropdown title={userInfo.name} id='username'>
                     <LinkContainer to='/profile/userInfo'>
                       <NavDropdown.Item>Profile</NavDropdown.Item>

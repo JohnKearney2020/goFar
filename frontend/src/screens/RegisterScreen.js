@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
+import { USER_REGISTER_RESET } from '../constants/userConstants';
 
 const RegisterScreen = ({ location, history }) => {
 
@@ -31,7 +32,7 @@ const RegisterScreen = ({ location, history }) => {
 
   useEffect(() => {
     // if a user is already logged in, redirect them
-    if(userInfo.name){
+    if(userInfo.loggedIn === true){
         history.push(redirect);
     }
   }, [ history, userInfo, redirect]);
@@ -68,12 +69,18 @@ const RegisterScreen = ({ location, history }) => {
     }
 
     if(anyErrors) { return }
-    dispatch(register(name, email, password));
+    dispatch(register(name, email.toLocaleLowerCase(), password));
   }
+
+  //This should clear our qty and moved messages and cart product details once users navigate away from the cart
+  useLayoutEffect(() => () => {
+    dispatch({type: USER_REGISTER_RESET});
+  }, [dispatch]);
 
   return (
     <FormContainer>
       <h1>Sign Up</h1>
+      {/* Clear error message using useLayoutEffect */}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>

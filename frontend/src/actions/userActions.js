@@ -48,7 +48,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: CART_QTY_MESSAGE_RESET });
   dispatch({ type: CART_MOVED_MESSAGE_RESET });
   dispatch({ type: CART_PRODUCT_DETAILS_RESET });
-  toast.info('Log Out Successful!', { position: 'top-right', autoClose: 3500 });
+  toast.info('Log Out Successful!', { position: 'bottom-center', autoClose: 3500 });
 }
 
 export const register = (name, email, password ) => async (dispatch) => {

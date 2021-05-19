@@ -23,7 +23,7 @@ const LoginScreen = ({ location, history }) => {
 
   useEffect(() => {
     // if a user is already logged in, redirect them
-    if(userInfo.name){
+    if(userInfo.loggedIn === true){
       history.push(redirect);
     }
   }, [history, userInfo, redirect]);
@@ -44,10 +44,11 @@ const LoginScreen = ({ location, history }) => {
       anyErrors = true;
     }
     if(anyErrors) { return }
-    dispatch(login(email, password));
+    dispatch(login(email.toLowerCase(), password));
   }
 
   const guestLoginHandler = (e) => {
+    e.preventDefault();
     console.log('guest login clicked');
     let guestEmail = 'guest@example.com';
     let guestPassword = '12345';
