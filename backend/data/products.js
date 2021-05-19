@@ -1,24 +1,3 @@
-// import {
-//   ascentBlueTinyImg,
-//   blackTinyImg,
-//   dkLodenTinyImg,
-//   dkSmokeTinyImg,
-//   duskNavyTinyImg,
-//   dustySageTinyImg,
-//   graphiteTinyImg,
-//   htrGrayTinyImg,
-//   lodenTinyImg,
-//   medIndigoTinyImg,
-//   mulberryTinyImg,
-//   pumiceTinyImg,
-//   rustTinyImg,
-//   seapineTinyImg,
-//   slateGreenTinyImg,
-//   sprigTinyImg,
-//   stormTinyImg
-// } from './tinyImageConstants.js';
-
-
 //Import Individual Products
 import { trailTightLeggings }  from './Products/Women/Pants/trailTightLeggings.js';
 import { guideProPants }  from './Products/Women/Pants/guideProPants.js';
