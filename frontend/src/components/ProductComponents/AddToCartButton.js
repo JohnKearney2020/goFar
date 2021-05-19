@@ -32,12 +32,12 @@ const AddToCartButton = ({ productID, productName, quantity, color, qtyInStock, 
         setCartErrorMessage(null);
         setCartWarningMessage(null);
       }
-      if(!userInfo.name){
+      if(userInfo.loggedIn === false){
         setCartLoginMessage('You need to sign in to add products to your cart or wishlist. You can sign in as a guest or create an account and sign in.')
       }
     }
     
-  }, [loaded, color, size, sizeCategory, qtyInStock, outOfStock]);
+  }, [loaded, color, size, sizeCategory, qtyInStock, outOfStock, userInfo.loggedIn]);
 
   const addToCartHandler =  async () => {
     setCartErrorMessage(null); //reset any existing cart error messages

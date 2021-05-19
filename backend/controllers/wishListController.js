@@ -58,6 +58,7 @@ const addUserWishListItem = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {
@@ -142,6 +143,7 @@ const updateWholeWishList = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {

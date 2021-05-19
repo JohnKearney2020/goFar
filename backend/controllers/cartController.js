@@ -56,6 +56,7 @@ const addCartItem = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {
@@ -107,6 +108,7 @@ const deleteCartItem = asyncHandler(async (req, res) => {
         isAdmin: updatedUser.isAdmin,
         cart: updatedUser.cart,
         wishList: updatedUser.wishList,
+        loggedIn: true,
         token: generateToken(updatedUser._id) 
       })
     } else {
@@ -182,6 +184,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {
@@ -210,6 +213,7 @@ const updateWholeCart = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {
@@ -255,6 +259,7 @@ const toggleSavedForLater = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
   } else {

@@ -1,4 +1,4 @@
-import { USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL } from '../constants/orderConstants';
+import { USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL, USER_ORDER_LIST_RESET } from '../constants/orderConstants';
 
 export const userOrderListReducer = (state = { orders: [], page: 1, pages: 1 }, action) => {
   switch(action.type) {
@@ -12,6 +12,8 @@ export const userOrderListReducer = (state = { orders: [], page: 1, pages: 1 }, 
       };
     case USER_ORDER_LIST_FAIL:
       return { loading: false, error: action.payload };
+    case USER_ORDER_LIST_RESET:
+      return { orders: [], page: 1, pages: 1 };
     default: 
       return state;
   } 

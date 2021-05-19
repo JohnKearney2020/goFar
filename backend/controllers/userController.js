@@ -119,6 +119,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       phoneNumber: updatedUser.phoneNumber,
       cart: updatedUser.cart,
       wishList: updatedUser.wishList,
+      loggedIn: true,
       token: generateToken(updatedUser._id) 
     })
 
