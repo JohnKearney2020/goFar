@@ -10,6 +10,7 @@ const reviewSchema = mongoose.Schema({  //we want to know which product is tied 
   productName: { type: String, required: true },
   userName: { type: String, required: true },
   rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
+  heading: { type: String, required: true },
   comment: { type: String, required: true },
   verified: { type: Boolean, required: true },
 }, {
