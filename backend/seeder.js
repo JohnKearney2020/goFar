@@ -2,11 +2,13 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import users from './data/users.js';
 import products from './data/products.js';
+import reviews from './data/reviews.js';
 
 //Models
 import Product from './models/productModel.js';
 import User from './models/userModel.js';
 import Order from './models/orderModel.js'; //we aren't seeding oders here, but by importing it we can gain the ability to destroy all Orders if we want
+import Review from './models/reviewModel.js';
 
 import connectDB from './config/db.js';
 
@@ -19,6 +21,7 @@ const importData = async () => {
     await Order.deleteMany(); //not passing any arguments will delete everything
     await User.deleteMany();
     await Product.deleteMany();
+    await Review.deleteMany();
 
     //--- Users ---
     //We store our created users in a variable as an array of created users. We do this b/c our products are tied to the user that created them,
@@ -31,7 +34,24 @@ const importData = async () => {
     const sampleProducts = products.map(product => {
       return { ...product, user: adminUser}
     })
-    await Product.insertMany(sampleProducts);
+    const seededProducts = await Product.insertMany(sampleProducts);
+    // console.log('Seeded Products!: ' .red.bold)
+    // console.log(seededProducts)
+    //--- Reviews ---
+    // Loop through each of the reviews. Find the matching product and add the product's ID to the review
+    for(let review of reviews){
+      innerLoop:
+      for(let product of seededProducts){
+        if(product.name === review.productName){
+          review.productID = product._id;
+          console.log(`Found a Match!`)
+          break innerLoop; //Move on to the next review
+        }
+      }
+    }
+    console.log('REVEIWS' .red.bold)
+    console.log(reviews)
+    await Review.insertMany(reviews);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
