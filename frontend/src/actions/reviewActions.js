@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { REVIEWS_REQUEST, REVIEWS_SUCCESS, REVIEWS_FAIL,  REVIEWS_RESET } from '../constants/reviewConstants';
 
-export const listProductReviews = (productID, pageNumber = '') => async (dispatch) => {
+export const listProductReviews = (productID, pageNumber = '', totalRating = -1) => async (dispatch) => {
   
   console.log('In listProductReviews Action')
   // set headers to json
@@ -15,7 +15,7 @@ export const listProductReviews = (productID, pageNumber = '') => async (dispatc
   try {
     dispatch({ type: REVIEWS_REQUEST });
     // /api/products?keyword=${keyword}&gender=${gender}&pageNumber=${pageNumber}
-    const { data } = await axios.get(`/api/reviews?productID=${productID}&pageNumber=${pageNumber}`, config); //fetch review data
+    const { data } = await axios.get(`/api/reviews?productID=${productID}&pageNumber=${pageNumber}&totalRating=${totalRating}`, config); //fetch review data
     dispatch({ //if that fetch is successful
       type: REVIEWS_SUCCESS,
       payload: data

@@ -226,7 +226,7 @@ const ProductScreen = ({ match }) => {
                     }
                   </ListGroup.Item>
                   <ListGroup.Item className='border-0'>
-                    <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
+                    <ProductRating useTotalRating={true}/>
                   </ListGroup.Item>
                 </ListGroup> 
                 {/* Size Categories */}
@@ -378,11 +378,17 @@ const ProductScreen = ({ match }) => {
             </Col>
           </Row>
           <hr/>
-          <Row>
-            {
-              loaded && <ProductReviews productID={match.params.id}/>
-            }
+          {/* Reviews */}
+          <Row className='justify-content-center my-5'>
+            <h1 className='display-4'>Reviews</h1>
           </Row>
+          { loaded && 
+            <Row>
+              {/* <ProductRating value={rating}/> */}
+            </Row>
+          }
+
+          { loaded && <ProductReviews productID={match.params.id}/> }
         </>
       }
     </>

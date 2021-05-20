@@ -2,21 +2,41 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import './ProductRating.css';
 
+import { useDispatch, useSelector } from 'react-redux';
 // color is an optional prop we can pass if we want to change the color of the stars in the rating component
-const ProductRating = ({ value, text, color }) => {
+// userTotalRating === true when we want to display the average of all review ratings. false when we want to show an individual user's
+// review
+const ProductRating = ({ color, rating, useTotalRating }) => {
+  //Set up the global state
+  const productReviews = useSelector(state => state.productReviews);
+  const { loading, reviews, loaded, totalRating, totalReviews } = productReviews;
+
   return (
-    <div className='productRating'>
-      { [1,2,3,4,5].map(index => (
-          <i key={index} style={{color}}  className={value >= index ? 'fas fa-star' : value >= index - 0.5 ? 'fa-star-half-alt' : 'far fa-star'}></i>
-        ))
+    <>
+      {loaded && 
+        <div className='productRating'>
+          { [1,2,3,4,5].map(index => (
+              <i key={index} style={{color}}  className={
+                useTotalRating ? 
+                (totalRating >= index ? 'fas fa-star' : totalRating >= index - 0.5 ? 'fa-star-half-alt' : 'far fa-star') :
+                (rating >= index ? 'fas fa-star' : rating >= index - 0.5 ? 'fa-star-half-alt' : 'far fa-star')
+              }>
+              </i>
+            ))
+          }
+          {useTotalRating && <span>{`${totalReviews} ${totalReviews === 1 ? 'review' : 'reviews'}`}</span>}
+        </div>
       }
-      <span>{text && text}</span>
-    </div>
+
+    </>
   )
 };
 
-// ProductRating.defaultProps = { color:  '#F8E825'};
-ProductRating.defaultProps = { color:  'black'};
+ProductRating.defaultProps = { 
+  color:  'black',
+  rating: 0,
+  useTotalRating: false
+};
 
 //If we felt like checking our protypes:
 // ProductRating.propTypes = {
