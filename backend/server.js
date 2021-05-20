@@ -11,6 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import wishListRoutes from './routes/wishListRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 
 dotenv.config(); //load our environmental variables
 connectDB(); // connect to our database!
@@ -65,9 +66,14 @@ app.use('/api/users/cart', cartRoutes);
 app.use('/api/users/wishlist', wishListRoutes);
 
 //========================================
-// Order related routes - Update User
+// Order related routes
 //========================================
 app.use('/api/orders', orderRoutes);
+
+//========================================
+// Review Related Routes
+//========================================
+app.use('/api/reviews', reviewRoutes);
 
 //========================================
 // Paypal

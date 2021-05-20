@@ -28,6 +28,7 @@ const ProductScreen = ({ match }) => {
   //State
   const productDetails = useSelector(state => state.productDetails);
   const { loading, error, product, loaded } = productDetails;
+
   const [selectedColor, setSelectedColor] = useState(colorFromUrl);
   const [colorSalePrice, setColorSalePrice] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -378,7 +379,9 @@ const ProductScreen = ({ match }) => {
           </Row>
           <hr/>
           <Row>
-            <ProductReviews />
+            {
+              loaded && <ProductReviews productID={match.params.id}/>
+            }
           </Row>
         </>
       }
