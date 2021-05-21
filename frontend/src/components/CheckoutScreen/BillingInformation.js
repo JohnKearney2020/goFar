@@ -123,7 +123,6 @@ const BillingInformation = () => {
             <NewAddressModal 
               show={showNewAddressModal}
               closeModalHandler={closeNewAddressModalHandler}
-              billingAddress={true}
             />
           }
         </Row>

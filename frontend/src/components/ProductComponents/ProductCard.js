@@ -40,7 +40,7 @@ const ProductCard = ({ product }) => {
         </Card.Text>}
         <Card.Text as='div'>{product.colors.length} colors</Card.Text>
         <Card.Text as='div'>
-          <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
+          <ProductRating />
         </Card.Text>
         <hr></hr>
         <ProductColors images={product.colors} colorSelectHandler={colorSelectHandler} productColorsArray={product.colors}/>

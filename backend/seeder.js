@@ -35,8 +35,6 @@ const importData = async () => {
       return { ...product, user: adminUser}
     })
     const seededProducts = await Product.insertMany(sampleProducts);
-    // console.log('Seeded Products!: ' .red.bold)
-    // console.log(seededProducts)
     //--- Reviews ---
     // Loop through each of the reviews. Find the matching product and add the product's ID to the review
     for(let review of reviews){
@@ -49,9 +47,12 @@ const importData = async () => {
         }
       }
     }
-    console.log('REVEIWS' .red.bold)
-    console.log(reviews)
-    await Review.insertMany(reviews);
+    // .insertMany() is problematic for our reviews because it gives them all an idential timestamp. When we try to sort by createdAt
+    // this cause issues b/c createdAt is the same for all reviews. We will use a loop and .create() instead
+    // await Review.insertMany(reviews);
+    for(let eachReview of reviews){
+      await Review.create(eachReview);
+    }
 
     console.log('Data Imported!'.green.inverse);
     process.exit();

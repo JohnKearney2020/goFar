@@ -20,6 +20,8 @@ import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
 import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
+import AddReviewForm from '../components/ProductComponents/AddReviewForm';
+import AddReviewRow from '../components/ProductComponents/AddReviewRow';
 
 const ProductScreen = ({ match }) => {
 
@@ -226,7 +228,7 @@ const ProductScreen = ({ match }) => {
                     }
                   </ListGroup.Item>
                   <ListGroup.Item className='border-0'>
-                    <ProductRating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? `review` : `reviews`}`}/>
+                    <ProductRating useTotalRating={true}/>
                   </ListGroup.Item>
                 </ListGroup> 
                 {/* Size Categories */}
@@ -378,11 +380,12 @@ const ProductScreen = ({ match }) => {
             </Col>
           </Row>
           <hr/>
-          <Row>
-            {
-              loaded && <ProductReviews productID={match.params.id}/>
-            }
+          {/* Reviews */}
+          <Row className='justify-content-center my-5'>
+            <h1 className='display-4'>Reviews</h1>
           </Row>
+          <AddReviewRow />
+          { loaded && <ProductReviews productID={match.params.id}/> }
         </>
       }
     </>

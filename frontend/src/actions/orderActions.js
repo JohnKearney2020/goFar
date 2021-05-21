@@ -4,7 +4,6 @@ import { USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL 
 
 export const listUserOrders = (pageNumber = '') => async (dispatch, getState) => {
   
-  console.log('IN listUserOrders')
   const { userLogin: { userInfo } } = getState();
   // set headers to json
   const config = {

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { ORDER_LOADING_TRUE, ORDER_LOADING_FALSE } from '../../constants/checkoutConstants';
 import { addGoogleMapsScript } from '../../utilityFunctions/googleMapsScript';
-import { MAP_LOADED_SCRIPT_TRUE, MAP_LOADED_SCRIPT_FALSE } from '../../constants/mapConstants';
+import { MAP_LOADED_SCRIPT_TRUE } from '../../constants/mapConstants';
 import Backdrop from '../../components/Modals/Backdrop';
 
 const CustomPayPalButton = ({ history }) => {
@@ -45,7 +45,8 @@ const CustomPayPalButton = ({ history }) => {
   const updateInventory = async () => {
     // This is the first of our functions to run after the user completes the PayPal transaction
     try {
-      const { data:data2 } = await axios.put('/api/orders/inventoryupdate', { cart }, config);
+      // const { data:data2 } = await axios.put('/api/orders/inventoryupdate', { cart }, config);
+      await axios.put('/api/orders/inventoryupdate', { cart }, config);
     } catch (error) {
       console.log('there was an error updating the item inventory')
       console.log(error)

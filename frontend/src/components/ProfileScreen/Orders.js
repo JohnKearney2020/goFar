@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Accordion, Col, Row } from 'react-bootstrap';
 
@@ -11,7 +11,7 @@ import { MAP_LOADED_SCRIPT_TRUE } from '../../constants/mapConstants';
 import { listUserOrders } from '../../actions/orderActions';
 import './Orders.css';
 
-const Orders = ({ match }) => {
+const Orders = () => {
   const dispatch = useDispatch();
   const mountedGoogleScript = useRef(false);
   const haveFetchedOrders = useRef(false);
