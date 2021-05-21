@@ -49,9 +49,12 @@ const importData = async () => {
         }
       }
     }
-    console.log('REVEIWS' .red.bold)
-    console.log(reviews)
-    await Review.insertMany(reviews);
+    // .insertMany() is problematic for our reviews because it gives them all an idential timestamp. When we try to sort by createdAt
+    // this cause issues b/c createdAt is the same for all reviews. We will use a loop and .create() instead
+    // await Review.insertMany(reviews);
+    for(let eachReview of reviews){
+      await Review.create(eachReview);
+    }
 
     console.log('Data Imported!'.green.inverse);
     process.exit();

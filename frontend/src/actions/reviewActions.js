@@ -9,7 +9,6 @@ export const listProductReviews = (productID, pageNumber = '', totalRating = -1)
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: `Bearer ${userInfo.token}` //Our middleware is expectinga token
     }
   }
   try {

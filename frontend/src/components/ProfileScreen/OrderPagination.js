@@ -2,8 +2,6 @@ import React from 'react';
 import { Pagination } from 'react-bootstrap';
 
 const OrderPagination = ({ pages, page, changePageHandler}) => {
-  console.log('PAGES: ', pages)
-  console.log('PAGE: ', page)
 
   return pages > 1 && (
     <Pagination className='justify-content-center'>

@@ -8,6 +8,7 @@ import { Accordion, Card, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import { listProductReviews } from '../../actions/reviewActions';
 import { formatDateDayMonthYear } from '../../utilityFunctions/formatDayMonthYear';
 import ProductRating from './ProductRating';
+import ReviewPagination from './ReviewPagination';
 
 
 
@@ -22,8 +23,10 @@ const ProductReviews = ({ productID }) => {
 
   useEffect(() => {
     console.log('in ProductReviews useEffect')
-    dispatch(listProductReviews(productID, page, totalRating));
-  }, [dispatch, productID, page])
+    if(!loaded){
+      dispatch(listProductReviews(productID, page, totalRating));
+    }
+  }, [dispatch, productID, page, totalRating])
 
   const firstReviews = (
     <>
@@ -68,6 +71,7 @@ const ProductReviews = ({ productID }) => {
           </Row>
         </div>
       ))}
+      <ReviewPagination productID={productID} />
     </>
   )
 

@@ -32,6 +32,7 @@ const getReviewByProductId = asyncHandler(async (req, res) => {
 
   // '-1' is descending order from newest to oldest. '1' is ascending order from oldest to newest
   const reviews = await Review.find({  productID: productID }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
+
   if(reviews){
     // We return what the current page is, and how many pages total their are rounded up
     res.json({ reviews, page, pages: Math.ceil(count / pageSize), totalRating, totalReviews: count });
