@@ -19,7 +19,7 @@ const ReviewPagination = ({ productID }) => {
 
 
   return pages > 1 && (
-    <Pagination className='justify-content-center'>
+    <Pagination className='justify-content-center mb-5'>
       {[...Array(pages).keys()].map(pageNum => (
           <Pagination.Item key={pageNum + 1} active={pageNum + 1 === page} onClick={changePageHandler} data-pagenumber={pageNum + 1}>
             {pageNum + 1}

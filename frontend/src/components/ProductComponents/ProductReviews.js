@@ -77,6 +77,7 @@ const ProductReviews = ({ productID }) => {
               </ListGroup>
             </Col>
           </Row>
+          <hr className='w-60'/>
         </div>
       ))}
       <ReviewPagination productID={productID} />
