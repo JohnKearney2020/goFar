@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Row, Form, Button, Col } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 
 import { checkoutPaymentMethod } from '../../actions/checkoutActions';
 
 const PaymentInformation = () => {
-
-  // const paymentOptions = ['PayPal or Credit Card', 'Test'];
 
   const dispatch = useDispatch();
 

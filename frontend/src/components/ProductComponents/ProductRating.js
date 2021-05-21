@@ -2,14 +2,14 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import './ProductRating.css';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 // color is an optional prop we can pass if we want to change the color of the stars in the rating component
 // userTotalRating === true when we want to display the average of all review ratings. false when we want to show an individual user's
 // review
 const ProductRating = ({ color, rating, useTotalRating }) => {
   //Set up the global state
   const productReviews = useSelector(state => state.productReviews);
-  const { loading, reviews, loaded, totalRating, totalReviews } = productReviews;
+  const { loaded, totalRating, totalReviews } = productReviews;
 
   return (
     <>

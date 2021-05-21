@@ -8,13 +8,15 @@ const ReviewPagination = ({ productID }) => {
   const dispatch = useDispatch();
 
   const productReviews = useSelector(state => state.productReviews);
-  const { loading, loaded, reviews, page, pages, totalRating, totalReviews } = productReviews;
+  const { page, pages, totalRating } = productReviews;
   
   const changePageHandler = (e) => {
     // setPage(Number(e.target.dataset.pagenumber));
     // listProductReviews(productID, pageNumber, totalRating)
     dispatch(listProductReviews(productID, e.target.dataset.pagenumber, totalRating));
   }
+
+
 
   return pages > 1 && (
     <Pagination className='justify-content-center'>

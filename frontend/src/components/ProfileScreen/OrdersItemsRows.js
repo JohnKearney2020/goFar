@@ -3,9 +3,9 @@ import { Row, Col, ListGroup } from 'react-bootstrap';
 import CartRow from '../../components/CartScreen/CartRow';
 
 const OrdersItemsRows = ({ items }) => {
-  {/* ============================================== */}
-  {/*                Products in Cart                */}
-  {/* ============================================== */}
+  //=============================================
+  //               Products in Cart              
+  //=============================================
   return (
     <Row> {/* Cart Items */}
       <Col className='' md={12}> {/* Left Side of Screen */}

@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-import { REVIEWS_REQUEST, REVIEWS_SUCCESS, REVIEWS_FAIL,  REVIEWS_RESET } from '../constants/reviewConstants';
+import { REVIEWS_REQUEST, REVIEWS_SUCCESS, REVIEWS_FAIL } from '../constants/reviewConstants';
 
 export const listProductReviews = (productID, pageNumber = '', totalRating = -1) => async (dispatch) => {
-  
-  console.log('In listProductReviews Action')
   // set headers to json
   const config = {
     headers: {

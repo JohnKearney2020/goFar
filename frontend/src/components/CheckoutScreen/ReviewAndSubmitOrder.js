@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom'; //Since this component does not h
 
 import CartRow from '../CartScreen/CartRow';
 import { checkoutSubTotal, checkoutItemTally, checkoutShippingCost, checkoutCartTotal } from '../../actions/checkoutActions';
-import Loader from '../Loader';
 import Message from '../Message';
 import CustomPayPalButton from '../CheckoutScreen/CustomPayPalButton';
 import { addDecimals } from '../../utilityFunctions/addDecimals';

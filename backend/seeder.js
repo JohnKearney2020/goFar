@@ -35,8 +35,6 @@ const importData = async () => {
       return { ...product, user: adminUser}
     })
     const seededProducts = await Product.insertMany(sampleProducts);
-    // console.log('Seeded Products!: ' .red.bold)
-    // console.log(seededProducts)
     //--- Reviews ---
     // Loop through each of the reviews. Find the matching product and add the product's ID to the review
     for(let review of reviews){

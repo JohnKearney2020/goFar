@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Row, Col, ListGroup } from 'react-bootstrap';
 
-import { Accordion, Card, Button, Row, Col, ListGroup } from 'react-bootstrap';
-// import Accordion from 'react-bootstrap/Accordion'
-// import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 import { listProductReviews } from '../../actions/reviewActions';
 import { formatDateDayMonthYear } from '../../utilityFunctions/formatDayMonthYear';
 import ProductRating from './ProductRating';
 import ReviewPagination from './ReviewPagination';
+import { REVIEWS_RESET } from '../../constants/reviewConstants';
 
 
 
@@ -16,19 +15,28 @@ const ProductReviews = ({ productID }) => {
   
   const dispatch = useDispatch();
 
+  const haveFetchedReviews = useRef(false);
+
   //Set up the global state
   const productReviews = useSelector(state => state.productReviews);
-  const { loading, loaded, reviews, page, pages, totalRating, totalReviews } = productReviews;
+  const { reviews, page, totalRating } = productReviews;
 
 
   useEffect(() => {
-    console.log('in ProductReviews useEffect')
-    if(!loaded){
+    // if(!loaded){
+    if(haveFetchedReviews.current === false){
       dispatch(listProductReviews(productID, page, totalRating));
+      haveFetchedReviews.current = true;
     }
+    // }
   }, [dispatch, productID, page, totalRating])
 
-  const firstReviews = (
+  //This should clear the reviews out of the global state when users navigate away from this page
+  useLayoutEffect(() => () => {
+    dispatch({type: REVIEWS_RESET});
+  }, [dispatch]);
+
+  return (
     <>
       {reviews.map((review) => (
         // <h4 key={idx}>{eachReview.heading}</h4>
@@ -72,12 +80,6 @@ const ProductReviews = ({ productID }) => {
         </div>
       ))}
       <ReviewPagination productID={productID} />
-    </>
-  )
-
-  return (
-    <>
-      {firstReviews}
     </>
   )
 }

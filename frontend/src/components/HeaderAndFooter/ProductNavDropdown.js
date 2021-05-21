@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Container, Col, ListGroup, Card, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container, Col, Row } from 'react-bootstrap';
 
 import './ProductNavDropdown.css';
 import ProductDropdownCard from './ProductDropdownCard';

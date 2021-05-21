@@ -34,7 +34,7 @@ const CheckoutScreen = ({ history }) => {
 
   const paymentMethod = useSelector(state => state.checkoutData.paymentMethod);
 
-  const orderLoading = useSelector(state => state.orderLoading.loading);
+  // const orderLoading = useSelector(state => state.orderLoading.loading);
 
   //Set up local state
   const [checkoutActiveKey, setCheckoutActiveKey] = useState("0");
@@ -45,7 +45,8 @@ const CheckoutScreen = ({ history }) => {
 
   useEffect(() => {
     if(userInfo){
-      if(cart.length === 0 && !orderLoading){ history.push('/') };
+      // if(cart.length === 0 && !orderLoading){ history.push('/') };
+      if(cart.length === 0){ history.push('/') };
     }
   }, [userInfo, cart, history]);
 
@@ -59,9 +60,6 @@ const CheckoutScreen = ({ history }) => {
     dispatch({type: CHECKOUT_RESET});
   }, [dispatch]);
 
-  // const submitCheckoutHandler = () => {
-  //   console.log('clicked submit!')
-  // }
 
   const cartEditHandler = () => {
     history.push('/cart');

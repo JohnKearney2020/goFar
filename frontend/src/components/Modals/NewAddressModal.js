@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { updateUserProfile } from '../../actions/userActions';
 import { getUserDetails } from '../../actions/userActions';
-import { checkoutBillingAddress } from '../../actions/checkoutActions';
 
-const NewAddressModal = ({ show, closeModalHandler, billingAddress, shippingAddress}) => {
+const NewAddressModal = ({ show, closeModalHandler }) => {
   
   const dispatch = useDispatch();
 

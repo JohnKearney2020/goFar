@@ -115,7 +115,6 @@ const ShippingInformation = () => {
             <NewAddressModal 
               show={showNewAddressModal}
               closeModalHandler={closeNewAddressModalHandler}
-              billingAddress={true}
             />
           }
         </Row>

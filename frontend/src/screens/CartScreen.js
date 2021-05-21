@@ -37,6 +37,9 @@ const CartScreen = ({ history }) => {
   const { cartMovedMessage } = cartMovedChanges;
 
   // Set up local state
+  // This forceReRender state is a bandaid. With more time I would not update the cart here in the useEffect(). Instead, I'd
+  // do it in an action and feed the updated cart to the global state.
+  // eslint-disable-next-line
   const [forceReRender, setForceReRender] = useState(false);
 
   const checkoutHandler = async () => {
@@ -84,7 +87,7 @@ const CartScreen = ({ history }) => {
           for(let upToDateItem of cartProducts){
             // Destructure the upToDateItem object
             // const { _id: id2, defaultPrice, defaultSalePrice, defaultQty, sizes, hasSizes } = upToDateItem;
-            const { _id: id2, sizes, hasSizes } = upToDateItem;
+            const { _id: id2, sizes } = upToDateItem;
 
             // Drill down into the detailed product object to look for a match
             if(id1 === id2){//If the product ID's match

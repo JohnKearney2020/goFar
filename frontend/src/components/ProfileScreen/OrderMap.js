@@ -4,13 +4,9 @@ import './OrderMap.css';
 
 const OrderMap = ({ shippingAddressString, zoom, latLng }) => {
   const mapRef = useRef();
-  // const { line1, line2, city, state, zipCode } = address;
-
-  // const addressForMap = `${line1} ${line2 ? line2 : ''} ${city}, ${state} ${zipCode}`;
 
   // Get the mapLoadedScript status from the global state
   const mapScriptLoaded = useSelector(state => state.mapLoadedScript.loaded);
-  // const { cart } = userInfo;
 
   useEffect(() => {
     // if(window.google){ //If the Google Maps Script has already been loaded and added to the body
@@ -20,6 +16,7 @@ const OrderMap = ({ shippingAddressString, zoom, latLng }) => {
       });
     
       map.setCenter(latLng);
+      // eslint-disable-next-line
       var marker = new window.google.maps.Marker({
         map: map,
         position: latLng
@@ -28,7 +25,7 @@ const OrderMap = ({ shippingAddressString, zoom, latLng }) => {
     return () => {
       
     }
-  }, [zoom, mapScriptLoaded]);
+  }, [zoom, mapScriptLoaded, latLng]);
 
   return (
     <div ref={mapRef} className='map'>
