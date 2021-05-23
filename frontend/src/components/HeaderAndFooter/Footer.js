@@ -12,7 +12,7 @@ const Footer = () => {
           </Col>
           <Col className='d-flex justify-content-center'>
             <div className='d-block text-center'>
-              <img src='./images/footer_bottom.png' alt=""></img>  
+              <img src='/images/footer_bottom.png' alt=""></img>  
               <h5 className='pt-2 m-0'>Copyright  2021 &copy;  Go Far</h5> 
             </div>             
           </Col>

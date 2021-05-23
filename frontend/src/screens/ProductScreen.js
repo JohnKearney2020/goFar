@@ -14,14 +14,13 @@ import ProductDescription from '../components/ProductComponents/ProductDescripti
 import ProductFeatures from '../components/ProductComponents/ProductFeatures';
 import ProductCare from '../components/ProductComponents/ProductCare';
 import ProductMaterials from '../components/ProductComponents/ProductMaterials';
-import ProductReviews from '../components/ProductComponents/ProductReviews';
+import ProductReviews from '../components/ProductComponents/ProductReviews/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
 import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
-import AddReviewForm from '../components/ProductComponents/AddReviewForm';
-import AddReviewRow from '../components/ProductComponents/AddReviewRow';
+import AddReviewRow from '../components/ProductComponents/ProductReviews/AddReviewRow';
 
 const ProductScreen = ({ match }) => {
 
@@ -384,7 +383,7 @@ const ProductScreen = ({ match }) => {
           <Row className='justify-content-center my-5'>
             <h1 className='display-4'>Reviews</h1>
           </Row>
-          <AddReviewRow />
+          <AddReviewRow productID={match.params.id}/>
           { loaded && <ProductReviews productID={match.params.id}/> }
         </>
       }

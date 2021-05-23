@@ -220,9 +220,9 @@ const NewAddressModal = ({ show, closeModalHandler }) => {
   )
 }
 
-NewAddressModal.defaultProps = {
-  billingAddress: false,
-  shippingAddress: false
-}
+// NewAddressModal.defaultProps = {
+//   billingAddress: false,
+//   shippingAddress: false
+// }
 
 export default NewAddressModal;

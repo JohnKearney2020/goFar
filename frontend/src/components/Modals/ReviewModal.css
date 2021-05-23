@@ -1,0 +1,13 @@
+#reviewHelpBlock.textWarning { 
+  /* This overrides the 'text-muted' class */
+  /* color: #D9534F !important; */
+  color: #F0AD4E !important;
+  font-weight: bold;
+}
+
+#titleHelpBlock.textWarning{ 
+  /* This overrides the 'text-muted' class */
+  /* color: #D9534F !important; */
+  color: #F0AD4E !important;
+  font-weight: bold;
+}

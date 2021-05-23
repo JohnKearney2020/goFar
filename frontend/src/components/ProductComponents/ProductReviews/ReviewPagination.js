@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pagination } from 'react-bootstrap';
-import { listProductReviews } from '../../actions/reviewActions';
+import { listProductReviews } from '../../../actions/reviewActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ReviewPagination = ({ productID }) => {
