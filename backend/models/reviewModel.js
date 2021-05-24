@@ -7,6 +7,11 @@ const reviewSchema = mongoose.Schema({  //we want to know which product is tied 
     required: true,
     ref: 'Product'
   },
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
   productName: { type: String, required: true },
   userName: { type: String, required: true },
   rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.

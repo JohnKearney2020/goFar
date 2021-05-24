@@ -42,7 +42,8 @@ const importData = async () => {
       for(let product of seededProducts){
         if(product.name === review.productName){
           review.productID = product._id;
-          console.log(`Found a Match!`)
+          review.userID = adminUser;
+          // console.log(`Found a Match!`)
           break innerLoop; //Move on to the next review
         }
       }
