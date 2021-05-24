@@ -17,13 +17,16 @@ export const addProductReview = (productID, title, review) => async (dispatch, g
     }
   }
 
+  
+
   try {
     dispatch({ type: ADD_REVIEW_LOADING_TRUE });
-
-    setTimeout(() => {
-      dispatch({ type: ADD_REVIEW_LOADING_FALSE }); //We've set up the reducer to also hide the modal here
-      return 'dispatch Test';
-    }, 2000);
+    const { data } = await axios.post(`/api/reviews`, { productID, title, review }, config)
+    dispatch({ type: ADD_REVIEW_LOADING_FALSE }); //We've set up the reducer to also hide the modal here
+    // setTimeout(() => {
+    //   dispatch({ type: ADD_REVIEW_LOADING_FALSE }); //We've set up the reducer to also hide the modal here
+    //   return 'dispatch Test';
+    // }, 2000);
 
 
     // /api/products?keyword=${keyword}&gender=${gender}&pageNumber=${pageNumber}
@@ -34,7 +37,7 @@ export const addProductReview = (productID, title, review) => async (dispatch, g
     // })
   } catch (error) {
     dispatch({
-      type: REVIEWS_FAIL,
+      type: ADD_REVIEW_LOADING_FALSE, //We've set up the reducer to also hide the modal here
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }

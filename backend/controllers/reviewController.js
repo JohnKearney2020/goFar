@@ -1,6 +1,61 @@
 import asyncHandler from 'express-async-handler';
 import Review from '../models/reviewModel.js';
 
+// @desc     Create a new review
+// @route    POST /api/reviews
+// @access   Private
+const createReview = asyncHandler(async (req, res) => {
+  const { productID, title, review } = req.body;
+  console.log(`productID: ${productID}`)
+  console.log(`title: ${title}`)
+  console.log(`review: ${review}`)
+
+    res.status(201).json({ //201 status means something was created
+      created: "created review"
+      // _id: user._id,
+      // name: user.name,
+      // email: user.email,
+      // isAdmin: user.isAdmin,
+      // cart: user.cart,
+      // wishList: user.wishList,
+      // loggedIn: true,
+      // token: generateToken(user._id) 
+    })
+
+
+
+  // const userExists = await User.findOne({ email })  // here, we are effectively doing {email: email}
+
+  // if(userExists) {
+  //   res.status(400);
+  //   throw  new Error('Email address already in use. Try another?');
+  // }
+
+  // const user = await User.create({ //don't need cart or wishlist on user creation
+  //   name,
+  //   email,
+  //   password //this will automatically be encrypted thanks to the .preSave() middleware we created in the user model
+  // })
+
+  // if(user){
+  //   res.status(201).json({ //201 status means something was created
+  //     _id: user._id,
+  //     name: user.name,
+  //     email: user.email,
+  //     isAdmin: user.isAdmin,
+  //     cart: user.cart,
+  //     wishList: user.wishList,
+  //     loggedIn: true,
+  //     token: generateToken(user._id) 
+  //   })
+  // } else {
+  //   res.status(400);
+  //   throw new Error('Invalid user data');
+  // }
+})
+
+
+
 // @desc     Get all orders tied to a specific user
 // @route    GET /api/reviews
 // @query    ?productID=&pageNumber=&totalRating=
@@ -43,6 +98,7 @@ const getReviewByProductId = asyncHandler(async (req, res) => {
 })
 
 export { 
-  getReviewByProductId
+  getReviewByProductId,
+  createReview
 };
 
