@@ -1,5 +1,5 @@
 import { REVIEWS_REQUEST, REVIEWS_SUCCESS, REVIEWS_FAIL,  REVIEWS_RESET } from '../constants/reviewConstants';
-import { ADD_REVIEW_LOADING_TRUE, ADD_REVIEW_LOADING_FALSE, ADD_REVIEW_SHOWMODAL_TRUE, ADD_REVIEW_SHOWMODAL_FALSE } from '../constants/reviewConstants';
+import { ADD_REVIEW_LOADING_TRUE, ADD_REVIEW_LOADING_FALSE, ADD_REVIEW_SHOWMODAL_TRUE, ADD_REVIEW_FAIL, ADD_REVIEW_RESET } from '../constants/reviewConstants';
 
 export const addReviewReducer = (state = { loading: false, showReviewModal: false }, action) => {
   switch(action.type) {
@@ -9,7 +9,11 @@ export const addReviewReducer = (state = { loading: false, showReviewModal: fals
       return { ...state, showReviewModal: true };
     case ADD_REVIEW_LOADING_FALSE: //We can set both of these to false b/c once the review is posted the modal can hide
       return { loading: false, showReviewModal: false };
-    case ADD_REVIEW_SHOWMODAL_FALSE: //This is only triggered when users cancel out of the review modal w/o submitting it
+    case ADD_REVIEW_FAIL:
+      return { loading: false, showReviewModal: false, error: action.payload };
+    case ADD_REVIEW_RESET: //This is technically redundant, but I think a separate action type makes it more clear what we are doing
+      // ADD_REVIEW_LOADING_FALSE is used when the reviews are done loading. ADD_REVIEW_RESET is used after the product screen unmounts to 
+      // reset the state and clear any lingering error messages
       return { loading: false, showReviewModal: false };
     default: 
       return state;
@@ -21,7 +25,7 @@ export const reviewListReducer = (state = {
 }, action) => {
   switch(action.type) {
     case REVIEWS_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, loading: true, loaded: false };
     case REVIEWS_SUCCESS:
       return { 
         loading: false, 

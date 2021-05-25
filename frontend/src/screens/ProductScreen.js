@@ -17,6 +17,7 @@ import ProductMaterials from '../components/ProductComponents/ProductMaterials';
 import ProductReviews from '../components/ProductComponents/ProductReviews/ProductReviews';
 import { listProductDetails } from '../actions/productActions';
 import { PRODUCT_DETAILS_RESET } from '../constants/productConstants';
+import { ADD_REVIEW_RESET } from '../constants/reviewConstants';
 import WishListButton from '../components/ProductComponents/WishListButton';
 import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
@@ -26,10 +27,14 @@ const ProductScreen = ({ match }) => {
 
   const colorFromUrl = match.params.color;
   const dispatch = useDispatch();
-  //State
+  //Global State
   const productDetails = useSelector(state => state.productDetails);
   const { loading, error, product, loaded } = productDetails;
 
+  const addReview = useSelector(state => state.addReview);
+  const { error:reviewError } = addReview;
+  
+  //Local State
   const [selectedColor, setSelectedColor] = useState(colorFromUrl);
   const [colorSalePrice, setColorSalePrice] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -54,6 +59,7 @@ const ProductScreen = ({ match }) => {
     return () => {
       // console.log('in cleanup function of ProductScreenTest2.js');
       dispatch({ type: PRODUCT_DETAILS_RESET });
+      dispatch({ type: ADD_REVIEW_RESET });
     }
   }, [dispatch, match.params.id]);
 
@@ -384,6 +390,7 @@ const ProductScreen = ({ match }) => {
             <h1 className='display-4'>Reviews</h1>
           </Row>
           <AddReviewRow productID={match.params.id}/>
+          { reviewError && <Message variant='danger'>{reviewError}</Message> }
           { loaded && <ProductReviews productID={match.params.id}/> }
         </>
       }

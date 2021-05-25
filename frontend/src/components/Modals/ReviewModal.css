@@ -11,3 +11,22 @@
   color: #F0AD4E !important;
   font-weight: bold;
 }
+
+/* .reviewStarRating {
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.reviewStarRating:hover {
+transform: scale(1.40);
+}
+
+@media screen and (max-width: 768px){
+  .reviewStarRating {
+    transition: none;
+  }
+
+  .reviewStarRating:hover {
+    transform: none;
+  }
+} */

@@ -13,6 +13,8 @@ const AddReviewRow = ({ productID }) => {
   // Get values from global state
   const addReview = useSelector(state => state.addReview);
   const { showReviewModal } = addReview;
+  const userInfo = useSelector(state => state.userLogin.userInfo);
+  const { loggedIn } = userInfo;
 
   const showReviewModalHandler = () => {
     dispatch({type: ADD_REVIEW_SHOWMODAL_TRUE }); //Show the review modal
@@ -21,7 +23,9 @@ const AddReviewRow = ({ productID }) => {
   return (
     <>
       <Row id='addReviewRow' className='justify-content-between align-items-center mb-5 px-2'>
-        <Button className='my-2 mx-3' onClick={showReviewModalHandler}>Write a Review</Button>
+        <Button className='my-2 mx-3' disabled={!loggedIn} onClick={showReviewModalHandler}>
+          {loggedIn ? 'Write A Review' : 'Login to Write a Review'}
+        </Button>
         <ProductRating useTotalRating={true} />
       </Row>
       {showReviewModal && 

@@ -49,7 +49,7 @@ const ProductReviews = ({ productID }) => {
               <ListGroup variant='flush' className='w-100 h-100'>
                 <ListGroup.Item key={`${review._id}`} className=''>
                   <div>
-                    <h5 className='font-weight-bold mb-1'>{review.heading}</h5>
+                    <h5 className='font-weight-bold mb-1'>{review.title}</h5>
                   </div>
                   <div>
                     <h6 className='mb-1'>{formatDateDayMonthYear(review.createdAt)}</h6>
@@ -71,7 +71,7 @@ const ProductReviews = ({ productID }) => {
             <Col md={9}>
               <ListGroup variant='flush'>
                 <ListGroup.Item>
-                  <p className='lead'>{review.comment}</p>
+                  <p className='lead'>{review.review}</p>
                 </ListGroup.Item>
               </ListGroup>
             </Col>

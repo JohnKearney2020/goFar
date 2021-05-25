@@ -1,5 +1,62 @@
 import asyncHandler from 'express-async-handler';
 import Review from '../models/reviewModel.js';
+import Order from '../models/orderModel.js';
+
+import { formatDateDayMonthYear } from '../utilityFunctions/formatDayMonthYear.js';
+
+// @desc     Create a new review
+// @route    POST /api/reviews
+// @access   Private
+const createReview = asyncHandler(async (req, res) => {
+  const { review } = req.body;
+
+  // Add the user information passed by our middleware to the review object we sent from the frontend
+  review.userID = req.user._id;
+  review.userName = req.user.name;
+
+  //=================================================================================================
+  // Check to see if the user has already reviewed this item
+  //=================================================================================================
+  const userReviews = await Review.find({ userID: req.user._id, productID: review.productID })
+  if(userReviews.length > 0){
+    res.status(400);
+    throw  new Error(`Add Review Failed - You already created a review for this item on ${formatDateDayMonthYear(userReviews[0].createdAt)}`);
+  }
+
+  //=================================================================================================
+  // Check to see if the user has in fact purchased this item or not
+  //=================================================================================================
+  // items is an array of objects containing the items in an order. Each item has an index with a key called productID. See the //
+  // article below for more on the "items.productID" notation
+  // https://kb.objectrocket.com/mongo-db/use-mongoose-to-find-in-an-array-of-objects-1206
+  const userOrders = await Order.find({ user: req.user._id, "items.productID": review.productID });
+  userOrders.length > 0 ? review.verified = true : review.verified = false;
+
+  // Destructure our review object
+  const { productID, userID, productName, userName, rating, title, verified } = review;
+
+  const reviewForDatabase = await Review.create({ 
+    productID,
+    userID,
+    productName,
+    userName,
+    rating,
+    title,
+    review: review.review,
+    verified
+  });
+
+  if(reviewForDatabase){
+    res.status(201).json({ //201 status means something was created
+      created: "created review"
+    })
+  } else {
+    res.status(400);
+    throw new Error('Invalid review data');
+  }
+})
+
+
 
 // @desc     Get all orders tied to a specific user
 // @route    GET /api/reviews
@@ -43,6 +100,7 @@ const getReviewByProductId = asyncHandler(async (req, res) => {
 })
 
 export { 
-  getReviewByProductId
+  getReviewByProductId,
+  createReview
 };
 
