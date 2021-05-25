@@ -269,7 +269,7 @@ export const microtherm20 =
     },
     {
       heading: 'Windproof',
-      source: '/images/FeatureIcons/windproof.svg'
+      source: '/images/FeatureIcons/windProof.svg'
     },
     {
       heading: 'Recycled Materials',

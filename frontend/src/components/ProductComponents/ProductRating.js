@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 // import PropTypes from 'prop-types';
 import './ProductRating.css';
 
@@ -16,11 +16,11 @@ const ProductRating = ({ color, rating, useTotalRating }) => {
     <>
       {loaded && 
         <div className='productRating'>
-          { [1,2,3,4,5].map(index => (
-              <i key={index} style={{color}}  className={
+          { [1,2,3,4,5].map(value => (
+              <i key={value} style={{color}}  className={
                 useTotalRating ? 
-                (totalRating >= index ? 'fas fa-star' : totalRating >= index - 0.5 ? 'fa-star-half-alt' : 'far fa-star') :
-                (rating >= index ? 'fas fa-star' : rating >= index - 0.5 ? 'fa-star-half-alt' : 'far fa-star')
+                (totalRating >= value ? 'fas fa-star' : totalRating >= value - 0.5 ? 'fas fa-star-half-alt' : 'far fa-star') :
+                (rating >= value ? 'fas fa-star' : rating >= value - 0.5 ? 'fa-star-half-alt' : 'far fa-star')
               }>
               </i>
             ))
