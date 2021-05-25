@@ -202,7 +202,9 @@ const updateWholeCart = asyncHandler(async (req, res) => {
   // const user = await User.findById(req.body.userID);
   console.log('typeof req.body.cart:', typeof req.body.cart)
   if(user) {
-    console.log('found user for update whole ')
+    console.log('found user for update whole cart ')
+    console.log('req.body.cart:')
+    console.log(req.body.cart)
     user.cart = req.body.cart || user.cart;
     //Update the user's info
     const updatedUser = await user.save();

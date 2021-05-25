@@ -63,14 +63,6 @@ const wishListSchema = mongoose.Schema({
 timestamps: true
 });
 
-const reviewSchema = mongoose.Schema({
-name: { type: String, required: true },
-rating: { type: Number, required: true }, //a single rating from a user's review. Not an average.
-comment: { type: String, required: true },
-}, {
-timestamps: true
-});
-
 // =====================================================================================================
 //                                                  UserSchema
 // =====================================================================================================

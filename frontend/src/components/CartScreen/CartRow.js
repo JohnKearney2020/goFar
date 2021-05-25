@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Image, Button, Col, Row, ListGroup } from 'react-bootstrap';
+import { Image, Button, Col, Row, ListGroup, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +13,7 @@ import { addDecimals } from '../../utilityFunctions/addDecimals';
 import './CartRow.css';
 // the hideButtons prop disables the 'save for later', 'move to wishlist', and delete buttons. It is used
 // when we display the cart contents during the final step of checkout
-const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater, hideButtons }) => {
+const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater, hideButtons, qtyInStock }) => {
 
   const dispatch = useDispatch();
 
@@ -41,6 +41,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   const [savingForLaterIcon, setSavingForLaterIcon] = useState(false);
   const [movingToWishlistIcon, setMovingToWishlistIcon] = useState(false);
   const [movingToCartIcon, setMovingToCartIcon] = useState(false);
+  const [qtyDropDownValue, setQtyDropDownValue] = useState(qty);
 
   useEffect(() => {
     // console.log('in CartRow.js useEffect')
@@ -160,53 +161,55 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     }
   }
 
+  const cartQtyChangeHandler = (qty) => {
+    console.log('qty change dropdown clicked.');
+    console.log(`qty: ${qty}`);
+    setQtyDropDownValue(qty);
+  }
+
   return (
     <>
       <ListGroup.Item className=''>
       <Row className='align-items-center'>
-        {/*     Product Image     */}
+        {/* ======== Product Image ======== */}
         <Col md={2}>
           <Link to={`/product/${productID}/${color}`}>
             <Image src={image} alt={name} fluid rounded />
           </Link>
         </Col>
-        {/*         Name          */}
+        {/* ======== Name ======== */}
         <Col md={3} className='text-center'>
           <Link to={`/product/${productID}/${color}`}>{name}</Link>
         </Col>
-        {/*         Color         */}
+        {/* ======== Color ======== */}
         <Col md={1} className='text-center'>{color}</Col>
-        {/*         Size          */}
+        {/* ======== Size ======== */}
         <Col md={2} className='text-center'>{sizeForTable}</Col>
-        {/*          Qty          */}
+        {/* ======== Qty ======== */}
         <Col md={1} className='text-center'>
-          {qty === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : qty }
+          {qty === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : 
+            <Form.Control 
+              as='select'
+              value={qtyDropDownValue} 
+              onChange={(e) => cartQtyChangeHandler(e.target.value)} 
+              // disabled={updatingWishList | inCart}
+              className='px-2 shadow-sm qtyDropDown'
+            >
+              {[...Array(qtyInStock).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
+                (x + 1 <= 10 &&
+                  <option key={x+1} value={x + 1}>
+                  {x + 1}
+                  </option>
+                )
+              ))}
+            </Form.Control> 
+          }
         </Col>
-        {/*         Price         */}
+        {/* ======== Price ======== */}
         <Col md={2} className='text-center'>
           ${price}
         </Col>
-        {/*    Add to Cart Form   */}
-        {/* {(qtyForCart === 0 && hasSizes === false) &&
-          <Col md={2} className='text-center'>
-            <span className='text-danger font-weight-bold'>Out of Stock</span> 
-          </Col>
-        }  */}
-        {/* {(qtyForTable === 0 && hasSizes === true && availableInOtherSizes === true) &&
-          <Col md={2} className='text-center'>
-            <span className='text-danger font-weight-bold'>Available in Other Sizes</span> 
-          </Col>
-        } 
-        {qtyForTable !== 0 &&
-          <>
-            <Col md={1}>
-              {qtyForTable}
-            </Col>
-          </>
-        } */}
-        {/* <Col md={2}>
-          {qty}
-        </Col> */}
+        {/* ======== Delete Cart Item ======== */}
         <Col md={1} className='d-flex justify-content-center'>
           { !hideButtons && 
             <Button size='sm' variant='danger' className='' disabled={updatingCartIcon} onClick={deleteCartItemHandler}>
@@ -215,6 +218,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
           }
         </Col>
       </Row>
+      {/* ======== Saved for Later and Move to Wishlist Buttons ======== */}
       { !hideButtons && 
         <Row className='justify-content-start mt-2 ml-1'>
         {savedForLater === true ?

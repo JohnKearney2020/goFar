@@ -92,82 +92,26 @@ const CartScreen = ({ history }) => {
             // Drill down into the detailed product object to look for a match
             if(id1 === id2){//If the product ID's match
               //=====================================================================================================================
-              //                                                  Find the current price and qty available
-              //=====================================================================================================================
-              // Products without sizes - easiest case
-              // if(hasSizes === false){
-              //   //Update the price
-              //   defaultSalePrice !== 0 ? cartItem.price = defaultSalePrice : cartItem.price = defaultPrice;
-              //   //Update the qty if needed
-              //   if(defaultQty === 0){ //If the item is now out of stock
-              //     if(userQuantity !== 0){
-              //       movedMessageArray.push({ //Add to message for moved items
-              //         name: name1,
-              //         color: color1,
-              //         size: size1,
-              //         sizeCategory: sizeCategory1,
-              //         oldQty: userQuantity,
-              //         newQty: defaultQty
-              //       })
-              //       cartItem.quantity = defaultQty;
-              //     }
-              //     if(!cartItem.savedForLater){
-              //       cartItem.savedForLater = true;
-              //       toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
-              //     }
-              //   } else if(cartItem.quantity > defaultQty){ //If the user has more qty in their cart than are in stock
-              //     cartItem.quantity = defaultQty;
-              //     qtyMessageArray.push({ //Add to message for reduced quantities
-              //       name: name1,
-              //       color: color1,
-              //       size: size1,
-              //       sizeCategory: sizeCategory1,
-              //       oldQty: userQuantity,
-              //       newQty: defaultQty
-              //     })
-              //     if(!cartItem.savedForLater){
-              //       toast.info(`${name1} - ${color1}/${size1}/${sizeCategory1}'s quantity has changed due to lower availability.`, { position: "bottom-center", autoClose: 5000 });
-              //     }
-              //   }
-              // }
-              //=====================================================================================================================
               // Products with sizes - hardest case
               //=====================================================================================================================
-              // if(hasSizes === true && size1 !== 'ONE SIZE'){ 
-                //Drill down into the product object based on the user's chosen size and color
-                //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
-                let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
-                // Find that size category's default price.
-                let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
-                //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
-                let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
-                //See if that color is on sale
-                let colorSalePrice = levelTwo.colorSalePrice;
-                //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
-                let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
-                let qtyInStock = levelThree.qty;
-                // Update the price
-                colorSalePrice !== 0 ? cartItem.price = colorSalePrice : cartItem.price = sizeCatDefaultPrice;
-                //Update the qty if needed
-                if(qtyInStock === 0){ //If the item is now out of stock
-                  if(userQuantity !== 0){
-                    movedMessageArray.push({ //Add to message for moved items
-                      name: name1,
-                      color: color1,
-                      size: size1,
-                      sizeCategory: sizeCategory1,
-                      oldQty: userQuantity,
-                      newQty: qtyInStock
-                    })
-                    cartItem.quantity = qtyInStock;
-                  }
-                  if(!cartItem.savedForLater){
-                    cartItem.savedForLater = true;
-                    toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
-                  }
-                } else if(userQuantity > qtyInStock) {  //
-                  cartItem.quantity = qtyInStock;
-                  qtyMessageArray.push({ //Add to message for qty changed items
+              //Drill down into the product object based on the user's chosen size and color
+              //In the array of sizes, find the index that corresponds to the size category, i.e. the index for "Regular" or "Tall"
+              let levelOne = sizes[sizes.findIndex(i => i.sizeCategoryName === sizeCategory1)];
+              // Find that size category's default price.
+              let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice;
+              //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
+              let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)];
+              //See if that color is on sale
+              let colorSalePrice = levelTwo.colorSalePrice;
+              //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
+              let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
+              let qtyInStock = levelThree.qty;
+              // Update the price
+              colorSalePrice !== 0 ? cartItem.price = colorSalePrice : cartItem.price = sizeCatDefaultPrice;
+              //Update the qty if needed
+              if(qtyInStock === 0){ //If the item is now out of stock
+                if(userQuantity !== 0){
+                  movedMessageArray.push({ //Add to message for moved items
                     name: name1,
                     color: color1,
                     size: size1,
@@ -175,7 +119,30 @@ const CartScreen = ({ history }) => {
                     oldQty: userQuantity,
                     newQty: qtyInStock
                   })
+                  // cartItem.quantity = qtyInStock;
+                  // cartItem.quantityInStock = qtyInStock;
                 }
+                if(!cartItem.savedForLater){
+                  cartItem.savedForLater = true;
+                  toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
+                }
+                cartItem.quantity = qtyInStock;
+                cartItem.quantityInStock = qtyInStock;
+              } else if(userQuantity > qtyInStock) {  // If the user wants more than we currently have in stock
+                cartItem.quantity = qtyInStock;
+                cartItem.quantityInStock = qtyInStock;
+                qtyMessageArray.push({ //Add to message for qty changed items
+                  name: name1,
+                  color: color1,
+                  size: size1,
+                  sizeCategory: sizeCategory1,
+                  oldQty: userQuantity,
+                  newQty: qtyInStock
+                })
+              } 
+              else { // If everything is good we still want to update the quantityInStock field
+                cartItem.quantityInStock = qtyInStock;
+              }
               
             } //End of the INNER for loop thru cart and cart details
           }
@@ -277,6 +244,7 @@ const CartScreen = ({ history }) => {
                     sizeCategory={eachProduct.sizeCategory}
                     price={eachProduct.price}
                     qty={eachProduct.quantity}
+                    qtyInStock={eachProduct.quantityInStock}
                     // dateAdded={eachProduct.createdAt}
                     image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}
