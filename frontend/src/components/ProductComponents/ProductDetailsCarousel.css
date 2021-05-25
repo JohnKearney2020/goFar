@@ -35,9 +35,6 @@
 
 /* From the documentation at:  https://express-labs.github.io/pure-react-carousel/ */
 /* Wrap the <Slider />, <ButtonBack />, <ButonNext /> components in a div with relative positioning. Add absolute positioning to the buttons */
-#divForBackNextButtons {
-  /* position: relative; */
-}
 
 #backButton {
   position: absolute;
@@ -54,17 +51,7 @@
   height: 20%;
 }
 
-.carouselVideo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
 .productCarouselVideoModal {
-  width: 90vw;
   max-width: none!important;
 }
 

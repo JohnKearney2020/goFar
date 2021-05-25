@@ -13,7 +13,7 @@ const VideoModal = ({ show, source, closeModalHandler, productName }) => {
     <Modal 
       show={show} 
       onHide={closeModalHandler} 
-      dialogClassName='productCarouselVideoModal' 
+      dialogClassName='productCarouselVideoModal px-md-5' 
       contentClassName='productCarouselVideoModalContent' 
       centered
       animation={false}
@@ -32,7 +32,6 @@ const VideoModal = ({ show, source, closeModalHandler, productName }) => {
         >
         </iframe>
       </Modal.Body>
-
     </Modal>
   )
 }
