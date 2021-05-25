@@ -3,24 +3,29 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addProductReview } from '../../actions/reviewActions';
-import { ADD_REVIEW_SHOWMODAL_FALSE  } from '../../constants/reviewConstants';
+import { ADD_REVIEW_RESET  } from '../../constants/reviewConstants';
 import './ReviewModal.css';
 
 const ReviewModal = ({ productID }) => {
-  
+
   const dispatch = useDispatch();
   // Get values from the global state
   const addReview = useSelector(state => state.addReview);
   const { loading, showReviewModal } = addReview;
 
+  const productName = useSelector(state => state.productDetails.product.name);
+
+  // Set up local state
   const[title, setTitle] = useState('');
   const[review, setReview] = useState('');
+  const[rating, setRating] = useState(0);
 
   const [titleMessage, setTitleMessage] = useState(null);
   const [reviewMessage, setReviewMessage] = useState(null);
+  const [ratingMessage, setRatingMessage] = useState(null);
 
   const closeReviewModalHandler = () => {
-    dispatch({type: ADD_REVIEW_SHOWMODAL_FALSE }); //Hide the review modal
+    dispatch({type: ADD_REVIEW_RESET }); //Hide the review modal
   }
 
   const titleTextHandler = (value) => {
@@ -28,6 +33,11 @@ const ReviewModal = ({ productID }) => {
       setTitle(value);
       if(titleMessage) { setTitleMessage(null) };
     }
+  }
+
+  const starRatingHandler = (value) => {
+    if(value > 0){ setRatingMessage(null) }
+    setRating(value);
   }
 
   const reviewTextHandler = (value) => {
@@ -57,13 +67,25 @@ const ReviewModal = ({ productID }) => {
       setReviewMessage('Your review cannot be blank...');
       anyErrors = true;
     }
+    if(rating === 0){ 
+      console.log('rating is blank...')
+      setRatingMessage('Choose a rating...');
+      anyErrors = true;
+    }
 
     if(anyErrors) { 
       console.log('found errors')
       return 
     } //stop here if the user did not fill out the form correctly
-
-    dispatch(addProductReview(productID, title, review))
+    // Create the review object we will pass to the backend
+    const reviewForDatabase = {
+      productID,
+      productName,
+      rating: Number(rating),
+      title,
+      review
+    }
+    dispatch(addProductReview(reviewForDatabase))
   }
 
   return (
@@ -91,6 +113,21 @@ const ReviewModal = ({ productID }) => {
               {`Required - ${(Number(70) - title.length)}/70 Characters Remaining`}
             </Form.Text>
             { titleMessage && <div className="invalid-feedback">{titleMessage}</div> }
+          </Form.Group>
+          <Form.Group controlId='reviewRating'>
+            <Form.Label>Rating</Form.Label>
+              <Form.Control as='select' className={ratingMessage === null ? '' : 'is-invalid'} value={rating} onChange={(e) => starRatingHandler(e.target.value)}>
+                <option value='0'>Select...</option>
+                <option value='1'>1 - Poor</option>
+                <option value='2'>2 - Fair</option>
+                <option value='3'>3 - Good</option>
+                <option value='4'>4 - Very Good</option>
+                <option value='5'>5 - Excellent</option>
+              </Form.Control>
+            <Form.Text className={`ml-2`} id="ratingHelpBlock" muted>
+              Required
+            </Form.Text>
+            { ratingMessage && <div className="invalid-feedback">{ratingMessage}</div> }
           </Form.Group>
           <Form.Group controlId='reviewText'>
             <Form.Label>Review</Form.Label>
