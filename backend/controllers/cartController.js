@@ -133,7 +133,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
     // console.log('========================================================================================================')
     // console.log(user.cart)
     // user.cart = req.body.cart || user.cart;
-    const { productID, name, color, size, sizeCategory, newQty, savedForLater } = req.body;
+    const { productID, name, color, size, sizeCategory, newQty } = req.body;
     // console.log(`new Qty: ${newQty}` .cyan)
     let oldCart = [...user.cart];
     // console.log('copy of users cart:')
@@ -152,7 +152,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
           // console.log(`eachItem.quantity =`)
           // console.log('Found item to update' .red.inverse);
           eachItem.quantity = Number(newQty); //Update the qty
-          eachItem.savedForLater = savedForLater;
+          // eachItem.savedForLater = savedForLater;
           foundItemToUpdate = true;
           // console.log('oldCart updated with new Qty:')
           // console.log(oldCart)

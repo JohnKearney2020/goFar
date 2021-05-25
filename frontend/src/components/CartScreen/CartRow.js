@@ -111,16 +111,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     try {
       //attempt to add the item to the user's wishlist
       await axios.post('/api/users/wishlist/wishlistitem', { 
-        // productID
-        // name
-        // color
-        // size
-        // sizeCategory
-        // image
-        // qtyAvailable
-        // currentPrice
-        // inCart
-        // availableInOtherSizes
         productID, 
         name,
         color,
@@ -175,12 +165,26 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     }
   }
 
-  const cartQtyChangeHandler = (qty) => {
+  const cartQtyChangeHandler = async (qty) => {
     dispatch({type: CART_LOADING_TRUE });
-    console.log('qty change dropdown clicked.');
-    console.log(`qty: ${qty}`);
-    setQtyDropDownValue(qty);
-    dispatch({type: CART_LOADING_FALSE });
+    try {
+      const { data } = await axios.put(`/api/users/cart/cartitem`,{
+        productID, name, color, size, sizeCategory, newQty:qty
+      }, config);
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      toast.info(`Successfully updated the quantity for ${name}}`, { position: "bottom-center", autoClose: 4000 });
+      setQtyDropDownValue(qty);
+      dispatch({type: CART_LOADING_FALSE });
+    } catch (error) {
+      console.log('there was an error trying to delete that item from the cart');
+      console.log(error)
+      toast.error(`Could not update the quantity for ${name} Try again later.`, { position: "bottom-center", autoClose: 4000 });
+      dispatch({type: CART_LOADING_FALSE });
+    }
   }
 
   return (

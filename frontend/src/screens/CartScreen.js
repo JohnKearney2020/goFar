@@ -8,6 +8,7 @@ import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
+import { CART_LOADING_RESET } from '../constants/cartConstants';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -195,6 +196,7 @@ const CartScreen = ({ history }) => {
     dispatch({type: CART_QTY_MESSAGE_RESET});
     dispatch({type: CART_MOVED_MESSAGE_RESET});
     dispatch({type: CART_PRODUCT_DETAILS_RESET});
+    dispatch({type: CART_LOADING_RESET});
   }, [dispatch]);
 
   return (
