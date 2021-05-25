@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, wishListDetailsReducer } from './reducers/userReducers';
-import { cartDetailsReducer, cartQtyMessageReducer, cartMovedMessageReducer } from './reducers/cartReducers';
+import { cartDetailsReducer, cartQtyMessageReducer, cartMovedMessageReducer, cartLoadingReducer } from './reducers/cartReducers';
 import { checkoutDataReducer, orderLoadingReducer } from './reducers/checkoutReducers';
 import { mapReducer } from './reducers/mapReducers';
 import { userOrderListReducer } from './reducers/orderReducers';
@@ -18,6 +18,7 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   wishListProductDetails: wishListDetailsReducer,
   cartProductDetails: cartDetailsReducer,
+  cartLoading: cartLoadingReducer,
   cartQtyChanges: cartQtyMessageReducer,
   cartMovedChanges: cartMovedMessageReducer,
   checkoutData: checkoutDataReducer,

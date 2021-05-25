@@ -9,6 +9,7 @@ import { faSpinner as spinner } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { USER_LOGIN_SUCCESS } from '../../constants/userConstants';
 import { addDecimals } from '../../utilityFunctions/addDecimals';
+import { CART_LOADING_TRUE, CART_LOADING_FALSE } from '../../constants/cartConstants';
 
 import './CartRow.css';
 // the hideButtons prop disables the 'save for later', 'move to wishlist', and delete buttons. It is used
@@ -24,8 +25,12 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   //Format the price for two decimal places
   price = addDecimals(price);
 
+  // Get data from the global state
   const userInfo = useSelector(state => state.userLogin.userInfo);
   const { _id:userID, token, wishList } = userInfo;
+
+  // This is a generic loading boolean used by all the operations possible on the cart screen.
+  const cartLoading = useSelector(state => state.cartLoading.loading);
 
   const config = {
     headers: {
@@ -64,6 +69,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
 
   //This moves items to saved for later or back to the cart
   const moveInCartHandler = async (e) => {
+    dispatch({type: CART_LOADING_TRUE });
     let savedForLaterBoolean = e.target.value;
     console.log(`e.target.value: ${e.target.value}`)
     setSavingForLaterIcon(true);
@@ -87,16 +93,19 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
+      dispatch({type: CART_LOADING_FALSE });
     } catch (error) {
       console.log('there was an error')
       console.log(error)
       toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setUpdatingCartIcon(false);
       setMovingToCartIcon(false);
+      dispatch({type: CART_LOADING_FALSE });
     } 
   }
 
   const moveToWishlistHandler = async () => {
+    dispatch({type: CART_LOADING_TRUE });
     setMovingToWishlistIcon(true);
     setUpdatingCartIcon(true);
     try {
@@ -131,16 +140,19 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.success(`Moved ${name} - ${color} - Size ${size} ${sizeCategory} to your wishlist!`, { position: "bottom-center", autoClose: 4000 } );
+      dispatch({type: CART_LOADING_FALSE });
     } catch (error) {
       console.log('there was an error')
       console.log(error)
       toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setMovingToWishlistIcon(false);
       setUpdatingCartIcon(false);
+      dispatch({type: CART_LOADING_FALSE });
     }    
   }
   
   const deleteCartItemHandler = async () => {
+    dispatch({type: CART_LOADING_TRUE });
     setLoadingDeleteIcon(true);
     setUpdatingCartIcon(true);
     console.log('delete from cart clicked')
@@ -152,19 +164,23 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast.info(`Successfully removed ${name} - ${color} - Size ${size} ${sizeCategory} from your cart`, { position: "bottom-center", autoClose: 4000 });
+      dispatch({type: CART_LOADING_FALSE });
     } catch (error) {
       console.log('there was an error trying to delete that item from the cart');
       console.log(error)
       toast.error(`Could not delete ${name} - ${color} - Size ${size} ${sizeCategory} from your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setLoadingDeleteIcon(false);
       setUpdatingCartIcon(false);
+      dispatch({type: CART_LOADING_FALSE });
     }
   }
 
   const cartQtyChangeHandler = (qty) => {
+    dispatch({type: CART_LOADING_TRUE });
     console.log('qty change dropdown clicked.');
     console.log(`qty: ${qty}`);
     setQtyDropDownValue(qty);
+    dispatch({type: CART_LOADING_FALSE });
   }
 
   return (
@@ -192,7 +208,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
               as='select'
               value={qtyDropDownValue} 
               onChange={(e) => cartQtyChangeHandler(e.target.value)} 
-              // disabled={updatingWishList | inCart}
+              disabled={cartLoading}
               className='px-2 shadow-sm qtyDropDown'
             >
               {[...Array(qtyInStock).keys()].map(x => (// Limit the user to a max of 10 items added to the cart at once
@@ -212,7 +228,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         {/* ======== Delete Cart Item ======== */}
         <Col md={1} className='d-flex justify-content-center'>
           { !hideButtons && 
-            <Button size='sm' variant='danger' className='' disabled={updatingCartIcon} onClick={deleteCartItemHandler}>
+            <Button size='sm' variant='danger' className='' disabled={cartLoading} onClick={deleteCartItemHandler}>
               <FontAwesomeIcon className='' icon={loadingDeleteIcon ? spinner : faTrashAlt} size="2x"/>
             </Button>
           }
@@ -223,17 +239,17 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         <Row className='justify-content-start mt-2 ml-1'>
         {savedForLater === true ?
           // Move to cart button
-          <Button className='p-0 px-2' variant="secondary" disabled={updatingCartIcon} onClick={moveInCartHandler} value={false}>
+          <Button className='p-0 px-2' variant="secondary" disabled={cartLoading} onClick={moveInCartHandler} value={false}>
             {movingToCartIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Cart`}
           </Button> : 
           // Save for later button
-          <Button className='p-0 px-2' variant="secondary" disabled={updatingCartIcon} onClick={moveInCartHandler} value={true}>
+          <Button className='p-0 px-2' variant="secondary" disabled={cartLoading} onClick={moveInCartHandler} value={true}>
               {savingForLaterIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Saving... </span> : `Save for Later`}
           </Button>
         }|
         {/* Move to wishlist button */}
         {/* <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={updatingCartIcon} onClick={moveToWishlistHandler}> */}
-          <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={updatingCartIcon | alreadyInWishlist} onClick={moveToWishlistHandler}>
+          <Button className='p-0 px-2 cartRowButton' variant="secondary" disabled={cartLoading | alreadyInWishlist} onClick={moveToWishlistHandler}>
             {alreadyInWishlist ? 'Already In Your Wishlist' : (movingToWishlistIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Wishlist`)}
           </Button>
         </Row>

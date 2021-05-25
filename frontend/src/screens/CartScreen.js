@@ -36,6 +36,9 @@ const CartScreen = ({ history }) => {
   const cartMovedChanges = useSelector(state => state.cartMovedChanges);
   const { cartMovedMessage } = cartMovedChanges;
 
+  // This is a generic loading boolean used by all the operations possible on the cart screen.
+  const cartLoading = useSelector(state => state.cartLoading.loading);
+
   // Set up local state
   // This forceReRender state is a bandaid. With more time I would not update the cart here in the useEffect(). Instead, I'd
   // do it in an action and feed the updated cart to the global state.
@@ -266,7 +269,7 @@ const CartScreen = ({ history }) => {
                     {/* .toFixed(2) gives us a 2 decimal number */}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <Button type='button' className='btn-block' disabled={cart.length === 0} onClick={checkoutHandler}>
+                    <Button type='button' className='btn-block' disabled={cart.length === 0 || cartLoading} onClick={checkoutHandler}>
                       Proceed to checkout
                     </Button>
                   </ListGroup.Item>
