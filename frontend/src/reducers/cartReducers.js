@@ -1,6 +1,20 @@
 import { CART_PRODUCT_DETAILS_REQUEST, CART_PRODUCT_DETAILS_SUCCESS, CART_PRODUCT_DETAILS_FAIL, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
 import { CART_QTY_MESSAGE_REQUEST, CART_QTY_MESSAGE_SUCCESS, CART_QTY_MESSAGE_FAIL, CART_QTY_MESSAGE_RESET } from '../constants/cartConstants';
 import { CART_MOVED_MESSAGE_REQUEST, CART_MOVED_MESSAGE_SUCCESS, CART_MOVED_MESSAGE_FAIL, CART_MOVED_MESSAGE_RESET } from '../constants/cartConstants';
+import { CART_LOADING_TRUE, CART_LOADING_FALSE, CART_LOADING_RESET } from '../constants/cartConstants';
+
+export const cartLoadingReducer = ( state = { cartLoading: false }, action ) => {
+  switch(action.type) {
+    case CART_LOADING_TRUE:
+      return { loading: true };
+    case CART_LOADING_FALSE:
+      return { loading: false };
+    case CART_LOADING_RESET:
+      return { loading: false };
+    default: 
+      return state;
+  } 
+}
 
 //This is used when we update the quantities in a user's cart. We do this in CartScreen.js. For example, it they put 10 of an item into
 //their cart at one point, but now there are only 5 in stock, we update their cart quantity to 5 and let them know we update the 

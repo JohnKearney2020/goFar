@@ -133,7 +133,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
     // console.log('========================================================================================================')
     // console.log(user.cart)
     // user.cart = req.body.cart || user.cart;
-    const { productID, name, color, size, sizeCategory, newQty, savedForLater } = req.body;
+    const { productID, name, color, size, sizeCategory, newQty } = req.body;
     // console.log(`new Qty: ${newQty}` .cyan)
     let oldCart = [...user.cart];
     // console.log('copy of users cart:')
@@ -152,7 +152,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
           // console.log(`eachItem.quantity =`)
           // console.log('Found item to update' .red.inverse);
           eachItem.quantity = Number(newQty); //Update the qty
-          eachItem.savedForLater = savedForLater;
+          // eachItem.savedForLater = savedForLater;
           foundItemToUpdate = true;
           // console.log('oldCart updated with new Qty:')
           // console.log(oldCart)
@@ -202,7 +202,9 @@ const updateWholeCart = asyncHandler(async (req, res) => {
   // const user = await User.findById(req.body.userID);
   console.log('typeof req.body.cart:', typeof req.body.cart)
   if(user) {
-    console.log('found user for update whole ')
+    console.log('found user for update whole cart ')
+    console.log('req.body.cart:')
+    console.log(req.body.cart)
     user.cart = req.body.cart || user.cart;
     //Update the user's info
     const updatedUser = await user.save();

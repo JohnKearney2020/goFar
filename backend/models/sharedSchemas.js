@@ -17,6 +17,11 @@ const cartSchema = mongoose.Schema({
     type: Number,
     required: true
   },
+  quantityInStock: {
+    type: Number,
+    required: false, //We'll update this when users go to the cart page, not when they first add an item to their cart
+    default: 0
+  },
   color: {
     type: String,
     required: false
