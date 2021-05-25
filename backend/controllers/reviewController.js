@@ -1,57 +1,59 @@
 import asyncHandler from 'express-async-handler';
 import Review from '../models/reviewModel.js';
+import Order from '../models/orderModel.js';
+
+import { formatDateDayMonthYear } from '../utilityFunctions/formatDayMonthYear.js';
 
 // @desc     Create a new review
 // @route    POST /api/reviews
 // @access   Private
 const createReview = asyncHandler(async (req, res) => {
-  const { productID, title, review } = req.body;
-  console.log(`productID: ${productID}`)
-  console.log(`title: ${title}`)
-  console.log(`review: ${review}`)
+  const { review } = req.body;
 
+  // Add the user information passed by our middleware to the review object we sent from the frontend
+  review.userID = req.user._id;
+  review.userName = req.user.name;
+
+  //=================================================================================================
+  // Check to see if the user has already reviewed this item
+  //=================================================================================================
+  const userReviews = await Review.find({ userID: req.user._id, productID: review.productID })
+  if(userReviews.length > 0){
+    res.status(400);
+    throw  new Error(`Add Review Failed - You already created a review for this item on ${formatDateDayMonthYear(userReviews[0].createdAt)}`);
+  }
+
+  //=================================================================================================
+  // Check to see if the user has in fact purchased this item or not
+  //=================================================================================================
+  // items is an array of objects containing the items in an order. Each item has an index with a key called productID. See the //
+  // article below for more on the "items.productID" notation
+  // https://kb.objectrocket.com/mongo-db/use-mongoose-to-find-in-an-array-of-objects-1206
+  const userOrders = await Order.find({ user: req.user._id, "items.productID": review.productID });
+  userOrders.length > 0 ? review.verified = true : review.verified = false;
+
+  // Destructure our review object
+  const { productID, userID, productName, userName, rating, title, verified } = review;
+
+  const reviewForDatabase = await Review.create({ 
+    productID,
+    userID,
+    productName,
+    userName,
+    rating,
+    title,
+    review: review.review,
+    verified
+  });
+
+  if(reviewForDatabase){
     res.status(201).json({ //201 status means something was created
       created: "created review"
-      // _id: user._id,
-      // name: user.name,
-      // email: user.email,
-      // isAdmin: user.isAdmin,
-      // cart: user.cart,
-      // wishList: user.wishList,
-      // loggedIn: true,
-      // token: generateToken(user._id) 
     })
-
-
-
-  // const userExists = await User.findOne({ email })  // here, we are effectively doing {email: email}
-
-  // if(userExists) {
-  //   res.status(400);
-  //   throw  new Error('Email address already in use. Try another?');
-  // }
-
-  // const user = await User.create({ //don't need cart or wishlist on user creation
-  //   name,
-  //   email,
-  //   password //this will automatically be encrypted thanks to the .preSave() middleware we created in the user model
-  // })
-
-  // if(user){
-  //   res.status(201).json({ //201 status means something was created
-  //     _id: user._id,
-  //     name: user.name,
-  //     email: user.email,
-  //     isAdmin: user.isAdmin,
-  //     cart: user.cart,
-  //     wishList: user.wishList,
-  //     loggedIn: true,
-  //     token: generateToken(user._id) 
-  //   })
-  // } else {
-  //   res.status(400);
-  //   throw new Error('Invalid user data');
-  // }
+  } else {
+    res.status(400);
+    throw new Error('Invalid review data');
+  }
 })
 
 
