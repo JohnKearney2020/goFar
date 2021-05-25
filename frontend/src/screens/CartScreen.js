@@ -127,6 +127,7 @@ const CartScreen = ({ history }) => {
                   // cartItem.quantityInStock = qtyInStock;
                 }
                 if(!cartItem.savedForLater){
+                  cartItem.quantityInStock = qtyInStock;
                   cartItem.savedForLater = true;
                   toast.error(`${name1} - ${color1}/${size1}/${sizeCategory1} is no longer in stock and has been moved to Saved for Later`, { position: "bottom-center", autoClose: 5000 });
                 }
@@ -336,6 +337,7 @@ const CartScreen = ({ history }) => {
                     sizeCategory={eachProduct.sizeCategory}
                     price={eachProduct.price}
                     qty={eachProduct.quantity}
+                    qtyInStock={eachProduct.quantityInStock}
                     // dateAdded={eachProduct.createdAt}
                     image={eachProduct.image}
                     savedForLater={eachProduct.savedForLater}

@@ -42,7 +42,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   //Set up local state
   const [alreadyInWishlist, setAlreadyInWishlist] = useState(false);
   const [loadingDeleteIcon, setLoadingDeleteIcon] = useState(false);
-  const [updatingCartIcon, setUpdatingCartIcon] = useState(false);
+  // const [updatingCartIcon, setUpdatingCartIcon] = useState(false);
   const [savingForLaterIcon, setSavingForLaterIcon] = useState(false);
   const [movingToWishlistIcon, setMovingToWishlistIcon] = useState(false);
   const [movingToCartIcon, setMovingToCartIcon] = useState(false);
@@ -73,7 +73,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
     let savedForLaterBoolean = e.target.value;
     console.log(`e.target.value: ${e.target.value}`)
     setSavingForLaterIcon(true);
-    setUpdatingCartIcon(true);
     setMovingToCartIcon(true);
     try {
       //attempt to move the item to the user's Cart OR move it to saved for later
@@ -98,7 +97,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       console.log('there was an error')
       console.log(error)
       toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
-      setUpdatingCartIcon(false);
       setMovingToCartIcon(false);
       dispatch({type: CART_LOADING_FALSE });
     } 
@@ -107,7 +105,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   const moveToWishlistHandler = async () => {
     dispatch({type: CART_LOADING_TRUE });
     setMovingToWishlistIcon(true);
-    setUpdatingCartIcon(true);
     try {
       //attempt to add the item to the user's wishlist
       await axios.post('/api/users/wishlist/wishlistitem', { 
@@ -136,7 +133,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       console.log(error)
       toast.error(`Could not add ${name} - ${color} - Size ${size} ${sizeCategory} to your wishlist. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setMovingToWishlistIcon(false);
-      setUpdatingCartIcon(false);
       dispatch({type: CART_LOADING_FALSE });
     }    
   }
@@ -144,7 +140,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   const deleteCartItemHandler = async () => {
     dispatch({type: CART_LOADING_TRUE });
     setLoadingDeleteIcon(true);
-    setUpdatingCartIcon(true);
     console.log('delete from cart clicked')
     try {
       const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
@@ -160,7 +155,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
       console.log(error)
       toast.error(`Could not delete ${name} - ${color} - Size ${size} ${sizeCategory} from your cart. Try again later.`, { position: "bottom-center", autoClose: 4000 });
       setLoadingDeleteIcon(false);
-      setUpdatingCartIcon(false);
       dispatch({type: CART_LOADING_FALSE });
     }
   }
@@ -206,7 +200,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         {/* ======== Size ======== */}
         <Col md={2} className='text-center'>{sizeForTable}</Col>
         {/* ======== Qty ======== */}
-        <Col md={1} className='text-center'>
+        <Col md={1} className='text-center px-0'>
           {qty === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : 
             <Form.Control 
               as='select'

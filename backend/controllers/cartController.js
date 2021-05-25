@@ -13,7 +13,6 @@ import generateToken from '../utils/generateToken.js';
 // @route    GET /api/users/cart
 // @access   Private
 const getCart = asyncHandler(async (req, res) => {
-  console.log('in getCart')
   const productsFromCart = await Product.find({ '_id': { $in: req.body.arrayOfProductIDs }});
   if(productsFromCart) {
     res.json(
@@ -127,21 +126,10 @@ const deleteCartItem = asyncHandler(async (req, res) => {
 const updateCartQty = asyncHandler(async (req, res) => {
   //remember, req.user is passed here automatically by our authorization middleware
   const user = await User.findById(req.user._id);
-  // const user = await User.findById(req.body.userID);
   if(user) {
-    // console.log('User we found in backend:')
-    // console.log('========================================================================================================')
-    // console.log(user.cart)
-    // user.cart = req.body.cart || user.cart;
     const { productID, name, color, size, sizeCategory, newQty } = req.body;
-    // console.log(`new Qty: ${newQty}` .cyan)
     let oldCart = [...user.cart];
-    // console.log('copy of users cart:')
-    // console.log(oldCart);
     let foundItemToUpdate = false;
-    // console.log('cart before any updated quantities')
-    // console.log(oldcart)
-    // console.log(user.cart)
     for(let eachItem of oldCart){
       if(eachItem.productID.toString() === productID 
         && eachItem.name.toString() === name 
@@ -149,28 +137,11 @@ const updateCartQty = asyncHandler(async (req, res) => {
         && eachItem.size.toString() === size
         && eachItem.sizeCategory.toString() === sizeCategory
         ) {
-          // console.log(`eachItem.quantity =`)
-          // console.log('Found item to update' .red.inverse);
           eachItem.quantity = Number(newQty); //Update the qty
-          // eachItem.savedForLater = savedForLater;
           foundItemToUpdate = true;
-          // console.log('oldCart updated with new Qty:')
-          // console.log(oldCart)
           break;
         }
     }
-
-    // let alreadyInCart = false;
-    // for(let eachProduct of oldCart){
-    //   if(eachProduct.productID.toString() === productID && eachProduct.color.toString() === color  && eachProduct.size.toString() === size && eachProduct.sizeCategory.toString() == sizeCategory){
-    //     // eachProduct.quantity += Number(quantity);
-    //     eachProduct.quantity = Number(quantity);
-    //     alreadyInCart = true; //We now know this combination already exists in the cart
-    //     break;
-    //   }
-    // }
-
-
     if(foundItemToUpdate === false){
       res.status(404); //not found
       throw new Error('Could not find that item in the cart. Cannot update the quantity');
@@ -199,12 +170,7 @@ const updateCartQty = asyncHandler(async (req, res) => {
 const updateWholeCart = asyncHandler(async (req, res) => {
   //remember, req.user is passed here automatically by our authorization middleware
   const user = await User.findById(req.user._id);
-  // const user = await User.findById(req.body.userID);
-  console.log('typeof req.body.cart:', typeof req.body.cart)
   if(user) {
-    console.log('found user for update whole cart ')
-    console.log('req.body.cart:')
-    console.log(req.body.cart)
     user.cart = req.body.cart || user.cart;
     //Update the user's info
     const updatedUser = await user.save();
