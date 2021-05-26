@@ -6,7 +6,7 @@
 main {
   /* This padding needs to be equal to the height of the footer */
   /* the <main></main> element is used in the App.js file */
-  padding-bottom: 150px;
+  padding-bottom: 220px;
 }
 
 footer {
@@ -16,7 +16,7 @@ footer {
   /* background-color: #303030; */
   background-color: #343a40;
   color: rgba(255,255,255,.5);
-  height: 150px;
+  min-height: 150px;
 }
 
 footer h5 {
