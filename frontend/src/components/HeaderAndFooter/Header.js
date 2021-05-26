@@ -51,12 +51,15 @@ const Header = () => {
             </LinkContainer>
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
+              {/* Product Dropdown for Desktop */}
               <Nav className='mr-auto'>
-                <Nav.Link onClick={disableProductNav ? '' : showProductsNavHandler}>
+                <Nav.Link className='d-none d-lg-block' onClick={disableProductNav ? '' : showProductsNavHandler}>
                   Products {showNav ? <FontAwesomeIcon icon={faCaretUp} /> : <FontAwesomeIcon icon={faCaretDown} />}
                 </Nav.Link>
               </Nav>
-              <SearchBox />
+              <Nav>
+                <SearchBox />
+              </Nav>
               <Nav className='ml-auto'>
                 {/* WishList Link */}
                 <LinkContainer to='/wishlist'>
@@ -84,6 +87,12 @@ const Header = () => {
                     </Nav.Link>
                   </LinkContainer>
                 )}
+                {/* Product Dropdown for Mobile */}
+                <Nav className='mr-auto d-block d-lg-none'>
+                  <Nav.Link onClick={disableProductNav ? '' : showProductsNavHandler}>
+                    Products {showNav ? <FontAwesomeIcon icon={faCaretUp} /> : <FontAwesomeIcon icon={faCaretDown} />}
+                  </Nav.Link>
+                </Nav>
                 {userInfo && userInfo.isAdmin && (
                   <NavDropdown title='Admin' id='adminMenu'>
                     <LinkContainer to='/admin/userlist'>
