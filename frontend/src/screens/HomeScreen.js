@@ -31,7 +31,7 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
-    <Message variant='info'>Hello! Thank you for checking out my site. As of 5/18/2021 this is still a work in progress that I hope to finish soon! Check back soon for added functionality</Message>
+    {/* <Message variant='info'>Hello! Thank you for checking out my site. As of 5/18/2021 this is still a work in progress that I hope to finish soon! Check back soon for added functionality</Message> */}
     {gender && keyword !== 'all' ? <h1>{gender}'s {keyword}</h1> : keyword && keyword !== 'all' ? <h1>Search Results for "{keyword}"...</h1> : keyword === 'all' ? <h1>{gender}'s Clothing</h1> : <h1>Latest Products</h1>}
       {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 
         : products.length === 0 ? ( <Message variant='info'>{noResultsMessage}</Message> ) :
