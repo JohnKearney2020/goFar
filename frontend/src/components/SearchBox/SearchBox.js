@@ -24,12 +24,11 @@ const SearchBox = ({ history }) => {
         className='mr-sm-2'
       >
       </Form.Control>
-      <Button type='submit' variant='outline-secondary' className='p-2 mt-0'>
+      <Button type='submit' variant='outline-secondary' className='p-2 mt-2 mt-lg-0'>
         Search
       </Button>
     </Form>
   )
 }
 
-// export default SearchBox;
 export default withRouter(SearchBox);

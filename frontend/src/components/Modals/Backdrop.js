@@ -18,7 +18,7 @@ const Backdrop = () => {
           display: 'block'
         }}
       />
-      <h3 className='' id="orderLoadingMessage">Finalizing Your Order. Sit Tight!</h3>
+      <h3 className='px-5' id="orderLoadingMessage">Finalizing Your Order. Sit Tight!</h3>
     </div>,
     document.getElementById('backdropHook')
   )
