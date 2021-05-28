@@ -14,7 +14,7 @@ import { CART_LOADING_TRUE, CART_LOADING_FALSE } from '../../constants/cartConst
 import './CartRow.css';
 // the hideButtons prop disables the 'save for later', 'move to wishlist', and delete buttons. It is used
 // when we display the cart contents during the final step of checkout
-const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater, hideButtons, qtyInStock }) => {
+const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image, savedForLater, hideButtons, qtyInStock, qtyDropDown }) => {
 
   const dispatch = useDispatch();
 
@@ -202,6 +202,7 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         {/* ======== Qty ======== */}
         <Col md={1} className='text-center px-0'>
           {qty === 0 ? <span className='text-danger font-weight-bold'>Out of Stock</span> : 
+            qtyDropDown ? 
             <Form.Control 
               as='select'
               value={qtyDropDownValue} 
@@ -217,6 +218,8 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
                 )
               ))}
             </Form.Control> 
+            :
+            qty
           }
         </Col>
         {/* ======== Price ======== */}
@@ -258,7 +261,8 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
 }
 
 CartRow.defaultProps = {
-  hideButtons: false
+  hideButtons: false,
+  qtyDropDown: true // by default the qty value prop will be rendered as a dropdown menu
 }
 
 export default CartRow;

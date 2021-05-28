@@ -291,6 +291,7 @@ const ReviewAndSubmitOrder = ({ history }) => {
                 image={eachProduct.image}
                 savedForLater={eachProduct.savedForLater}
                 hideButtons={true}
+                qtyDropDown={false}
               />
             ))}
           </ListGroup>

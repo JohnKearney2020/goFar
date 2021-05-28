@@ -50,6 +50,7 @@ const OrdersItemsRows = ({ items }) => {
               image={eachItem.image}
               savedForLater={eachItem.savedForLater}
               hideButtons={true}
+              qtyDropDown={false}
             />
           ))}
         </ListGroup>
