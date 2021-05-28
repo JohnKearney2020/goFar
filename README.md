@@ -15,7 +15,10 @@ React | MongoDB
 Redux | Mongoose
 React Bootstrap | Express
  &nbsp; | Node
- 
+
+**Google Maps API**, **JWT (JSON Web Tokens)**, and **bcrypt** are used by both the frontend and backend. <br />
+For an exhaustive list of all libraries used see the frontend [package.json](/frontend/package.json) and the backend [package.json](/package.json)
+
 ### Features
 *RESTful API*
 - Go Far is built on a RESTful API. All CRUD operations use some combination of GET, PUT, POST, and DELETE http requests to the server
@@ -32,7 +35,10 @@ React Bootstrap | Express
 - This same product on the [Eddie Bauer website](https://www.eddiebauer.com/p/23151062/women's-guide-pro-pants?sp=1&color=Dusty%20Sage&size=)
 <br />
 
-*Athorization Middleware*
+*Authentication with bcrypt*
+- User authentication is handled with bcrypt
+
+*Athorization Middleware using JWT (JSON Web Tokens)*
 - When users log in a JSON Web Token is created
 - Athorization middleware looks for that token when users try to access protected routes
 
