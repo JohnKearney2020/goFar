@@ -137,6 +137,11 @@ For an exhaustive list of all libraries used see the frontend [package.json](/fr
 - Backend - During the final stages of the checkout process the user's shipping address is Geocoded (turned from an address into a pair of latitude and longitude coordinates that will be used by the frontend) and saved with the rest of the order
 - Frontend - Using the Google Maps Javascript SDK, a map of the user's shipping address is shown for each order. The Google Maps script is not mounted to the Body until needed
 
+*Mobile Responsive*
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/mobile.png">
+</p>
+
 Checkout all these features on the live website [here](https://gofarapp.herokuapp.com/)
 <br />
 
