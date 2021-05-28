@@ -54,9 +54,9 @@ React Bootstrap | Express
 
 *Frontend and Backend Pagination*
 - The Go Far server sends paginated data to the frontend when displaying products, reviews, and orders
-- For example, the landing page requests and is sent the data for eight products at a time and no more. As users interact with the pagination buttons eight more products are sent as needed
+- For example, the orders section of the User Profile page requests and is sent the data for five orders at a time and no more. As users interact with the pagination buttons more orders are sent as needed
 - See the getUserOrders() function in [orderController.js](/backend/controllers/orderController.js)
-- 
+
 <p align="center">
   <img width="" src="frontend/public/images/markdown/pagination.png">
 </p>
