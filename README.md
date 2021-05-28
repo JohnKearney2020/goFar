@@ -104,7 +104,7 @@ React Bootstrap | Express
 <br />
 
 *Checkout*
-- Users can place orders using the PayPal API and PayPal's sandbox mode
+- Users can place orders using the PayPal API and PayPal's sandbox mode. The PayPal API script is not mounted to the Body until needed
 - Users can add shipping and/or billing addresses if needed during the checkout process
 
 <p align="center">
