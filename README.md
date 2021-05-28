@@ -55,14 +55,10 @@ React Bootstrap | Express
 - A warning message is displayed if users try to review a product they have already reviewed
 
 <p align="center">
-  <img width="" src="frontend/public/images/markdown/reviews1.png">
-</p>
-<p align="center">
   <img width="" src="frontend/public/images/markdown/reviews2.png">
 </p>
-<p align="center">
-  <img width="" src="frontend/public/images/markdown/reviews3.png">
-</p>
 
-*User Profiles*
+*Search Functionality*
+- Users can search for product names or for broader product categories like "camping" and "leggings"
+
 
