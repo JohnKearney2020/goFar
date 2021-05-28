@@ -55,10 +55,18 @@ React Bootstrap | Express
 - A warning message is displayed if users try to review a product they have already reviewed
 
 <p align="center">
-  <img width="" src="frontend/public/images/markdown/reviews2.png">
+  <img width="" src="frontend/public/images/markdown/reviews2.jpg">
 </p>
 
 *Search Functionality*
 - Users can search for product names or for broader product categories like "camping" and "leggings"
 
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/searchResult2.jpg">
+</p>
+
+*User Profiles*
+- Users can change their name, email, phone number and passwords
+- Users can add, edit, and delete their addresses
+- Users can browse their order history
 
