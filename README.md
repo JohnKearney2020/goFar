@@ -91,11 +91,23 @@ React Bootstrap | Express
 <br />
 
 *Cart*
-- Users can add and remove items from their cart, change the quantities, or save the item for later
+- Users can add and remove items from their cart, change the quantities, save the item for later, or move them to their wishlist (if it's not already in it)
 - The cart checks to see if the items are still in stock and if any quantity changes are needed. Out of stock items are automatically saved for later. Any changes to the cart are relayed to the user.
 
 <p align="center">
   <img width="" src="frontend/public/images/markdown/cart.png">
+</p>
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/savedForLater.png">
+</p>
+<br />
+
+*Checkout*
+- Users can place orders using the PayPal API and PayPal's sandbox mode
+- Users can add shipping and/or billing addresses if need during the checkout process
+
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/checkout.png">
 </p>
 <br />
 
