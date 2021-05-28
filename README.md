@@ -97,6 +97,7 @@ React Bootstrap | Express
 <p align="center">
   <img width="" src="frontend/public/images/markdown/cart.png">
 </p>
+<br />
 <p align="center">
   <img width="" src="frontend/public/images/markdown/savedForLater.png">
 </p>
@@ -104,7 +105,7 @@ React Bootstrap | Express
 
 *Checkout*
 - Users can place orders using the PayPal API and PayPal's sandbox mode
-- Users can add shipping and/or billing addresses if need during the checkout process
+- Users can add shipping and/or billing addresses if needed during the checkout process
 
 <p align="center">
   <img width="" src="frontend/public/images/markdown/checkout.png">
