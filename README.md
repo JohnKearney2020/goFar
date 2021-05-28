@@ -70,3 +70,7 @@ React Bootstrap | Express
 - Users can add, edit, and delete their addresses
 - Users can browse their order history
 
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/orders.png">
+</p>
+
