@@ -75,7 +75,7 @@ React Bootstrap | Express
 - Users can add, edit, and delete their addresses
 - Users can browse their order history and see a Google Map of their shipping address
 <p align="center">
-  <img width="" src="frontend/public/images/markdown/addresses.png
+  <img width="" src="frontend/public/images/markdown/addresses.png">
 </p>
 <p align="center">
   <img width="" src="frontend/public/images/markdown/orders.png">
