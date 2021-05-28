@@ -42,6 +42,7 @@ React Bootstrap | Express
 - Images populate based on the colors selected by the user
 - Hovering over the featured image gives users a zoom in view of the product
 - This was acomplished using [Pure React Carousel](https://github.com/express-labs/pure-react-carousel) by Express Labs
+- Some products have videos and are included in the carousel. Clicking the video opens a modal that plays an embedded YouTube video
 
 <p align="center">
   <img width="" src="frontend/public/images/markdown/imageCarousel.gif">
@@ -92,7 +93,7 @@ React Bootstrap | Express
 
 *Cart*
 - Users can add and remove items from their cart, change the quantities, save the item for later, or move them to their wishlist (if it's not already in it)
-- The cart checks to see if the items are still in stock and if any quantity changes are needed. Out of stock items are automatically saved for later. Any changes to the cart are relayed to the user.
+- The cart checks to see if the items are still in stock and if any quantity changes are needed. Out of stock items are automatically saved for later. Any changes to the cart are relayed to the user
 
 <p align="center">
   <img width="" src="frontend/public/images/markdown/cart.png">
@@ -116,6 +117,8 @@ React Bootstrap | Express
 - Backend - During the final stages of the checkout process the user's shipping address is Geocoded (turned from an address into a pair of latitude and longitude coordinates that will be used by the frontend) and saved with the rest of the order
 - Frontend - Using the Google Maps Javascript SDK, a map of the user's shipping address is shown for each order. The Google Maps script is not mounted to the Body until needed
 
+Checkout all these features on the live website [here](https://gofarapp.herokuapp.com/)
+<br />
 
 
 
