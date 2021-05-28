@@ -24,3 +24,11 @@ const protect = AsyncHandler(async (req, res, next) => {
 })
 
 export { protect }
+
+
+
+
+
+
+
+
