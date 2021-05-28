@@ -60,6 +60,9 @@ React Bootstrap | Express
 <p align="center">
   <img width="" src="frontend/public/images/markdown/reviews2.png">
 </p>
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/reviews3.png">
+</p>
 
 *User Profiles*
 
