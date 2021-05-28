@@ -41,4 +41,23 @@ React Bootstrap | Express
 *Dynamic Product Image Carousel*
 - Images populate based on the colors selected by the user
 - Hovering over the featured image gives users a zoom in view of the product
+- This was acomplished using [Pure React Carousel](https://github.com/express-labs/pure-react-carousel) by Express Labs
+
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/imageCarousel.gif">
+</p>
+<br />
+
+*Product Reviews*
+- Users can add product reviews
+- If they've purchased the product the review will be marked as "Verified Purchase"
+- A user's rating immediately counts toward the products total rating and total reviews
+- A warning message is displayed if users try to review a product they have already reviewed
+
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/reviews1.png">
+</p>
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/reviews2.png">
+</p>
 
