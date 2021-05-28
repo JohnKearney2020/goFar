@@ -18,4 +18,10 @@ React Bootstrap | Express
  
 ### Features
 *Robust Product Model*
-- A robust product [model](/backend/models/productModel.js) allows for products with many different sizes, colors, size categories (petite, tall, plus, etc.), along with unique prices and images for each possible combination
+- A robust product [model](/backend/models/productModel.js) allows the database to store products with many different sizes, colors, size categories (petite, tall, plus, etc.), along with unique prices and images for each possible combination
+- An example of a product based on this model is shown below:
+
+<p align="center">
+  <img width="" src="/fontend/public/images/markdown/product.png">
+</p>
+<br />
