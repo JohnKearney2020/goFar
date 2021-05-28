@@ -6,6 +6,27 @@ import { Client } from "@googlemaps/google-maps-services-js";
 
 dotenv.config(); //load environmental variables
 
+// @desc     Get all orders tied to a specific user
+// @route    GET /api/orders
+// @access   Private
+const getUserOrders = asyncHandler(async (req, res) => {
+  const pageSize = 5;
+  const page = Number(req.query.pageNumber) || 1;
+  //Get the total count for pagination purposes
+  // Remember, req.user._id is passed here automatically by our authorization middleware
+  const count = await Order.countDocuments({ user: req.user._id });
+  console.log(`Count: ${count}` .red.bold)
+  // '-1' is descending order from newest to oldest. '1' is ascending order from oldest to newest
+  const orders = await Order.find({ user: req.user._id }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
+  if(orders){
+    // We return what the current page is, and how many pages total their are rounded up
+    res.json({ orders, page, pages: Math.ceil(count / pageSize) });
+  } else {
+    res.status(400);
+    throw new Error('Could not find orders based on that user ID...');
+  }
+})
+
 // @desc     Add an order to a User and update that user's cart at the same time - remove items that they just purchased
 // @route    PUT /api/users/orders
 // @access   Private
@@ -46,26 +67,6 @@ const createOrder = asyncHandler(async (req, res) => {
   })
 })
 
-// @desc     Get all orders tied to a specific user
-// @route    GET /api/orders
-// @access   Private
-const getUserOrders = asyncHandler(async (req, res) => {
-  const pageSize = 5;
-  const page = Number(req.query.pageNumber) || 1;
-  //Get the total count for pagination purposes
-  // Remember, req.user._id is passed here automatically by our authorization middleware
-  const count = await Order.countDocuments({ user: req.user._id });
-  console.log(`Count: ${count}` .red.bold)
-  // '-1' is descending order from newest to oldest. '1' is ascending order from oldest to newest
-  const orders = await Order.find({ user: req.user._id }).sort({createdAt: -1}).limit(pageSize).skip(pageSize * (page - 1));
-  if(orders){
-    // We return what the current page is, and how many pages total their are rounded up
-    res.json({ orders, page, pages: Math.ceil(count / pageSize) });
-  } else {
-    res.status(400);
-    throw new Error('Could not find orders based on that user ID...');
-  }
-})
 
 // @desc     Adjust the inventory based on the qty's the user checked out
 // @route    PUT /api/orders/inventoryupdate
