@@ -65,11 +65,18 @@ React Bootstrap | Express
   <img width="" src="frontend/public/images/markdown/searchResult2.jpg">
 </p>
 
+*User Wishlist*
+- Users can add products to their wishlist. From there they can delete them or move them to the cart
+- If an item is already in their cart the wishlist will display that to the user
+
+
 *User Profiles*
 - Users can change their name, email, phone number and passwords
 - Users can add, edit, and delete their addresses
-- Users can browse their order history
-
+- Users can browse their order history and see a Google Map of their shipping address
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/addresses.png
+</p>
 <p align="center">
   <img width="" src="frontend/public/images/markdown/orders.png">
 </p>
