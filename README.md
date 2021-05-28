@@ -57,6 +57,7 @@ React Bootstrap | Express
 <p align="center">
   <img width="" src="frontend/public/images/markdown/reviews2.jpg">
 </p>
+<br />
 
 *Search Functionality*
 - Users can search for product names or for broader product categories like "camping" and "leggings"
@@ -64,14 +65,7 @@ React Bootstrap | Express
 <p align="center">
   <img width="" src="frontend/public/images/markdown/searchResult2.jpg">
 </p>
-
-*User Wishlist*
-- Users can add products to their wishlist. From there they can delete them or move them to the cart
-- If an item is already in their cart the wishlist will display that to the user
-<p align="center">
-  <img width="" src="frontend/public/images/markdown/wishlist.png">
-</p>
-
+<br />
 
 *User Profiles*
 - Users can change their name, email, phone number and passwords
@@ -86,4 +80,24 @@ React Bootstrap | Express
 <p align="center">
   <img width="" src="frontend/public/images/markdown/orders.png">
 </p>
+<br />
+
+*User Wishlist*
+- Users can add products to their wishlist. From there they can delete them or move them to the cart
+- If an item is already in their cart the wishlist will display that to the user
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/wishlist.png">
+</p>
+<br />
+
+*Cart*
+- Users can add and remove items from their cart, change the quantities, or save the item for later
+- The cart checks to see if the items are still in stock and if any quantity changes are needed. Out of stock items are automatically saved for later. Any changes to the cart are relayed to the user.
+
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/cart.png">
+</p>
+<br />
+
+
 
