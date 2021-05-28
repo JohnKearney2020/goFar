@@ -61,3 +61,5 @@ React Bootstrap | Express
   <img width="" src="frontend/public/images/markdown/reviews2.png">
 </p>
 
+*User Profiles*
+
