@@ -17,6 +17,9 @@ React Bootstrap | Express
  &nbsp; | Node
  
 ### Features
+*RESTful API*
+- Go Far is built on a RESTful API. All CRUD operations use some combination of GET, PUT, POST, and DELETE http requests to the server
+
 *Robust Product Model*
 - A robust product [model](/backend/models/productModel.js) allows the database to store products with many different sizes, colors, size categories (petite, tall, plus, etc.), along with unique prices and images for each possible combination
 - An example of a product based on this model is shown below:
@@ -48,6 +51,17 @@ React Bootstrap | Express
   <img width="" src="frontend/public/images/markdown/imageCarousel.gif">
 </p>
 <br />
+
+*Frontend and Backend Pagination*
+- The Go Far server sends paginated data to the frontend when displaying products, reviews, and orders
+- For example, the landing page requests and is sent the data for eight products at a time and no more. As users interact with the pagination buttons eight more products are sent as needed
+- See the getUserOrders() function in [orderController.js](/backend/controllers/orderController.js)
+- 
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/pagination.png">
+</p>
+<br />
+
 
 *Product Reviews*
 - Users can add product reviews
