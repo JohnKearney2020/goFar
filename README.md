@@ -68,6 +68,9 @@ React Bootstrap | Express
 *User Wishlist*
 - Users can add products to their wishlist. From there they can delete them or move them to the cart
 - If an item is already in their cart the wishlist will display that to the user
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/wishlist.png">
+</p>
 
 
 *User Profiles*
