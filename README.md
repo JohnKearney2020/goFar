@@ -22,6 +22,6 @@ React Bootstrap | Express
 - An example of a product based on this model is shown below:
 
 <p align="center">
-  <img width="" src="/fontend/public/images/markdown/product.png">
+  <img width="" src="./fontend/public/images/markdown/product.png">
 </p>
 <br />
