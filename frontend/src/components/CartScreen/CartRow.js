@@ -240,8 +240,10 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
         <Row className='justify-content-start mt-2 ml-1'>
         {savedForLater === true ?
           // Move to cart button
-          <Button className='p-0 px-2' variant="secondary" disabled={cartLoading} onClick={moveInCartHandler} value={false}>
-            {movingToCartIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Cart`}
+          <Button className='p-0 px-2' variant="secondary" disabled={cartLoading || qty === 0} onClick={moveInCartHandler} value={false}>
+            {/* {movingToCartIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : `Move to Cart`} */}
+            {movingToCartIcon ? <span><FontAwesomeIcon className='' icon={spinner} /> Moving... </span> : 
+            qty === 0 ? 'Out of Stock' : `Move to Cart`}
           </Button> : 
           // Save for later button
           <Button className='p-0 px-2' variant="secondary" disabled={cartLoading} onClick={moveInCartHandler} value={true}>
