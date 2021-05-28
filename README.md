@@ -37,3 +37,8 @@ React Bootstrap | Express
   <img width="" src="frontend/public/images/markdown/authMiddleware.png">
 </p>
 <br />
+
+*Dynamic Product Image Carousel*
+- Images populate based on the colors selected by the user
+- Hovering over the featured image gives users a zoom in view of the product
+
