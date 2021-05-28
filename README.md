@@ -22,6 +22,18 @@ React Bootstrap | Express
 - An example of a product based on this model is shown below:
 
 <p align="center">
-  <img width="" src="/fontend/public/images/markdown/product.png">
+  <img width="" src="frontend/public/images/markdown/product.png">
+</p>
+<br />
+
+- This same product on the [Eddie Bauer website](https://www.eddiebauer.com/p/23151062/women's-guide-pro-pants?sp=1&color=Dusty%20Sage&size=)
+<br />
+
+*Athorization Middleware*
+- When users log in a JSON Web Token is created
+- Athorization middleware looks for that token when users try to access protected routes
+
+<p align="center">
+  <img width="" src="frontend/public/images/markdown/authMiddleware.png">
 </p>
 <br />
