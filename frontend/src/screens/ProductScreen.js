@@ -22,6 +22,7 @@ import WishListButton from '../components/ProductComponents/WishListButton';
 import AddToCartButton from '../components/ProductComponents/AddToCartButton';
 import { addDecimals } from '../utilityFunctions/addDecimals';
 import AddReviewRow from '../components/ProductComponents/ProductReviews/AddReviewRow';
+import './ProductScreen.css';
 
 const ProductScreen = ({ match }) => {
 
@@ -310,11 +311,12 @@ const ProductScreen = ({ match }) => {
                         value={qtyForCart} 
                         onChange={(e) => setQtyForCart(Number(e.target.value))} 
                         disabled={!(selectedSize !== '' && qtyInStock > 0)}
+                        className='py-0 px-3 qtyDropDown'
                       >
                         {[...Array(qtyInStock).keys()].map(x => (
                           // Limit the user to a max of 10 items added to the cart at once
                           (x + 1 <= 10 &&
-                            <option key={x+1} value={x + 1}>
+                            <option key={x+1} value={x + 1} className=''>
                             {x + 1}
                             </option>
                           )
