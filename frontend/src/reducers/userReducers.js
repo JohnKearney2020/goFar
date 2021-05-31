@@ -11,7 +11,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localS
 // console.log(userInfoFromStorage)
 //If so, set the initial state for userLoginReducer to that, otherwise use the default state
 // const initialState = (userInfoFromStorage || { userInfo: {cart: [], wishList: [] } });
-const initialState = (userInfoFromStorage || {cart: [], wishList: [], loggedIn: false });
+const initialState = (userInfoFromStorage || {loading: false, cart: [], wishList: [], loggedIn: false });
 // console.log('initialState:')
 // console.log(initialState);
 
@@ -28,7 +28,8 @@ export const userLoginReducer = (state = { userInfo: initialState }, action) => 
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload, userInfo: initialState };
     case USER_LOGOUT:
-      return { userInfo: initialState }
+      // return { userInfo: initialState }
+      return { userInfo: {loading: false, cart: [], wishList: [], loggedIn: false } }
     default: 
       return state;
   } 

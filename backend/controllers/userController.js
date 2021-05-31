@@ -18,7 +18,6 @@ const authUser = asyncHandler(async (req, res) => {
     // the 'userInfo' state and local storage is meant as general user data. Later, when we go to the user profile page, we make a request to the 
     // back end for more detailed information including the addresses and phone number.
     res.json({
-      loading: false,
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -55,7 +54,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if(user){
     res.status(201).json({ //201 status means something was created
-      loading: false,
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -113,7 +111,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.status(201).json({ //201 status means something was created
-      loading: false,
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
