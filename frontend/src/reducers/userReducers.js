@@ -29,7 +29,7 @@ export const userLoginReducer = (state = { userInfo: initialState }, action) => 
       return { loading: false, error: action.payload, userInfo: initialState };
     case USER_LOGOUT:
       // return { userInfo: initialState }
-      return { userInfo: {loading: false, cart: [], wishList: [], loggedIn: false } }
+      return { userInfo: { loading: false, cart: [], wishList: [], loggedIn: false } }
     default: 
       return state;
   } 

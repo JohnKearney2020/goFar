@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Card, ListGroup, Button, Form } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 
 import ProductDetailsCarousel from '../components/ProductComponents/ProductDetailsCarousel';
 import Message from '../components/Message';
@@ -195,6 +196,9 @@ const ProductScreen = ({ match }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Go Far | ${product.name ? product.name : ''}`}</title>
+      </Helmet>
       { loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : 
         <>
           <Row>

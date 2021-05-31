@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
@@ -56,53 +58,58 @@ const LoginScreen = ({ location, history }) => {
   }
 
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
-      {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='email'>
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control 
-            type='email' 
-            placeholder='Enter email address' 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={emailMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
-          }
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control 
-            type='password' 
-            placeholder='Enter password' 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={passwordMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
-          }
-        </Form.Group>
-        <Button type='submit' variant='outline-primary' disabled={loading}>
-          {loading ? 'Signing in...' : 'Sign In'}
-        </Button>
-        <Button type='button' variant='outline-primary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
-          {loading ? 'Signing in...' : 'Sign In As Guest'}
-        </Button>
-      </Form>
-      <Row className='py-3'>
-        <Col>
-          New Customer?{' '} 
-          <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
-            <u>Register Instead</u>
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+    <>
+      <Helmet>
+        <title>{`Go Far | Login`}</title>
+      </Helmet>
+      <FormContainer>
+        <h1>Sign In</h1>
+        {error && <Message variant='danger'>{error}</Message>}
+        {loading && <Loader />}
+        <Form onSubmit={submitHandler}>
+          <Form.Group controlId='email'>
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control 
+              type='email' 
+              placeholder='Enter email address' 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={emailMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
+            }
+          </Form.Group>
+          <Form.Group controlId='password'>
+            <Form.Label>Password</Form.Label>
+            <Form.Control 
+              type='password' 
+              placeholder='Enter password' 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={passwordMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
+            }
+          </Form.Group>
+          <Button type='submit' variant='outline-primary' disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </Button>
+          <Button type='button' variant='outline-primary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
+            {loading ? 'Signing in...' : 'Sign In As Guest'}
+          </Button>
+        </Form>
+        <Row className='py-3'>
+          <Col>
+            New Customer?{' '} 
+            <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
+              <u>Register Instead</u>
+            </Link>
+          </Col>
+        </Row>
+      </FormContainer>
+    </>
   )
 }
 

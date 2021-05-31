@@ -2,6 +2,8 @@ import React, {useState, useEffect, useLayoutEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
@@ -78,81 +80,86 @@ const RegisterScreen = ({ location, history }) => {
   }, [dispatch]);
 
   return (
-    <FormContainer>
-      <h1>Sign Up</h1>
-      {/* Clear error message using useLayoutEffect */}
-      {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-      <Form.Group controlId='name'>
-          <Form.Label>Name</Form.Label>
-          <Form.Control 
-            type='name' 
-            placeholder='Enter name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            // className='is-invalid'
-            className={nameMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {nameMessage && <div className="invalid-feedback">{nameMessage}</div>
-          }
-        </Form.Group>
-        <Form.Group controlId='email'>
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control 
-            type='email' 
-            placeholder='Enter email address' 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={emailMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
-          }
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control 
-            type='password' 
-            placeholder='Enter password' 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={passwordMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
-          }
-        </Form.Group>
-        <Form.Group controlId='confirmPassword'>
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control 
-            type='password' 
-            placeholder='Confirm password' 
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={confirmPasswordMessage === null ? '' : 'is-invalid'}
-          >
-          </Form.Control>
-          {confirmPasswordMessage && <div className="invalid-feedback">{confirmPasswordMessage}</div>
-          }
-        </Form.Group>
-        <Button type='submit' variant='outline-primary' disabled={loading}>
-          {loading ? 'Signing in...' : 'Register'}
-        </Button>
-        {/* <Button type='button' variant='outline-secondary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
-          {loading ? 'Signing in...' : 'Sign In As Guest'}
-        </Button> */}
-      </Form>
-      <Row className='py-3'>
-        <Col>
-          Already Have an Account?{' '} 
-          <Link to={redirect ? `/login?redirect=${redirect}` : `/login`} as='u'>
-            <u>Login Instead</u>
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+    <>
+      <Helmet>
+        <title>{`Go Far | Register`}</title>
+      </Helmet>
+      <FormContainer>
+        <h1>Sign Up</h1>
+        {/* Clear error message using useLayoutEffect */}
+        {error && <Message variant='danger'>{error}</Message>}
+        {loading && <Loader />}
+        <Form onSubmit={submitHandler}>
+        <Form.Group controlId='name'>
+            <Form.Label>Name</Form.Label>
+            <Form.Control 
+              type='name' 
+              placeholder='Enter name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              // className='is-invalid'
+              className={nameMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {nameMessage && <div className="invalid-feedback">{nameMessage}</div>
+            }
+          </Form.Group>
+          <Form.Group controlId='email'>
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control 
+              type='email' 
+              placeholder='Enter email address' 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={emailMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {emailMessage && <div className="invalid-feedback">{emailMessage}</div>
+            }
+          </Form.Group>
+          <Form.Group controlId='password'>
+            <Form.Label>Password</Form.Label>
+            <Form.Control 
+              type='password' 
+              placeholder='Enter password' 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={passwordMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {passwordMessage && <div className="invalid-feedback">{passwordMessage}</div>
+            }
+          </Form.Group>
+          <Form.Group controlId='confirmPassword'>
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control 
+              type='password' 
+              placeholder='Confirm password' 
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={confirmPasswordMessage === null ? '' : 'is-invalid'}
+            >
+            </Form.Control>
+            {confirmPasswordMessage && <div className="invalid-feedback">{confirmPasswordMessage}</div>
+            }
+          </Form.Group>
+          <Button type='submit' variant='outline-primary' disabled={loading}>
+            {loading ? 'Signing in...' : 'Register'}
+          </Button>
+          {/* <Button type='button' variant='outline-secondary' disabled={loading} className='ml-2' onClick={guestLoginHandler}>
+            {loading ? 'Signing in...' : 'Sign In As Guest'}
+          </Button> */}
+        </Form>
+        <Row className='py-3'>
+          <Col>
+            Already Have an Account?{' '} 
+            <Link to={redirect ? `/login?redirect=${redirect}` : `/login`} as='u'>
+              <u>Login Instead</u>
+            </Link>
+          </Col>
+        </Row>
+      </FormContainer>
+    </>
   )
 }
 

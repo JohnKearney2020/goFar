@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import UserInfo from '../components/ProfileScreen/UserInfo';
@@ -25,6 +26,9 @@ const ProfileScreen = ({ history, match }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Go Far | Profile`}</title>
+      </Helmet>
       <OffsetPageHeader leftHeaderText='User Profile' rightHeaderText='User Profile' hrBoolean={false}/>
       <Tabs defaultActiveKey={
           acceptableParams[match.params.tab] ? match.params.tab : 'userInfo'

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 
 import { listProducts, listGenderProducts } from '../actions/productActions';
 import ProductCard from '../components/ProductComponents/ProductCard';
@@ -31,6 +32,9 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Welcome to Go Far`}</title>
+      </Helmet>
     {/* <Message variant='info'>Hello! Thank you for checking out my site. As of 5/18/2021 this is still a work in progress that I hope to finish soon! Check back soon for added functionality</Message> */}
     {gender && keyword !== 'all' ? <h1>{gender}'s {keyword}</h1> : keyword && keyword !== 'all' ? <h1>Search Results for "{keyword}"...</h1> : keyword === 'all' ? <h1>{gender}'s Clothing</h1> : <h1>Latest Products</h1>}
       {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) 

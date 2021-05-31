@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row } from 'react-bootstrap';
-import { refreshWishList } from '../actions/wishListActions';
+import { Helmet } from 'react-helmet';
 
+import { refreshWishList } from '../actions/wishListActions';
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -40,6 +41,9 @@ const WishListScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Go Far | Wishlist`}</title>
+      </Helmet>
       <OffsetPageHeader leftHeaderText='Wishlist' rightHeaderText='Wishlist' hrBoolean={false}/>
       {(!haveUpdatedWishList.current && !noWishList) ? <Loader /> :
         <>

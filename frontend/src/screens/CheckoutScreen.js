@@ -5,6 +5,7 @@ import { getUserDetails } from '../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { Helmet } from 'react-helmet';
 
 import OffsetPageHeader from '../components/OffsetPageHeader';
 import BillingInformation from '../components/CheckoutScreen/BillingInformation';
@@ -138,6 +139,9 @@ const CheckoutScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Go Far | Checkout`}</title>
+      </Helmet>
       <OffsetPageHeader leftHeaderText='Checkout' rightHeaderText='Checkout' hrBoolean={false}/>
       {loading ? <Loader /> :
         <>

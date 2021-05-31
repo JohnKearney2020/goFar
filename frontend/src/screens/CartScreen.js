@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Col, Row, Card, Button } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 
 import { getCartProductDetails, addCartQtyMessage, addCartMovedMessage } from '../actions/cartActions';
 import { CART_QTY_MESSAGE_RESET, CART_MOVED_MESSAGE_RESET, CART_PRODUCT_DETAILS_RESET } from '../constants/cartConstants';
@@ -202,6 +203,9 @@ const CartScreen = ({ history }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Go Far | Cart`}</title>
+      </Helmet>
       <OffsetPageHeader leftHeaderText='Your Cart' rightHeaderText='Your Cart' hrBoolean={false}/>
       {!fullyLoadedScreenOnceAlready.current ? <Loader /> :
         <>
