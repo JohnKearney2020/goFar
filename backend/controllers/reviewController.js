@@ -20,7 +20,7 @@ const createReview = asyncHandler(async (req, res) => {
   const userReviews = await Review.find({ userID: req.user._id, productID: review.productID })
   if(userReviews.length > 0){
     res.status(400);
-    throw  new Error(`Add Review Failed - You already created a review for this item on ${formatDateDayMonthYear(userReviews[0].createdAt)}`);
+    throw  new Error(userReviews[0].createdAt);
   }
 
   //=================================================================================================

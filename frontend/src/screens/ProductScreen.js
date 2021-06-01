@@ -396,7 +396,7 @@ const ProductScreen = ({ match }) => {
             <h1 className='display-4'>Reviews</h1>
           </Row>
           <AddReviewRow productID={match.params.id}/>
-          { reviewError && <Message variant='danger'>{reviewError}</Message> }
+          { reviewError && <Message variant='danger'>{`Add review failed - You already created a review for this product on ${reviewError}`}</Message> }
           { loaded && <ProductReviews productID={match.params.id}/> }
         </>
       }
