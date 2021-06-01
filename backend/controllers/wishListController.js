@@ -28,17 +28,6 @@ const getUserWishListProducts = asyncHandler(async (req, res) => {
 // @route    PUT /api/users/wishlistitem
 // @access   Private
 const addUserWishListItem = asyncHandler(async (req, res) => {
-  console.log('in addUserWishListItem')
-
-  // userID,
-  // productID, 
-  // name: productName,
-  // color,
-  // size,
-  // sizeCategory, 
-  // image: primaryImageForColor,
-
-
   const { productID, name, color, size, sizeCategory, image } = req.body;
   const user = await User.findById(req.user._id);
   if(user) {
@@ -108,10 +97,9 @@ const deleteUserWishListItem = asyncHandler(async (req, res) => {
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
-        // addresses: updatedUser.addresses,
-        // phoneNumber: updatedUser.phoneNumber,
         cart: updatedUser.cart,
         wishList: updatedUser.wishList,
+        loggedIn: true,
         token: generateToken(updatedUser._id) 
       })
     } else {
