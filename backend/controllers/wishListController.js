@@ -149,3 +149,4 @@ export {
 
 // test commit for new WSL terminal
 // test commit 2 for new WSL terminal
+// test commit 3 for bash terminal after setting remote to ssh
