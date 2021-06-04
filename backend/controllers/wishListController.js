@@ -146,3 +146,5 @@ export {
   deleteUserWishListItem,
   updateWholeWishList
 };
+
+// test commit for new WSL terminal
