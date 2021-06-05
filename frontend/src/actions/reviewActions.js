@@ -16,7 +16,7 @@ export const addProductReview = (review, pageNumber = '', totalRating = -1 ) => 
 
   try {
     dispatch({ type: ADD_REVIEW_LOADING_TRUE });
-    const { data } = await axios.post(`/api/reviews`, { review }, config)
+    await axios.post(`/api/reviews`, { review }, config)
     dispatch({ type: ADD_REVIEW_LOADING_FALSE }); //We've set up the reducer to also hide the modal here
     // We need to fetch review data for this product ID again since we just added a review
     // If we don't do this, the user won't see their new review until they refresh the page
