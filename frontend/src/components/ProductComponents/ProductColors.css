@@ -1,5 +1,7 @@
 img.colorButton {
   /* as of 3/1/2021 this is used simply as a way of selecting all color button elements */
+  /* except for the css below :) */
+  cursor: pointer
 }
 
 .colorButtonActiveBorder {
