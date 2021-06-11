@@ -36,11 +36,8 @@ const UserInfo = () => {
   const { loading: updateProfileLoading, success } = userUpdateProfile;
 
   const noAddressMessage = 'No addresses on file. Click the "Addresses" tab to add an address.';
-  // const updateAddressMessage = 'You can update your primary address by clicking the "Addresses" tab.'
-  const isGuestMessage1 = 'As a guest you cannot change the Name, Email, or Password fields. You can update the Phone Number field.';
-  const isGuestMessage2 = 'Try out various CRUD operations on the Addresses, Wishlist, and Orders Tabs. You have the same abilities there as any other user. ';
-  // const isGuestMessage3 = 'Try adding, deleting, and editing addresses on the Addresses tab.';
-  // const isGuestMessage4 = 'Look at orders you and other guests have made on the Orders Tab.';
+  const isGuestMessage1 = 'As a guest you cannot change the Name, Email, or Password fields because this is a shared account. You can update the Phone Number field.';
+  const isGuestMessage2 = 'Try out various CRUD operations on the Addresses and Orders tabs. You have the same abilities there as any other user. ';
 
   useEffect(() => {
       if(haveFetchedUserData.current === false){ //if we haven't gotten the user details yet, go ahead and get them
@@ -61,7 +58,7 @@ const UserInfo = () => {
         let primeAddress = user.addresses[user.addresses.findIndex(i => i.isPrimary === true)];
         if(primeAddress !== undefined) { setPrimaryAddress(primeAddress) };
         //Determine if the user is a guest
-        if(user._id === '605a1c32864ac85278b75db1') { setIsGuest(true) };
+        if(user._id === '60ad45521f19ac122ce6c333') { setIsGuest(true) };
       }
     }, [ dispatch, userInfo, user, success ]);
 
@@ -74,7 +71,6 @@ const UserInfo = () => {
     if(phoneNumberMessage) { setPhoneNumberMessage(null) }
     if(passwordMessage) { setPasswordMessage(null) }
     if(confirmPasswordMessage) { setConfirmPasswordMessage(null) }
-
     //Check for blank fields next
     if(name === ''){ 
       setNameMessage('Name field cannot be empty');
@@ -89,7 +85,6 @@ const UserInfo = () => {
       setConfirmPasswordMessage('Your passwords do not match');
       anyErrors = true;
     }
-
     if(anyErrors) { return }
     //DISPATCH UPDATE PROFILE
     dispatch(updateUserProfile({ id: user._id, name, email, password, phoneNumber }, 'userUpdate'));
@@ -111,15 +106,10 @@ const UserInfo = () => {
               <h4 className='font-weight-bold'>Current Primary Address</h4>
               {primaryAddress === '' ? ( <Message variant='info'>{noAddressMessage}</Message> ) : (
                 <>
-                  {/* { primaryAddress.addressName && <h6>{primaryAddress.addressName}</h6> }
-                  { <h6>{primaryAddress.line1}</h6> }
-                  { primaryAddress.line2 && <h6>{primaryAddress.line2}</h6> }
-                  {<h6>{primaryAddress.city}, {primaryAddress.state} {primaryAddress.zipCode}</h6>} */}
                   { addressName && <h6>{addressName}</h6> } {/* the address name is an optional field */}
                   { <h6>{line1}</h6> }
                   { line2 && <h6>{line2}</h6> } {/* the address line 2 is an optional field */}
                   {<h6>{city}, {state} {zipCode}</h6>}
-                  {/* <Message className='my-0' variant='info'>{updateAddressMessage}</Message> */}
                 </>
               )}          
             </ListGroup.Item>
@@ -130,18 +120,14 @@ const UserInfo = () => {
           {success && <Message variant='success'>Profile Successfully Updated!</Message>}
           { isGuest && <Message variant='info'>{isGuestMessage1}</Message>}
           { isGuest && <Message variant='info'>{isGuestMessage2}</Message>}
-          {/* { isGuest && <Message variant='info'>{isGuestMessage3}</Message>} */}
-          {/* { isGuest && <Message variant='info'>{isGuestMessage4}</Message>} */}
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control 
                 type='text'
-                // placeholder='Enter name'
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                // className='is-invalid'
                 className={nameMessage === null ? '' : 'is-invalid'}
                 disabled={isGuest}
               >
