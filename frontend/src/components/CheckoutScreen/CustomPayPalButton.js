@@ -76,7 +76,6 @@ const CustomPayPalButton = ({ history }) => {
   const createOrder = async (data) => {
     // This is the second of our functions to run after the user completes the PayPal transaction
     try {
-      console.log('in createOrder')
       //============================================================================================
       //            Get the latLng coordinates for the user's shipping address
       //============================================================================================
