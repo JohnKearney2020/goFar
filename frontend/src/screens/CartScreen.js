@@ -56,7 +56,6 @@ const CartScreen = ({ history }) => {
     // First, get the detailed data with current prices and quantities for items in the cart
     //============================================================================================================
     if(cart.length > 0 && haveFetchedCartData.current === false){
-      console.log('in fetch cart details part of cart screen useEffect')
       let arrayOfProductIDs = cart.map((eachItem) => {
         return eachItem.productID;
       })
@@ -66,7 +65,6 @@ const CartScreen = ({ history }) => {
     // Next, compare the user's cart to the up to date product data. Update prices and quantities when necessary
     //============================================================================================================
     } else if(cartProducts.length > 0 && haveFetchedCartData.current === true && haveUpdatedQtysPrices.current === false){
-      console.log('in update qtys and prices part of cart screen useEffect')
       const qtyMessageArray = [];
       const movedMessageArray = [];
       let newUpdatedCart = cloneDeep(cart);
@@ -175,7 +173,6 @@ const CartScreen = ({ history }) => {
             payload: data
           });
           localStorage.setItem('userInfo', JSON.stringify(data));
-          console.log('cart updated successfully')
         } catch (error) {
           console.log('there was an error updating the cart with up to date values')
           console.log(error)
@@ -187,7 +184,6 @@ const CartScreen = ({ history }) => {
       //This else statement is the equivalent of ComponentDidUpdate. The logic above is all equivalent to ComponentDidMount
       //Resetting the Refs below and then toggling the local state forceReRender wil force a fresh re-render with all the logic
       //above in this useEffect executing again
-      console.log('in last part of useEffect')
       fullyLoadedScreenOnceAlready.current = true;
       setForceReRender(true);
     }

@@ -5,7 +5,7 @@ import { USER_LOGIN_SUCCESS } from '../constants/userConstants';
 
 
 export const refreshWishList = (userID) => async (dispatch, getState) => {
-  console.log('in refreshWishList action');
+  // console.log('in refreshWishList action');
   // Get the current wishList and token from the global state
   const { userLogin: { userInfo } } = getState();
   const { cart, wishList, token } = userInfo;
@@ -44,15 +44,10 @@ export const refreshWishList = (userID) => async (dispatch, getState) => {
             let sizeCatDefaultPrice = levelOne.sizeCategoryDefaultPrice; // Find that size category's default price.
             //Next, find the index in sizeCategoryColorsAndSizes that matches the color the user chose, i.e. "Seapine"
             let levelTwo = levelOne.sizeCategoryColorsAndSizes[levelOne.sizeCategoryColorsAndSizes.findIndex(i => i.color === color1)]
-            console.log('levelTwo:')
-            console.log(levelTwo)
             //See if that color is on sale
             let colorSalePrice = levelTwo.colorSalePrice;
             //Next, look at the array of sizes in that color and size category and see if the size the customer gave is in stock
-            console.log(`size1: ${size1}`)
             let levelThree = levelTwo.sizeCategorySizes[levelTwo.sizeCategorySizes.findIndex(i => i.size === size1)];
-            console.log('level three:')
-            console.log(levelThree)
             let qtyInStock = levelThree.qty;
             oldItem.availableInOtherSizes = false; //reset this and assume it's false.
             //If there are zero in stock for that size, see if it's in stock in other sizes in that size category.

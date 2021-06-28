@@ -24,13 +24,11 @@ const Header = () => {
   }
 
   const showProductsNavHandler = () => {
-    console.log('showProductsNavHandler');
     setShowNav(true);
   }
 
   const productsClickHandler = () => {
     setDisableProductNav(true); //Explained Below
-    console.log('productsClickHandler');
     setShowNav(false)
     // This setTimeout prevents the products dropdown onClick and the 'click outside' handler of the BigNavDropdown from interfering with each other. 
     // Without this, when the product dropdown is showing, clicking the product dropdown again will simply quickly close the dropdown and immediately reopen it

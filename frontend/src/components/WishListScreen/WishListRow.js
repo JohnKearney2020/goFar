@@ -39,7 +39,6 @@ const WishListRow = ({
   const [loadingCartIcon, setLoadingCartIcon] = useState(false);
   const [updatingWishList, setUpdatingWishList] = useState(false);
   useEffect(() => {
-    console.log('in WishListRow.js useEffect')
     // This useEffect is used to force a rerender after we add an item to the cart b/c otherwise we don't get an opportunity
     // to set updatingWishList to false after setting it to true when we add an item to the cart
     setUpdatingWishList(false);
@@ -59,8 +58,6 @@ const WishListRow = ({
 
   const addToCartHandler = async (e) => {
     e.preventDefault();
-    console.log('in cart handler')
-    console.log(`qty for cart: ${qtyForCart}`)
     setUpdatingWishList(true)
     setLoadingCartIcon(true); //We set this to false again in the useEffect. Setting it to false in this function leaves a small
     //window of time where the button is not disabled while we see if the item is in our cart or not

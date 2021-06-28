@@ -66,8 +66,6 @@ const EditAddressModal = ({ show, closeModalHandler, address }) => {
         eachAddress.isPrimary = false;
       })
     }
-    console.log('filteredAddresses addresses after setting primary:')
-    console.log(filteredAddresses);
 
     let newAddress = {
       _id: oldAddressID,

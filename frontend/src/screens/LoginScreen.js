@@ -51,7 +51,6 @@ const LoginScreen = ({ location, history }) => {
 
   const guestLoginHandler = (e) => {
     e.preventDefault();
-    console.log('guest login clicked');
     let guestEmail = 'guest@example.com';
     let guestPassword = '12345';
     dispatch(login(guestEmail, guestPassword));

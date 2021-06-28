@@ -49,7 +49,6 @@ const ReviewModal = ({ productID }) => {
 
   const addNewReviewHandler = async (e) => {
     e.preventDefault();
-    console.log('clicked add review')
     let anyErrors = false;
 
     //Clear any existing error messages first
@@ -58,23 +57,19 @@ const ReviewModal = ({ productID }) => {
 
     //Check for blank fields next
     if(title === ''){ 
-      console.log('title is blank...')
       setTitleMessage('Your review must have a title...');
       anyErrors = true;
     }
     if(review === ''){ 
-      console.log('review is blank...')
       setReviewMessage('Your review cannot be blank...');
       anyErrors = true;
     }
     if(rating === 0){ 
-      console.log('rating is blank...')
       setRatingMessage('Choose a rating...');
       anyErrors = true;
     }
 
     if(anyErrors) { 
-      console.log('found errors')
       return 
     } //stop here if the user did not fill out the form correctly
     // Create the review object we will pass to the backend

@@ -59,8 +59,6 @@ const CustomPayPalButton = ({ history }) => {
   const updateUserCart = async () => {
     // Filter our the 'Saved For Later' items from the cart. Those will be saved. Everything else in the cart will be removed
     const cartAfterOrder = cart.filter(eachItem => eachItem.savedForLater === true);
-    console.log('cartAfterOrder:')
-    console.log(cartAfterOrder)
     try {
       const { data } = await axios.put('/api/users/cart/updatewholecart', { cart:cartAfterOrder }, config);
       dispatch({
@@ -68,7 +66,6 @@ const CustomPayPalButton = ({ history }) => {
         payload: data
       });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      console.log('cart updated successfully')
     } catch (error) {
       console.log('there was an error updating the cart with up to date values')
       console.log(error)

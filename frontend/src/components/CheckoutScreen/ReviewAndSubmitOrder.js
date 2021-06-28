@@ -63,7 +63,6 @@ const ReviewAndSubmitOrder = ({ history }) => {
           if(!unmounted && window.paypal){ //Only mount the script if this component is mounted and don't mount the script if the script is already there
             setSdkReady(true);
           } else if(!unmounted && !window.paypal){
-            console.log('mounting script')
             script.onload = () => {
               setSdkReady(true);
             }

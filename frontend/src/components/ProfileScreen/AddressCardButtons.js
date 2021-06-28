@@ -58,7 +58,6 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
 
 
   const deleteAddressHandler = (e) => {
-    console.log('delete button clicked!')
     e.preventDefault();
     setShowConfirmModal(false);
     if(updateProfileLoading){ return } //prevent users from clicking multiple times
@@ -69,8 +68,6 @@ const AddressCardButtons = ({ addressID, address, isPrimary }) => {
     if(isPrimary && newAddresses.length > 0){
       newAddresses[0].isPrimary = true;
     }
-    console.log('new addresses minus the deleted one:')
-    console.log(newAddresses)
     dispatch(updateUserProfile({ addresses: newAddresses }, 'deleteAddress'));
 
   }

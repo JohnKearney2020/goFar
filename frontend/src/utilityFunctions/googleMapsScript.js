@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // Google Maps Mounting Script Function
 export const addGoogleMapsScript = async (string, dispatchFunction, type) => {
-  console.log(`calling addGoogleMapsScript from: ${string}`)
   //This if() should technically be redundant, since this function should not be called at all
   //if the script has already been mounted ( by using the same if() before this function is even called )
   //but I will leave the if() just in case
@@ -18,7 +17,6 @@ export const addGoogleMapsScript = async (string, dispatchFunction, type) => {
       //I can't figure out why and it seems very very hard to reproduce. I'm assuming it's some asynchronous shennanigans, so I've 
       //added one more check here just before we mount the script just in case
       if(!window.google){
-        console.log('MOUNTING GOOGLE MAPS SCRIPT');
         document.body.appendChild(script);
         // The global state seems to update faster than the script gets added to the body and the necessary Google Maps stuff gets
         // loaded. This setTimeout seems to give enough time /// for the script to be added to the body before the global state gets 

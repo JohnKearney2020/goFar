@@ -34,7 +34,6 @@ const Orders = () => {
     // The script can also be mounted if the user places an order. We use the geocoding service during the order
     if(!unmounted && !window.google && orders.length > 0 && mountedGoogleScript.current === false){
       mountedGoogleScript.current = true;
-      console.log('orders.length: ', orders.length);
       addGoogleMapsScript('calling from Orders.js useEffect', dispatch, {type: MAP_LOADED_SCRIPT_TRUE});
     }
     return () => { unmounted = true };

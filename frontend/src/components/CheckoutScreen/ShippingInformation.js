@@ -50,12 +50,10 @@ const ShippingInformation = () => {
   }, [addresses, shippingAddressObj, dispatch])
 
   const showNewAddressModalHandler = () => {
-    console.log('show modal')
     setShowNewAddressModal(true);
   }
 
   const closeNewAddressModalHandler = () => {
-    console.log('close modal')
     setShowNewAddressModal(false);
   }
 

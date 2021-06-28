@@ -58,7 +58,6 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
     }
     setLoadingWishListIcon(true);
     try {
-      console.log('attempting to add to a users wishlist')
       //attempt to add the item to the user's wishlist
       const { data } = await axios.post('/api/users/wishlist/wishlistitem', { 
         userID,
@@ -69,7 +68,6 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
         sizeCategory, 
         image: primaryImageForColor,
       }, config);
-      console.log(data)
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({
@@ -91,7 +89,6 @@ const WishListButton = ({ productID, productName, color, size, sizeCategory, pri
   }
 
   const removeFromWishListHandler = async () => {
-    console.log('clicked remove from wishlist')
     setLoadingWishListIcon(true);
     try {
       const { data } = await axios.delete(`/api/users/wishlist/wishlistitem/${userID}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);

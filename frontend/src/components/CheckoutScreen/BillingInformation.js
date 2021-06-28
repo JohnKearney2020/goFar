@@ -57,12 +57,10 @@ const BillingInformation = () => {
   }, [addresses, billingAddressObj, dispatch, showNoAddressMessage])
 
   const showNewAddressModalHandler = () => {
-    console.log('show modal')
     setShowNewAddressModal(true);
   }
 
   const closeNewAddressModalHandler = () => {
-    console.log('close modal')
     setShowNewAddressModal(false);
   }
 

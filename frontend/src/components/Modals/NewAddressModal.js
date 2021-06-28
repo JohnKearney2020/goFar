@@ -44,7 +44,6 @@ const NewAddressModal = ({ show, closeModalHandler }) => {
       anyErrors = true;
     }
     if(city === ''){ 
-      console.log('in city conditional')
       setCityMessage('City field cannot be blank');
       anyErrors = true;
     }

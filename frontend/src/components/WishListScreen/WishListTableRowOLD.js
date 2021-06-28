@@ -49,7 +49,6 @@ const WishListTableRow = ({ productID, productName, color, size, sizeCategory, p
       // Destructure the product object. Doing this outside the useEffect was giving 'undefined' errors
       const { name, defaultPrice, defaultQty, defaultSalePrice, sizes, hasSizes:productHasSizes } = product;
       if(productHasSizes) { setHasSizes(true) }
-      console.log(`in wishlist table row useEffect for ${name}`);
 
       //=========================================
       //Find the current price and qty available
@@ -85,7 +84,6 @@ const WishListTableRow = ({ productID, productName, color, size, sizeCategory, p
           //Start at level two, all sizes in that color and size category, and look through all sizes there
           for(let eachSize of levelTwo.sizeCategorySizes){
             if(eachSize.qty !== 0){
-              console.log('available in other sizes')
               setAvailableInOtherSizes(true);
               break;
             }
@@ -105,12 +103,9 @@ const WishListTableRow = ({ productID, productName, color, size, sizeCategory, p
 
   const addToCartHandler = (e) => {
     e.preventDefault();
-    console.log('in cart handler')
-    console.log(`qty for cart: ${qtyForCart}`)
   }
 
   const deleteWishListItemHandler = async () => {
-    console.log('clicked delete!');
     // setWishListErrorMessage('');
     setLoadingDeleteIcon(true);
     try {
@@ -124,7 +119,6 @@ const WishListTableRow = ({ productID, productName, color, size, sizeCategory, p
       // DEL /api/user/wishlistitem/:userid&:productid&:color&:size&:sizecategory
       // productID, productName, color, size, sizeCategory, productImage, dateAdded, index}
       const { data } = await axios.delete(`/api/users/wishlistitem/${userInfo._id}&${productID}&${encodeURI(color)}&${encodeURI(size)}&${encodeURI(sizeCategory)}`, config);
-      console.log(data)
       // We've set up the backend to send us back the updated user information once the user's wishlist is updated. We need to 
       // dispatch the user login again to update the user's wishlist in the global state
       dispatch({

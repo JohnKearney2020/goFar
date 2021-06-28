@@ -71,7 +71,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   const moveInCartHandler = async (e) => {
     dispatch({type: CART_LOADING_TRUE });
     let savedForLaterBoolean = e.target.value;
-    console.log(`e.target.value: ${e.target.value}`)
     setSavingForLaterIcon(true);
     setMovingToCartIcon(true);
     try {
@@ -140,7 +139,6 @@ const CartRow = ({ productID, name, color, size, sizeCategory, price, qty, image
   const deleteCartItemHandler = async () => {
     dispatch({type: CART_LOADING_TRUE });
     setLoadingDeleteIcon(true);
-    console.log('delete from cart clicked')
     try {
       const { data } = await axios.delete(`/api/users/cart/cartitem/${userID}&${productID}&${color}&${size}&${sizeCategory}`, config);
       dispatch({

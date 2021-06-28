@@ -18,7 +18,6 @@ let order = {
 };
 
 if(window.google){ //If the Google Maps Script has already been loaded and added to the body
-  console.log('TRYING TO GEOCODE!!!')
   const geocoder = new window.google.maps.Geocoder();
   //Deconstruct the shipping address object
   const { line1, line2, city, state, zipCode } = shippingAddressObj;
@@ -27,11 +26,7 @@ if(window.google){ //If the Google Maps Script has already been loaded and added
   const addressForMap = 1;
   //
   geocoder.geocode( { 'address': addressForMap}, async function(results, status) {
-    console.log('Google Maps Geocode Status: ')
-    console.log(status)
     if (status === 'OK') {
-      console.log('Lat Lng for that address:')
-      console.log(results[0].geometry.location)
       // map.setCenter(results[0].geometry.location);
       // var marker = new window.google.maps.Marker({
       //     map: map,

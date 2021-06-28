@@ -40,7 +40,6 @@ export const login = (email, password) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-  console.log('in logout action');
   localStorage.removeItem('userInfo');
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_LOGOUT });
@@ -128,7 +127,6 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 
 // The get state parameter is needed b/c we will need a JWT from the state for this
 export const updateUserProfile = (user, userUpdateType) => async (dispatch, getState) => {
-  console.log(`userUpdateType: ${userUpdateType}`);
   try {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST
@@ -187,7 +185,7 @@ export const updateUserProfile = (user, userUpdateType) => async (dispatch, getS
       default:
         break;
     }
-    console.log(`position: ${position}`)
+    // console.log(`position: ${position}`)
     toast.success(successMessage, 
       { 
         position: position,

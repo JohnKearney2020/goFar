@@ -10,7 +10,6 @@ const ProductNavDropdown = ({ show, productsClickHandler }) => {
   useEffect(() => {
 
     const handleClickOutside = (e) => {
-      console.log("clicking anywhere");
       if (node.current.contains(e.target)) {
         // inside click
         return;

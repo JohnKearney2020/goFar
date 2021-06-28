@@ -52,7 +52,6 @@ const CheckoutScreen = ({ history }) => {
   }, [userInfo, cart, history]);
 
   useEffect(() => {
-    console.log('in CheckoutScreen useEffect')
     dispatch(getUserDetails('profile'));
   }, [dispatch])
 

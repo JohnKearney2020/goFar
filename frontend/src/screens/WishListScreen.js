@@ -25,14 +25,11 @@ const WishListScreen = ({ history }) => {
   useEffect(() => {
     // if a user is not already logged in, redirect them. Also, if a user logs out from the profile screen, this will redirect them
     if(!userInfo.name){ history.push('/login') };
-    console.log('in WishListScreen useEffect')
     if(wishList.length > 0 && haveUpdatedWishList.current === false){
-      console.log('in first conditional')
       dispatch(refreshWishList(userID));
       haveUpdatedWishList.current = true;
     }
     if(wishList.length === 0 && haveUpdatedWishList.current === false){
-      console.log('the user does not have a wishlist');
       haveUpdatedWishList.current = false
       console.log(`haveUpdateWishList.current: ${haveUpdatedWishList.current}`)
       setNoWishList(true);
