@@ -51,7 +51,7 @@ const HomeScreen = ({ match }) => {
         {products.length === 0 && !loading && <Message variant='info'>{noResultsMessage}</Message> }
           <CSSTransition 
             in={productsToDisplay.length === products.length && productsToDisplay.length > 0} 
-            timeout={2000} 
+            timeout={1200} 
             classNames="product-transition"
           >
             <div>
