@@ -1,20 +1,15 @@
-#testPrice {
-  /* color: blue!important; */
-  /* font-weight: 900!important; */
-  letter-spacing: 1px;
-}
-
+/* Product transition animations for use with React Transition Group */
 .product-transition-enter {
   opacity: 0;
 }
 .product-transition-enter-active {
   opacity: 1;
-  transition: opacity 2000ms;
+  transition: opacity 1000ms;
 }
 .product-transition-exit {
   opacity: 1;
 }
 .product-transition-exit-active {
   opacity: 0;
-  transition: opacity 2000ms;
+  transition: opacity 1000ms;
 }
