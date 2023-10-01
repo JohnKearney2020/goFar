@@ -31,14 +31,14 @@ if(process.env.NODE_ENV === 'development') {
 // Heroku lets users access our site by http:// for some reason, alongside https://
 // This gives a security warning in chrome, among other things
 // This middleware redirects all http: requests to https:
-if(process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https')
-      res.redirect(`https://${req.header('host')}${req.url}`)
-    else
-      next()
-  })
-}
+// if(process.env.NODE_ENV === 'production') {
+//   app.use((req, res, next) => {
+//     if (req.header('x-forwarded-proto') !== 'https')
+//       res.redirect(`https://${req.header('host')}${req.url}`)
+//     else
+//       next()
+//   })
+// }
 
 //===============================================
 //         Parse JSON from Body
