@@ -146,6 +146,5 @@ For an exhaustive list of all libraries used see the frontend [package.json](/fr
 Checkout all these features on the live website [here](https://gofarapp.herokuapp.com/)
 <br />
 
-Small commit test for WSl
 
 
